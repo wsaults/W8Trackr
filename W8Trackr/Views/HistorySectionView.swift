@@ -7,7 +7,9 @@ struct HistorySectionView: View {
     
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d, HH:mm a"
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        formatter.locale = .current
         return formatter
     }()
     
