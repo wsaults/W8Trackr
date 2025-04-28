@@ -40,7 +40,7 @@ final class WeightEntry {
     
     // MARK: - Sample Data
     static var sortedSampleData: [WeightEntry] {
-        sampleData.sorted { $0.date < $1.date }
+        sampleData.sorted { $0.date > $1.date }
     }
     
     static var sampleData: [WeightEntry] {
@@ -73,17 +73,17 @@ final class WeightEntry {
             WeightEntry(weight: 184.9, date: randomDateTime(daysToAdd: 80), bodyFatPercentage: 18.8),
             WeightEntry(weight: 183.5, date: randomDateTime(daysToAdd: 100), note: "Monthly check-in", bodyFatPercentage: 18.6),
             WeightEntry(weight: 182.7, date: randomDateTime(daysToAdd: 120), bodyFatPercentage: 18.4),
-            WeightEntry(weight: 181.9, date: randomDateTime(daysToAdd: 140), bodyFatPercentage: 18.2),
-            WeightEntry(weight: 180.5, date: randomDateTime(daysToAdd: 155), note: "Monthly check-in", bodyFatPercentage: 18.0),
-            WeightEntry(weight: 179.8, date: randomDateTime(daysToAdd: 160), bodyFatPercentage: 17.8),
-            WeightEntry(weight: 178.9, date: randomDateTime(daysToAdd: 200), bodyFatPercentage: 17.6),
-            WeightEntry(weight: 177.5, date: randomDateTime(daysToAdd: 250), note: "Monthly check-in", bodyFatPercentage: 17.4),
-            WeightEntry(weight: 176.8, date: randomDateTime(daysToAdd: 288), bodyFatPercentage: 17.2),
-            WeightEntry(weight: 176.2, date: randomDateTime(daysToAdd: 288), bodyFatPercentage: 17.0),
-            WeightEntry(weight: 175.8, date: randomDateTime(daysToAdd: 312), note: "Monthly check-in", bodyFatPercentage: 16.8),
-            WeightEntry(weight: 175.5, date: randomDateTime(daysToAdd: 324), bodyFatPercentage: 16.6),
-            WeightEntry(weight: 175.3, date: randomDateTime(daysToAdd: 336), bodyFatPercentage: 16.4),
-            WeightEntry(weight: 175.0, date: randomDateTime(daysToAdd: 348), note: "Goal weight reached!", bodyFatPercentage: 16.2)
+            WeightEntry(weight: 172.9, date: randomDateTime(daysToAdd: 140), bodyFatPercentage: 18.2),
+            WeightEntry(weight: 170.5, date: randomDateTime(daysToAdd: 338), note: "Monthly check-in", bodyFatPercentage: 18.0),
+            WeightEntry(weight: 169.8, date: randomDateTime(daysToAdd: 340), bodyFatPercentage: 17.8),
+            WeightEntry(weight: 167.9, date: randomDateTime(daysToAdd: 342), bodyFatPercentage: 17.6),
+            WeightEntry(weight: 165.5, date: randomDateTime(daysToAdd: 343), note: "Monthly check-in", bodyFatPercentage: 17.4),
+            WeightEntry(weight: 165.8, date: randomDateTime(daysToAdd: 343), bodyFatPercentage: 17.2),
+            WeightEntry(weight: 166.2, date: randomDateTime(daysToAdd: 344), bodyFatPercentage: 17.0),
+            WeightEntry(weight: 164.8, date: randomDateTime(daysToAdd: 345), note: "Monthly check-in", bodyFatPercentage: 16.8),
+            WeightEntry(weight: 163.5, date: randomDateTime(daysToAdd: 346), bodyFatPercentage: 16.6),
+            WeightEntry(weight: 163.3, date: randomDateTime(daysToAdd: 347), bodyFatPercentage: 16.4),
+            WeightEntry(weight: 162.0, date: randomDateTime(daysToAdd: 348), note: "Goal weight reached!", bodyFatPercentage: 16.2)
         ]
     }
 }
