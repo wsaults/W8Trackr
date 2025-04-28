@@ -12,17 +12,44 @@ struct SingleLineLollipop: View {
     let entries: [WeightEntry]
     let goalWeight: Double
     
+    @State private var selectedRange: DateRange = .oneMonth
+    
+    private enum DateRange: String, CaseIterable {
+        case oneMonth = "1M"
+        case threeMonths = "3M"
+        case sixMonths = "6M"
+        case oneYear = "1Y"
+        case allTime = "All"
+        
+        var months: Int? {
+            switch self {
+            case .oneMonth: return 1
+            case .threeMonths: return 3
+            case .sixMonths: return 6
+            case .oneYear: return 12
+            case .allTime: return nil
+            }
+        }
+    }
+    
+    private var filteredEntries: [WeightEntry] {
+        guard let months = selectedRange.months else { return entries }
+        
+        let cutoffDate = Calendar.current.date(byAdding: .month, value: -months, to: Date()) ?? Date()
+        return entries.filter { $0.date >= cutoffDate }
+    }
+    
     private var minWeight: Double {
-        min(entries.map { $0.weightValue }.min() ?? 0, goalWeight)
+        min(filteredEntries.map { $0.weightValue }.min() ?? 0, goalWeight)
     }
     
     private var maxWeight: Double {
-        max(entries.map { $0.weightValue }.max() ?? 200, goalWeight)
+        max(filteredEntries.map { $0.weightValue }.max() ?? 200, goalWeight)
     }
     
     // Group entries by date, maintaining the full WeightEntry objects
     private var entriesByDay: [Date: [WeightEntry]] {
-        Dictionary(grouping: entries) { entry in
+        Dictionary(grouping: filteredEntries) { entry in
             Calendar.current.startOfDay(for: entry.date)
         }
     }
@@ -36,48 +63,58 @@ struct SingleLineLollipop: View {
     }
     
     var body: some View {
-        Chart {
-            // Goal weight line
-            RuleMark(y: .value("Goal Weight", goalWeight))
-                .foregroundStyle(.green.opacity(0.5))
-                .lineStyle(StrokeStyle(lineWidth: 2, dash: [10, 5]))
-                .annotation(position: .leading) {
-                    Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) lbs")
-                        .font(.caption)
-                        .foregroundStyle(.green)
+        VStack {
+            Picker("Date Range", selection: $selectedRange) {
+                ForEach(DateRange.allCases, id: \.self) { range in
+                    Text(range.rawValue).tag(range)
                 }
-            
-            // Draw line using daily averages
-            ForEach(dailyAverages) { average in
-                LineMark(
-                    x: .value("Date", average.date),
-                    y: .value("Weight", average.weight)
-                )
-                .interpolationMethod(.catmullRom)
             }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
             
-            // Plot all individual points
-            ForEach(entries) { entry in
-                PointMark(
-                    x: .value("Date", Calendar.current.startOfDay(for: entry.date)),
-                    y: .value("Weight", entry.weightValue)
-                )
-            }
-        }
-        .chartYScale(domain: (minWeight - 5)...(maxWeight + 5))
-        .chartYAxis {
-            AxisMarks(preset: .extended, position: .leading) { value in
-                AxisValueLabel {
-                    if let weight = value.as(Double.self) {
-                        Text("\(weight, format: .number.precision(.fractionLength(1))) lbs")
+            Chart {
+                // Goal weight line
+                RuleMark(y: .value("Goal Weight", goalWeight))
+                    .foregroundStyle(.green.opacity(0.5))
+                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [10, 5]))
+                    .annotation(position: .leading) {
+                        Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) lbs")
+                            .font(.caption)
+                            .foregroundStyle(.green)
                     }
+                
+                // Draw line using daily averages
+                ForEach(dailyAverages) { average in
+                    LineMark(
+                        x: .value("Date", average.date),
+                        y: .value("Weight", average.weight)
+                    )
+                    .interpolationMethod(.catmullRom)
                 }
-                AxisGridLine()
-                AxisTick()
+                
+                // Plot all individual points
+                ForEach(filteredEntries) { entry in
+                    PointMark(
+                        x: .value("Date", Calendar.current.startOfDay(for: entry.date)),
+                        y: .value("Weight", entry.weightValue)
+                    )
+                }
             }
-        }
-        .chartXAxis {
-            AxisMarks(format: .dateTime.month().day())
+            .chartYScale(domain: (minWeight - 5)...(maxWeight + 5))
+            .chartYAxis {
+                AxisMarks(preset: .extended, position: .leading) { value in
+                    AxisValueLabel {
+                        if let weight = value.as(Double.self) {
+                            Text("\(weight, format: .number.precision(.fractionLength(1))) lbs")
+                        }
+                    }
+                    AxisGridLine()
+                    AxisTick()
+                }
+            }
+            .chartXAxis {
+                AxisMarks(format: .dateTime.month().day())
+            }
         }
     }
 }
