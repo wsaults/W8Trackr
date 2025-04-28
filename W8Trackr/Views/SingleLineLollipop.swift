@@ -13,11 +13,11 @@ struct SingleLineLollipop: View {
     let goalWeight: Double
     
     private var minWeight: Double {
-        entries.map { $0.weightValue }.min() ?? 0
+        min(entries.map { $0.weightValue }.min() ?? 0, goalWeight)
     }
     
     private var maxWeight: Double {
-        entries.map { $0.weightValue }.max() ?? 200
+        max(entries.map { $0.weightValue }.max() ?? 200, goalWeight)
     }
     
     // Group entries by date, maintaining the full WeightEntry objects
@@ -90,6 +90,6 @@ private struct DailyAverage: Identifiable {
 }
 
 #Preview {
-    SingleLineLollipop(entries: WeightEntry.sortedSampleData, goalWeight: 185.0)
+    SingleLineLollipop(entries: WeightEntry.sortedSampleData, goalWeight: 160.0)
         .padding()
 }
