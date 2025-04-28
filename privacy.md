@@ -29,7 +29,7 @@ You maintain full control over your data:
 
 ## Contact
 If you have questions about this privacy policy or W8Trackr's data practices, please contact:
-will@saults.net
+will@saults.io
 
 ## Your Rights
 By using W8Trackr, you consent to this privacy policy. You have the right to:
