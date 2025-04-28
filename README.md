@@ -49,7 +49,7 @@ W8Trackr/
 The app is built using:
 - SwiftUI for the user interface
 - SwiftData for data persistence
-- MVVM architecture pattern
+- MVVM architecture pattern (TODO)
 - Swift's latest features including Observation framework
 
 ## Contributing
