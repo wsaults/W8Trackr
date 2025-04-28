@@ -11,9 +11,22 @@ struct AddWeightView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
-    @State private var weight: Double = 150.0
+    @Binding var weightUnit: String
+    
+    var entries: [WeightEntry]
+    
+    @State private var weight: Double
     @State private var isEditing = false
     let today = Date()
+    
+    init(
+        entries: [WeightEntry],
+        weightUnit: Binding<String>
+    ) {
+        self.entries = entries
+        _weightUnit = weightUnit
+        _weight = State(initialValue: entries.first?.weightValue ?? 150.0)
+    }
     
     var body: some View {
         NavigationStack {
@@ -38,7 +51,7 @@ struct AddWeightView: View {
                                 }
                         }
                         
-                        Text("lbs")
+                        Text(weightUnit)
                             .font(.title)
                             .foregroundStyle(.secondary)
                     }
@@ -70,13 +83,13 @@ struct AddWeightView: View {
                     modelContext.insert(entry)
                     dismiss()
                 } label: {
-                    Text("Add Entry")
+                    Text("Save")
                         .fontWeight(.bold)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(.blue)
                         .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .cornerRadius(10)
                 }
                 .padding(.horizontal)
             }
@@ -95,5 +108,5 @@ struct AddWeightView: View {
 }
 
 #Preview {
-    AddWeightView()
+    AddWeightView(entries: WeightEntry.sortedSampleData, weightUnit: .constant("lb"))
 }

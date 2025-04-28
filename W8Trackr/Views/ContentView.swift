@@ -15,22 +15,30 @@ struct ContentView: View {
         sort: [SortDescriptor(\WeightEntry.date, order: .reverse)]
     ) private var entries: [WeightEntry]
     
+    @AppStorage("preferredWeightUnit") var preferredWeightUnit: String = Locale.current.measurementSystem == .metric ? "kg" : "lb"
+    @AppStorage("goalWeight") var goalWeight: Double = .zero
+    
     @State private var showAddWeightView = false
+    @State private var showSettingsView = false
     
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
                 VStack {
                     if entries.isEmpty {
-                        ContentUnavailableView("Start Tracking!", systemImage: "person.badge.plus", description: Text("Tap the + button to track your weight"))
+                        ContentUnavailableView(
+                            "Start Tracking!",
+                            systemImage: "person.badge.plus",
+                            description: Text("Tap the + button to track your weight")
+                        )
                     } else {
-                        CurrentWeightView(weight: entries.first?.weightValue ?? 0)
+                        if let entry = entries.first {
+                            CurrentWeightView(weight: entry.weightValue(in: UnitMass(symbol: preferredWeightUnit)), weightUnit: preferredWeightUnit)
+                        }
                         
-                        ScrollView {
-                            VStack(spacing: .zero) {
-                                ChartSectionView(entries: entries)
-                                HistorySectionView(entries: entries)
-                            }
+                        VStack(spacing: .zero) {
+                            ChartSectionView(entries: entries)
+                            HistorySectionView(entries: entries)
                         }
                     }
                 }
@@ -48,9 +56,23 @@ struct ContentView: View {
                 }
             }
             .background(.gray.opacity(0.1))
-            .navigationTitle("Weight Tracker")
+            .navigationTitle("W8Trackr")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar(content: {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showSettingsView.toggle()
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                    }
+                    .foregroundStyle(.secondary)
+                }
+            })
             .sheet(isPresented: $showAddWeightView) {
-                AddWeightView()
+                AddWeightView(entries: entries, weightUnit: $preferredWeightUnit)
+            }
+            .sheet(isPresented: $showSettingsView) {
+                SettingsView(weightUnit: $preferredWeightUnit, goalWeight: $goalWeight)
             }
         }
     }

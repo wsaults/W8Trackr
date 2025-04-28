@@ -13,7 +13,7 @@ struct W8TrackrApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .modelContainer(for: [WeightEntry.self])
         }
+        .modelContainer(for: [WeightEntry.self])
     }
 }

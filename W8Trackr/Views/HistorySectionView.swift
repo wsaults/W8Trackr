@@ -1,37 +1,43 @@
 import SwiftUI
 
 struct HistorySectionView: View {
+    @Environment(\.modelContext) private var modelContext
     let entries: [WeightEntry]
     
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d"
+        formatter.dateFormat = "MMM d, HH:mm a"
         return formatter
     }()
     
     var body: some View {
         Section {
-            VStack {
+            List {
                 ForEach(entries) { entry in
-                    VStack {
-                        HStack {
-                            Text(entry.date, formatter: Self.dateFormatter)
-                            Spacer()
-                            HStack(spacing: 4) {
-                                Text(entry.weightValue, format: .number.precision(.fractionLength(1)))
-                                    .fontWeight(.bold)
-                                Text(entry.weightUnit)
-                            }
+                    HStack {
+                        Text(entry.date, formatter: Self.dateFormatter)
+                        Spacer()
+                        HStack(spacing: 4) {
+                            Text(entry.weightValue, format: .number.precision(.fractionLength(1)))
+                                .fontWeight(.bold)
+                            Text(entry.weightUnit)
                         }
-                        
-                        Divider()
+                    }
+                    .padding(.vertical, 8)
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button(role: .destructive) {
+                            withAnimation {
+                                modelContext.delete(entry)
+                            }
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
                     }
                 }
+                .onDelete { _ in
+                    
+                }
             }
-            .padding()
-            .background(.white)
-            .cornerRadius(10)
-            .padding()
         } header: {
             HStack {
                 Text("History")
@@ -44,5 +50,5 @@ struct HistorySectionView: View {
 }
 
 #Preview {
-    HistorySectionView(entries: WeightEntry.sampleData)
+    HistorySectionView(entries: WeightEntry.sortedSampleData)
 }
