@@ -6,21 +6,22 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var weightUnit: String
+    @Environment(\.modelContext) private var modelContext
+    @Binding var weightUnit: WeightUnit
     @Binding var goalWeight: Double
-    
-    let weightUnits = ["lb", "kg"]
+    @State private var showingDeleteAlert = false
     
     var body: some View {
         NavigationStack {
             Form {
                 Section("Weight Settings") {
                     Picker("Weight Unit", selection: $weightUnit) {
-                        ForEach(weightUnits, id: \.self) { unit in
-                            Text(unit)
+                        ForEach(WeightUnit.allCases, id: \.self) { unit in
+                            Text(unit.rawValue)
                         }
                     }
                     .pickerStyle(.segmented)
@@ -31,8 +32,18 @@ struct SettingsView: View {
                         TextField("Goal Weight", value: $goalWeight, format: .number)
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
-                        Text(weightUnit)
+                        Text(weightUnit.rawValue)
                     }
+                }
+                
+                Section {
+                    Button(role: .destructive) {
+                        showingDeleteAlert = true
+                    } label: {
+                        Text("Delete All Weight Entries")
+                    }
+                } header: {
+                    Text("Danger Zone")
                 }
             }
             .navigationTitle("Settings")
@@ -42,6 +53,23 @@ struct SettingsView: View {
                         dismiss()
                     }
                 }
+            }
+            .alert("Delete All Entries", isPresented: $showingDeleteAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Delete", role: .destructive) {
+                    do {
+                        let entries = try modelContext.fetch(FetchDescriptor<WeightEntry>())
+                        for entry in entries {
+                            modelContext.delete(entry)
+                        }
+                        try modelContext.save()
+                        dismiss()
+                    } catch {
+                        print("Failed to delete entries: \(error)")
+                    }
+                }
+            } message: {
+                Text("Are you sure you want to delete all weight entries? This action cannot be undone.")
             }
         }
     }

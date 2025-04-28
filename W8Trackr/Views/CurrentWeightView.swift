@@ -2,7 +2,7 @@ import SwiftUI
 
 struct CurrentWeightView: View {
     let weight: Double
-    let weightUnit: String
+    let weightUnit: WeightUnit
     
     var body: some View {
         VStack {
@@ -10,7 +10,7 @@ struct CurrentWeightView: View {
                 Text(weight, format: .number.precision(.fractionLength(1)))
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                Text(weightUnit)
+                Text(weightUnit.rawValue)
             }
             Text("Current Weight")
                 .font(.footnote)
@@ -24,6 +24,6 @@ struct CurrentWeightView: View {
 }
 
 #Preview {
-    CurrentWeightView(weight: 175, weightUnit: "lb")
+    CurrentWeightView(weight: 175, weightUnit: .lb)
 }
 

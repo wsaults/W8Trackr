@@ -8,24 +8,18 @@
 import Foundation
 import SwiftData
 
+enum WeightUnit: String, CaseIterable {
+    case lb, kg
+}
+
 @Model
 final class WeightEntry {
     var weightValue: Double = 0
-    var weightUnit: String = "lb"
+    var weightUnit: String = WeightUnit.lb.rawValue
     var date: Date = Date.now
     var note: String?
     var bodyFatPercentage: Decimal?
-    
-//    var weight: Measurement<UnitMass> {
-//        get {
-//            Measurement(value: weightValue, unit: UnitMass(symbol: weightUnit))
-//        }
-//        set {
-//            weightValue = newValue.value
-//            weightUnit = newValue.unit.symbol
-//        }
-//    }
-    
+
     init(weight: Double, unit: UnitMass = .pounds, date: Date = .now, note: String? = nil, bodyFatPercentage: Decimal? = nil) {
         self.weightValue = weight
         self.weightUnit = unit.symbol
@@ -34,10 +28,10 @@ final class WeightEntry {
         self.bodyFatPercentage = bodyFatPercentage
     }
     
-    func weightValue(in unit: String) -> Double {
-        if weightUnit == "lb", unit == "kg" {
+    func weightValue(in unit: WeightUnit) -> Double {
+        if weightUnit == WeightUnit.lb.rawValue, unit == .kg {
             return weightValue * 0.453592 // Convert from lb to kg
-        } else if weightUnit == "kg", unit == "lb" {
+        } else if weightUnit == WeightUnit.kg.rawValue, unit == .lb {
             return weightValue * 2.20462 // Convert from kg to lb
         }
         

@@ -3,7 +3,7 @@ import SwiftUI
 struct HistorySectionView: View {
     @Environment(\.modelContext) private var modelContext
     let entries: [WeightEntry]
-    let weightUnit: String
+    let weightUnit: WeightUnit
     
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -27,7 +27,7 @@ struct HistorySectionView: View {
                             )
                             .fontWeight(.bold)
                             
-                            Text(weightUnit)
+                            Text(weightUnit.rawValue)
                         }
                     }
                     .padding(.vertical, 8)
@@ -57,5 +57,5 @@ struct HistorySectionView: View {
 }
 
 #Preview {
-    HistorySectionView(entries: WeightEntry.sortedSampleData, weightUnit: "lb")
+    HistorySectionView(entries: WeightEntry.sortedSampleData, weightUnit: .lb)
 }

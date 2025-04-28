@@ -15,7 +15,7 @@ struct ContentView: View {
         sort: [SortDescriptor(\WeightEntry.date, order: .reverse)]
     ) private var entries: [WeightEntry]
     
-    @AppStorage("preferredWeightUnit") var preferredWeightUnit: String = Locale.current.measurementSystem == .metric ? "kg" : "lb"
+    @AppStorage("preferredWeightUnit") var preferredWeightUnit: WeightUnit = Locale.current.measurementSystem == .metric ? .kg : .lb
     @AppStorage("goalWeight") var goalWeight: Double = .zero
     
     @State private var showAddWeightView = false

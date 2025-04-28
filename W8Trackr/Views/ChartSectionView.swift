@@ -4,7 +4,7 @@ import SwiftUI
 struct ChartSectionView: View {
     let entries: [WeightEntry]
     let goalWeight: Double
-    let weightUnit: String
+    let weightUnit: WeightUnit
     
     var body: some View {
         Section {
@@ -26,5 +26,5 @@ struct ChartSectionView: View {
 }
 
 #Preview {
-    ChartSectionView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: "lb")
+    ChartSectionView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb)
 }

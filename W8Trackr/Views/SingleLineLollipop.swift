@@ -11,7 +11,7 @@ import SwiftUI
 struct SingleLineLollipop: View {
     let entries: [WeightEntry]
     let goalWeight: Double
-    let weightUnit: String
+    let weightUnit: WeightUnit
     
     @State private var selectedRange: DateRange = .oneMonth
     
@@ -71,7 +71,7 @@ struct SingleLineLollipop: View {
                     .foregroundStyle(.green.opacity(0.5))
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [10, 5]))
                     .annotation(position: .leading) {
-                        Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) lbs")
+                        Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
                             .font(.caption)
                             .foregroundStyle(.green)
                     }
@@ -98,7 +98,7 @@ struct SingleLineLollipop: View {
                 AxisMarks(preset: .extended, position: .leading) { value in
                     AxisValueLabel {
                         if let weight = value.as(Double.self) {
-                            Text("\(weight, format: .number.precision(.fractionLength(1))) lbs")
+                            Text("\(weight, format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
                         }
                     }
                     AxisGridLine()
@@ -129,6 +129,6 @@ private struct DailyAverage: Identifiable {
 }
 
 #Preview {
-    SingleLineLollipop(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: "lb")
+    SingleLineLollipop(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb)
         .padding()
 }

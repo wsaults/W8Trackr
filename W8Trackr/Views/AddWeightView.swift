@@ -11,7 +11,7 @@ struct AddWeightView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
-    @Binding var weightUnit: String
+    @Binding var weightUnit: WeightUnit
     
     var entries: [WeightEntry]
     
@@ -21,7 +21,7 @@ struct AddWeightView: View {
     
     init(
         entries: [WeightEntry],
-        weightUnit: Binding<String>
+        weightUnit: Binding<WeightUnit>
     ) {
         self.entries = entries
         _weightUnit = weightUnit
@@ -51,7 +51,7 @@ struct AddWeightView: View {
                                 }
                         }
                         
-                        Text(weightUnit)
+                        Text(weightUnit.rawValue)
                             .font(.title)
                             .foregroundStyle(.secondary)
                     }
@@ -108,5 +108,5 @@ struct AddWeightView: View {
 }
 
 #Preview {
-    AddWeightView(entries: WeightEntry.sortedSampleData, weightUnit: .constant("lb"))
+    AddWeightView(entries: WeightEntry.sortedSampleData, weightUnit: .constant(WeightUnit.lb))
 }
