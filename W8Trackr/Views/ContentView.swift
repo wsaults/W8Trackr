@@ -15,22 +15,28 @@ struct ContentView: View {
         sort: [SortDescriptor(\WeightEntry.date, order: .reverse)]
     ) private var entries: [WeightEntry]
     
+    @State private var showAddWeightView = false
+    
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
                 VStack {
-                    CurrentWeightView(weight: entries.first?.weightValue ?? 0)
-                    
-                    ScrollView {
-                        VStack(spacing: .zero) {
-                            ChartSectionView(entries: entries)
-                            HistorySectionView(entries: entries)
+                    if entries.isEmpty {
+                        ContentUnavailableView("Start Tracking!", systemImage: "person.badge.plus", description: Text("Tap the + button to track your weight"))
+                    } else {
+                        CurrentWeightView(weight: entries.first?.weightValue ?? 0)
+                        
+                        ScrollView {
+                            VStack(spacing: .zero) {
+                                ChartSectionView(entries: entries)
+                                HistorySectionView(entries: entries)
+                            }
                         }
                     }
                 }
                 
                 Button {
-                    print("Add weight entry")
+                    showAddWeightView.toggle()
                 } label: {
                     Image(systemName: "plus")
                         .font(.system(size: 20))
@@ -43,6 +49,9 @@ struct ContentView: View {
             }
             .background(.gray.opacity(0.1))
             .navigationTitle("Weight Tracker")
+            .sheet(isPresented: $showAddWeightView) {
+                AddWeightView()
+            }
         }
     }
 }

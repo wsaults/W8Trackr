@@ -18,3 +18,8 @@ struct CurrentWeightView: View {
         .padding()
     }
 }
+
+#Preview {
+    CurrentWeightView(weight: 175)
+}
+

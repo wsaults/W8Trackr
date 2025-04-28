@@ -42,3 +42,7 @@ struct HistorySectionView: View {
         }
     }
 }
+
+#Preview {
+    HistorySectionView(entries: WeightEntry.sampleData)
+}

@@ -1,0 +1,99 @@
+//
+//  AddWeightView.swift
+//  W8Trackr
+//
+//  Created by Will Saults on 4/28/25.
+//
+
+import SwiftUI
+
+struct AddWeightView: View {
+    @Environment(\.modelContext) var modelContext
+    @Environment(\.dismiss) var dismiss
+    
+    @State private var weight: Double = 150.0
+    @State private var isEditing = false
+    let today = Date()
+    
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 30) {
+                Spacer()
+                Text(today.formatted(date: .abbreviated, time: .omitted))
+                    .foregroundStyle(.secondary)
+                
+                VStack(spacing: 0) {
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        if isEditing {
+                            TextField("Weight", value: $weight, format: .number.precision(.fractionLength(1)))
+                                .font(.system(size: 64, weight: .medium))
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.center)
+                                .frame(width: 200)
+                        } else {
+                            Text(String(format: "%.1f", weight))
+                                .font(.system(size: 64, weight: .medium))
+                                .onTapGesture {
+                                    isEditing = true
+                                }
+                        }
+                        
+                        Text("lbs")
+                            .font(.title)
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    HStack(spacing: 40) {
+                        Button {
+                            weight = max(0, weight - 0.1)
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .font(.system(size: 44))
+                                .foregroundStyle(.blue)
+                        }
+                        
+                        Button {
+                            weight = min(500, weight + 0.1)
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 44))
+                                .foregroundStyle(.blue)
+                        }
+                    }
+                    .padding(.top, 20)
+                }
+                
+                Spacer()
+                
+                Button {
+                    let entry = WeightEntry(weight: weight)
+                    modelContext.insert(entry)
+                    dismiss()
+                } label: {
+                    Text("Add Entry")
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(.blue)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+                .padding(.horizontal)
+            }
+            .padding(.top, 30)
+            .navigationTitle("Add Weight")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+#Preview {
+    AddWeightView()
+}

@@ -22,3 +22,7 @@ struct ChartSectionView: View {
         }
     }
 }
+
+#Preview {
+    ChartSectionView(entries: WeightEntry.sampleData)
+}
