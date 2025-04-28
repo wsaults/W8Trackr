@@ -17,7 +17,7 @@ struct CurrentWeightView: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(.white)
+        .background(Color(UIColor.systemBackground))
         .cornerRadius(10)
         .padding()
     }

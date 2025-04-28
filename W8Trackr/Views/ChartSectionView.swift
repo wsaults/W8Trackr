@@ -11,7 +11,7 @@ struct ChartSectionView: View {
             SingleLineLollipop(entries: entries, goalWeight: goalWeight, weightUnit: weightUnit)
                 .frame(height: 200)
                 .padding()
-                .background(.white)
+                .background(Color(UIColor.systemBackground))
                 .cornerRadius(10)
                 .padding()
         } header: {

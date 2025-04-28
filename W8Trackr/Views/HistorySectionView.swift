@@ -41,9 +41,6 @@ struct HistorySectionView: View {
                         }
                     }
                 }
-                .onDelete { _ in
-                    
-                }
             }
         } header: {
             HStack {
