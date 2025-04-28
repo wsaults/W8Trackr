@@ -115,11 +115,11 @@ struct SingleLineLollipop: View {
             .chartXAxis {
                 AxisMarks(format: .dateTime.month().day())
             }
+            .animation(.smooth, value: selectedRange)
         }
     }
 }
 
-// Helper struct for daily averages
 private struct DailyAverage: Identifiable {
     let id = UUID()
     let date: Date
