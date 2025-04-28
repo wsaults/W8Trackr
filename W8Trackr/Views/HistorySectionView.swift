@@ -3,6 +3,7 @@ import SwiftUI
 struct HistorySectionView: View {
     @Environment(\.modelContext) private var modelContext
     let entries: [WeightEntry]
+    let weightUnit: String
     
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -18,9 +19,13 @@ struct HistorySectionView: View {
                         Text(entry.date, formatter: Self.dateFormatter)
                         Spacer()
                         HStack(spacing: 4) {
-                            Text(entry.weightValue, format: .number.precision(.fractionLength(1)))
-                                .fontWeight(.bold)
-                            Text(entry.weightUnit)
+                            Text(
+                                entry.weightValue(in: weightUnit),
+                                format: .number.precision(.fractionLength(1))
+                            )
+                            .fontWeight(.bold)
+                            
+                            Text(weightUnit)
                         }
                     }
                     .padding(.vertical, 8)
@@ -50,5 +55,5 @@ struct HistorySectionView: View {
 }
 
 #Preview {
-    HistorySectionView(entries: WeightEntry.sortedSampleData)
+    HistorySectionView(entries: WeightEntry.sortedSampleData, weightUnit: "lb")
 }

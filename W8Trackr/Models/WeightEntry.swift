@@ -16,15 +16,15 @@ final class WeightEntry {
     var note: String?
     var bodyFatPercentage: Decimal?
     
-    var weight: Measurement<UnitMass> {
-        get {
-            Measurement(value: weightValue, unit: UnitMass(symbol: weightUnit))
-        }
-        set {
-            weightValue = newValue.value
-            weightUnit = newValue.unit.symbol
-        }
-    }
+//    var weight: Measurement<UnitMass> {
+//        get {
+//            Measurement(value: weightValue, unit: UnitMass(symbol: weightUnit))
+//        }
+//        set {
+//            weightValue = newValue.value
+//            weightUnit = newValue.unit.symbol
+//        }
+//    }
     
     init(weight: Double, unit: UnitMass = .pounds, date: Date = .now, note: String? = nil, bodyFatPercentage: Decimal? = nil) {
         self.weightValue = weight
@@ -34,13 +34,17 @@ final class WeightEntry {
         self.bodyFatPercentage = bodyFatPercentage
     }
     
-    func weightValue(in unit: UnitMass) -> Double {
-        weight.converted(to: unit).value
+    func weightValue(in unit: String) -> Double {
+        if weightUnit == "lb", unit == "kg" {
+            return weightValue * 0.453592 // Convert from lb to kg
+        } else if weightUnit == "kg", unit == "lb" {
+            return weightValue * 2.20462 // Convert from kg to lb
+        }
+        
+        return weightValue
     }
-}
-
-// MARK: - Sample Data
-extension WeightEntry {
+    
+    // MARK: - Sample Data
     static var sortedSampleData: [WeightEntry] {
         sampleData.sorted { $0.date < $1.date }
     }

@@ -11,6 +11,7 @@ import SwiftUI
 struct SingleLineLollipop: View {
     let entries: [WeightEntry]
     let goalWeight: Double
+    let weightUnit: String
     
     @State private var selectedRange: DateRange = .oneMonth
     
@@ -64,14 +65,6 @@ struct SingleLineLollipop: View {
     
     var body: some View {
         VStack {
-            Picker("Date Range", selection: $selectedRange) {
-                ForEach(DateRange.allCases, id: \.self) { range in
-                    Text(range.rawValue).tag(range)
-                }
-            }
-            .pickerStyle(.segmented)
-            .padding(.horizontal)
-            
             Chart {
                 // Goal weight line
                 RuleMark(y: .value("Goal Weight", goalWeight))
@@ -116,6 +109,15 @@ struct SingleLineLollipop: View {
                 AxisMarks(format: .dateTime.month().day())
             }
             .animation(.smooth, value: selectedRange)
+            .padding(.bottom)
+            
+            Picker("Date Range", selection: $selectedRange) {
+                ForEach(DateRange.allCases, id: \.self) { range in
+                    Text(range.rawValue).tag(range)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
         }
     }
 }
@@ -127,6 +129,6 @@ private struct DailyAverage: Identifiable {
 }
 
 #Preview {
-    SingleLineLollipop(entries: WeightEntry.sortedSampleData, goalWeight: 160.0)
+    SingleLineLollipop(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: "lb")
         .padding()
 }

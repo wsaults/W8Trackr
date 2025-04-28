@@ -4,10 +4,11 @@ import SwiftUI
 struct ChartSectionView: View {
     let entries: [WeightEntry]
     let goalWeight: Double
+    let weightUnit: String
     
     var body: some View {
         Section {
-            SingleLineLollipop(entries: entries, goalWeight: goalWeight)
+            SingleLineLollipop(entries: entries, goalWeight: goalWeight, weightUnit: weightUnit)
                 .frame(height: 200)
                 .padding()
                 .background(.white)
@@ -25,5 +26,5 @@ struct ChartSectionView: View {
 }
 
 #Preview {
-    ChartSectionView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0)
+    ChartSectionView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: "lb")
 }

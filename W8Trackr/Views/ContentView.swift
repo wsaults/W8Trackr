@@ -33,12 +33,15 @@ struct ContentView: View {
                         )
                     } else {
                         if let entry = entries.first {
-                            CurrentWeightView(weight: entry.weightValue(in: UnitMass(symbol: preferredWeightUnit)), weightUnit: preferredWeightUnit)
+                            CurrentWeightView(
+                                weight: entry.weightValue(in: preferredWeightUnit),
+                                weightUnit: preferredWeightUnit
+                            )
                         }
                         
                         VStack(spacing: .zero) {
-                            ChartSectionView(entries: entries, goalWeight: goalWeight)
-                            HistorySectionView(entries: entries)
+                            ChartSectionView(entries: entries, goalWeight: goalWeight, weightUnit: preferredWeightUnit)
+                            HistorySectionView(entries: entries, weightUnit: preferredWeightUnit)
                         }
                     }
                 }
