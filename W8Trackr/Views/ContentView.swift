@@ -37,7 +37,7 @@ struct ContentView: View {
                         }
                         
                         VStack(spacing: .zero) {
-                            ChartSectionView(entries: entries)
+                            ChartSectionView(entries: entries, goalWeight: goalWeight)
                             HistorySectionView(entries: entries)
                         }
                     }

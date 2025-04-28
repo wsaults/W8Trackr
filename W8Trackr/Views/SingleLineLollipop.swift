@@ -10,6 +10,7 @@ import SwiftUI
 
 struct SingleLineLollipop: View {
     let entries: [WeightEntry]
+    let goalWeight: Double
     
     private var minWeight: Double {
         entries.map { $0.weightValue }.min() ?? 0
@@ -19,17 +20,46 @@ struct SingleLineLollipop: View {
         entries.map { $0.weightValue }.max() ?? 200
     }
     
+    // Group entries by date, maintaining the full WeightEntry objects
+    private var entriesByDay: [Date: [WeightEntry]] {
+        Dictionary(grouping: entries) { entry in
+            Calendar.current.startOfDay(for: entry.date)
+        }
+    }
+    
+    // Calculate average weight for each day for the line
+    private var dailyAverages: [DailyAverage] {
+        entriesByDay.map { date, entries in
+            let avgWeight = entries.reduce(0.0) { $0 + $1.weightValue } / Double(entries.count)
+            return DailyAverage(date: date, weight: avgWeight)
+        }.sorted { $0.date < $1.date }
+    }
+    
     var body: some View {
         Chart {
-            ForEach(entries) { entry in
+            // Goal weight line
+            RuleMark(y: .value("Goal Weight", goalWeight))
+                .foregroundStyle(.green.opacity(0.5))
+                .lineStyle(StrokeStyle(lineWidth: 2, dash: [10, 5]))
+                .annotation(position: .leading) {
+                    Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) lbs")
+                        .font(.caption)
+                        .foregroundStyle(.green)
+                }
+            
+            // Draw line using daily averages
+            ForEach(dailyAverages) { average in
                 LineMark(
-                    x: .value("Date", entry.date),
-                    y: .value("Weight", entry.weightValue)
+                    x: .value("Date", average.date),
+                    y: .value("Weight", average.weight)
                 )
                 .interpolationMethod(.catmullRom)
-                
+            }
+            
+            // Plot all individual points
+            ForEach(entries) { entry in
                 PointMark(
-                    x: .value("Date", entry.date),
+                    x: .value("Date", Calendar.current.startOfDay(for: entry.date)),
                     y: .value("Weight", entry.weightValue)
                 )
             }
@@ -52,7 +82,14 @@ struct SingleLineLollipop: View {
     }
 }
 
+// Helper struct for daily averages
+private struct DailyAverage: Identifiable {
+    let id = UUID()
+    let date: Date
+    let weight: Double
+}
+
 #Preview {
-    SingleLineLollipop(entries: WeightEntry.sortedSampleData)
+    SingleLineLollipop(entries: WeightEntry.sortedSampleData, goalWeight: 185.0)
         .padding()
 }
