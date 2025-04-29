@@ -10,31 +10,9 @@ import SwiftUI
 
 @main
 struct W8TrackrApp: App {
-    @AppStorage("preferredWeightUnit") var preferredWeightUnit: WeightUnit = Locale.current.measurementSystem == .metric ? .kg : .lb
-    @AppStorage("goalWeight") var goalWeight: Double = .zero
-    
-    @Query(
-        sort: [SortDescriptor(\WeightEntry.date, order: .reverse)]
-    ) private var entries: [WeightEntry]
-    
     var body: some Scene {
         WindowGroup {
-            TabView {
-                SummaryView(entries: entries, preferredWeightUnit: preferredWeightUnit, goalWeight: goalWeight)
-                    .tabItem {
-                        Label("Summary", systemImage: "chart.line.uptrend.xyaxis")
-                    }
-                
-                LogbookView(entries: entries, preferredWeightUnit: preferredWeightUnit, goalWeight: goalWeight)
-                    .tabItem {
-                        Label("Logbook", systemImage: "book")
-                    }
-                
-                SettingsView(weightUnit: $preferredWeightUnit, goalWeight: $goalWeight)
-                    .tabItem {
-                        Label("Settings", systemImage: "gear")
-                    }
-            }
+            ContentView()
         }
         .modelContainer(for: [WeightEntry.self])
     }
