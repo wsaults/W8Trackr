@@ -120,6 +120,29 @@ struct SingleLineLollipop: View {
         return (tomorrow, predictedWeight)
     }
     
+    private struct ChartEntry: Identifiable {
+        let id = UUID()
+        let date: Date
+        let weight: Double
+        let isPrediction: Bool
+        let showPoint: Bool
+    }
+    
+    private var chartData: [ChartEntry] {
+        var data = dailyAverages.map { ChartEntry(date: $0.date, weight: $0.weight, isPrediction: false, showPoint: true) }
+        
+        // Add prediction line if available
+        if let prediction = prediction,
+           let lastActual = dailyAverages.last {
+            // Add the last actual point as part of prediction line but don't show its point
+            data.append(ChartEntry(date: lastActual.date, weight: lastActual.weight, isPrediction: true, showPoint: false))
+            // Add the prediction point and show it
+            data.append(ChartEntry(date: prediction.date, weight: prediction.weight, isPrediction: true, showPoint: true))
+        }
+        
+        return data
+    }
+    
     var body: some View {
         VStack {
             Chart {
@@ -136,39 +159,27 @@ struct SingleLineLollipop: View {
                         }
                 }
                 
-                // Draw line using daily averages
-                ForEach(dailyAverages) { average in
+                // Combined line for actual and predicted data
+                ForEach(chartData) { entry in
                     LineMark(
-                        x: .value("Date", average.date),
-                        y: .value("Weight", average.weight)
+                        x: .value("Date", entry.date),
+                        y: .value("Weight", entry.weight)
                     )
-                    .interpolationMethod(.catmullRom)
-                }
-                
-                // Plot all individual points
-                ForEach(filteredEntries) { entry in
-                    PointMark(
-                        x: .value("Date", Calendar.current.startOfDay(for: entry.date)),
-                        y: .value("Weight", entry.weightValue)
-                    )
-                }
-                
-                // Add prediction point and line
-                if let prediction = prediction {
-                    LineMark(
-                        x: .value("Date", prediction.date),
-                        y: .value("Weight", prediction.weight)
-                    )
-                    .foregroundStyle(.orange.opacity(0.5))
+                    .foregroundStyle(by: .value("Type", entry.isPrediction ? "Prediction" : "Actual"))
                     
-                    // Prediction point
-                    PointMark(
-                        x: .value("Date", prediction.date),
-                        y: .value("Weight", prediction.weight)
-                    )
-                    .foregroundStyle(.orange.opacity(0.5))
+                    if entry.showPoint {
+                        PointMark(
+                            x: .value("Date", entry.date),
+                            y: .value("Weight", entry.weight)
+                        )
+                        .foregroundStyle(by: .value("Type", entry.isPrediction ? "Prediction" : "Actual"))
+                    }
                 }
             }
+            .chartForegroundStyleScale([
+                "Actual": Color.blue,
+                "Prediction": Color.orange.opacity(0.5)
+            ])
             .chartYScale(domain: minWeight...maxWeight)
             .chartYAxis {
                 AxisMarks(preset: .extended, position: .leading) { value in
