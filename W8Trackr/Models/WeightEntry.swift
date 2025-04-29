@@ -21,6 +21,17 @@ enum WeightUnit: String, CaseIterable {
     }
 }
 
+extension Double {
+    func weightValue(from: WeightUnit, to unit: WeightUnit) -> Double {
+        if from == .lb, unit == .kg {
+            return self * 0.453592 // Convert from lb to kg
+        } else if from == .kg, unit == .lb {
+            return self * 2.20462 // Convert from kg to lb
+        }
+        return self
+    }
+}
+
 @Model
 final class WeightEntry {
     var weightValue: Double = 0
@@ -38,13 +49,8 @@ final class WeightEntry {
     }
     
     func weightValue(in unit: WeightUnit) -> Double {
-        if weightUnit == WeightUnit.lb.rawValue, unit == .kg {
-            return weightValue * 0.453592 // Convert from lb to kg
-        } else if weightUnit == WeightUnit.kg.rawValue, unit == .lb {
-            return weightValue * 2.20462 // Convert from kg to lb
-        }
-        
-        return weightValue
+        let currentUnit = WeightUnit(rawValue: weightUnit) ?? .lb
+        return weightValue.weightValue(from: currentUnit, to: unit)
     }
     
     // MARK: - Sample Data

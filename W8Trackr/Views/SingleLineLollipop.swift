@@ -40,14 +40,29 @@ struct SingleLineLollipop: View {
         return entries.filter { $0.date >= cutoffDate }
     }
     
-    private var yAxisPadding: Double { 5.0 }
+    private func convertWeight(_ weight: Double) -> Double {
+        switch weightUnit {
+        case .kg:
+            return weight * 0.453592 // Convert lb to kg
+        case .lb:
+            return weight
+        }
+    }
+    
+    private var yAxisPadding: Double {
+        weightUnit == .kg ? 2.0 : 5.0
+    }
     
     private var minWeight: Double {
-        (filteredEntries.map { $0.weightValue }.min() ?? goalWeight) - yAxisPadding
+        let dataMin = filteredEntries.map { convertWeight($0.weightValue) }.min() ?? 0
+        let convertedGoal = convertWeight(goalWeight)
+        return goalWeight > 0 ? min(dataMin, convertedGoal) - yAxisPadding : dataMin - yAxisPadding
     }
     
     private var maxWeight: Double {
-        (filteredEntries.map { $0.weightValue }.max() ?? goalWeight) + yAxisPadding
+        let dataMax = filteredEntries.map { convertWeight($0.weightValue) }.max() ?? 0
+        let convertedGoal = convertWeight(goalWeight)
+        return goalWeight > 0 ? max(dataMax, convertedGoal) + yAxisPadding : dataMax + yAxisPadding
     }
     
     // Group entries by date, maintaining the full WeightEntry objects
@@ -60,7 +75,7 @@ struct SingleLineLollipop: View {
     // Calculate average weight for each day for the line
     private var dailyAverages: [DailyAverage] {
         entriesByDay.map { date, entries in
-            let avgWeight = entries.reduce(0.0) { $0 + $1.weightValue } / Double(entries.count)
+            let avgWeight = entries.reduce(0.0) { $0 + convertWeight($1.weightValue) } / Double(entries.count)
             return DailyAverage(date: date, weight: avgWeight)
         }.sorted { $0.date < $1.date }
     }
@@ -100,7 +115,7 @@ struct SingleLineLollipop: View {
         guard filteredEntries.count >= 2 else { return nil }
         
         let xValues = filteredEntries.map { $0.date.timeIntervalSince1970 }
-        let yValues = filteredEntries.map { $0.weightValue }
+        let yValues = filteredEntries.map { convertWeight($0.weightValue) }
         
         // Calculate linear regression
         let n = Double(xValues.count)
@@ -148,11 +163,11 @@ struct SingleLineLollipop: View {
             Chart {
                 // Goal weight line
                 if goalWeight > 0 {
-                    RuleMark(y: .value("Goal Weight", goalWeight))
+                    RuleMark(y: .value("Goal Weight", convertWeight(goalWeight)))
                         .foregroundStyle(.green.opacity(0.5))
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [10, 5]))
                         .annotation(position: .overlay) {
-                            Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
+                            Text("Goal: \(convertWeight(goalWeight), format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
                                 .font(.caption)
                                 .foregroundStyle(.green)
                                 .background(Color(UIColor.systemBackground))
