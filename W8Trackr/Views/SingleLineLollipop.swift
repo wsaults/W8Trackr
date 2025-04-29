@@ -42,12 +42,14 @@ struct SingleLineLollipop: View {
         return entries.filter { $0.date >= cutoffDate }
     }
     
+    private var yAxisPadding: Double { 5.0 }
+    
     private var minWeight: Double {
-        min(filteredEntries.map { $0.weightValue }.min() ?? 0, goalWeight)
+        (filteredEntries.map { $0.weightValue }.min() ?? goalWeight) - yAxisPadding
     }
     
     private var maxWeight: Double {
-        max(filteredEntries.map { $0.weightValue }.max() ?? 200, goalWeight)
+        (filteredEntries.map { $0.weightValue }.max() ?? goalWeight) + yAxisPadding
     }
     
     // Group entries by date, maintaining the full WeightEntry objects
@@ -124,7 +126,7 @@ struct SingleLineLollipop: View {
                     )
                 }
             }
-            .chartYScale(domain: (minWeight - 5)...(maxWeight + 5))
+            .chartYScale(domain: minWeight...maxWeight)
             .chartYAxis {
                 AxisMarks(preset: .extended, position: .leading) { value in
                     AxisValueLabel {
