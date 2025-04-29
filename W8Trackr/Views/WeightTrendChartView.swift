@@ -1,5 +1,5 @@
 //
-//  SingleLineLollipop.swift
+//  WeightTrendChartView.swift
 //  W8Trackr
 //
 //  Created by Will Saults on 4/28/25.
@@ -8,7 +8,7 @@
 import Charts
 import SwiftUI
 
-struct SingleLineLollipop: View {
+struct WeightTrendChartView: View {
     let entries: [WeightEntry]
     let goalWeight: Double
     let weightUnit: WeightUnit
@@ -247,6 +247,6 @@ private struct DailyAverage: Identifiable {
 }
 
 #Preview {
-    SingleLineLollipop(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb)
+    WeightTrendChartView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb)
         .padding()
 }

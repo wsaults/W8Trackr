@@ -8,7 +8,7 @@ struct ChartSectionView: View {
     
     var body: some View {
         Section {
-            SingleLineLollipop(entries: entries, goalWeight: goalWeight, weightUnit: weightUnit)
+            WeightTrendChartView(entries: entries, goalWeight: goalWeight, weightUnit: weightUnit)
                 .frame(height: 300)
                 .padding()
                 .background(Color(UIColor.systemBackground))
