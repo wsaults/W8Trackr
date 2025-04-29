@@ -51,6 +51,7 @@ struct SummaryView: View {
                         .background(.blue)
                         .clipShape(.circle)
                 }
+                .padding(.bottom)
             }
             .background(.gray.opacity(0.1))
             .navigationTitle("Summary")
