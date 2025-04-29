@@ -38,7 +38,7 @@ struct SingleLineLollipop: View {
     private var filteredEntries: [WeightEntry] {
         guard let weeks = selectedRange.weeks else { return entries }
         
-        let cutoffDate = Calendar.current.date(byAdding: .day, value: -weeks, to: Date()) ?? Date()
+        let cutoffDate = Calendar.current.date(byAdding: .day, value: -weeks * 7, to: Date()) ?? Date()
         return entries.filter { $0.date >= cutoffDate }
     }
     
@@ -63,6 +63,32 @@ struct SingleLineLollipop: View {
             let avgWeight = entries.reduce(0.0) { $0 + $1.weightValue } / Double(entries.count)
             return DailyAverage(date: date, weight: avgWeight)
         }.sorted { $0.date < $1.date }
+    }
+    
+    private var dateFormatForRange: Date.FormatStyle {
+        switch selectedRange {
+        case .oneWeek:
+            return .dateTime.weekday(.abbreviated)
+        case .oneMonth:
+            return .dateTime.month().day()
+        case .threeMonths, .sixMonths:
+            return .dateTime.month(.abbreviated)
+        case .oneYear, .allTime:
+            return .dateTime.month(.abbreviated).year()
+        }
+    }
+
+    private var xAxisStride: Calendar.Component {
+        switch selectedRange {
+        case .oneWeek:
+            return .day
+        case .oneMonth:
+            return .day
+        case .threeMonths, .sixMonths:
+            return .month
+        case .oneYear, .allTime:
+            return .month
+        }
     }
     
     var body: some View {
@@ -111,7 +137,11 @@ struct SingleLineLollipop: View {
                 }
             }
             .chartXAxis {
-                AxisMarks(format: .dateTime.month().day())
+                AxisMarks(values: .stride(by: xAxisStride)) { value in
+                    AxisGridLine()
+                    AxisTick()
+                    AxisValueLabel(format: dateFormatForRange)
+                }
             }
             .animation(.smooth, value: selectedRange)
             .padding(.bottom)
