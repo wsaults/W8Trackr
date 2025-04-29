@@ -25,7 +25,8 @@ struct AddWeightView: View {
     ) {
         self.entries = entries
         _weightUnit = weightUnit
-        _weight = State(initialValue: entries.first?.weightValue ?? 150.0)
+        let unit = weightUnit.wrappedValue
+        _weight = State(initialValue: entries.first?.weightValue ?? unit.defaultWeight)
     }
     
     var body: some View {
@@ -79,8 +80,9 @@ struct AddWeightView: View {
                 Spacer()
                 
                 Button {
-                    let entry = WeightEntry(weight: weight)
+                    let entry = WeightEntry(weight: weight, unit: UnitMass(symbol: weightUnit.rawValue))
                     modelContext.insert(entry)
+                    try? modelContext.save()
                     dismiss()
                 } label: {
                     Text("Save")

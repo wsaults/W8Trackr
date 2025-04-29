@@ -10,6 +10,15 @@ import SwiftData
 
 enum WeightUnit: String, CaseIterable {
     case lb, kg
+    
+    var defaultWeight: Double {
+        switch self {
+        case .lb:
+            return 180.0
+        case .kg:
+            return 80.0
+        }
+    }
 }
 
 @Model

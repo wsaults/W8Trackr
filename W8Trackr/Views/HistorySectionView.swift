@@ -35,6 +35,7 @@ struct HistorySectionView: View {
                         Button(role: .destructive) {
                             withAnimation {
                                 modelContext.delete(entry)
+                                try? modelContext.save()
                             }
                         } label: {
                             Label("Delete", systemImage: "trash")
