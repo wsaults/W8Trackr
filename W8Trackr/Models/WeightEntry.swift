@@ -98,25 +98,29 @@ final class WeightEntry {
     
     static var shortSampleData: [WeightEntry] {
         let calendar = Calendar.current
-        let startDate = calendar.date(byAdding: .year, value: -1, to: .now)!
+        let today = Date.now
         
-        func randomDateTime(daysToAdd: Int) -> Date {
-            let dateWithDays = calendar.date(byAdding: .day, value: daysToAdd, to: startDate)!
-            let dateWithHours = calendar.date(byAdding: .hour, value: Int.random(in: 0...23), to: dateWithDays)!
+        func dateTime(daysAgo: Int) -> Date {
+            let dateWithDays = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let dateWithHours = calendar.date(byAdding: .hour, value: Int.random(in: 6...10), to: dateWithDays)!
             return calendar.date(byAdding: .minute, value: Int.random(in: 0...59), to: dateWithHours)!
         }
         
         return [
-            WeightEntry(weight: 170.5, date: randomDateTime(daysToAdd: 338), note: "Monthly check-in", bodyFatPercentage: 18.0),
-            WeightEntry(weight: 169.8, date: randomDateTime(daysToAdd: 340), bodyFatPercentage: 17.8),
-            WeightEntry(weight: 167.9, date: randomDateTime(daysToAdd: 342), bodyFatPercentage: 17.6),
-            WeightEntry(weight: 165.5, date: randomDateTime(daysToAdd: 343), note: "Monthly check-in", bodyFatPercentage: 17.4),
-            WeightEntry(weight: 165.8, date: randomDateTime(daysToAdd: 343), bodyFatPercentage: 17.2),
-            WeightEntry(weight: 166.2, date: randomDateTime(daysToAdd: 344), bodyFatPercentage: 17.0),
-            WeightEntry(weight: 164.8, date: randomDateTime(daysToAdd: 345), note: "Monthly check-in", bodyFatPercentage: 16.8),
-            WeightEntry(weight: 163.5, date: randomDateTime(daysToAdd: 346), bodyFatPercentage: 16.6),
-            WeightEntry(weight: 163.3, date: randomDateTime(daysToAdd: 347), bodyFatPercentage: 16.4),
-            WeightEntry(weight: 162.0, date: randomDateTime(daysToAdd: 348), note: "Goal weight reached!", bodyFatPercentage: 16.2)
+            WeightEntry(weight: 200.0, date: dateTime(daysAgo: 13), note: "Started tracking", bodyFatPercentage: 25.0),
+            WeightEntry(weight: 197.2, date: dateTime(daysAgo: 12), bodyFatPercentage: 24.5),
+            WeightEntry(weight: 193.8, date: dateTime(daysAgo: 11), bodyFatPercentage: 24.0),
+            WeightEntry(weight: 189.5, date: dateTime(daysAgo: 10), note: "Good workout", bodyFatPercentage: 23.5),
+            WeightEntry(weight: 185.8, date: dateTime(daysAgo: 9), bodyFatPercentage: 23.0),
+            WeightEntry(weight: 182.2, date: dateTime(daysAgo: 8), bodyFatPercentage: 22.5),
+            WeightEntry(weight: 177.8, date: dateTime(daysAgo: 7), note: "One week in", bodyFatPercentage: 22.0),
+            WeightEntry(weight: 175.5, date: dateTime(daysAgo: 6), bodyFatPercentage: 21.5),
+            WeightEntry(weight: 172.3, date: dateTime(daysAgo: 5), bodyFatPercentage: 21.0),
+            WeightEntry(weight: 168.8, date: dateTime(daysAgo: 4), note: "Getting closer", bodyFatPercentage: 20.5),
+            WeightEntry(weight: 166.2, date: dateTime(daysAgo: 3), bodyFatPercentage: 20.0),
+            WeightEntry(weight: 163.8, date: dateTime(daysAgo: 2), bodyFatPercentage: 19.5),
+            WeightEntry(weight: 161.5, date: dateTime(daysAgo: 1), note: "Almost there", bodyFatPercentage: 19.0),
+            WeightEntry(weight: 160.0, date: dateTime(daysAgo: 0), note: "Goal weight reached!", bodyFatPercentage: 18.5)
         ].sorted { $0.date > $1.date }
     }
 }

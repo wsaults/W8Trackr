@@ -13,30 +13,32 @@ struct SingleLineLollipop: View {
     let goalWeight: Double
     let weightUnit: WeightUnit
     
-    @State private var selectedRange: DateRange = .oneMonth
+    @State private var selectedRange: DateRange = .oneWeek
     
     private enum DateRange: String, CaseIterable {
+        case oneWeek = "1W"
         case oneMonth = "1M"
         case threeMonths = "3M"
         case sixMonths = "6M"
         case oneYear = "1Y"
         case allTime = "All"
         
-        var months: Int? {
+        var weeks: Int? {
             switch self {
-            case .oneMonth: return 1
-            case .threeMonths: return 3
-            case .sixMonths: return 6
-            case .oneYear: return 12
+            case .oneWeek: return 1
+            case .oneMonth: return 4
+            case .threeMonths: return 13
+            case .sixMonths: return 26
+            case .oneYear: return 52
             case .allTime: return nil
             }
         }
     }
     
     private var filteredEntries: [WeightEntry] {
-        guard let months = selectedRange.months else { return entries }
+        guard let weeks = selectedRange.weeks else { return entries }
         
-        let cutoffDate = Calendar.current.date(byAdding: .month, value: -months, to: Date()) ?? Date()
+        let cutoffDate = Calendar.current.date(byAdding: .day, value: -weeks, to: Date()) ?? Date()
         return entries.filter { $0.date >= cutoffDate }
     }
     
