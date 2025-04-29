@@ -13,7 +13,7 @@ struct ChartSectionView: View {
                 .padding()
                 .background(Color(UIColor.systemBackground))
                 .cornerRadius(10)
-                .padding()
+                .padding(.horizontal)
         } header: {
             HStack {
                 Text("Weight Chart")

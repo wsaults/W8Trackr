@@ -159,26 +159,38 @@ struct SingleLineLollipop: View {
                         }
                 }
                 
-                // Combined line for actual and predicted data
-                ForEach(chartData) { entry in
+                // Draw prediction line first (in background)
+                ForEach(chartData.filter { $0.isPrediction }) { entry in
                     LineMark(
                         x: .value("Date", entry.date),
                         y: .value("Weight", entry.weight)
                     )
-                    .foregroundStyle(by: .value("Type", entry.isPrediction ? "Prediction" : "Actual"))
-                    
+                    .foregroundStyle(by: .value("Type", "Predicted"))
+                }
+                
+                // Draw actual line second
+                ForEach(chartData.filter { !$0.isPrediction }) { entry in
+                    LineMark(
+                        x: .value("Date", entry.date),
+                        y: .value("Weight", entry.weight)
+                    )
+                    .foregroundStyle(by: .value("Type", "Actual"))
+                }
+                
+                // Draw all points last (on top)
+                ForEach(chartData) { entry in
                     if entry.showPoint {
                         PointMark(
                             x: .value("Date", entry.date),
                             y: .value("Weight", entry.weight)
                         )
-                        .foregroundStyle(by: .value("Type", entry.isPrediction ? "Prediction" : "Actual"))
+                        .foregroundStyle(by: .value("Type", entry.isPrediction ? "Predicted" : "Actual"))
                     }
                 }
             }
             .chartForegroundStyleScale([
                 "Actual": Color.blue,
-                "Prediction": Color.orange.opacity(0.5)
+                "Predicted": Color.orange
             ])
             .chartYScale(domain: minWeight...maxWeight)
             .chartYAxis {
