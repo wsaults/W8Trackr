@@ -10,10 +10,9 @@ import SwiftData
 import SwiftUI
 
 struct SummaryView: View {
-    @Environment(\.modelContext) var modelContext
-    var entries: [WeightEntry]
-    
     @State private var showAddWeightView = false
+    
+    var entries: [WeightEntry]
     var preferredWeightUnit: WeightUnit
     var goalWeight: Double
     

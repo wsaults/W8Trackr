@@ -95,6 +95,31 @@ struct SingleLineLollipop: View {
         }
     }
     
+    // Add prediction calculation
+    private var prediction: (date: Date, weight: Double)? {
+        guard filteredEntries.count >= 2 else { return nil }
+        
+        let xValues = filteredEntries.map { $0.date.timeIntervalSince1970 }
+        let yValues = filteredEntries.map { $0.weightValue }
+        
+        // Calculate linear regression
+        let n = Double(xValues.count)
+        let sumX = xValues.reduce(0, +)
+        let sumY = yValues.reduce(0, +)
+        let sumXY = zip(xValues, yValues).map(*).reduce(0, +)
+        let sumXX = xValues.map { $0 * $0 }.reduce(0, +)
+        
+        let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX)
+        let intercept = (sumY - slope * sumX) / n
+        
+        // Predict next day
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+        let tomorrowInterval = tomorrow.timeIntervalSince1970
+        let predictedWeight = slope * tomorrowInterval + intercept
+        
+        return (tomorrow, predictedWeight)
+    }
+    
     var body: some View {
         VStack {
             Chart {
@@ -126,6 +151,22 @@ struct SingleLineLollipop: View {
                         x: .value("Date", Calendar.current.startOfDay(for: entry.date)),
                         y: .value("Weight", entry.weightValue)
                     )
+                }
+                
+                // Add prediction point and line
+                if let prediction = prediction {
+                    LineMark(
+                        x: .value("Date", prediction.date),
+                        y: .value("Weight", prediction.weight)
+                    )
+                    .foregroundStyle(.orange.opacity(0.5))
+                    
+                    // Prediction point
+                    PointMark(
+                        x: .value("Date", prediction.date),
+                        y: .value("Weight", prediction.weight)
+                    )
+                    .foregroundStyle(.orange.opacity(0.5))
                 }
             }
             .chartYScale(domain: minWeight...maxWeight)
