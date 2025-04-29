@@ -17,17 +17,17 @@ struct SingleLineLollipop: View {
     
     private enum DateRange: String, CaseIterable {
         case sevenDay = "7 Day"
-        case thirtyDay = "30 Day"
-        case ninetyDay = "90 Day"
-        case oneYear = "1 Year"
+//        case thirtyDay = "30 Day"
+//        case ninetyDay = "90 Day"
+//        case oneYear = "1 Year"
         case allTime = "All"
         
         var days: Int? {
             switch self {
             case .sevenDay: return 7
-            case .thirtyDay: return 30
-            case .ninetyDay: return 90
-            case .oneYear: return 365
+//            case .thirtyDay: return 30
+//            case .ninetyDay: return 90
+//            case .oneYear: return 365
             case .allTime: return nil
             }
         }
@@ -67,22 +67,30 @@ struct SingleLineLollipop: View {
     
     private var dateFormatForRange: Date.FormatStyle {
         switch selectedRange {
-        case .sevenDay, .thirtyDay:
+        case .sevenDay:
             return .dateTime.day()
-        case .ninetyDay:
-            return .dateTime.month(.abbreviated).day()
-        case .oneYear, .allTime:
+//        case .thirtyDay:
+//            return .dateTime.day()
+//        case .ninetyDay:
+//            return .dateTime.month(.abbreviated).day()
+//        case .oneYear:
+//            return .dateTime.month(.abbreviated).year()
+        case .allTime:
             return .dateTime.month(.abbreviated).year()
         }
     }
 
     private var xAxisStride: Calendar.Component {
         switch selectedRange {
-        case .sevenDay, .thirtyDay:
+        case .sevenDay:
             return .day
-        case .ninetyDay:
-            return .month
-        case .oneYear, .allTime:
+//        case .thirtyDay:
+//            return .day
+//        case .ninetyDay:
+//            return .month
+//        case .oneYear:
+//            return .month
+        case .allTime:
             return .month
         }
     }

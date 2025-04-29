@@ -11,15 +11,11 @@ import SwiftUI
 
 struct SummaryView: View {
     @Environment(\.modelContext) var modelContext
-    @Query(
-        sort: [SortDescriptor(\WeightEntry.date, order: .reverse)]
-    ) private var entries: [WeightEntry]
-    
-    @AppStorage("preferredWeightUnit") var preferredWeightUnit: WeightUnit = Locale.current.measurementSystem == .metric ? .kg : .lb
-    @AppStorage("goalWeight") var goalWeight: Double = .zero
+    var entries: [WeightEntry]
     
     @State private var showAddWeightView = false
-    @State private var showSettingsView = false
+    var preferredWeightUnit: WeightUnit
+    var goalWeight: Double
     
     var body: some View {
         NavigationStack {
@@ -39,9 +35,8 @@ struct SummaryView: View {
                             )
                         }
                         
-                        VStack(spacing: .zero) {
+                        ScrollView {
                             ChartSectionView(entries: entries, goalWeight: goalWeight, weightUnit: preferredWeightUnit)
-                            HistorySectionView(entries: entries, weightUnit: preferredWeightUnit)
                         }
                     }
                 }
@@ -61,21 +56,8 @@ struct SummaryView: View {
             .background(.gray.opacity(0.1))
             .navigationTitle("Summary")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar(content: {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showSettingsView.toggle()
-                    } label: {
-                        Image(systemName: "gearshape.fill")
-                    }
-                    .foregroundStyle(.secondary)
-                }
-            })
             .sheet(isPresented: $showAddWeightView) {
-                AddWeightView(entries: entries, weightUnit: $preferredWeightUnit)
-            }
-            .sheet(isPresented: $showSettingsView) {
-                SettingsView(weightUnit: $preferredWeightUnit, goalWeight: $goalWeight)
+                AddWeightView(entries: entries, weightUnit: preferredWeightUnit)
             }
         }
     }
@@ -85,7 +67,7 @@ struct SummaryView: View {
 #Preview(traits: .modifier(EntriesPreview())) {
     @Previewable @Query var entries: [WeightEntry]
     
-    SummaryView()
+    SummaryView(entries: WeightEntry.shortSampleData, preferredWeightUnit: .lb, goalWeight: 160)
 }
 
 struct EntriesPreview: PreviewModifier {
