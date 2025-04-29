@@ -41,7 +41,7 @@ struct SettingsView: View {
                     HStack {
                         Text("Goal Weight")
                         Spacer()
-                        TextField("Goal Weight", value: $localGoalWeight, format: .number.precision(.fractionLength(2)))
+                        TextField("Goal Weight", value: $localGoalWeight, format: .number.precision(.fractionLength(1)))
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
                             .onChange(of: localGoalWeight) { _, newValue in

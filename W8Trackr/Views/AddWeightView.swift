@@ -16,7 +16,6 @@ struct AddWeightView: View {
     var entries: [WeightEntry]
     
     @State private var weight: Double
-    @State private var isEditing = false
     let today = Date()
     
     init(
@@ -25,7 +24,10 @@ struct AddWeightView: View {
     ) {
         self.entries = entries
         self.weightUnit = weightUnit
-        _weight = State(initialValue: entries.first?.weightValue ?? weightUnit.defaultWeight)
+        
+        // Convert the initial weight to the current unit
+        let initialWeight = entries.first?.weightValue(in: weightUnit) ?? weightUnit.defaultWeight
+        _weight = State(initialValue: initialWeight)
     }
     
     var body: some View {
@@ -35,25 +37,18 @@ struct AddWeightView: View {
                 Text(today.formatted(date: .abbreviated, time: .omitted))
                     .foregroundStyle(.secondary)
                 
-                VStack(spacing: 0) {
+                VStack(spacing: .zero) {
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        if isEditing {
-                            TextField("Weight", value: $weight, format: .number.precision(.fractionLength(1)))
-                                .font(.system(size: 64, weight: .medium))
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.center)
-                                .frame(width: 200)
-                        } else {
-                            Text(String(format: "%.1f", weight))
-                                .font(.system(size: 64, weight: .medium))
-                                .onTapGesture {
-                                    isEditing = true
-                                }
-                        }
+                        TextField("Weight", value: $weight, format: .number.precision(.fractionLength(1)))
+                            .font(.system(size: 64, weight: .medium))
+                            .keyboardType(.decimalPad)
+                            .fixedSize()
+                            .multilineTextAlignment(.trailing)
                         
                         Text(weightUnit.rawValue)
                             .font(.title)
                             .foregroundStyle(.secondary)
+                            .padding(.trailing, 40)
                     }
                     
                     HStack(spacing: 40) {
