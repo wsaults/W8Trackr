@@ -55,14 +55,12 @@ struct WeightTrendChartView: View {
     
     private var minWeight: Double {
         let dataMin = filteredEntries.map { convertWeight($0.weightValue) }.min() ?? 0
-        let convertedGoal = convertWeight(goalWeight)
-        return goalWeight > 0 ? min(dataMin, convertedGoal) - yAxisPadding : dataMin - yAxisPadding
+        return goalWeight > 0 ? min(dataMin, goalWeight) - yAxisPadding : dataMin - yAxisPadding
     }
     
     private var maxWeight: Double {
         let dataMax = filteredEntries.map { convertWeight($0.weightValue) }.max() ?? 0
-        let convertedGoal = convertWeight(goalWeight)
-        return goalWeight > 0 ? max(dataMax, convertedGoal) + yAxisPadding : dataMax + yAxisPadding
+        return goalWeight > 0 ? max(dataMax, goalWeight) + yAxisPadding : dataMax + yAxisPadding
     }
     
     // Group entries by date, maintaining the full WeightEntry objects
@@ -163,11 +161,11 @@ struct WeightTrendChartView: View {
             Chart {
                 // Goal weight line
                 if goalWeight > 0 {
-                    RuleMark(y: .value("Goal Weight", convertWeight(goalWeight)))
+                    RuleMark(y: .value("Goal Weight", goalWeight))
                         .foregroundStyle(.green.opacity(0.5))
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [10, 5]))
                         .annotation(position: .overlay) {
-                            Text("Goal: \(convertWeight(goalWeight), format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
+                            Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
                                 .font(.caption)
                                 .foregroundStyle(.green)
                                 .background(Color(UIColor.systemBackground))
