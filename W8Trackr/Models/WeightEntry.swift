@@ -95,4 +95,28 @@ final class WeightEntry {
             WeightEntry(weight: 162.0, date: randomDateTime(daysToAdd: 348), note: "Goal weight reached!", bodyFatPercentage: 16.2)
         ]
     }
+    
+    static var shortSampleData: [WeightEntry] {
+        let calendar = Calendar.current
+        let startDate = calendar.date(byAdding: .year, value: -1, to: .now)!
+        
+        func randomDateTime(daysToAdd: Int) -> Date {
+            let dateWithDays = calendar.date(byAdding: .day, value: daysToAdd, to: startDate)!
+            let dateWithHours = calendar.date(byAdding: .hour, value: Int.random(in: 0...23), to: dateWithDays)!
+            return calendar.date(byAdding: .minute, value: Int.random(in: 0...59), to: dateWithHours)!
+        }
+        
+        return [
+            WeightEntry(weight: 170.5, date: randomDateTime(daysToAdd: 338), note: "Monthly check-in", bodyFatPercentage: 18.0),
+            WeightEntry(weight: 169.8, date: randomDateTime(daysToAdd: 340), bodyFatPercentage: 17.8),
+            WeightEntry(weight: 167.9, date: randomDateTime(daysToAdd: 342), bodyFatPercentage: 17.6),
+            WeightEntry(weight: 165.5, date: randomDateTime(daysToAdd: 343), note: "Monthly check-in", bodyFatPercentage: 17.4),
+            WeightEntry(weight: 165.8, date: randomDateTime(daysToAdd: 343), bodyFatPercentage: 17.2),
+            WeightEntry(weight: 166.2, date: randomDateTime(daysToAdd: 344), bodyFatPercentage: 17.0),
+            WeightEntry(weight: 164.8, date: randomDateTime(daysToAdd: 345), note: "Monthly check-in", bodyFatPercentage: 16.8),
+            WeightEntry(weight: 163.5, date: randomDateTime(daysToAdd: 346), bodyFatPercentage: 16.6),
+            WeightEntry(weight: 163.3, date: randomDateTime(daysToAdd: 347), bodyFatPercentage: 16.4),
+            WeightEntry(weight: 162.0, date: randomDateTime(daysToAdd: 348), note: "Goal weight reached!", bodyFatPercentage: 16.2)
+        ].sorted { $0.date > $1.date }
+    }
 }
