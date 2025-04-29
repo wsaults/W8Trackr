@@ -12,7 +12,7 @@ import SwiftUI
 struct W8TrackrApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SummaryView()
         }
         .modelContainer(for: [WeightEntry.self])
     }

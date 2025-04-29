@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  SummaryView.swift
 //  W8Trackr
 //
 //  Created by Will Saults on 4/28/25.
@@ -9,7 +9,7 @@ import Charts
 import SwiftData
 import SwiftUI
 
-struct ContentView: View {
+struct SummaryView: View {
     @Environment(\.modelContext) var modelContext
     @Query(
         sort: [SortDescriptor(\WeightEntry.date, order: .reverse)]
@@ -85,7 +85,7 @@ struct ContentView: View {
 #Preview(traits: .modifier(EntriesPreview())) {
     @Previewable @Query var entries: [WeightEntry]
     
-    ContentView()
+    SummaryView()
 }
 
 struct EntriesPreview: PreviewModifier {
