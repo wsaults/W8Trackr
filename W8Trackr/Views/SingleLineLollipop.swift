@@ -13,32 +13,30 @@ struct SingleLineLollipop: View {
     let goalWeight: Double
     let weightUnit: WeightUnit
     
-    @State private var selectedRange: DateRange = .oneWeek
+    @State private var selectedRange: DateRange = .sevenDay
     
     private enum DateRange: String, CaseIterable {
-        case oneWeek = "1W"
-        case oneMonth = "1M"
-        case threeMonths = "3M"
-        case sixMonths = "6M"
-        case oneYear = "1Y"
+        case sevenDay = "7 Day"
+        case thirtyDay = "30 Day"
+        case ninetyDay = "90 Day"
+        case oneYear = "1 Year"
         case allTime = "All"
         
-        var weeks: Int? {
+        var days: Int? {
             switch self {
-            case .oneWeek: return 1
-            case .oneMonth: return 4
-            case .threeMonths: return 13
-            case .sixMonths: return 26
-            case .oneYear: return 52
+            case .sevenDay: return 7
+            case .thirtyDay: return 30
+            case .ninetyDay: return 90
+            case .oneYear: return 365
             case .allTime: return nil
             }
         }
     }
     
     private var filteredEntries: [WeightEntry] {
-        guard let weeks = selectedRange.weeks else { return entries }
+        guard let days = selectedRange.days else { return entries }
         
-        let cutoffDate = Calendar.current.date(byAdding: .day, value: -weeks * 7, to: Date()) ?? Date()
+        let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
         return entries.filter { $0.date >= cutoffDate }
     }
     
@@ -69,12 +67,10 @@ struct SingleLineLollipop: View {
     
     private var dateFormatForRange: Date.FormatStyle {
         switch selectedRange {
-        case .oneWeek:
-            return .dateTime.weekday(.abbreviated)
-        case .oneMonth:
-            return .dateTime.month().day()
-        case .threeMonths, .sixMonths:
-            return .dateTime.month(.abbreviated)
+        case .sevenDay, .thirtyDay:
+            return .dateTime.day()
+        case .ninetyDay:
+            return .dateTime.month(.abbreviated).day()
         case .oneYear, .allTime:
             return .dateTime.month(.abbreviated).year()
         }
@@ -82,11 +78,9 @@ struct SingleLineLollipop: View {
 
     private var xAxisStride: Calendar.Component {
         switch selectedRange {
-        case .oneWeek:
+        case .sevenDay, .thirtyDay:
             return .day
-        case .oneMonth:
-            return .day
-        case .threeMonths, .sixMonths:
+        case .ninetyDay:
             return .month
         case .oneYear, .allTime:
             return .month

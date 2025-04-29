@@ -61,7 +61,7 @@ struct ContentView: View {
                 }
             }
             .background(.gray.opacity(0.1))
-            .navigationTitle("W8Trackr")
+            .navigationTitle("Summary")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(content: {
                 ToolbarItem(placement: .navigationBarTrailing) {

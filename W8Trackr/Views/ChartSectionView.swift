@@ -16,7 +16,7 @@ struct ChartSectionView: View {
                 .padding()
         } header: {
             HStack {
-                Text("Chart")
+                Text("Weight Chart")
                     .font(.title2)
                 Spacer()
             }
