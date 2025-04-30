@@ -35,13 +35,13 @@ struct WeightTrendChartView: View {
     }
     
     private var minWeight: Double {
-        let dataMin = filteredEntries.map { convertWeight($0.weightValue) }.min() ?? 0
+        let dataMin = filteredEntries.map { $0.weightValue }.min() ?? 0
         let goalMin = goalWeight > 0 ? goalWeight : Double.infinity
         return min(dataMin, goalMin) - yAxisPadding
     }
     
     private var maxWeight: Double {
-        let dataMax = filteredEntries.map { convertWeight($0.weightValue) }.max() ?? 0
+        let dataMax = filteredEntries.map { $0.weightValue }.max() ?? 0
         let goalMax = goalWeight > 0 ? goalWeight : 0
         return max(dataMax, goalMax) + yAxisPadding
     }
@@ -56,7 +56,7 @@ struct WeightTrendChartView: View {
     // Calculate average weight for each day for the line
     private var dailyAverages: [DailyAverage] {
         entriesByDay.map { date, entries in
-            let avgWeight = entries.reduce(0.0) { $0 + convertWeight($1.weightValue) } / Double(entries.count)
+            let avgWeight = entries.reduce(0.0) { $0 + $1.weightValue } / Double(entries.count)
             return DailyAverage(date: date, weight: avgWeight)
         }.sorted { $0.date < $1.date }
     }
@@ -79,9 +79,18 @@ struct WeightTrendChartView: View {
         }
     }
     
-    // Add prediction calculation
+    // Update prediction calculation
     private var prediction: (date: Date, weight: Double)? {
         guard filteredEntries.count >= 2 else { return nil }
+        
+        // Check if entries span at least 2 days
+        let calendar = Calendar.current
+        let startDate = calendar.startOfDay(for: filteredEntries.first?.date ?? Date())
+        let endDate = calendar.startOfDay(for: filteredEntries.last?.date ?? Date())
+        
+        guard calendar.dateComponents([.day], from: startDate, to: endDate).day ?? 0 >= 1 else {
+            return nil
+        }
         
         let xValues = filteredEntries.map { $0.date.timeIntervalSince1970 }
         let yValues = filteredEntries.map { convertWeight($0.weightValue) }
