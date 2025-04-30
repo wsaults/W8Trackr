@@ -55,10 +55,17 @@ struct WeightTrendChartView: View {
     
     // Calculate average weight for each day for the line
     private var dailyAverages: [DailyAverage] {
-        entriesByDay.map { date, entries in
+        // Get all days including the latest entry
+        let allDays = entriesByDay.map { $0.key }
+        guard let latestEntry = filteredEntries.max(by: { $0.date < $1.date }) else {
+            return []
+        }
+
+        return entriesByDay.map { date, entries in
             let avgWeight = entries.reduce(0.0) { $0 + $1.weightValue } / Double(entries.count)
             return DailyAverage(date: date, weight: convertWeight(avgWeight))
-        }.sorted { $0.date < $1.date }
+        }
+        .sorted { $0.date < $1.date }
     }
     
     private var dateFormatForRange: Date.FormatStyle {
@@ -126,17 +133,12 @@ struct WeightTrendChartView: View {
     }
     
     private var chartData: [ChartEntry] {
-        var data = filteredEntries.sorted { $0.date < $1.date }.map { entry in
-            ChartEntry(
-                date: entry.date,
-                weight: convertWeight(entry.weightValue),
-                isPrediction: false,
-                showPoint: true,
-                isIndividualEntry: true
-            )
-        }
+        // Get all entries sorted by date
+        let sortedEntries = filteredEntries.sorted { $0.date < $1.date }
         
-        // Add daily averages for the trend line
+        var data: [ChartEntry] = []
+        
+        // Add daily averages for the trend line first
         data.append(contentsOf: dailyAverages.map {
             ChartEntry(
                 date: $0.date,
@@ -147,9 +149,31 @@ struct WeightTrendChartView: View {
             )
         })
         
+        // Add the last actual point to both the trend line and individual points
+        if let lastEntry = sortedEntries.last {
+            data.append(ChartEntry(
+                date: lastEntry.date,
+                weight: convertWeight(lastEntry.weightValue),
+                isPrediction: false,
+                showPoint: false,
+                isIndividualEntry: false
+            ))
+        }
+        
+        // Add all individual points
+        data.append(contentsOf: sortedEntries.map { entry in
+            ChartEntry(
+                date: entry.date,
+                weight: convertWeight(entry.weightValue),
+                isPrediction: false,
+                showPoint: true,
+                isIndividualEntry: true
+            )
+        })
+        
         // Add prediction line if available
         if let prediction = prediction,
-           let lastEntry = filteredEntries.sorted(by: { $0.date < $1.date }).last {
+           let lastEntry = sortedEntries.last {
             // Add the last actual point as part of prediction line
             data.append(ChartEntry(
                 date: lastEntry.date,
@@ -186,24 +210,24 @@ struct WeightTrendChartView: View {
                                 .background(Color(UIColor.systemBackground))
                         }
                 }
-                
-                // Draw prediction line first
-                ForEach(chartData.filter { $0.isPrediction }) { entry in
-                    LineMark(
-                        x: .value("Date", entry.date),
-                        y: .value("Weight", entry.weight)
-                    )
-                    .foregroundStyle(by: .value("Type", "Predicted"))
-                    .interpolationMethod(.catmullRom)
-                }
-                
-                // Draw actual trend line
+
+                // Draw actual trend line first
                 ForEach(chartData.filter { !$0.isPrediction && !$0.isIndividualEntry }) { entry in
                     LineMark(
                         x: .value("Date", entry.date),
                         y: .value("Weight", entry.weight)
                     )
                     .foregroundStyle(by: .value("Type", "Average"))
+                    .interpolationMethod(.catmullRom)
+                }
+                
+                // Draw prediction line
+                ForEach(chartData.filter { $0.isPrediction }) { entry in
+                    LineMark(
+                        x: .value("Date", entry.date),
+                        y: .value("Weight", entry.weight)
+                    )
+                    .foregroundStyle(by: .value("Type", "Predicted"))
                     .interpolationMethod(.catmullRom)
                 }
                 
