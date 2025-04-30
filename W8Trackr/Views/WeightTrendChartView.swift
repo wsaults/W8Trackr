@@ -193,6 +193,7 @@ struct WeightTrendChartView: View {
                         y: .value("Weight", entry.weight)
                     )
                     .foregroundStyle(by: .value("Type", "Average"))
+                    .interpolationMethod(.catmullRom)
                 }
                 
                 ForEach(chartData.filter { $0.showPoint }) { entry in
