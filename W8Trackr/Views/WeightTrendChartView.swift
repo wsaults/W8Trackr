@@ -35,13 +35,13 @@ struct WeightTrendChartView: View {
     }
     
     private var minWeight: Double {
-        let dataMin = filteredEntries.map { $0.weightValue }.min() ?? 0
+        let dataMin = filteredEntries.map { convertWeight($0.weightValue) }.min() ?? 0
         let goalMin = goalWeight > 0 ? goalWeight : Double.infinity
         return min(dataMin, goalMin) - yAxisPadding
     }
     
     private var maxWeight: Double {
-        let dataMax = filteredEntries.map { $0.weightValue }.max() ?? 0
+        let dataMax = filteredEntries.map { convertWeight($0.weightValue) }.max() ?? 0
         let goalMax = goalWeight > 0 ? goalWeight : 0
         return max(dataMax, goalMax) + yAxisPadding
     }
@@ -57,7 +57,7 @@ struct WeightTrendChartView: View {
     private var dailyAverages: [DailyAverage] {
         entriesByDay.map { date, entries in
             let avgWeight = entries.reduce(0.0) { $0 + $1.weightValue } / Double(entries.count)
-            return DailyAverage(date: date, weight: avgWeight)
+            return DailyAverage(date: date, weight: convertWeight(avgWeight))
         }.sorted { $0.date < $1.date }
     }
     
@@ -83,17 +83,20 @@ struct WeightTrendChartView: View {
     private var prediction: (date: Date, weight: Double)? {
         guard filteredEntries.count >= 2 else { return nil }
         
+        // Get the dates sorted
+        let sortedEntries = filteredEntries.sorted { $0.date < $1.date }
+        
         // Check if entries span at least 2 days
         let calendar = Calendar.current
-        let startDate = calendar.startOfDay(for: filteredEntries.first?.date ?? Date())
-        let endDate = calendar.startOfDay(for: filteredEntries.last?.date ?? Date())
+        let startDate = calendar.startOfDay(for: sortedEntries.first?.date ?? Date())
+        let endDate = calendar.startOfDay(for: sortedEntries.last?.date ?? Date())
         
         guard calendar.dateComponents([.day], from: startDate, to: endDate).day ?? 0 >= 1 else {
             return nil
         }
         
-        let xValues = filteredEntries.map { $0.date.timeIntervalSince1970 }
-        let yValues = filteredEntries.map { convertWeight($0.weightValue) }
+        let xValues = sortedEntries.map { $0.date.timeIntervalSince1970 }
+        let yValues = sortedEntries.map { convertWeight($0.weightValue) }
         
         // Calculate linear regression
         let n = Double(xValues.count)
@@ -106,7 +109,7 @@ struct WeightTrendChartView: View {
         let intercept = (sumY - slope * sumX) / n
         
         // Predict next day
-        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: sortedEntries.last?.date ?? Date()) ?? Date()
         let tomorrowInterval = tomorrow.timeIntervalSince1970
         let predictedWeight = slope * tomorrowInterval + intercept
         
@@ -123,16 +126,17 @@ struct WeightTrendChartView: View {
     }
     
     private var chartData: [ChartEntry] {
-        var data = filteredEntries.map { entry in
+        var data = filteredEntries.sorted { $0.date < $1.date }.map { entry in
             ChartEntry(
                 date: entry.date,
-                weight: entry.weightValue,
+                weight: convertWeight(entry.weightValue),
                 isPrediction: false,
                 showPoint: true,
                 isIndividualEntry: true
             )
         }
         
+        // Add daily averages for the trend line
         data.append(contentsOf: dailyAverages.map {
             ChartEntry(
                 date: $0.date,
@@ -143,15 +147,18 @@ struct WeightTrendChartView: View {
             )
         })
         
+        // Add prediction line if available
         if let prediction = prediction,
-           let lastActual = dailyAverages.last {
+           let lastEntry = filteredEntries.sorted(by: { $0.date < $1.date }).last {
+            // Add the last actual point as part of prediction line
             data.append(ChartEntry(
-                date: lastActual.date,
-                weight: lastActual.weight,
+                date: lastEntry.date,
+                weight: convertWeight(lastEntry.weightValue),
                 isPrediction: true,
                 showPoint: false,
                 isIndividualEntry: false
             ))
+            // Add the prediction point
             data.append(ChartEntry(
                 date: prediction.date,
                 weight: prediction.weight,
@@ -167,6 +174,7 @@ struct WeightTrendChartView: View {
     var body: some View {
         VStack {
             Chart {
+                // Goal weight line remains the same
                 if goalWeight > 0 {
                     RuleMark(y: .value("Goal Weight", goalWeight))
                         .foregroundStyle(.green.opacity(0.5))
@@ -179,14 +187,17 @@ struct WeightTrendChartView: View {
                         }
                 }
                 
+                // Draw prediction line first
                 ForEach(chartData.filter { $0.isPrediction }) { entry in
                     LineMark(
                         x: .value("Date", entry.date),
                         y: .value("Weight", entry.weight)
                     )
                     .foregroundStyle(by: .value("Type", "Predicted"))
+                    .interpolationMethod(.catmullRom)
                 }
                 
+                // Draw actual trend line
                 ForEach(chartData.filter { !$0.isPrediction && !$0.isIndividualEntry }) { entry in
                     LineMark(
                         x: .value("Date", entry.date),
@@ -196,6 +207,7 @@ struct WeightTrendChartView: View {
                     .interpolationMethod(.catmullRom)
                 }
                 
+                // Draw all points last
                 ForEach(chartData.filter { $0.showPoint }) { entry in
                     PointMark(
                         x: .value("Date", entry.date),

@@ -113,20 +113,20 @@ final class WeightEntry {
         }
         
         return [
-            WeightEntry(weight: 200.0, date: dateTime(daysAgo: 13), note: "Started tracking", bodyFatPercentage: 25.0),
-            WeightEntry(weight: 197.2, date: dateTime(daysAgo: 12), bodyFatPercentage: 24.5),
-            WeightEntry(weight: 193.8, date: dateTime(daysAgo: 11), bodyFatPercentage: 24.0),
-            WeightEntry(weight: 194.5, date: dateTime(daysAgo: 10), note: "Good workout", bodyFatPercentage: 23.5),
-            WeightEntry(weight: 190.8, date: dateTime(daysAgo: 9), bodyFatPercentage: 23.0),
-            WeightEntry(weight: 191.2, date: dateTime(daysAgo: 8), bodyFatPercentage: 22.5),
-            WeightEntry(weight: 185.8, date: dateTime(daysAgo: 7), note: "One week in", bodyFatPercentage: 22.0),
-            WeightEntry(weight: 180.5, date: dateTime(daysAgo: 6), bodyFatPercentage: 21.5),
-            WeightEntry(weight: 182.3, date: dateTime(daysAgo: 5), bodyFatPercentage: 21.0),
-            WeightEntry(weight: 179.8, date: dateTime(daysAgo: 4), note: "Getting closer", bodyFatPercentage: 20.5),
-            WeightEntry(weight: 175.2, date: dateTime(daysAgo: 3), bodyFatPercentage: 20.0),
-            WeightEntry(weight: 176.8, date: dateTime(daysAgo: 2), bodyFatPercentage: 19.5),
-            WeightEntry(weight: 170.5, date: dateTime(daysAgo: 1), note: "Almost there", bodyFatPercentage: 19.0),
-            WeightEntry(weight: 171.0, date: dateTime(daysAgo: 0), note: "Goal weight reached!", bodyFatPercentage: 18.5)
+            WeightEntry(weight: 200.0, date: dateTime(daysAgo: 14), note: "Started tracking", bodyFatPercentage: 25.0),
+            WeightEntry(weight: 197.2, date: dateTime(daysAgo: 13), bodyFatPercentage: 24.5),
+            WeightEntry(weight: 193.8, date: dateTime(daysAgo: 12), bodyFatPercentage: 24.0),
+            WeightEntry(weight: 194.5, date: dateTime(daysAgo: 11), note: "Good workout", bodyFatPercentage: 23.5),
+            WeightEntry(weight: 190.8, date: dateTime(daysAgo: 10), bodyFatPercentage: 23.0),
+            WeightEntry(weight: 191.2, date: dateTime(daysAgo: 9), bodyFatPercentage: 22.5),
+            WeightEntry(weight: 185.8, date: dateTime(daysAgo: 8), note: "One week in", bodyFatPercentage: 22.0),
+            WeightEntry(weight: 180.5, date: dateTime(daysAgo: 7), bodyFatPercentage: 21.5),
+            WeightEntry(weight: 182.3, date: dateTime(daysAgo: 6), bodyFatPercentage: 21.0),
+            WeightEntry(weight: 179.8, date: dateTime(daysAgo: 5), note: "Getting closer", bodyFatPercentage: 20.5),
+            WeightEntry(weight: 175.2, date: dateTime(daysAgo: 4), bodyFatPercentage: 20.0),
+            WeightEntry(weight: 176.8, date: dateTime(daysAgo: 3), bodyFatPercentage: 19.5),
+            WeightEntry(weight: 170.5, date: dateTime(daysAgo: 2), note: "Almost there", bodyFatPercentage: 19.0),
+            WeightEntry(weight: 171.0, date: dateTime(daysAgo: 1), note: "Goal weight reached!", bodyFatPercentage: 18.5)
         ].sorted { $0.date > $1.date }
     }
 }
