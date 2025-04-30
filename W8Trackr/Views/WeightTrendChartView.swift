@@ -119,18 +119,46 @@ struct WeightTrendChartView: View {
         let weight: Double
         let isPrediction: Bool
         let showPoint: Bool
+        let isIndividualEntry: Bool
     }
     
     private var chartData: [ChartEntry] {
-        var data = dailyAverages.map { ChartEntry(date: $0.date, weight: $0.weight, isPrediction: false, showPoint: true) }
+        var data = filteredEntries.map { entry in
+            ChartEntry(
+                date: entry.date,
+                weight: entry.weightValue,
+                isPrediction: false,
+                showPoint: true,
+                isIndividualEntry: true
+            )
+        }
         
-        // Add prediction line if available
+        data.append(contentsOf: dailyAverages.map {
+            ChartEntry(
+                date: $0.date,
+                weight: $0.weight,
+                isPrediction: false,
+                showPoint: false,
+                isIndividualEntry: false
+            )
+        })
+        
         if let prediction = prediction,
            let lastActual = dailyAverages.last {
-            // Add the last actual point as part of prediction line but don't show its point
-            data.append(ChartEntry(date: lastActual.date, weight: lastActual.weight, isPrediction: true, showPoint: false))
-            // Add the prediction point and show it
-            data.append(ChartEntry(date: prediction.date, weight: prediction.weight, isPrediction: true, showPoint: true))
+            data.append(ChartEntry(
+                date: lastActual.date,
+                weight: lastActual.weight,
+                isPrediction: true,
+                showPoint: false,
+                isIndividualEntry: false
+            ))
+            data.append(ChartEntry(
+                date: prediction.date,
+                weight: prediction.weight,
+                isPrediction: true,
+                showPoint: true,
+                isIndividualEntry: false
+            ))
         }
         
         return data
@@ -139,7 +167,6 @@ struct WeightTrendChartView: View {
     var body: some View {
         VStack {
             Chart {
-                // Goal weight line
                 if goalWeight > 0 {
                     RuleMark(y: .value("Goal Weight", goalWeight))
                         .foregroundStyle(.green.opacity(0.5))
@@ -152,7 +179,6 @@ struct WeightTrendChartView: View {
                         }
                 }
                 
-                // Draw prediction line first (in background)
                 ForEach(chartData.filter { $0.isPrediction }) { entry in
                     LineMark(
                         x: .value("Date", entry.date),
@@ -161,28 +187,25 @@ struct WeightTrendChartView: View {
                     .foregroundStyle(by: .value("Type", "Predicted"))
                 }
                 
-                // Draw actual line second
-                ForEach(chartData.filter { !$0.isPrediction }) { entry in
+                ForEach(chartData.filter { !$0.isPrediction && !$0.isIndividualEntry }) { entry in
                     LineMark(
                         x: .value("Date", entry.date),
                         y: .value("Weight", entry.weight)
                     )
-                    .foregroundStyle(by: .value("Type", "Actual"))
+                    .foregroundStyle(by: .value("Type", "Average"))
                 }
                 
-                // Draw all points last (on top)
-                ForEach(chartData) { entry in
-                    if entry.showPoint {
-                        PointMark(
-                            x: .value("Date", entry.date),
-                            y: .value("Weight", entry.weight)
-                        )
-                        .foregroundStyle(by: .value("Type", entry.isPrediction ? "Predicted" : "Actual"))
-                    }
+                ForEach(chartData.filter { $0.showPoint }) { entry in
+                    PointMark(
+                        x: .value("Date", entry.date),
+                        y: .value("Weight", entry.weight)
+                    )
+                    .foregroundStyle(by: .value("Type", entry.isPrediction ? "Predicted" : (entry.isIndividualEntry ? "Entry" : "Average")))
                 }
             }
             .chartForegroundStyleScale([
-                "Actual": Color.blue,
+                "Entry": Color.blue,
+                "Average": Color.blue.opacity(0.5),
                 "Predicted": Color.orange
             ])
             .chartYScale(domain: minWeight...maxWeight)
