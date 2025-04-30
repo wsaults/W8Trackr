@@ -12,26 +12,7 @@ struct WeightTrendChartView: View {
     let entries: [WeightEntry]
     let goalWeight: Double
     let weightUnit: WeightUnit
-    
-    @State private var selectedRange: DateRange = .sevenDay
-    
-    private enum DateRange: String, CaseIterable {
-        case sevenDay = "7 Day"
-//        case thirtyDay = "30 Day"
-//        case ninetyDay = "90 Day"
-//        case oneYear = "1 Year"
-        case allTime = "All"
-        
-        var days: Int? {
-            switch self {
-            case .sevenDay: return 7
-//            case .thirtyDay: return 30
-//            case .ninetyDay: return 90
-//            case .oneYear: return 365
-            case .allTime: return nil
-            }
-        }
-    }
+    let selectedRange: DateRange
     
     private var filteredEntries: [WeightEntry] {
         guard let days = selectedRange.days else { return entries }
@@ -55,12 +36,14 @@ struct WeightTrendChartView: View {
     
     private var minWeight: Double {
         let dataMin = filteredEntries.map { convertWeight($0.weightValue) }.min() ?? 0
-        return goalWeight > 0 ? min(dataMin, goalWeight) - yAxisPadding : dataMin - yAxisPadding
+        let goalMin = goalWeight > 0 ? goalWeight : Double.infinity
+        return min(dataMin, goalMin) - yAxisPadding
     }
     
     private var maxWeight: Double {
         let dataMax = filteredEntries.map { convertWeight($0.weightValue) }.max() ?? 0
-        return goalWeight > 0 ? max(dataMax, goalWeight) + yAxisPadding : dataMax + yAxisPadding
+        let goalMax = goalWeight > 0 ? goalWeight : 0
+        return max(dataMax, goalMax) + yAxisPadding
     }
     
     // Group entries by date, maintaining the full WeightEntry objects
@@ -82,12 +65,6 @@ struct WeightTrendChartView: View {
         switch selectedRange {
         case .sevenDay:
             return .dateTime.day()
-//        case .thirtyDay:
-//            return .dateTime.day()
-//        case .ninetyDay:
-//            return .dateTime.month(.abbreviated).day()
-//        case .oneYear:
-//            return .dateTime.month(.abbreviated).year()
         case .allTime:
             return .dateTime.month(.abbreviated).year()
         }
@@ -97,12 +74,6 @@ struct WeightTrendChartView: View {
         switch selectedRange {
         case .sevenDay:
             return .day
-//        case .thirtyDay:
-//            return .day
-//        case .ninetyDay:
-//            return .month
-//        case .oneYear:
-//            return .month
         case .allTime:
             return .month
         }
@@ -224,17 +195,10 @@ struct WeightTrendChartView: View {
                     AxisValueLabel(format: dateFormatForRange)
                 }
             }
-            .animation(.smooth, value: selectedRange)
+            .animation(.easeInOut, value: selectedRange)
             .padding(.bottom)
-            
-            Picker("Date Range", selection: $selectedRange) {
-                ForEach(DateRange.allCases, id: \.self) { range in
-                    Text(range.rawValue).tag(range)
-                }
-            }
-            .pickerStyle(.segmented)
-            .padding(.horizontal)
         }
+        .padding(.horizontal)
     }
 }
 
@@ -245,6 +209,6 @@ private struct DailyAverage: Identifiable {
 }
 
 #Preview {
-    WeightTrendChartView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb)
+    WeightTrendChartView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb, selectedRange: .sevenDay)
         .padding()
 }
