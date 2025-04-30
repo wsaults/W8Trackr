@@ -9,8 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
     @AppStorage("preferredWeightUnit") var preferredWeightUnit: WeightUnit = Locale.current.measurementSystem == .metric ? .kg : .lb
-    @AppStorage("goalWeight") var goalWeight: Double = .zero
+    @AppStorage("goalWeight") var goalWeight: Double = 170.0
     
     @Query(
         sort: [SortDescriptor(\WeightEntry.date, order: .reverse)]
@@ -32,6 +33,14 @@ struct ContentView: View {
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
+        }
+        .onAppear {
+            if entries.isEmpty {
+                WeightEntry.initialData.forEach { entry in
+                    modelContext.insert(entry)
+                }
+                try? modelContext.save()
+            }
         }
     }
 }

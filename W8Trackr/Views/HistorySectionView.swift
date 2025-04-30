@@ -32,26 +32,32 @@ struct HistorySectionView: View {
                 .padding(.vertical, 8)
                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                     Button(role: .destructive) {
-                        withAnimation {
-                            modelContext.delete(entry)
-                            try? modelContext.save()
-                        }
+                        deleteEntry(entry)
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
                 }
             }
+            .onDelete { indexSet in
+                indexSet.forEach { index in
+                    deleteEntry(entries[index])
+                }
+            }
         }
-//        Section {
-//
-//        } header: {
-//            HStack {
-//                Text("Weight")
-//                    .font(.title2)
-//                Spacer()
-//            }
-//            .padding(.horizontal)
-//        }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                if !entries.isEmpty {
+                    EditButton()
+                }
+            }
+        }
+    }
+    
+    private func deleteEntry(_ entry: WeightEntry) {
+        withAnimation {
+            modelContext.delete(entry)
+            try? modelContext.save()
+        }
     }
 }
 
