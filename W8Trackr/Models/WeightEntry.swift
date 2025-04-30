@@ -129,4 +129,23 @@ final class WeightEntry {
             WeightEntry(weight: 171.0, date: dateTime(daysAgo: 1), note: "Goal weight reached!", bodyFatPercentage: 18.5)
         ].sorted { $0.date > $1.date }
     }
+    
+    static var initialData: [WeightEntry] {
+        let calendar = Calendar.current
+        let today = Date.now
+        
+        func dateTime(daysAgo: Int) -> Date {
+            let dateWithDays = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+            let dateWithHours = calendar.date(byAdding: .hour, value: Int.random(in: 6...10), to: dateWithDays)!
+            return calendar.date(byAdding: .minute, value: Int.random(in: 0...59), to: dateWithHours)!
+        }
+        
+        return [
+            WeightEntry(weight: 182.3, date: dateTime(daysAgo: 7), bodyFatPercentage: 21.0),
+            WeightEntry(weight: 179.8, date: dateTime(daysAgo: 5), note: "Getting closer", bodyFatPercentage: 20.5),
+            WeightEntry(weight: 175.2, date: dateTime(daysAgo: 4), bodyFatPercentage: 20.0),
+            WeightEntry(weight: 175.4, date: dateTime(daysAgo: 3), bodyFatPercentage: 20.0),
+            WeightEntry(weight: 176.8, date: dateTime(daysAgo: 3), bodyFatPercentage: 19.5),
+        ].sorted { $0.date > $1.date }
+    }
 }
