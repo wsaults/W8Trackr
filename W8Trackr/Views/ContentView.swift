@@ -12,6 +12,7 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("preferredWeightUnit") var preferredWeightUnit: WeightUnit = Locale.current.measurementSystem == .metric ? .kg : .lb
     @AppStorage("goalWeight") var goalWeight: Double = 170.0
+    @State private var showingInitialDataToast = false
     
     @Query(
         sort: [SortDescriptor(\WeightEntry.date, order: .reverse)]
@@ -40,7 +41,15 @@ struct ContentView: View {
                     modelContext.insert(entry)
                 }
                 try? modelContext.save()
+                withAnimation {
+                    showingInitialDataToast = true
+                }
             }
         }
+        .toast(
+            isPresented: $showingInitialDataToast,
+            message: "Sample data added. Feel free to delete and add your own entries!",
+            systemImage: "info.circle"
+        )
     }
 }
