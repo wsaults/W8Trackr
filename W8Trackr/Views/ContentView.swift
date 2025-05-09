@@ -14,9 +14,13 @@ struct ContentView: View {
     @AppStorage("goalWeight") var goalWeight: Double = 170.0
     @State private var showingInitialDataToast = false
     
+    #if targetEnvironment(simulator)
+    private var entries: [WeightEntry] = WeightEntry.shortSampleData
+    #else
     @Query(
         sort: [SortDescriptor(\WeightEntry.date, order: .reverse)]
     ) private var entries: [WeightEntry]
+    #endif
     
     var body: some View {
         TabView {

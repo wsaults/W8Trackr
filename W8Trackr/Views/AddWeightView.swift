@@ -7,6 +7,19 @@
 
 import SwiftUI
 
+struct WeightAdjustButton: View {
+    let systemName: String
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.system(size: 44))
+                .foregroundStyle(.blue)
+        }
+    }
+}
+
 struct AddWeightView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
@@ -16,6 +29,8 @@ struct AddWeightView: View {
     var entries: [WeightEntry]
     
     @State private var weight: Double
+    @State private var lightFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+    @State private var mediumFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
     let today = Date()
     
     init(
@@ -52,36 +67,24 @@ struct AddWeightView: View {
                     }
                     
                     HStack(spacing: 40) {
-                        Button {
-                            weight = max(0, weight - 1.0)
-                        } label: {
-                            Image(systemName: "backward.circle.fill")
-                                .font(.system(size: 44))
-                                .foregroundStyle(.blue)
+                        WeightAdjustButton(systemName: "backward.circle.fill") {
+                            mediumFeedbackGenerator.impactOccurred()
+                            weight -= 1.0
                         }
                         
-                        Button {
-                            weight = max(0, weight - 0.1)
-                        } label: {
-                            Image(systemName: "backward.end.circle.fill")
-                                .font(.system(size: 44))
-                                .foregroundStyle(.blue)
+                        WeightAdjustButton(systemName: "backward.end.circle.fill") {
+                            lightFeedbackGenerator.impactOccurred()
+                            weight -= 0.1
                         }
                         
-                        Button {
-                            weight = min(500, weight + 0.1)
-                        } label: {
-                            Image(systemName: "forward.end.circle.fill")
-                                .font(.system(size: 44))
-                                .foregroundStyle(.blue)
+                        WeightAdjustButton(systemName: "forward.end.circle.fill") {
+                            lightFeedbackGenerator.impactOccurred()
+                            weight += 0.1
                         }
                         
-                        Button {
-                            weight = min(500, weight + 1.0)
-                        } label: {
-                            Image(systemName: "forward.circle.fill")
-                                .font(.system(size: 44))
-                                .foregroundStyle(.blue)
+                        WeightAdjustButton(systemName: "forward.circle.fill") {
+                            mediumFeedbackGenerator.impactOccurred()
+                            weight += 1.0
                         }
                     }
                     .padding(.top, 20)

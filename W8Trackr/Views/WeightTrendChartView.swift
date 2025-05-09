@@ -55,9 +55,7 @@ struct WeightTrendChartView: View {
     
     // Calculate average weight for each day for the line
     private var dailyAverages: [DailyAverage] {
-        // Get all days including the latest entry
-        let allDays = entriesByDay.map { $0.key }
-        guard let latestEntry = filteredEntries.max(by: { $0.date < $1.date }) else {
+        guard let _ = filteredEntries.max(by: { $0.date < $1.date }) else {
             return []
         }
 

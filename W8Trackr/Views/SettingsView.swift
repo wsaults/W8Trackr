@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-import UserNotifications
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
@@ -17,8 +16,14 @@ struct SettingsView: View {
     @Binding var goalWeight: Double
     @State private var localGoalWeight: Double = 0.0
     @State private var showingDeleteAlert = false
-    @State private var reminderTime = Date()
+    @State private var reminderTime: Date
     @State private var showingNotificationPermissionAlert = false
+    
+    init(weightUnit: Binding<WeightUnit>, goalWeight: Binding<Double>) {
+        _weightUnit = weightUnit
+        _goalWeight = goalWeight
+        _reminderTime = State(initialValue: NotificationManager().getReminderTime())
+    }
     
     private func updateGoalWeight(_ newValue: Double) {
         goalWeight = newValue
@@ -91,6 +96,7 @@ struct SettingsView: View {
                           displayedComponents: .hourAndMinute)
                     .onChange(of: reminderTime) { _, newValue in
                         notificationManager.scheduleNotification(at: newValue)
+                        notificationManager.saveReminderTime(newValue)
                     }
             }
         } header: {
