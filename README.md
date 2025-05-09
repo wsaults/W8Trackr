@@ -25,7 +25,7 @@ W8Trackr is a clean, intuitive weight tracking application that helps users moni
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/W8Trackr.git
+git clone https://github.com/wsaults/W8Trackr.git
 ```
 
 2. Open `W8Trackr.xcodeproj` in Xcode
@@ -51,14 +51,6 @@ The app is built using:
 - SwiftData for data persistence
 - MVVM architecture pattern (TODO)
 - Swift's latest features including Observation framework
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ## License
 
