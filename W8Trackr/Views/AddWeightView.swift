@@ -53,9 +53,17 @@ struct AddWeightView: View {
                     
                     HStack(spacing: 40) {
                         Button {
+                            weight = max(0, weight - 1.0)
+                        } label: {
+                            Image(systemName: "backward.circle.fill")
+                                .font(.system(size: 44))
+                                .foregroundStyle(.blue)
+                        }
+                        
+                        Button {
                             weight = max(0, weight - 0.1)
                         } label: {
-                            Image(systemName: "minus.circle.fill")
+                            Image(systemName: "backward.end.circle.fill")
                                 .font(.system(size: 44))
                                 .foregroundStyle(.blue)
                         }
@@ -63,7 +71,15 @@ struct AddWeightView: View {
                         Button {
                             weight = min(500, weight + 0.1)
                         } label: {
-                            Image(systemName: "plus.circle.fill")
+                            Image(systemName: "forward.end.circle.fill")
+                                .font(.system(size: 44))
+                                .foregroundStyle(.blue)
+                        }
+                        
+                        Button {
+                            weight = min(500, weight + 1.0)
+                        } label: {
+                            Image(systemName: "forward.circle.fill")
                                 .font(.system(size: 44))
                                 .foregroundStyle(.blue)
                         }
