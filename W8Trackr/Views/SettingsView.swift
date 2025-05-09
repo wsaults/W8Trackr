@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
@@ -15,9 +16,46 @@ struct SettingsView: View {
     @Binding var goalWeight: Double
     @State private var localGoalWeight: Double = 0.0
     @State private var showingDeleteAlert = false
+    @State private var isReminderEnabled = false
+    @State private var reminderTime = Date()
+    @State private var showingNotificationPermissionAlert = false
     
     private func updateGoalWeight(_ newValue: Double) {
         goalWeight = newValue
+    }
+    
+    private func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
+            if granted {
+                scheduleNotification()
+            } else {
+                showingNotificationPermissionAlert = true
+            }
+        }
+    }
+    
+    private func scheduleNotification() {
+        let center = UNUserNotificationCenter.current()
+        
+        center.removeAllPendingNotificationRequests()
+        
+        if isReminderEnabled {
+            let content = UNMutableNotificationContent()
+            content.title = "Time to Log Your Weight"
+            content.body = "Don't forget to log your weight for today!"
+            content.sound = .default
+            
+            let calendar = Calendar.current
+            let components = calendar.dateComponents([.hour, .minute], from: reminderTime)
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+            
+            let request = UNNotificationRequest(identifier: "weightLogReminder",
+                                             content: content,
+                                             trigger: trigger)
+            
+            center.add(request)
+        }
     }
     
     private var weightSettingsSection: some View {
@@ -66,15 +104,47 @@ struct SettingsView: View {
         }
     }
     
+    private var reminderSection: some View {
+        Section {
+            Toggle("Daily Reminder", isOn: $isReminderEnabled)
+                .onChange(of: isReminderEnabled) { _, newValue in
+                    if newValue {
+                        requestNotificationPermission()
+                    } else {
+                        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                    }
+                }
+            
+            if isReminderEnabled {
+                DatePicker("Reminder Time",
+                          selection: $reminderTime,
+                          displayedComponents: .hourAndMinute)
+                    .onChange(of: reminderTime) { _, _ in
+                        scheduleNotification()
+                    }
+            }
+        } header: {
+            Text("Reminders")
+        } footer: {
+            Text("You'll receive a notification at the specified time every day to log your weight.")
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             Form {
                 weightSettingsSection
+                reminderSection
                 dangerZoneSection
             }
             .navigationTitle("Settings")
             .onAppear {
                 localGoalWeight = goalWeight
+                UNUserNotificationCenter.current().getNotificationSettings { settings in
+                    DispatchQueue.main.async {
+                        isReminderEnabled = settings.authorizationStatus == .authorized
+                    }
+                }
             }
             .alert("Delete All Entries", isPresented: $showingDeleteAlert) {
                 Button("Cancel", role: .cancel) { }
@@ -92,6 +162,18 @@ struct SettingsView: View {
                 }
             } message: {
                 Text("Are you sure you want to delete all weight entries? This action cannot be undone.")
+            }
+            .alert("Notifications Disabled", isPresented: $showingNotificationPermissionAlert) {
+                Button("OK", role: .cancel) {
+                    isReminderEnabled = false
+                }
+                Button("Open Settings") {
+                    if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(settingsUrl)
+                    }
+                }
+            } message: {
+                Text("Please enable notifications in Settings to use daily reminders.")
             }
         }
     }
