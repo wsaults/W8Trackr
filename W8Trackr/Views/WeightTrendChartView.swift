@@ -187,7 +187,7 @@ struct WeightTrendChartView: View {
                 date: prediction.date,
                 weight: prediction.weight,
                 isPrediction: true,
-                showPoint: true,
+                showPoint: false,
                 isIndividualEntry: false
             ))
         }
