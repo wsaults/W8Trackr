@@ -20,50 +20,57 @@ struct SettingsView: View {
         goalWeight = newValue
     }
     
+    private var weightSettingsSection: some View {
+        Section {
+            Picker("Weight Unit", selection: $weightUnit) {
+                ForEach(WeightUnit.allCases, id: \.self) { unit in
+                    Text(unit.rawValue)
+                }
+            }
+            .pickerStyle(.segmented)
+            .onChange(of: weightUnit) { oldUnit, newUnit in
+                if newUnit == .lb {
+                    localGoalWeight *= 2.20462 // Convert kg to lbs
+                } else {
+                    localGoalWeight /= 2.20462 // Convert lbs to kg
+                }
+            }
+            
+            HStack {
+                Text("Goal Weight")
+                Spacer()
+                TextField("Goal Weight", value: $localGoalWeight, format: .number.precision(.fractionLength(1)))
+                    .keyboardType(.decimalPad)
+                    .multilineTextAlignment(.trailing)
+                    .onChange(of: localGoalWeight) { _, newValue in
+                        updateGoalWeight(newValue)
+                    }
+                Text(weightUnit.rawValue)
+            }
+        } header: {
+            Text("Weight Settings")
+        } footer: {
+            Text("Your goal weight will be automatically converted when changing units.")
+        }
+    }
+    
+    private var dangerZoneSection: some View {
+        Section {
+            Button(role: .destructive) {
+                showingDeleteAlert = true
+            } label: {
+                Text("Delete All Weight Entries")
+            }
+        } header: {
+            Text("Danger Zone")
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             Form {
-                Section {
-                    Picker("Weight Unit", selection: $weightUnit) {
-                        ForEach(WeightUnit.allCases, id: \.self) { unit in
-                            Text(unit.rawValue)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .onChange(of: weightUnit) { oldUnit, newUnit in
-                        if newUnit == .lb {
-                            localGoalWeight *= 2.20462 // Convert kg to lbs
-                        } else {
-                            localGoalWeight /= 2.20462 // Convert lbs to kg
-                        }
-                    }
-                    
-                    HStack {
-                        Text("Goal Weight")
-                        Spacer()
-                        TextField("Goal Weight", value: $localGoalWeight, format: .number.precision(.fractionLength(1)))
-                            .keyboardType(.decimalPad)
-                            .multilineTextAlignment(.trailing)
-                            .onChange(of: localGoalWeight) { _, newValue in
-                                updateGoalWeight(newValue)
-                            }
-                        Text(weightUnit.rawValue)
-                    }
-                } header: {
-                    Text("Weight Settings")
-                } footer: {
-                    Text("Your goal weight will be automatically converted when changing units.")
-                }
-                
-                Section {
-                    Button(role: .destructive) {
-                        showingDeleteAlert = true
-                    } label: {
-                        Text("Delete All Weight Entries")
-                    }
-                } header: {
-                    Text("Danger Zone")
-                }
+                weightSettingsSection
+                dangerZoneSection
             }
             .navigationTitle("Settings")
             .onAppear {
