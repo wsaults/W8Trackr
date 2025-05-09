@@ -1,3 +1,10 @@
+//
+//  HistorySectionView.swift
+//  W8Trackr
+//
+//  Created by Will Saults on 4/28/25.
+//
+
 import SwiftUI
 
 struct HistorySectionView: View {

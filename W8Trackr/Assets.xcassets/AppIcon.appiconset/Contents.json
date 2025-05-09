@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "w8trackr-icon.png",
+      "filename" : "W8Trackr.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "w8trackr-icon-dark.png",
+      "filename" : "W8Trackr-Dark.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,7 +25,7 @@
           "value" : "tinted"
         }
       ],
-      "filename" : "w8trackr-icon-tinted.png",
+      "filename" : "W8Trackr-Tinted.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

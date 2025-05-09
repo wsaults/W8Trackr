@@ -1,3 +1,10 @@
+//
+//  LogbookView.swift
+//  W8Trackr
+//
+//  Created by Will Saults on 4/29/25.
+//
+
 import SwiftUI
 import SwiftData
 

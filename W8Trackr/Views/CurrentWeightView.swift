@@ -1,3 +1,10 @@
+//
+//  AddWeightView.swift
+//  W8Trackr
+//
+//  Created by Will Saults on 5/9/25.
+//
+
 import SwiftUI
 
 struct CurrentWeightView: View {
