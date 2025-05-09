@@ -12,50 +12,16 @@ import UserNotifications
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @StateObject private var notificationManager = NotificationManager()
     @Binding var weightUnit: WeightUnit
     @Binding var goalWeight: Double
     @State private var localGoalWeight: Double = 0.0
     @State private var showingDeleteAlert = false
-    @State private var isReminderEnabled = false
     @State private var reminderTime = Date()
     @State private var showingNotificationPermissionAlert = false
     
     private func updateGoalWeight(_ newValue: Double) {
         goalWeight = newValue
-    }
-    
-    private func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
-            if granted {
-                scheduleNotification()
-            } else {
-                showingNotificationPermissionAlert = true
-            }
-        }
-    }
-    
-    private func scheduleNotification() {
-        let center = UNUserNotificationCenter.current()
-        
-        center.removeAllPendingNotificationRequests()
-        
-        if isReminderEnabled {
-            let content = UNMutableNotificationContent()
-            content.title = "Time to Log Your Weight"
-            content.body = "Don't forget to log your weight for today!"
-            content.sound = .default
-            
-            let calendar = Calendar.current
-            let components = calendar.dateComponents([.hour, .minute], from: reminderTime)
-            
-            let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-            
-            let request = UNNotificationRequest(identifier: "weightLogReminder",
-                                             content: content,
-                                             trigger: trigger)
-            
-            center.add(request)
-        }
     }
     
     private var weightSettingsSection: some View {
@@ -106,21 +72,25 @@ struct SettingsView: View {
     
     private var reminderSection: some View {
         Section {
-            Toggle("Daily Reminder", isOn: $isReminderEnabled)
-                .onChange(of: isReminderEnabled) { _, newValue in
+            Toggle("Daily Reminder", isOn: $notificationManager.isReminderEnabled)
+                .onChange(of: notificationManager.isReminderEnabled) { _, newValue in
                     if newValue {
-                        requestNotificationPermission()
+                        notificationManager.requestNotificationPermission { granted in
+                            if !granted {
+                                showingNotificationPermissionAlert = true
+                            }
+                        }
                     } else {
-                        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                        notificationManager.disableNotifications()
                     }
                 }
             
-            if isReminderEnabled {
+            if notificationManager.isReminderEnabled {
                 DatePicker("Reminder Time",
                           selection: $reminderTime,
                           displayedComponents: .hourAndMinute)
-                    .onChange(of: reminderTime) { _, _ in
-                        scheduleNotification()
+                    .onChange(of: reminderTime) { _, newValue in
+                        notificationManager.scheduleNotification(at: newValue)
                     }
             }
         } header: {
@@ -140,11 +110,6 @@ struct SettingsView: View {
             .navigationTitle("Settings")
             .onAppear {
                 localGoalWeight = goalWeight
-                UNUserNotificationCenter.current().getNotificationSettings { settings in
-                    DispatchQueue.main.async {
-                        isReminderEnabled = settings.authorizationStatus == .authorized
-                    }
-                }
             }
             .alert("Delete All Entries", isPresented: $showingDeleteAlert) {
                 Button("Cancel", role: .cancel) { }
@@ -165,7 +130,7 @@ struct SettingsView: View {
             }
             .alert("Notifications Disabled", isPresented: $showingNotificationPermissionAlert) {
                 Button("OK", role: .cancel) {
-                    isReminderEnabled = false
+                    notificationManager.isReminderEnabled = false
                 }
                 Button("Open Settings") {
                     if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {

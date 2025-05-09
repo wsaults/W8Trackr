@@ -6,5 +6,7 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<key>NSUserNotificationUsageDescription</key>
+	<string>We need to send you notifications for daily weight logging reminders.</string>
 </dict>
 </plist>
