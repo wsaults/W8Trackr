@@ -84,41 +84,47 @@ struct WeightTrendChartView: View {
         }
     }
     
-    // Update prediction calculation
+    // Improved prediction calculation: recentered days-based regression
     private var prediction: (date: Date, weight: Double)? {
-        guard filteredEntries.count >= 2 else { return nil }
-        
-        // Get the dates sorted
-        let sortedEntries = filteredEntries.sorted { $0.date < $1.date }
-        
-        // Check if entries span at least 2 days
-        let calendar = Calendar.current
-        let startDate = calendar.startOfDay(for: sortedEntries.first?.date ?? Date())
-        let endDate = calendar.startOfDay(for: sortedEntries.last?.date ?? Date())
-        
-        guard calendar.dateComponents([.day], from: startDate, to: endDate).day ?? 0 >= 1 else {
+        let sorted = filteredEntries.sorted { $0.date < $1.date }
+        guard sorted.count >= 2 else { return nil }
+
+        // Require a minimum span of one hour between first and last entry
+        guard let firstDate = sorted.first?.date,
+              let lastDate = sorted.last?.date,
+              lastDate.timeIntervalSince(firstDate) >= 3600 else {
             return nil
         }
-        
-        let xValues = sortedEntries.map { $0.date.timeIntervalSince1970 }
-        let yValues = sortedEntries.map { convertWeight($0.weightValue) }
-        
-        // Calculate linear regression
-        let n = Double(xValues.count)
-        let sumX = xValues.reduce(0, +)
-        let sumY = yValues.reduce(0, +)
-        let sumXY = zip(xValues, yValues).map(*).reduce(0, +)
-        let sumXX = xValues.map { $0 * $0 }.reduce(0, +)
-        
-        let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX)
-        let intercept = (sumY - slope * sumX) / n
-        
-        // Predict next day
-        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: sortedEntries.last?.date ?? Date()) ?? Date()
-        let tomorrowInterval = tomorrow.timeIntervalSince1970
-        let predictedWeight = slope * tomorrowInterval + intercept
-        
-        return (tomorrow, predictedWeight)
+
+        // Convert timestamps to days since first entry
+        let firstTime = firstDate.timeIntervalSince1970
+        let xs = sorted.map { ($0.date.timeIntervalSince1970 - firstTime) / 86400.0 }
+        let ys = sorted.map { convertWeight($0.weightValue) }
+
+        // Calculate regression sums
+        let n = Double(xs.count)
+        let sumX  = xs.reduce(0, +)
+        let sumY  = ys.reduce(0, +)
+        let sumXX = xs.reduce(0) { $0 + $1 * $1 }
+        let sumXY = zip(xs, ys).reduce(0) { $0 + $1.0 * $1.1 }
+
+        let denom = n * sumXX - sumX * sumX
+        guard denom != 0 else { return nil }
+
+        let slope     = (n * sumXY - sumX * sumY) / denom      // weight change per day
+        let intercept = (sumY - slope * sumX) / n               // starting weight
+
+        // Predict 1 day ahead (adjustable via `daysAhead`)
+        let daysAhead = 1.0
+        let futureX = (xs.last! + daysAhead)
+        let predictedWeight = slope * futureX + intercept
+
+        let predictedDate = Calendar.current.date(
+            byAdding: .day, value: Int(daysAhead),
+            to: lastDate
+        )!
+
+        return (predictedDate, predictedWeight)
     }
     
     private struct ChartEntry: Identifiable {

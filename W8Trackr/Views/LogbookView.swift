@@ -21,7 +21,7 @@ struct LogbookView: View {
                     ContentUnavailableView(
                         "No Weight Entries",
                         systemImage: "book.closed",
-                        description: Text("Add your first weight entry to start tracking your progress")
+                        description: Text("Add your first weight entry to start tracking your progress.")
                     )
                 } else {
                     HistorySectionView(entries: entries, weightUnit: preferredWeightUnit)
