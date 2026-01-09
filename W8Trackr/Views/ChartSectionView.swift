@@ -24,15 +24,17 @@ struct ChartSectionView: View {
     let entries: [WeightEntry]
     let goalWeight: Double
     let weightUnit: WeightUnit
+    let showSmoothing: Bool
     @State private var selectedRange: DateRange = .sevenDay
-    
+
     var body: some View {
         Section {
             VStack {
-                WeightTrendChartView(entries: entries, 
+                WeightTrendChartView(entries: entries,
                                    goalWeight: goalWeight,
                                    weightUnit: weightUnit,
-                                   selectedRange: selectedRange)
+                                   selectedRange: selectedRange,
+                                   showSmoothing: showSmoothing)
                     .frame(height: 300)
                     .padding()
                     .background(Color(UIColor.systemBackground))
@@ -59,5 +61,5 @@ struct ChartSectionView: View {
 }
 
 #Preview {
-    ChartSectionView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb)
+    ChartSectionView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb, showSmoothing: true)
 }

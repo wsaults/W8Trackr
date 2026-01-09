@@ -14,14 +14,17 @@ struct SettingsView: View {
     @StateObject private var notificationManager = NotificationManager()
     @Binding var weightUnit: WeightUnit
     @Binding var goalWeight: Double
+    @Binding var showSmoothing: Bool
     @State private var localGoalWeight: Double = 0.0
     @State private var showingDeleteAlert = false
     @State private var reminderTime: Date
     @State private var showingNotificationPermissionAlert = false
-    
-    init(weightUnit: Binding<WeightUnit>, goalWeight: Binding<Double>) {
+    @State private var showingSmoothingInfo = false
+
+    init(weightUnit: Binding<WeightUnit>, goalWeight: Binding<Double>, showSmoothing: Binding<Bool>) {
         _weightUnit = weightUnit
         _goalWeight = goalWeight
+        _showSmoothing = showSmoothing
         _reminderTime = State(initialValue: NotificationManager.getReminderTime())
     }
 
@@ -89,6 +92,25 @@ struct SettingsView: View {
         }
     }
     
+    private var chartSettingsSection: some View {
+        Section {
+            HStack {
+                Toggle("Trend Smoothing", isOn: $showSmoothing)
+                Button {
+                    showingSmoothingInfo = true
+                } label: {
+                    Image(systemName: "info.circle")
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+            }
+        } header: {
+            Text("Chart Settings")
+        } footer: {
+            Text("Shows your true weight trend by smoothing out daily fluctuations from water weight and sodium.")
+        }
+    }
+
     private var reminderSection: some View {
         Section {
             Toggle("Daily Reminder", isOn: $notificationManager.isReminderEnabled)
@@ -124,6 +146,7 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 weightSettingsSection
+                chartSettingsSection
                 reminderSection
                 dangerZoneSection
             }
@@ -159,6 +182,11 @@ struct SettingsView: View {
                 }
             } message: {
                 Text("Please enable notifications in Settings to use daily reminders.")
+            }
+            .alert("Trend Smoothing", isPresented: $showingSmoothingInfo) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Your weight naturally fluctuates 2-4 lbs daily due to water retention, sodium intake, and digestion. Trend smoothing uses a 10-day exponential moving average to reveal your true weight trend, helping you focus on long-term progress rather than day-to-day noise.")
             }
         }
     }

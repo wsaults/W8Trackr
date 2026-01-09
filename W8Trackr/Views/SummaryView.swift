@@ -11,10 +11,11 @@ import SwiftUI
 
 struct SummaryView: View {
     @State private var showAddWeightView = false
-    
+
     var entries: [WeightEntry]
     var preferredWeightUnit: WeightUnit
     var goalWeight: Double
+    var showSmoothing: Bool
     
     var body: some View {
         NavigationStack {
@@ -38,7 +39,7 @@ struct SummaryView: View {
                         }
                         
                         ScrollView {
-                            ChartSectionView(entries: entries, goalWeight: goalWeight, weightUnit: preferredWeightUnit)
+                            ChartSectionView(entries: entries, goalWeight: goalWeight, weightUnit: preferredWeightUnit, showSmoothing: showSmoothing)
                         }
                     }
                 }
@@ -69,8 +70,8 @@ struct SummaryView: View {
 @available(iOS 18, macOS 15, *)
 #Preview(traits: .modifier(EntriesPreview())) {
     @Previewable @Query var entries: [WeightEntry]
-    
-    SummaryView(entries: WeightEntry.shortSampleData, preferredWeightUnit: .lb, goalWeight: 160)
+
+    SummaryView(entries: WeightEntry.shortSampleData, preferredWeightUnit: .lb, goalWeight: 160, showSmoothing: true)
 }
 
 struct EntriesPreview: PreviewModifier {

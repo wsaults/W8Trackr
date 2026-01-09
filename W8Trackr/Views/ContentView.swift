@@ -12,6 +12,7 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("preferredWeightUnit") var preferredWeightUnit: WeightUnit = Locale.current.measurementSystem == .metric ? .kg : .lb
     @AppStorage("goalWeight") var goalWeight: Double = 170.0
+    @AppStorage("showSmoothing") var showSmoothing: Bool = true
     @State private var showingInitialDataToast = false
     
     #if targetEnvironment(simulator)
@@ -24,7 +25,7 @@ struct ContentView: View {
     
     var body: some View {
         TabView {
-            SummaryView(entries: entries, preferredWeightUnit: preferredWeightUnit, goalWeight: goalWeight)
+            SummaryView(entries: entries, preferredWeightUnit: preferredWeightUnit, goalWeight: goalWeight, showSmoothing: showSmoothing)
                 .tabItem {
                     Label("Summary", systemImage: "chart.line.uptrend.xyaxis")
                 }
@@ -34,7 +35,7 @@ struct ContentView: View {
                     Label("Logbook", systemImage: "book")
                 }
             
-            SettingsView(weightUnit: $preferredWeightUnit, goalWeight: $goalWeight)
+            SettingsView(weightUnit: $preferredWeightUnit, goalWeight: $goalWeight, showSmoothing: $showSmoothing)
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
