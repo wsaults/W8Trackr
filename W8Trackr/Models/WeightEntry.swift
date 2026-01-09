@@ -11,6 +11,11 @@ import SwiftData
 enum WeightUnit: String, CaseIterable {
     case lb, kg
 
+    /// Conversion factor: 1 lb = 0.453592 kg
+    static let lbToKg = 0.453592
+    /// Conversion factor: 1 kg = 2.20462 lb
+    static let kgToLb = 2.20462
+
     var defaultWeight: Double {
         switch self {
         case .lb:
@@ -41,16 +46,24 @@ enum WeightUnit: String, CaseIterable {
     func isValidWeight(_ weight: Double) -> Bool {
         weight >= minWeight && weight <= maxWeight
     }
+
+    /// Converts a weight value from this unit to the target unit
+    func convert(_ value: Double, to targetUnit: WeightUnit) -> Double {
+        guard self != targetUnit else { return value }
+        switch (self, targetUnit) {
+        case (.lb, .kg):
+            return value * Self.lbToKg
+        case (.kg, .lb):
+            return value * Self.kgToLb
+        default:
+            return value
+        }
+    }
 }
 
 extension Double {
     func weightValue(from: WeightUnit, to unit: WeightUnit) -> Double {
-        if from == .lb, unit == .kg {
-            return self * 0.453592 // Convert from lb to kg
-        } else if from == .kg, unit == .lb {
-            return self * 2.20462 // Convert from kg to lb
-        }
-        return self
+        from.convert(self, to: unit)
     }
 }
 

@@ -49,11 +49,7 @@ struct SettingsView: View {
             }
             .pickerStyle(.segmented)
             .onChange(of: weightUnit) { oldUnit, newUnit in
-                if newUnit == .lb {
-                    localGoalWeight *= 2.20462 // Convert kg to lbs
-                } else {
-                    localGoalWeight /= 2.20462 // Convert lbs to kg
-                }
+                localGoalWeight = oldUnit.convert(localGoalWeight, to: newUnit)
             }
             
             HStack {

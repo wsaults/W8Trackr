@@ -22,12 +22,7 @@ struct WeightTrendChartView: View {
     }
     
     private func convertWeight(_ weight: Double) -> Double {
-        switch weightUnit {
-        case .kg:
-            return weight * 0.453592 // Convert lb to kg
-        case .lb:
-            return weight
-        }
+        WeightUnit.lb.convert(weight, to: weightUnit)
     }
     
     private var yAxisPadding: Double {
