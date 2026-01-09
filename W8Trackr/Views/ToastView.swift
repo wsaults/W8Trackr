@@ -13,6 +13,7 @@ struct ToastView: View {
     let systemImage: String
     var actionLabel: String?
     var onAction: (() -> Void)?
+    var isError: Bool = false
 
     var body: some View {
         HStack(spacing: 12) {
@@ -20,7 +21,7 @@ struct ToastView: View {
                 Text(message)
             } icon: {
                 Image(systemName: systemImage)
-                    .foregroundColor(.blue)
+                    .foregroundColor(isError ? .red : .blue)
             }
 
             if let actionLabel, let onAction {
@@ -33,8 +34,16 @@ struct ToastView: View {
             }
         }
         .padding()
-        .background(.ultraThinMaterial)
-        .cornerRadius(10)
+        .background {
+            if isError {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(.red.opacity(0.1))
+            } else {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(.ultraThinMaterial)
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 10))
         .shadow(color: .black.opacity(0.15), radius: 5, x: 0, y: 2)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(.isStaticText)
@@ -47,7 +56,8 @@ struct ToastModifier: ViewModifier {
     let systemImage: String
     var actionLabel: String?
     var onAction: (() -> Void)?
-    var duration: TimeInterval
+    var duration: TimeInterval = 5
+    var isError: Bool = false
 
     var yOffset: CGFloat {
         isPresented ? 0 : -100
@@ -61,7 +71,8 @@ struct ToastModifier: ViewModifier {
                 message: message,
                 systemImage: systemImage,
                 actionLabel: actionLabel,
-                onAction: onAction
+                onAction: onAction,
+                isError: isError
             )
             .padding(.top)
             .opacity(isPresented ? 1 : 0)
@@ -109,5 +120,9 @@ extension View {
             onAction: onAction,
             duration: duration
         ))
+    }
+
+    func errorToast(isPresented: Binding<Bool>, message: String) -> some View {
+        modifier(ToastModifier(isPresented: isPresented, message: message, systemImage: "exclamationmark.triangle.fill", isError: true))
     }
 }

@@ -75,6 +75,8 @@ struct SettingsView: View {
             }
             .pickerStyle(.segmented)
             .onChange(of: weightUnit) { oldUnit, newUnit in
+                guard oldUnit != newUnit else { return }
+
                 // Validate source value before conversion
                 guard oldUnit.isValidGoalWeight(localGoalWeight) else {
                     // Invalid source value - use the new unit's default

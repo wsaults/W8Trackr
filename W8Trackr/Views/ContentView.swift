@@ -14,6 +14,7 @@ struct ContentView: View {
     @AppStorage("goalWeight") var goalWeight: Double = 170.0
     @AppStorage("showSmoothing") var showSmoothing: Bool = true
     @State private var showingInitialDataToast = false
+    @State private var showingSaveError = false
 
     #if targetEnvironment(simulator)
     private var entries: [WeightEntry] = WeightEntry.shortSampleData
@@ -60,9 +61,13 @@ struct ContentView: View {
                 WeightEntry.initialData.forEach { entry in
                     modelContext.insert(entry)
                 }
-                try? modelContext.save()
-                withAnimation {
-                    showingInitialDataToast = true
+                do {
+                    try modelContext.save()
+                    withAnimation {
+                        showingInitialDataToast = true
+                    }
+                } catch {
+                    showingSaveError = true
                 }
             }
         }
@@ -71,5 +76,6 @@ struct ContentView: View {
             message: "Sample data added. Feel free to delete and add your own entries!",
             systemImage: "info.circle"
         )
+        .errorToast(isPresented: $showingSaveError, message: "Failed to save initial data")
     }
 }
