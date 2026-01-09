@@ -14,18 +14,28 @@ struct ContentView: View {
     @AppStorage("goalWeight") var goalWeight: Double = 170.0
     @AppStorage("showSmoothing") var showSmoothing: Bool = true
     @State private var showingInitialDataToast = false
-    
+
     #if targetEnvironment(simulator)
     private var entries: [WeightEntry] = WeightEntry.shortSampleData
+    private var completedMilestones: [CompletedMilestone] = []
     #else
     @Query(
         sort: [SortDescriptor(\WeightEntry.date, order: .reverse)]
     ) private var entries: [WeightEntry]
+    @Query(
+        sort: [SortDescriptor(\CompletedMilestone.achievedDate, order: .reverse)]
+    ) private var completedMilestones: [CompletedMilestone]
     #endif
-    
+
     var body: some View {
         TabView {
-            SummaryView(entries: entries, preferredWeightUnit: preferredWeightUnit, goalWeight: goalWeight, showSmoothing: showSmoothing)
+            SummaryView(
+                entries: entries,
+                completedMilestones: completedMilestones,
+                preferredWeightUnit: preferredWeightUnit,
+                goalWeight: goalWeight,
+                showSmoothing: showSmoothing
+            )
                 .tabItem {
                     Label("Summary", systemImage: "chart.line.uptrend.xyaxis")
                 }

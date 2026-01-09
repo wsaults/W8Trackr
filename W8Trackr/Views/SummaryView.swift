@@ -10,13 +10,39 @@ import SwiftData
 import SwiftUI
 
 struct SummaryView: View {
+    @Environment(\.modelContext) private var modelContext
     @State private var showAddWeightView = false
+    @State private var celebrationMilestone: Double?
 
     var entries: [WeightEntry]
+    var completedMilestones: [CompletedMilestone]
     var preferredWeightUnit: WeightUnit
     var goalWeight: Double
     var showSmoothing: Bool
-    
+
+    // Derive start weight from oldest entry
+    private var startWeight: Double {
+        guard let oldest = entries.min(by: { $0.date < $1.date }) else {
+            return goalWeight
+        }
+        return oldest.weightValue(in: preferredWeightUnit)
+    }
+
+    private var currentWeight: Double {
+        entries.first?.weightValue(in: preferredWeightUnit) ?? goalWeight
+    }
+
+    private var milestoneProgress: MilestoneProgress? {
+        guard !entries.isEmpty else { return nil }
+        return MilestoneCalculator.calculateProgress(
+            currentWeight: currentWeight,
+            startWeight: startWeight,
+            goalWeight: goalWeight,
+            unit: preferredWeightUnit,
+            completedMilestones: completedMilestones
+        )
+    }
+
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
@@ -37,13 +63,24 @@ struct SummaryView: View {
                                 bodyFatPercentage: entry.bodyFatPercentage
                             )
                         }
-                        
+
                         ScrollView {
+                            if let progress = milestoneProgress {
+                                MilestoneProgressView(progress: progress) {
+                                    checkForNewMilestone()
+                                }
+                            }
+
                             ChartSectionView(entries: entries, goalWeight: goalWeight, weightUnit: preferredWeightUnit, showSmoothing: showSmoothing)
+
+                            if !completedMilestones.isEmpty {
+                                MilestoneHistoryView(milestones: completedMilestones, unit: preferredWeightUnit)
+                                    .padding(.bottom, 80)
+                            }
                         }
                     }
                 }
-                
+
                 Button {
                     showAddWeightView.toggle()
                 } label: {
@@ -56,12 +93,58 @@ struct SummaryView: View {
                         .clipShape(.circle)
                 }
                 .padding(.bottom)
+
+                // Celebration overlay
+                if let milestone = celebrationMilestone {
+                    MilestoneCelebrationView(milestoneWeight: milestone, unit: preferredWeightUnit) {
+                        celebrationMilestone = nil
+                    }
+                }
             }
             .background(.gray.opacity(0.1))
             .navigationTitle("Summary")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showAddWeightView) {
                 WeightEntryView(entries: entries, weightUnit: preferredWeightUnit)
+            }
+            .onAppear {
+                checkForNewMilestone()
+            }
+            .onChange(of: entries.count) { _, _ in
+                checkForNewMilestone()
+            }
+        }
+    }
+
+    private func checkForNewMilestone() {
+        guard let progress = milestoneProgress else { return }
+
+        // Generate all milestones between start and goal
+        let allMilestones = MilestoneCalculator.generateMilestones(
+            startWeight: startWeight,
+            goalWeight: goalWeight,
+            unit: preferredWeightUnit
+        )
+
+        // Find milestones that are crossed but not yet recorded
+        let completedWeights = Set(completedMilestones.map { $0.targetWeight(in: preferredWeightUnit) })
+        let isLosingWeight = goalWeight < startWeight
+
+        for milestone in allMilestones {
+            let isCrossed = isLosingWeight ? currentWeight <= milestone : currentWeight >= milestone
+            if isCrossed && !completedWeights.contains(milestone) {
+                // Record the completed milestone
+                let completed = CompletedMilestone(
+                    targetWeight: milestone,
+                    unit: preferredWeightUnit,
+                    startWeight: startWeight
+                )
+                modelContext.insert(completed)
+                try? modelContext.save()
+
+                // Trigger celebration
+                celebrationMilestone = milestone
+                break // Only celebrate one at a time
             }
         }
     }
@@ -71,19 +154,28 @@ struct SummaryView: View {
 #Preview(traits: .modifier(EntriesPreview())) {
     @Previewable @Query var entries: [WeightEntry]
 
-    SummaryView(entries: WeightEntry.shortSampleData, preferredWeightUnit: .lb, goalWeight: 160, showSmoothing: true)
+    SummaryView(
+        entries: WeightEntry.shortSampleData,
+        completedMilestones: [],
+        preferredWeightUnit: .lb,
+        goalWeight: 160,
+        showSmoothing: true
+    )
 }
 
 struct EntriesPreview: PreviewModifier {
     static func makeSharedContext() async throws -> ModelContainer {
-        let container = try ModelContainer(for: WeightEntry.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let container = try ModelContainer(
+            for: WeightEntry.self, CompletedMilestone.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
         let examples = WeightEntry.sampleData
         examples.forEach { example in
             container.mainContext.insert(example)
         }
         return container
     }
-    
+
     func body(content: Content, context: ModelContainer) -> some View {
         content.modelContainer(context)
     }

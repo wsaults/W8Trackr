@@ -22,6 +22,6 @@ struct W8TrackrApp: App {
                 }
             }
         }
-        .modelContainer(for: [WeightEntry.self])
+        .modelContainer(for: [WeightEntry.self, CompletedMilestone.self])
     }
 }
