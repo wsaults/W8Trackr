@@ -7,6 +7,28 @@
 
 import Foundation
 
+/// Export format options
+enum ExportFormat: String, CaseIterable, Identifiable {
+    case csv = "CSV"
+    case json = "JSON"
+
+    var id: String { rawValue }
+
+    var fileExtension: String {
+        switch self {
+        case .csv: return "csv"
+        case .json: return "json"
+        }
+    }
+
+    var mimeType: String {
+        switch self {
+        case .csv: return "text/csv"
+        case .json: return "application/json"
+        }
+    }
+}
+
 struct DataExporter {
 
     /// Generates CSV content from weight entries
@@ -85,4 +107,66 @@ struct DataExporter {
             return nil
         }
     }
+
+    // MARK: - JSON Export
+
+    /// Generates JSON content from weight entries
+    /// - Parameters:
+    ///   - entries: Array of WeightEntry objects to export
+    ///   - startDate: Optional start date for filtering (inclusive)
+    ///   - endDate: Optional end date for filtering (inclusive)
+    /// - Returns: JSON string with entry data
+    static func generateJSON(
+        from entries: [WeightEntry],
+        startDate: Date? = nil,
+        endDate: Date? = nil
+    ) -> String {
+        let filteredEntries = filterEntries(entries, startDate: startDate, endDate: endDate)
+        let sortedEntries = filteredEntries.sorted { $0.date < $1.date }
+
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withFullDate, .withTime, .withDashSeparatorInDate, .withColonSeparatorInTime]
+
+        let exportData = ExportData(
+            exportDate: dateFormatter.string(from: Date.now),
+            appVersion: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0",
+            entryCount: sortedEntries.count,
+            entries: sortedEntries.map { entry in
+                ExportEntry(
+                    date: dateFormatter.string(from: entry.date),
+                    weight: entry.weightValue,
+                    unit: entry.weightUnit,
+                    note: entry.note,
+                    bodyFatPercentage: entry.bodyFatPercentage.map { Double(truncating: $0 as NSNumber) }
+                )
+            }
+        )
+
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+
+        guard let jsonData = try? encoder.encode(exportData),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            return "{}"
+        }
+
+        return jsonString
+    }
+}
+
+// MARK: - JSON Export Models
+
+struct ExportData: Codable {
+    let exportDate: String
+    let appVersion: String
+    let entryCount: Int
+    let entries: [ExportEntry]
+}
+
+struct ExportEntry: Codable {
+    let date: String
+    let weight: Double
+    let unit: String
+    let note: String?
+    let bodyFatPercentage: Double?
 }
