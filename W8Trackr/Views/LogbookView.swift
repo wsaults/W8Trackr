@@ -41,10 +41,10 @@ struct LogbookView: View {
                 }
             }
             .sheet(isPresented: $showingAddWeight) {
-                AddWeightView(entries: entries, weightUnit: preferredWeightUnit)
+                WeightEntryView(entries: entries, weightUnit: preferredWeightUnit)
             }
             .sheet(item: $entryToEdit) { entry in
-                EditWeightView(entry: entry, weightUnit: preferredWeightUnit)
+                WeightEntryView(entries: entries, weightUnit: preferredWeightUnit, existingEntry: entry)
             }
         }
     }

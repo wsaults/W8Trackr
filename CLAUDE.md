@@ -70,7 +70,7 @@ W8TrackrApp
     └── SettingsView
 ```
 
-Modal: `AddWeightView` (sheet from SummaryView/LogbookView)
+Modal: `WeightEntryView` (sheet from SummaryView/LogbookView for add/edit)
 
 ### Notification System
 `NotificationManager` is an `ObservableObject` handling daily reminder scheduling via `UNUserNotificationCenter`. Instantiated as `@StateObject` in `SettingsView`.

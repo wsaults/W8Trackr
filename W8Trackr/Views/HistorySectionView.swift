@@ -45,6 +45,10 @@ struct HistorySectionView: View {
                     }
                 }
                 .padding(.vertical, 8)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    onEdit?(entry)
+                }
                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                     Button(role: .destructive) {
                         deleteEntry(entry)

@@ -58,7 +58,7 @@ struct SummaryView: View {
             .navigationTitle("Summary")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showAddWeightView) {
-                AddWeightView(entries: entries, weightUnit: preferredWeightUnit)
+                WeightEntryView(entries: entries, weightUnit: preferredWeightUnit)
             }
         }
     }

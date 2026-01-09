@@ -74,6 +74,7 @@ final class WeightEntry {
     var date: Date = Date.now
     var note: String?
     var bodyFatPercentage: Decimal?
+    var modifiedDate: Date?
 
     init(weight: Double, unit: UnitMass = .pounds, date: Date = .now, note: String? = nil, bodyFatPercentage: Decimal? = nil) {
         self.weightValue = weight
@@ -81,6 +82,7 @@ final class WeightEntry {
         self.date = date
         self.note = note
         self.bodyFatPercentage = bodyFatPercentage
+        // modifiedDate is nil on creation, set when entry is edited
     }
     
     func weightValue(in unit: WeightUnit) -> Double {
