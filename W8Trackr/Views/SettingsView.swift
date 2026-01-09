@@ -125,7 +125,7 @@ struct SettingsView: View {
                         notificationManager.disableNotifications()
                     }
                 }
-            
+
             if notificationManager.isReminderEnabled {
                 DatePicker("Reminder Time",
                           selection: $reminderTime,
@@ -134,11 +134,39 @@ struct SettingsView: View {
                         notificationManager.scheduleNotification(at: newValue)
                         notificationManager.saveReminderTime(newValue)
                     }
+
+                if let suggestedTime = notificationManager.suggestedReminderTime {
+                    Button {
+                        reminderTime = suggestedTime
+                        notificationManager.scheduleNotification(at: suggestedTime)
+                        notificationManager.saveReminderTime(suggestedTime)
+                    } label: {
+                        HStack {
+                            Image(systemName: "lightbulb.fill")
+                                .foregroundStyle(.yellow)
+                            Text("Use suggested time: \(suggestedTime, style: .time)")
+                                .foregroundStyle(.primary)
+                        }
+                    }
+                }
             }
         } header: {
             Text("Reminders")
         } footer: {
             Text("You'll receive a notification at the specified time every day to log your weight.")
+        }
+    }
+
+    private var smartRemindersSection: some View {
+        Section {
+            Toggle("Smart Reminders", isOn: $notificationManager.isSmartRemindersEnabled)
+                .onChange(of: notificationManager.isSmartRemindersEnabled) { _, newValue in
+                    notificationManager.setSmartRemindersEnabled(newValue)
+                }
+        } header: {
+            Text("Smart Reminders")
+        } footer: {
+            Text("Get personalized notifications including streak warnings, milestone alerts, and weekly summaries based on your logging habits.")
         }
     }
     
@@ -148,6 +176,7 @@ struct SettingsView: View {
                 weightSettingsSection
                 chartSettingsSection
                 reminderSection
+                smartRemindersSection
                 dangerZoneSection
             }
             .navigationTitle("Settings")
