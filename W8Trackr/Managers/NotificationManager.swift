@@ -10,7 +10,7 @@ import UserNotifications
 
 class NotificationManager: ObservableObject {
     @Published var isReminderEnabled = false
-    private let reminderTimeKey = "reminderTime"
+    private static let reminderTimeKey = "reminderTime"
     
     init() {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
@@ -62,10 +62,10 @@ class NotificationManager: ObservableObject {
     }
     
     func saveReminderTime(_ time: Date) {
-        UserDefaults.standard.set(time, forKey: reminderTimeKey)
+        UserDefaults.standard.set(time, forKey: Self.reminderTimeKey)
     }
-    
-    func getReminderTime() -> Date {
+
+    static func getReminderTime() -> Date {
         UserDefaults.standard.object(forKey: reminderTimeKey) as? Date ?? Date()
     }
 }

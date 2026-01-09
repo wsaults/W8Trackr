@@ -22,7 +22,7 @@ struct SettingsView: View {
     init(weightUnit: Binding<WeightUnit>, goalWeight: Binding<Double>) {
         _weightUnit = weightUnit
         _goalWeight = goalWeight
-        _reminderTime = State(initialValue: NotificationManager().getReminderTime())
+        _reminderTime = State(initialValue: NotificationManager.getReminderTime())
     }
     
     private func updateGoalWeight(_ newValue: Double) {
