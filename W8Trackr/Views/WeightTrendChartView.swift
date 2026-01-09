@@ -67,8 +67,7 @@ struct WeightTrendChartView: View {
     private var smoothedTrend: [TrendPoint] {
         TrendCalculator.exponentialMovingAverage(
             entries: filteredEntries,
-            span: 10,
-            convertWeight: convertWeight
+            span: 10
         )
     }
     
@@ -222,7 +221,7 @@ struct WeightTrendChartView: View {
             data.append(contentsOf: smoothedTrend.map { point in
                 ChartEntry(
                     date: point.date,
-                    weight: point.weight,
+                    weight: point.smoothedWeight(in: weightUnit),
                     isPrediction: false,
                     showPoint: false,
                     isIndividualEntry: false,
