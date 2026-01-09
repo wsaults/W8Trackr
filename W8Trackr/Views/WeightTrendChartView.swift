@@ -116,13 +116,14 @@ struct WeightTrendChartView: View {
 
         // Predict 1 day ahead (adjustable via `daysAhead`)
         let daysAhead = 1.0
-        let futureX = (xs.last! + daysAhead)
+        guard let lastX = xs.last else { return nil }
+        let futureX = lastX + daysAhead
         let predictedWeight = slope * futureX + intercept
 
-        let predictedDate = Calendar.current.date(
+        guard let predictedDate = Calendar.current.date(
             byAdding: .day, value: Int(daysAhead),
             to: lastDate
-        )!
+        ) else { return nil }
 
         return (predictedDate, predictedWeight)
     }
