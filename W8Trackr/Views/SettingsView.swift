@@ -105,7 +105,7 @@ struct SettingsView: View {
                 TextField("Goal Weight", value: $localGoalWeight, format: .number.precision(.fractionLength(1)))
                     .keyboardType(.decimalPad)
                     .multilineTextAlignment(.trailing)
-                    .foregroundStyle(isValidGoalWeight ? .primary : .red)
+                    .foregroundColor(isValidGoalWeight ? .primary : .red)
                     .onChange(of: localGoalWeight) { _, newValue in
                         updateGoalWeight(newValue)
                     }

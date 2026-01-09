@@ -1192,7 +1192,7 @@ struct TrendCalculatorTests {
         let result = TrendCalculator.calculateEWMA(entries: [entry])
 
         #expect(result.count == 1)
-        #expect(result[0].weight == 175.0)
+        #expect(result[0].smoothedWeight == 175.0)
     }
 
     // MARK: - Basic EWMA Calculation Tests
@@ -1210,9 +1210,9 @@ struct TrendCalculatorTests {
         let result = TrendCalculator.calculateEWMA(entries: entries)
 
         #expect(result.count == 2)
-        #expect(result[0].weight == 180.0) // First entry = weight
+        #expect(result[0].smoothedWeight == 180.0) // First entry = weight
         // Second: 0.1 * 170 + 0.9 * 180 = 17 + 162 = 179
-        #expect(abs(result[1].weight - 179.0) < 0.001)
+        #expect(abs(result[1].smoothedWeight - 179.0) < 0.001)
     }
 
     @Test func ewmaSmoothesDailyFluctuations() {
@@ -1234,7 +1234,7 @@ struct TrendCalculatorTests {
 
         // Verify trend is smoother than raw weights
         // The variance of trend should be less than variance of weights
-        let trendValues = result.map { $0.weight }
+        let trendValues = result.map { $0.smoothedWeight }
         let trendVariance = variance(trendValues)
         let weightVariance = variance(weights)
 
@@ -1264,7 +1264,7 @@ struct TrendCalculatorTests {
         #expect(result[2].date == today)
 
         // First trend should be 180 (oldest entry)
-        #expect(result[0].weight == 180.0)
+        #expect(result[0].smoothedWeight == 180.0)
     }
 
     // MARK: - Lambda Parameter Tests
@@ -1287,8 +1287,8 @@ struct TrendCalculatorTests {
         let highLambda = TrendCalculator.calculateEWMA(entries: entries, lambda: 0.5)
 
         // Higher lambda should be closer to latest weight (170)
-        let lowLambdaDistance = abs(lowLambda[1].weight - 170.0)
-        let highLambdaDistance = abs(highLambda[1].weight - 170.0)
+        let lowLambdaDistance = abs(lowLambda[1].smoothedWeight - 170.0)
+        let highLambdaDistance = abs(highLambda[1].smoothedWeight - 170.0)
 
         #expect(highLambdaDistance < lowLambdaDistance)
     }
@@ -1306,8 +1306,8 @@ struct TrendCalculatorTests {
         let result = TrendCalculator.calculateEWMA(entries: entries, lambda: 1.0)
 
         // Lambda = 1 means trend = current weight (no smoothing)
-        #expect(result[0].weight == 180.0)
-        #expect(result[1].weight == 170.0)
+        #expect(result[0].smoothedWeight == 180.0)
+        #expect(result[1].smoothedWeight == 170.0)
     }
 
     // MARK: - Unit Conversion Tests
@@ -1318,9 +1318,9 @@ struct TrendCalculatorTests {
         let lbResult = TrendCalculator.calculateEWMA(entries: [entry], unit: .lb)
         let kgResult = TrendCalculator.calculateEWMA(entries: [entry], unit: .kg)
 
-        #expect(lbResult[0].weight == 100.0)
+        #expect(lbResult[0].smoothedWeight == 100.0)
         // 100 lb ≈ 45.36 kg
-        #expect(abs(kgResult[0].weight - 45.3592) < 0.001)
+        #expect(abs(kgResult[0].smoothedWeight - 45.3592) < 0.001)
     }
 
     // MARK: - Gap Handling Tests
@@ -1342,19 +1342,19 @@ struct TrendCalculatorTests {
 
         // Should still calculate correctly
         #expect(result.count == 3)
-        #expect(result[0].weight == 180.0)
+        #expect(result[0].smoothedWeight == 180.0)
         // Gap doesn't affect formula, just uses previous trend
-        #expect(result[1].weight < 180.0)
-        #expect(result[2].weight < result[1].weight)
+        #expect(result[1].smoothedWeight < 180.0)
+        #expect(result[2].smoothedWeight < result[1].smoothedWeight)
     }
 
     // MARK: - TrendPoint Tests
 
     @Test func trendPointEquatable() {
         let date = Date()
-        let point1 = TrendPoint(date: date, weight: 175.0)
-        let point2 = TrendPoint(date: date, weight: 175.0)
-        let point3 = TrendPoint(date: date, weight: 180.0)
+        let point1 = TrendPoint(date: date, rawWeight: 175.0, smoothedWeight: 175.0)
+        let point2 = TrendPoint(date: date, rawWeight: 175.0, smoothedWeight: 175.0)
+        let point3 = TrendPoint(date: date, rawWeight: 180.0, smoothedWeight: 180.0)
 
         #expect(point1 == point2)
         #expect(point1 != point3)
