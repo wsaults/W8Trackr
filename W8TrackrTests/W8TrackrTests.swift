@@ -1175,3 +1175,290 @@ struct SampleDataTests {
         }
     }
 }
+
+// MARK: - SmoothedTrend Extension Tests
+
+struct SmoothedTrendTests {
+
+    // MARK: - Empty and Single Entry Cases
+
+    @Test func emptyArrayReturnsEmptyTrend() {
+        let entries: [WeightEntry] = []
+        let trend = entries.smoothedTrend()
+        #expect(trend.isEmpty)
+    }
+
+    @Test func singleEntryReturnsOneTrendPoint() {
+        let entry = WeightEntry(weight: 180.0, unit: .lb, date: Date())
+        let trend = [entry].smoothedTrend()
+
+        #expect(trend.count == 1)
+        #expect(trend[0].rawWeight == 180.0)
+        #expect(trend[0].smoothedWeight == 180.0) // First point: smoothed == raw
+        #expect(trend[0].trendRate == nil) // No previous point for trend rate
+    }
+
+    // MARK: - Multiple Entry Cases
+
+    @Test func multipleEntriesOnDifferentDaysProducesTrendPoints() {
+        let calendar = Calendar.current
+        let today = Date()
+
+        let entries = [
+            WeightEntry(weight: 180.0, date: calendar.date(byAdding: .day, value: -2, to: today)!),
+            WeightEntry(weight: 178.0, date: calendar.date(byAdding: .day, value: -1, to: today)!),
+            WeightEntry(weight: 176.0, date: today)
+        ]
+
+        let trend = entries.smoothedTrend()
+
+        #expect(trend.count == 3)
+        // Results should be sorted chronologically
+        #expect(trend[0].rawWeight == 180.0)
+        #expect(trend[1].rawWeight == 178.0)
+        #expect(trend[2].rawWeight == 176.0)
+    }
+
+    @Test func sameDayEntriesAreAveraged() {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+
+        // Two entries on the same day
+        let entries = [
+            WeightEntry(weight: 178.0, date: today),
+            WeightEntry(weight: 182.0, date: calendar.date(byAdding: .hour, value: 8, to: today)!)
+        ]
+
+        let trend = entries.smoothedTrend()
+
+        #expect(trend.count == 1) // Grouped into single day
+        #expect(trend[0].rawWeight == 180.0) // (178 + 182) / 2
+    }
+
+    @Test func sameDayEntriesWithDifferentDaysProducesCorrectGrouping() {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
+
+        let entries = [
+            WeightEntry(weight: 180.0, date: yesterday),
+            WeightEntry(weight: 176.0, date: today),
+            WeightEntry(weight: 180.0, date: calendar.date(byAdding: .hour, value: 6, to: today)!)
+        ]
+
+        let trend = entries.smoothedTrend()
+
+        #expect(trend.count == 2) // Two distinct days
+        #expect(trend[0].rawWeight == 180.0) // Yesterday
+        #expect(trend[1].rawWeight == 178.0) // Today: (176 + 180) / 2
+    }
+
+    // MARK: - Lambda Parameter Tests
+
+    @Test func defaultLambdaIsPointOne() {
+        let calendar = Calendar.current
+        let today = Date()
+
+        let entries = [
+            WeightEntry(weight: 180.0, date: calendar.date(byAdding: .day, value: -1, to: today)!),
+            WeightEntry(weight: 170.0, date: today)
+        ]
+
+        let trendDefault = entries.smoothedTrend()
+        let trendExplicit = entries.smoothedTrend(lambda: 0.1)
+
+        #expect(trendDefault[1].smoothedWeight == trendExplicit[1].smoothedWeight)
+    }
+
+    @Test func higherLambdaIsMoreResponsive() {
+        let calendar = Calendar.current
+        let today = Date()
+
+        let entries = [
+            WeightEntry(weight: 180.0, date: calendar.date(byAdding: .day, value: -1, to: today)!),
+            WeightEntry(weight: 170.0, date: today)
+        ]
+
+        let lowLambda = entries.smoothedTrend(lambda: 0.1)
+        let highLambda = entries.smoothedTrend(lambda: 0.5)
+
+        // Higher lambda should be closer to the new raw value (170)
+        let lowDiff = abs(lowLambda[1].smoothedWeight - 170.0)
+        let highDiff = abs(highLambda[1].smoothedWeight - 170.0)
+        #expect(highDiff < lowDiff)
+    }
+
+    @Test func lambdaOneEqualsRawValue() {
+        let calendar = Calendar.current
+        let today = Date()
+
+        let entries = [
+            WeightEntry(weight: 180.0, date: calendar.date(byAdding: .day, value: -1, to: today)!),
+            WeightEntry(weight: 170.0, date: today)
+        ]
+
+        let trend = entries.smoothedTrend(lambda: 1.0)
+
+        // Lambda=1 means smoothed = raw (no smoothing)
+        #expect(trend[1].smoothedWeight == 170.0)
+    }
+
+    @Test func lambdaZeroEqualsFirstValue() {
+        let calendar = Calendar.current
+        let today = Date()
+
+        let entries = [
+            WeightEntry(weight: 180.0, date: calendar.date(byAdding: .day, value: -1, to: today)!),
+            WeightEntry(weight: 170.0, date: today)
+        ]
+
+        let trend = entries.smoothedTrend(lambda: 0.0)
+
+        // Lambda=0 means smoothed never changes from initial value
+        #expect(trend[1].smoothedWeight == 180.0)
+    }
+
+    @Test func lambdaIsClampedToValidRange() {
+        let calendar = Calendar.current
+        let today = Date()
+
+        let entries = [
+            WeightEntry(weight: 180.0, date: calendar.date(byAdding: .day, value: -1, to: today)!),
+            WeightEntry(weight: 170.0, date: today)
+        ]
+
+        // Values outside 0-1 should be clamped
+        let trendNegative = entries.smoothedTrend(lambda: -0.5)
+        let trendOver = entries.smoothedTrend(lambda: 1.5)
+        let trendZero = entries.smoothedTrend(lambda: 0.0)
+        let trendOne = entries.smoothedTrend(lambda: 1.0)
+
+        #expect(trendNegative[1].smoothedWeight == trendZero[1].smoothedWeight)
+        #expect(trendOver[1].smoothedWeight == trendOne[1].smoothedWeight)
+    }
+
+    // MARK: - Unit Conversion Tests
+
+    @Test func entriesInKilogramsAreConvertedToPounds() {
+        let entry = WeightEntry(weight: 81.6466, unit: .kg, date: Date()) // ~180 lb
+
+        let trend = [entry].smoothedTrend()
+
+        // Internal storage is in pounds
+        #expect(abs(trend[0].rawWeight - 180.0) < 0.01)
+    }
+
+    @Test func mixedUnitsAreHandledCorrectly() {
+        let calendar = Calendar.current
+        let today = Date()
+
+        let entries = [
+            WeightEntry(weight: 180.0, unit: .lb, date: calendar.date(byAdding: .day, value: -1, to: today)!),
+            WeightEntry(weight: 79.3787, unit: .kg, date: today) // ~175 lb
+        ]
+
+        let trend = entries.smoothedTrend()
+
+        #expect(abs(trend[0].rawWeight - 180.0) < 0.01)
+        #expect(abs(trend[1].rawWeight - 175.0) < 0.01)
+    }
+
+    @Test func trendPointUnitConversionMethods() {
+        let entry = WeightEntry(weight: 180.0, unit: .lb, date: Date())
+        let trend = [entry].smoothedTrend()
+
+        let inLb = trend[0].rawWeight(in: .lb)
+        let inKg = trend[0].rawWeight(in: .kg)
+
+        #expect(inLb == 180.0)
+        #expect(abs(inKg - 81.6466) < 0.01)
+    }
+
+    // MARK: - Trend Rate Tests
+
+    @Test func trendRateIsNilForFirstPoint() {
+        let entry = WeightEntry(weight: 180.0, date: Date())
+        let trend = [entry].smoothedTrend()
+
+        #expect(trend[0].trendRate == nil)
+    }
+
+    @Test func trendRateCalculatesCorrectly() {
+        let calendar = Calendar.current
+        let today = Date()
+
+        // Lambda=1 so smoothed equals raw, making trend rate = raw difference
+        let entries = [
+            WeightEntry(weight: 180.0, date: calendar.date(byAdding: .day, value: -1, to: today)!),
+            WeightEntry(weight: 178.0, date: today)
+        ]
+
+        let trend = entries.smoothedTrend(lambda: 1.0)
+
+        #expect(trend[1].trendRate != nil)
+        #expect(abs(trend[1].trendRate! - (-2.0)) < 0.01) // -2 lbs/day
+    }
+
+    @Test func trendRateWithGapInDays() {
+        let calendar = Calendar.current
+        let today = Date()
+
+        let entries = [
+            WeightEntry(weight: 180.0, date: calendar.date(byAdding: .day, value: -4, to: today)!),
+            WeightEntry(weight: 172.0, date: today)
+        ]
+
+        let trend = entries.smoothedTrend(lambda: 1.0)
+
+        // With lambda=1, smoothed = raw, so trend rate = (172-180)/4 = -2 lbs/day
+        #expect(trend[1].trendRate != nil)
+        #expect(abs(trend[1].trendRate! - (-2.0)) < 0.01)
+    }
+
+    // MARK: - Sorting Tests
+
+    @Test func unsortedEntriesAreSortedChronologically() {
+        let calendar = Calendar.current
+        let today = Date()
+
+        // Entries in random order
+        let entries = [
+            WeightEntry(weight: 176.0, date: today),
+            WeightEntry(weight: 180.0, date: calendar.date(byAdding: .day, value: -2, to: today)!),
+            WeightEntry(weight: 178.0, date: calendar.date(byAdding: .day, value: -1, to: today)!)
+        ]
+
+        let trend = entries.smoothedTrend()
+
+        #expect(trend[0].rawWeight == 180.0) // Day -2
+        #expect(trend[1].rawWeight == 178.0) // Day -1
+        #expect(trend[2].rawWeight == 176.0) // Today
+        #expect(trend[0].date < trend[1].date)
+        #expect(trend[1].date < trend[2].date)
+    }
+
+    // MARK: - EWMA Formula Verification
+
+    @Test func ewmaFormulaIsCorrect() {
+        let calendar = Calendar.current
+        let today = Date()
+        let lambda = 0.1
+
+        let entries = [
+            WeightEntry(weight: 180.0, date: calendar.date(byAdding: .day, value: -2, to: today)!),
+            WeightEntry(weight: 178.0, date: calendar.date(byAdding: .day, value: -1, to: today)!),
+            WeightEntry(weight: 176.0, date: today)
+        ]
+
+        let trend = entries.smoothedTrend(lambda: lambda)
+
+        // Manual EWMA calculation:
+        // Day 0: smoothed = 180.0
+        // Day 1: smoothed = 0.1 * 178.0 + 0.9 * 180.0 = 17.8 + 162.0 = 179.8
+        // Day 2: smoothed = 0.1 * 176.0 + 0.9 * 179.8 = 17.6 + 161.82 = 179.42
+
+        #expect(trend[0].smoothedWeight == 180.0)
+        #expect(abs(trend[1].smoothedWeight - 179.8) < 0.001)
+        #expect(abs(trend[2].smoothedWeight - 179.42) < 0.001)
+    }
+}

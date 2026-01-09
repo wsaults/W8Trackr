@@ -59,6 +59,90 @@ struct TrendPoint: Identifiable {
     }
 }
 
+// MARK: - WeightEntry Extension for Trend Calculation
+
+extension Array where Element == WeightEntry {
+
+    /// Calculates smoothed weight trend using exponentially weighted moving average (EWMA).
+    ///
+    /// This method processes weight entries by:
+    /// 1. Sorting entries chronologically (oldest first)
+    /// 2. Grouping same-day entries and averaging them
+    /// 3. Applying EWMA smoothing with the specified lambda factor
+    ///
+    /// - Parameters:
+    ///   - unit: The unit to use for output values (default: .lb). Note: TrendPoint stores
+    ///           values in pounds internally; use TrendPoint's conversion methods for display.
+    ///   - lambda: Smoothing factor between 0 and 1 (default: 0.1 per Hacker's Diet).
+    ///             Lower values = smoother trend (more weight on historical data).
+    ///             Higher values = more responsive (more weight on recent data).
+    /// - Returns: Array of TrendPoints with raw and smoothed weight values, sorted by date.
+    func smoothedTrend(unit: WeightUnit = .lb, lambda: Double = 0.1) -> [TrendPoint] {
+        guard !isEmpty else { return [] }
+
+        // Clamp lambda to valid range
+        let smoothingFactor = Swift.max(0.0, Swift.min(1.0, lambda))
+
+        // Sort entries chronologically (oldest first for EWMA processing)
+        let sorted = self.sorted { $0.date < $1.date }
+
+        // Group by calendar day and compute daily average weight
+        let calendar = Calendar.current
+        let dailyData = Dictionary(grouping: sorted) { entry in
+            calendar.startOfDay(for: entry.date)
+        }
+        .map { date, dayEntries -> (date: Date, rawWeight: Double) in
+            // Convert all to pounds for internal storage consistency
+            let avgWeight = dayEntries.reduce(0.0) { sum, entry in
+                sum + entry.weightValue(in: .lb)
+            } / Double(dayEntries.count)
+            return (date, avgWeight)
+        }
+        .sorted { $0.date < $1.date }
+
+        guard !dailyData.isEmpty else { return [] }
+
+        // Apply EWMA: smoothed[t] = λ × raw[t] + (1-λ) × smoothed[t-1]
+        var trendPoints: [TrendPoint] = []
+        var smoothed: Double = dailyData[0].rawWeight
+        var previousSmoothed: Double?
+
+        for (index, day) in dailyData.enumerated() {
+            if index == 0 {
+                // Initialize with first day's value
+                smoothed = day.rawWeight
+            } else {
+                previousSmoothed = smoothed
+                smoothed = smoothingFactor * day.rawWeight + (1 - smoothingFactor) * smoothed
+            }
+
+            // Calculate trend rate (lbs/day) from smoothed values
+            var trendRate: Double?
+            if let prevSmoothed = previousSmoothed {
+                let daysBetween = calendar.dateComponents(
+                    [.day],
+                    from: dailyData[index - 1].date,
+                    to: day.date
+                ).day ?? 1
+                if daysBetween > 0 {
+                    trendRate = (smoothed - prevSmoothed) / Double(daysBetween)
+                }
+            }
+
+            trendPoints.append(TrendPoint(
+                date: day.date,
+                rawWeight: day.rawWeight,
+                smoothedWeight: smoothed,
+                trendRate: trendRate
+            ))
+        }
+
+        return trendPoints
+    }
+}
+
+// MARK: - TrendCalculator Utilities
+
 enum TrendCalculator {
 
     /// Calculates exponential moving average for weight entries
