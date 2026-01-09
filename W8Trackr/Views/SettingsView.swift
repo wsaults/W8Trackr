@@ -23,6 +23,8 @@ struct SettingsView: View {
     @State private var showingHealthKitPermissionAlert = false
     @State private var showingSmoothingInfo = false
     @State private var showingExportView = false
+    @State private var showingDeleteSuccessToast = false
+    @State private var showingDeleteErrorToast = false
 
     init(weightUnit: Binding<WeightUnit>, goalWeight: Binding<Double>, showSmoothing: Binding<Bool>) {
         _weightUnit = weightUnit
@@ -43,6 +45,20 @@ struct SettingsView: View {
     private func updateGoalWeight(_ newValue: Double) {
         if weightUnit.isValidWeight(newValue) {
             goalWeight = newValue
+        }
+    }
+
+    private func deleteAllEntries() {
+        do {
+            let entries = try modelContext.fetch(FetchDescriptor<WeightEntry>())
+            for entry in entries {
+                modelContext.delete(entry)
+            }
+            try modelContext.save()
+            showingDeleteSuccessToast = true
+            dismiss()
+        } catch {
+            showingDeleteErrorToast = true
         }
     }
     
@@ -285,16 +301,7 @@ struct SettingsView: View {
             .alert("Delete All Entries", isPresented: $showingDeleteAlert) {
                 Button("Cancel", role: .cancel) { }
                 Button("Delete", role: .destructive) {
-                    do {
-                        let entries = try modelContext.fetch(FetchDescriptor<WeightEntry>())
-                        for entry in entries {
-                            modelContext.delete(entry)
-                        }
-                        try modelContext.save()
-                        dismiss()
-                    } catch {
-                        // Deletion failed silently
-                    }
+                    deleteAllEntries()
                 }
             } message: {
                 Text("Are you sure you want to delete all weight entries? This action cannot be undone.")
@@ -334,6 +341,18 @@ struct SettingsView: View {
             .sheet(isPresented: $showingExportView) {
                 ExportView()
             }
+            .toast(
+                isPresented: $showingDeleteSuccessToast,
+                message: "All weight entries deleted",
+                systemImage: "checkmark.circle.fill"
+            )
+            .toast(
+                isPresented: $showingDeleteErrorToast,
+                message: "Failed to delete entries",
+                systemImage: "exclamationmark.triangle.fill",
+                actionLabel: "Retry",
+                onAction: deleteAllEntries
+            )
         }
     }
 }
