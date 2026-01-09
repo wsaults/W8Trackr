@@ -30,7 +30,8 @@ struct SummaryView: View {
                         if let entry = entries.first {
                             CurrentWeightView(
                                 weight: entry.weightValue(in: preferredWeightUnit),
-                                weightUnit: preferredWeightUnit
+                                weightUnit: preferredWeightUnit,
+                                bodyFatPercentage: entry.bodyFatPercentage
                             )
                         }
                         

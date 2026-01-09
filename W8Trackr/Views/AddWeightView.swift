@@ -29,6 +29,8 @@ struct AddWeightView: View {
     var entries: [WeightEntry]
 
     @State private var weight: Double
+    @State private var bodyFatPercentage: Double?
+    @State private var includeBodyFat: Bool = false
     @State private var lightFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
     @State private var mediumFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
     let today = Date()
@@ -37,9 +39,23 @@ struct AddWeightView: View {
         weightUnit.isValidWeight(weight)
     }
 
+    private var isValidBodyFat: Bool {
+        guard includeBodyFat, let bf = bodyFatPercentage else { return true }
+        return bf >= 1.0 && bf <= 60.0
+    }
+
     private var validationMessage: String? {
-        guard !isValidWeight else { return nil }
-        return "Weight must be between \(weightUnit.minWeight.formatted()) and \(weightUnit.maxWeight.formatted()) \(weightUnit.rawValue)"
+        if !isValidWeight {
+            return "Weight must be between \(weightUnit.minWeight.formatted()) and \(weightUnit.maxWeight.formatted()) \(weightUnit.rawValue)"
+        }
+        if !isValidBodyFat {
+            return "Body fat must be between 1% and 60%"
+        }
+        return nil
+    }
+
+    private var isFormValid: Bool {
+        isValidWeight && isValidBodyFat
     }
 
     init(
@@ -105,11 +121,39 @@ struct AddWeightView: View {
                             .padding(.top, 8)
                     }
                 }
-                
+
+                VStack(spacing: 12) {
+                    Toggle("Include Body Fat %", isOn: $includeBodyFat)
+                        .tint(.blue)
+
+                    if includeBodyFat {
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            TextField("Body Fat", value: $bodyFatPercentage, format: .number.precision(.fractionLength(1)))
+                                .font(.system(size: 32, weight: .medium))
+                                .keyboardType(.decimalPad)
+                                .fixedSize()
+                                .multilineTextAlignment(.trailing)
+
+                            Text("%")
+                                .font(.title2)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .padding(.horizontal, 40)
+                .padding(.top, 20)
+
                 Spacer()
                 
                 Button {
-                    let entry = WeightEntry(weight: weight, unit: UnitMass(symbol: weightUnit.rawValue))
+                    let bodyFat: Decimal? = includeBodyFat && bodyFatPercentage != nil
+                        ? Decimal(bodyFatPercentage!)
+                        : nil
+                    let entry = WeightEntry(
+                        weight: weight,
+                        unit: UnitMass(symbol: weightUnit.rawValue),
+                        bodyFatPercentage: bodyFat
+                    )
                     modelContext.insert(entry)
                     try? modelContext.save()
                     dismiss()
@@ -118,11 +162,11 @@ struct AddWeightView: View {
                         .fontWeight(.bold)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(isValidWeight ? .blue : .gray)
+                        .background(isFormValid ? .blue : .gray)
                         .foregroundStyle(.white)
                         .cornerRadius(10)
                 }
-                .disabled(!isValidWeight)
+                .disabled(!isFormValid)
                 .padding(.horizontal)
             }
             .padding(.top, 30)

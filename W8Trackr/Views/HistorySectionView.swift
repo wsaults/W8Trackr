@@ -24,7 +24,14 @@ struct HistorySectionView: View {
         List {
             ForEach(entries) { entry in
                 HStack {
-                    Text(entry.date, formatter: Self.dateFormatter)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(entry.date, formatter: Self.dateFormatter)
+                        if let bodyFat = entry.bodyFatPercentage {
+                            Text("\(NSDecimalNumber(decimal: bodyFat).doubleValue, specifier: "%.1f")% body fat")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                     Spacer()
                     HStack(spacing: 4) {
                         Text(
@@ -32,7 +39,7 @@ struct HistorySectionView: View {
                             format: .number.precision(.fractionLength(1))
                         )
                         .fontWeight(.bold)
-                        
+
                         Text(weightUnit.rawValue)
                     }
                 }
