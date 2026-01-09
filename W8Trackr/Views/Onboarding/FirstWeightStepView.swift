@@ -16,6 +16,7 @@ struct FirstWeightStepView: View {
     @State private var showContent = false
     @State private var lightFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
     @State private var mediumFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+    @ScaledMetric(relativeTo: .largeTitle) private var weightFontSize: CGFloat = 64
 
     private var isValidWeight: Bool {
         weightUnit.isValidWeight(enteredWeight)
@@ -44,7 +45,7 @@ struct FirstWeightStepView: View {
             VStack(spacing: 20) {
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     TextField("Weight", value: $enteredWeight, format: .number.precision(.fractionLength(1)))
-                        .font(.system(size: 64, weight: .medium))
+                        .font(.system(size: weightFontSize, weight: .medium))
                         .keyboardType(.decimalPad)
                         .fixedSize()
                         .multilineTextAlignment(.trailing)
@@ -120,11 +121,12 @@ struct FirstWeightStepView: View {
 private struct WeightStepButton: View {
     let systemName: String
     let action: () -> Void
+    @ScaledMetric(relativeTo: .title) private var buttonIconSize: CGFloat = 44
 
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
-                .font(.system(size: 44))
+                .font(.system(size: buttonIconSize))
                 .foregroundStyle(.blue)
         }
     }

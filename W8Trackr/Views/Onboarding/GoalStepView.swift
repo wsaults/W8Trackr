@@ -16,6 +16,7 @@ struct GoalStepView: View {
     @State private var showContent = false
     @State private var lightFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
     @State private var mediumFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+    @ScaledMetric(relativeTo: .largeTitle) private var weightFontSize: CGFloat = 64
 
     private var isValidGoal: Bool {
         weightUnit.isValidWeight(goalWeight)
@@ -44,7 +45,7 @@ struct GoalStepView: View {
             VStack(spacing: 20) {
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     TextField("Goal", value: $goalWeight, format: .number.precision(.fractionLength(1)))
-                        .font(.system(size: 64, weight: .medium))
+                        .font(.system(size: weightFontSize, weight: .medium))
                         .keyboardType(.decimalPad)
                         .fixedSize()
                         .multilineTextAlignment(.trailing)
@@ -110,11 +111,12 @@ struct GoalStepView: View {
 private struct AdjustButton: View {
     let systemName: String
     let action: () -> Void
+    @ScaledMetric(relativeTo: .title) private var buttonIconSize: CGFloat = 44
 
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
-                .font(.system(size: 44))
+                .font(.system(size: buttonIconSize))
                 .foregroundStyle(.blue)
         }
     }

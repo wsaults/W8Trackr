@@ -14,6 +14,8 @@ struct EmptyStateView: View {
     let description: String
     var actionTitle: String?
     var action: (() -> Void)?
+    @ScaledMetric(relativeTo: .title) private var mainIconSize: CGFloat = 48
+    @ScaledMetric(relativeTo: .body) private var accentIconSize: CGFloat = 24
 
     var body: some View {
         VStack(spacing: 24) {
@@ -68,11 +70,11 @@ struct EmptyStateView: View {
                 .frame(width: 120, height: 120)
 
             Image(systemName: "figure.walk")
-                .font(.system(size: 48))
+                .font(.system(size: mainIconSize))
                 .foregroundStyle(.blue.gradient)
 
             Image(systemName: "plus.circle.fill")
-                .font(.system(size: 24))
+                .font(.system(size: accentIconSize))
                 .foregroundStyle(.green)
                 .offset(x: 30, y: -30)
         }
@@ -85,11 +87,11 @@ struct EmptyStateView: View {
                 .frame(width: 120, height: 120)
 
             Image(systemName: "book.pages")
-                .font(.system(size: 48))
+                .font(.system(size: mainIconSize))
                 .foregroundStyle(.orange.gradient)
 
             Image(systemName: "pencil.circle.fill")
-                .font(.system(size: 24))
+                .font(.system(size: accentIconSize))
                 .foregroundStyle(.blue)
                 .offset(x: 30, y: 30)
         }
@@ -102,11 +104,11 @@ struct EmptyStateView: View {
                 .frame(width: 120, height: 120)
 
             Image(systemName: "chart.line.uptrend.xyaxis")
-                .font(.system(size: 48))
+                .font(.system(size: mainIconSize))
                 .foregroundStyle(.purple.gradient)
 
             Image(systemName: "questionmark.circle.fill")
-                .font(.system(size: 24))
+                .font(.system(size: accentIconSize))
                 .foregroundStyle(.secondary)
                 .offset(x: 30, y: -30)
         }

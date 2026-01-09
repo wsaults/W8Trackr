@@ -13,6 +13,7 @@ struct CompletionStepView: View {
 
     @State private var showContent = false
     @State private var showCheckmark = false
+    @ScaledMetric(relativeTo: .largeTitle) private var checkmarkSize: CGFloat = 50
 
     var body: some View {
         VStack(spacing: 40) {
@@ -29,7 +30,7 @@ struct CompletionStepView: View {
                     .frame(width: 100, height: 100)
 
                 Image(systemName: "checkmark")
-                    .font(.system(size: 50, weight: .bold))
+                    .font(.system(size: checkmarkSize, weight: .bold))
                     .foregroundStyle(.white)
                     .scaleEffect(showCheckmark ? 1.0 : 0)
             }

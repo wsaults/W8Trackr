@@ -14,6 +14,7 @@ struct MilestoneCelebrationView: View {
 
     @State private var showContent = false
     @State private var showConfetti = false
+    @ScaledMetric(relativeTo: .largeTitle) private var trophySize: CGFloat = 60
 
     var body: some View {
         ZStack {
@@ -34,7 +35,7 @@ struct MilestoneCelebrationView: View {
             VStack(spacing: 20) {
                 // Trophy icon with animation
                 Image(systemName: "trophy.fill")
-                    .font(.system(size: 60))
+                    .font(.system(size: trophySize))
                     .foregroundStyle(.yellow)
                     .scaleEffect(showContent ? 1.0 : 0.5)
                     .opacity(showContent ? 1.0 : 0)

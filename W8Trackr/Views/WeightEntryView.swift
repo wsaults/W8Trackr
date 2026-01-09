@@ -10,11 +10,12 @@ import SwiftUI
 struct WeightAdjustButton: View {
     let systemName: String
     let action: () -> Void
+    @ScaledMetric(relativeTo: .title) private var buttonIconSize: CGFloat = 44
 
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
-                .font(.system(size: 44))
+                .font(.system(size: buttonIconSize))
                 .foregroundStyle(.blue)
         }
     }
@@ -37,6 +38,8 @@ struct WeightEntryView: View {
     @State private var includeBodyFat: Bool
     @State private var lightFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
     @State private var mediumFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+    @ScaledMetric(relativeTo: .largeTitle) private var weightFontSize: CGFloat = 64
+    @ScaledMetric(relativeTo: .title) private var bodyFatFontSize: CGFloat = 32
 
     private var isEditing: Bool { existingEntry != nil }
 
@@ -121,7 +124,7 @@ struct WeightEntryView: View {
                     VStack(spacing: .zero) {
                         HStack(alignment: .firstTextBaseline, spacing: 4) {
                             TextField("Weight", value: $weight, format: .number.precision(.fractionLength(1)))
-                                .font(.system(size: 64, weight: .medium))
+                                .font(.system(size: weightFontSize, weight: .medium))
                                 .keyboardType(.decimalPad)
                                 .fixedSize()
                                 .multilineTextAlignment(.trailing)
@@ -171,7 +174,7 @@ struct WeightEntryView: View {
                         if includeBodyFat {
                             HStack(alignment: .firstTextBaseline, spacing: 4) {
                                 TextField("Body Fat", value: $bodyFatPercentage, format: .number.precision(.fractionLength(1)))
-                                    .font(.system(size: 32, weight: .medium))
+                                    .font(.system(size: bodyFatFontSize, weight: .medium))
                                     .keyboardType(.decimalPad)
                                     .fixedSize()
                                     .multilineTextAlignment(.trailing)

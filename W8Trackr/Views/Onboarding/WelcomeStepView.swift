@@ -14,6 +14,7 @@ struct WelcomeStepView: View {
     @State private var showSubtitle = false
     @State private var showIcon = false
     @State private var showButton = false
+    @ScaledMetric(relativeTo: .largeTitle) private var iconSize: CGFloat = 50
 
     var body: some View {
         VStack(spacing: 40) {
@@ -32,7 +33,7 @@ struct WelcomeStepView: View {
                     .frame(width: 120, height: 120)
 
                 Image(systemName: "scalemass.fill")
-                    .font(.system(size: 50))
+                    .font(.system(size: iconSize))
                     .foregroundStyle(.white)
             }
             .scaleEffect(showIcon ? 1.0 : 0.5)

@@ -88,7 +88,7 @@ struct SummaryView: View {
                     showAddWeightView.toggle()
                 } label: {
                     Image(systemName: "plus")
-                        .font(.system(size: 20))
+                        .font(.title3)
                         .foregroundStyle(.white)
                         .fontWeight(.bold)
                         .padding()
