@@ -34,16 +34,20 @@ struct SettingsView: View {
     }
 
     private var isValidGoalWeight: Bool {
-        weightUnit.isValidWeight(localGoalWeight)
+        weightUnit.isValidGoalWeight(localGoalWeight)
     }
 
     private var goalWeightValidationMessage: String? {
         guard !isValidGoalWeight else { return nil }
-        return "Goal weight must be between \(weightUnit.minWeight.formatted()) and \(weightUnit.maxWeight.formatted()) \(weightUnit.rawValue)"
+        return "Goal weight must be between \(weightUnit.minGoalWeight.formatted()) and \(weightUnit.maxGoalWeight.formatted()) \(weightUnit.rawValue)"
+    }
+
+    private var goalWeightWarning: GoalWeightWarning? {
+        weightUnit.goalWeightWarning(localGoalWeight)
     }
 
     private func updateGoalWeight(_ newValue: Double) {
-        if weightUnit.isValidWeight(newValue) {
+        if weightUnit.isValidGoalWeight(newValue) {
             goalWeight = newValue
         }
     }
@@ -72,7 +76,7 @@ struct SettingsView: View {
             .pickerStyle(.segmented)
             .onChange(of: weightUnit) { oldUnit, newUnit in
                 // Validate source value before conversion
-                guard oldUnit.isValidWeight(localGoalWeight) else {
+                guard oldUnit.isValidGoalWeight(localGoalWeight) else {
                     // Invalid source value - use the new unit's default
                     localGoalWeight = newUnit.defaultWeight
                     goalWeight = newUnit.defaultWeight
@@ -81,13 +85,13 @@ struct SettingsView: View {
 
                 let convertedWeight = oldUnit.convert(localGoalWeight, to: newUnit)
 
-                // Validate converted result falls within new unit's bounds
-                if newUnit.isValidWeight(convertedWeight) {
+                // Validate converted result falls within new unit's goal bounds
+                if newUnit.isValidGoalWeight(convertedWeight) {
                     localGoalWeight = convertedWeight
                     goalWeight = convertedWeight
                 } else {
-                    // Conversion produced out-of-bounds value - clamp to valid range
-                    let clampedWeight = min(max(convertedWeight, newUnit.minWeight), newUnit.maxWeight)
+                    // Conversion produced out-of-bounds value - clamp to valid goal range
+                    let clampedWeight = min(max(convertedWeight, newUnit.minGoalWeight), newUnit.maxGoalWeight)
                     localGoalWeight = clampedWeight
                     goalWeight = clampedWeight
                 }
@@ -110,6 +114,16 @@ struct SettingsView: View {
                 Text(message)
                     .font(.caption)
                     .foregroundStyle(.red)
+            }
+
+            if let warning = goalWeightWarning {
+                HStack(alignment: .top, spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.orange)
+                    Text(warning.message)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         } header: {
             Text("Weight Settings")

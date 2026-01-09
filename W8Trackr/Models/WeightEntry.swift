@@ -43,10 +43,78 @@ enum WeightUnit: String, CaseIterable {
         }
     }
 
+    // MARK: - Goal Weight Bounds (Medical Standards)
+
+    var minGoalWeight: Double {
+        switch self {
+        case .lb:
+            return 70.0
+        case .kg:
+            return 32.0
+        }
+    }
+
+    var maxGoalWeight: Double {
+        switch self {
+        case .lb:
+            return 450.0
+        case .kg:
+            return 205.0
+        }
+    }
+
+    var lowGoalWarningThreshold: Double {
+        switch self {
+        case .lb:
+            return 100.0
+        case .kg:
+            return 45.0
+        }
+    }
+
+    var highGoalWarningThreshold: Double {
+        switch self {
+        case .lb:
+            return 350.0
+        case .kg:
+            return 159.0
+        }
+    }
+
     func isValidWeight(_ weight: Double) -> Bool {
         weight >= minWeight && weight <= maxWeight
     }
 
+    func isValidGoalWeight(_ weight: Double) -> Bool {
+        weight >= minGoalWeight && weight <= maxGoalWeight
+    }
+
+    func goalWeightWarning(_ weight: Double) -> GoalWeightWarning? {
+        guard isValidGoalWeight(weight) else { return nil }
+        if weight < lowGoalWarningThreshold {
+            return .low
+        } else if weight > highGoalWarningThreshold {
+            return .high
+        }
+        return nil
+    }
+}
+
+enum GoalWeightWarning {
+    case low
+    case high
+
+    var message: String {
+        switch self {
+        case .low:
+            return "This goal weight may be too low for healthy adults. Consider consulting a healthcare provider."
+        case .high:
+            return "This goal weight is quite high. Consider consulting a healthcare provider about a healthy target."
+        }
+    }
+}
+
+extension WeightUnit {
     /// Converts a weight value from this unit to the target unit
     func convert(_ value: Double, to targetUnit: WeightUnit) -> Double {
         guard self != targetUnit else { return value }

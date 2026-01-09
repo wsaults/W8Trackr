@@ -241,6 +241,100 @@ struct GoalWeightValidationTests {
     }
 }
 
+// MARK: - Goal-Specific Weight Validation Tests
+
+struct GoalSpecificWeightValidationTests {
+
+    // MARK: - Goal Weight Bounds Tests
+
+    @Test func minGoalWeightForPounds() {
+        #expect(WeightUnit.lb.minGoalWeight == 70.0)
+    }
+
+    @Test func minGoalWeightForKilograms() {
+        #expect(WeightUnit.kg.minGoalWeight == 32.0)
+    }
+
+    @Test func maxGoalWeightForPounds() {
+        #expect(WeightUnit.lb.maxGoalWeight == 450.0)
+    }
+
+    @Test func maxGoalWeightForKilograms() {
+        #expect(WeightUnit.kg.maxGoalWeight == 205.0)
+    }
+
+    // MARK: - Goal Weight Validation Tests
+
+    @Test func validGoalWeightWithinMedicalBounds() {
+        #expect(WeightUnit.lb.isValidGoalWeight(160.0) == true)
+        #expect(WeightUnit.lb.isValidGoalWeight(70.0) == true)  // Min boundary
+        #expect(WeightUnit.lb.isValidGoalWeight(450.0) == true) // Max boundary
+        #expect(WeightUnit.kg.isValidGoalWeight(70.0) == true)
+        #expect(WeightUnit.kg.isValidGoalWeight(32.0) == true)  // Min boundary
+        #expect(WeightUnit.kg.isValidGoalWeight(205.0) == true) // Max boundary
+    }
+
+    @Test func invalidGoalWeightBelowMinimum() {
+        #expect(WeightUnit.lb.isValidGoalWeight(69.9) == false)
+        #expect(WeightUnit.lb.isValidGoalWeight(50.0) == false)
+        #expect(WeightUnit.kg.isValidGoalWeight(31.9) == false)
+        #expect(WeightUnit.kg.isValidGoalWeight(20.0) == false)
+    }
+
+    @Test func invalidGoalWeightAboveMaximum() {
+        #expect(WeightUnit.lb.isValidGoalWeight(450.1) == false)
+        #expect(WeightUnit.lb.isValidGoalWeight(500.0) == false)
+        #expect(WeightUnit.kg.isValidGoalWeight(205.1) == false)
+        #expect(WeightUnit.kg.isValidGoalWeight(250.0) == false)
+    }
+
+    // MARK: - Goal Weight Warning Tests
+
+    @Test func lowGoalWeightWarningThresholds() {
+        #expect(WeightUnit.lb.lowGoalWarningThreshold == 100.0)
+        #expect(WeightUnit.kg.lowGoalWarningThreshold == 45.0)
+    }
+
+    @Test func highGoalWeightWarningThresholds() {
+        #expect(WeightUnit.lb.highGoalWarningThreshold == 350.0)
+        #expect(WeightUnit.kg.highGoalWarningThreshold == 159.0)
+    }
+
+    @Test func noWarningForNormalGoalWeight() {
+        #expect(WeightUnit.lb.goalWeightWarning(160.0) == nil)
+        #expect(WeightUnit.lb.goalWeightWarning(200.0) == nil)
+        #expect(WeightUnit.kg.goalWeightWarning(70.0) == nil)
+        #expect(WeightUnit.kg.goalWeightWarning(80.0) == nil)
+    }
+
+    @Test func lowWarningForLowGoalWeight() {
+        let warning = WeightUnit.lb.goalWeightWarning(90.0)
+        #expect(warning == .low)
+
+        let kgWarning = WeightUnit.kg.goalWeightWarning(40.0)
+        #expect(kgWarning == .low)
+    }
+
+    @Test func highWarningForHighGoalWeight() {
+        let warning = WeightUnit.lb.goalWeightWarning(400.0)
+        #expect(warning == .high)
+
+        let kgWarning = WeightUnit.kg.goalWeightWarning(180.0)
+        #expect(kgWarning == .high)
+    }
+
+    @Test func noWarningForInvalidGoalWeight() {
+        // Invalid weights should return nil, not a warning
+        #expect(WeightUnit.lb.goalWeightWarning(50.0) == nil)
+        #expect(WeightUnit.lb.goalWeightWarning(500.0) == nil)
+    }
+
+    @Test func warningMessagesAreNotEmpty() {
+        #expect(!GoalWeightWarning.low.message.isEmpty)
+        #expect(!GoalWeightWarning.high.message.isEmpty)
+    }
+}
+
 // MARK: - Chart Data Filtering Tests
 
 struct ChartDataFilteringTests {

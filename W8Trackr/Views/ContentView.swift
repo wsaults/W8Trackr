@@ -51,6 +51,11 @@ struct ContentView: View {
                 }
         }
         .onAppear {
+            // Validate and sanitize stored goal weight for current unit
+            if !preferredWeightUnit.isValidGoalWeight(goalWeight) {
+                goalWeight = min(max(goalWeight, preferredWeightUnit.minGoalWeight), preferredWeightUnit.maxGoalWeight)
+            }
+
             if entries.isEmpty {
                 WeightEntry.initialData.forEach { entry in
                     modelContext.insert(entry)
