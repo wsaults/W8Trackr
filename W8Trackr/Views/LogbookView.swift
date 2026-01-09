@@ -13,6 +13,7 @@ struct LogbookView: View {
     var preferredWeightUnit: WeightUnit
     var goalWeight: Double
     @State private var showingAddWeight = false
+    @State private var entryToEdit: WeightEntry?
     
     var body: some View {
         NavigationStack {
@@ -24,7 +25,9 @@ struct LogbookView: View {
                         description: Text("Add your first weight entry to start tracking your progress.")
                     )
                 } else {
-                    HistorySectionView(entries: entries, weightUnit: preferredWeightUnit)
+                    HistorySectionView(entries: entries, weightUnit: preferredWeightUnit) { entry in
+                        entryToEdit = entry
+                    }
                 }
             }
             .navigationTitle("Logbook")
@@ -39,6 +42,9 @@ struct LogbookView: View {
             }
             .sheet(isPresented: $showingAddWeight) {
                 AddWeightView(entries: entries, weightUnit: preferredWeightUnit)
+            }
+            .sheet(item: $entryToEdit) { entry in
+                EditWeightView(entry: entry, weightUnit: preferredWeightUnit)
             }
         }
     }

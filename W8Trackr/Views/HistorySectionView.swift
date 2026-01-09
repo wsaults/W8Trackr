@@ -11,6 +11,7 @@ struct HistorySectionView: View {
     @Environment(\.modelContext) private var modelContext
     let entries: [WeightEntry]
     let weightUnit: WeightUnit
+    var onEdit: ((WeightEntry) -> Void)?
     
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -50,6 +51,14 @@ struct HistorySectionView: View {
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
+                }
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    Button {
+                        onEdit?(entry)
+                    } label: {
+                        Label("Edit", systemImage: "pencil")
+                    }
+                    .tint(.blue)
                 }
             }
             .onDelete { indexSet in
