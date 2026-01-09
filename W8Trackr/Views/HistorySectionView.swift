@@ -12,7 +12,13 @@ struct HistorySectionView: View {
     let entries: [WeightEntry]
     let weightUnit: WeightUnit
     var onEdit: ((WeightEntry) -> Void)?
-    
+
+    @State private var pendingDeletes: [WeightEntry] = []
+    @State private var showingUndoToast = false
+    @State private var deleteWorkItem: DispatchWorkItem?
+
+    private static let undoTimeout: TimeInterval = 5
+
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
@@ -20,10 +26,21 @@ struct HistorySectionView: View {
         formatter.locale = .current
         return formatter
     }()
-    
+
+    private var visibleEntries: [WeightEntry] {
+        entries.filter { entry in
+            !pendingDeletes.contains { $0.id == entry.id }
+        }
+    }
+
+    private var undoMessage: String {
+        let count = pendingDeletes.count
+        return count == 1 ? "Entry deleted" : "\(count) entries deleted"
+    }
+
     var body: some View {
         List {
-            ForEach(entries) { entry in
+            ForEach(visibleEntries) { entry in
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(entry.date, formatter: Self.dateFormatter)
@@ -51,7 +68,7 @@ struct HistorySectionView: View {
                 }
                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                     Button(role: .destructive) {
-                        deleteEntry(entry)
+                        queueDelete(entry)
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
@@ -67,24 +84,67 @@ struct HistorySectionView: View {
             }
             .onDelete { indexSet in
                 indexSet.forEach { index in
-                    deleteEntry(entries[index])
+                    queueDelete(visibleEntries[index])
                 }
             }
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                if !entries.isEmpty {
+                if !visibleEntries.isEmpty {
                     EditButton()
                 }
             }
         }
-    }
-    
-    private func deleteEntry(_ entry: WeightEntry) {
-        withAnimation {
-            modelContext.delete(entry)
-            try? modelContext.save()
+        .toast(
+            isPresented: $showingUndoToast,
+            message: undoMessage,
+            systemImage: "trash",
+            actionLabel: "Undo",
+            duration: Self.undoTimeout
+        ) {
+            undoDelete()
         }
+        .onChange(of: showingUndoToast) { _, isShowing in
+            if !isShowing && !pendingDeletes.isEmpty {
+                commitDeletes()
+            }
+        }
+    }
+
+    private func queueDelete(_ entry: WeightEntry) {
+        deleteWorkItem?.cancel()
+
+        withAnimation {
+            pendingDeletes.append(entry)
+            showingUndoToast = true
+        }
+
+        let workItem = DispatchWorkItem { [self] in
+            withAnimation {
+                showingUndoToast = false
+            }
+        }
+        deleteWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.undoTimeout, execute: workItem)
+    }
+
+    private func undoDelete() {
+        deleteWorkItem?.cancel()
+        deleteWorkItem = nil
+
+        withAnimation {
+            pendingDeletes.removeAll()
+            showingUndoToast = false
+        }
+    }
+
+    private func commitDeletes() {
+        for entry in pendingDeletes {
+            modelContext.delete(entry)
+        }
+        try? modelContext.save()
+        pendingDeletes.removeAll()
+        deleteWorkItem = nil
     }
 }
 
