@@ -9,7 +9,7 @@ import Foundation
 
 /// A single point in the weight trend timeline, containing both raw and smoothed values.
 /// Used for charting and trend analysis.
-struct TrendPoint: Identifiable {
+struct TrendPoint: Identifiable, Equatable {
     /// Unique identifier for SwiftUI, based on the date
     var id: Date { date }
 
@@ -57,9 +57,68 @@ struct TrendPoint: Identifiable {
         guard let rate = trendRate else { return nil }
         return WeightUnit.lb.convert(rate, to: unit)
     }
+
+    static func == (lhs: TrendPoint, rhs: TrendPoint) -> Bool {
+        lhs.date == rhs.date && lhs.rawWeight == rhs.rawWeight && lhs.smoothedWeight == rhs.smoothedWeight
+    }
 }
 
 enum TrendCalculator {
+
+    /// Default smoothing factor from The Hacker's Diet
+    /// Lower values = smoother trend (less responsive to daily fluctuations)
+    /// Higher values = more responsive to recent changes
+    static let defaultLambda: Double = 0.1
+
+    /// Calculates EWMA trend line from weight entries using Hacker's Diet formula
+    ///
+    /// - Parameters:
+    ///   - entries: Array of weight entries (will be sorted by date ascending)
+    ///   - lambda: Smoothing factor (0 < lambda <= 1). Default is 0.1 per Hacker's Diet
+    ///   - unit: Weight unit to use for calculations
+    /// - Returns: Array of TrendPoints with smoothed trend values, sorted by date ascending
+    ///
+    /// The EWMA formula:
+    /// ```
+    /// trend[0] = weight[0]
+    /// trend[t] = lambda * weight[t] + (1 - lambda) * trend[t-1]
+    /// ```
+    ///
+    /// Edge cases:
+    /// - Empty array returns empty array
+    /// - Single entry returns that entry's weight as the trend
+    /// - Gaps in dates are handled naturally (previous trend carries forward)
+    static func calculateEWMA(
+        entries: [WeightEntry],
+        lambda: Double = defaultLambda,
+        unit: WeightUnit = .lb
+    ) -> [TrendPoint] {
+        guard !entries.isEmpty else { return [] }
+
+        let sorted = entries.sorted { $0.date < $1.date }
+
+        var result: [TrendPoint] = []
+        var previousTrend: Double?
+
+        for entry in sorted {
+            let weight = entry.weightValue(in: unit)
+
+            let trend: Double
+            if let prev = previousTrend {
+                trend = lambda * weight + (1 - lambda) * prev
+            } else {
+                trend = weight
+            }
+
+            // Convert to lbs for internal storage
+            let rawWeightLbs = entry.weightValue(in: .lb)
+            let smoothedWeightLbs = WeightUnit.lb == unit ? trend : unit.convert(trend, to: .lb)
+            result.append(TrendPoint(date: entry.date, rawWeight: rawWeightLbs, smoothedWeight: smoothedWeightLbs))
+            previousTrend = trend
+        }
+
+        return result
+    }
 
     /// Calculates exponential moving average for weight entries
     /// - Parameters:

@@ -1175,3 +1175,197 @@ struct SampleDataTests {
         }
     }
 }
+
+// MARK: - TrendCalculator EWMA Tests
+
+struct TrendCalculatorTests {
+
+    // MARK: - Empty and Single Entry Tests
+
+    @Test func emptyEntriesReturnsEmptyResult() {
+        let result = TrendCalculator.calculateEWMA(entries: [])
+        #expect(result.isEmpty)
+    }
+
+    @Test func singleEntryReturnsThatWeight() {
+        let entry = WeightEntry(weight: 175.0, unit: .lb, date: Date())
+        let result = TrendCalculator.calculateEWMA(entries: [entry])
+
+        #expect(result.count == 1)
+        #expect(result[0].weight == 175.0)
+    }
+
+    // MARK: - Basic EWMA Calculation Tests
+
+    @Test func twoEntriesCalculatesCorrectTrend() {
+        let calendar = Calendar.current
+        let today = Date()
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
+
+        let entries = [
+            WeightEntry(weight: 180.0, unit: .lb, date: yesterday),
+            WeightEntry(weight: 170.0, unit: .lb, date: today)
+        ]
+
+        let result = TrendCalculator.calculateEWMA(entries: entries)
+
+        #expect(result.count == 2)
+        #expect(result[0].weight == 180.0) // First entry = weight
+        // Second: 0.1 * 170 + 0.9 * 180 = 17 + 162 = 179
+        #expect(abs(result[1].weight - 179.0) < 0.001)
+    }
+
+    @Test func ewmaSmoothesDailyFluctuations() {
+        let calendar = Calendar.current
+        let baseDate = Date()
+
+        // Simulate daily weights with fluctuations
+        let weights: [Double] = [180.0, 182.0, 179.0, 181.0, 178.0]
+        var entries: [WeightEntry] = []
+
+        for (i, weight) in weights.enumerated() {
+            let date = calendar.date(byAdding: .day, value: i - 4, to: baseDate)!
+            entries.append(WeightEntry(weight: weight, unit: .lb, date: date))
+        }
+
+        let result = TrendCalculator.calculateEWMA(entries: entries)
+
+        #expect(result.count == 5)
+
+        // Verify trend is smoother than raw weights
+        // The variance of trend should be less than variance of weights
+        let trendValues = result.map { $0.weight }
+        let trendVariance = variance(trendValues)
+        let weightVariance = variance(weights)
+
+        #expect(trendVariance < weightVariance)
+    }
+
+    // MARK: - Sorting Tests
+
+    @Test func unsortedEntriesAreSortedByDate() {
+        let calendar = Calendar.current
+        let today = Date()
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
+        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: today)!
+
+        // Entries in random order
+        let entries = [
+            WeightEntry(weight: 170.0, unit: .lb, date: today),
+            WeightEntry(weight: 180.0, unit: .lb, date: twoDaysAgo),
+            WeightEntry(weight: 175.0, unit: .lb, date: yesterday)
+        ]
+
+        let result = TrendCalculator.calculateEWMA(entries: entries)
+
+        // Result should be sorted by date ascending
+        #expect(result[0].date == twoDaysAgo)
+        #expect(result[1].date == yesterday)
+        #expect(result[2].date == today)
+
+        // First trend should be 180 (oldest entry)
+        #expect(result[0].weight == 180.0)
+    }
+
+    // MARK: - Lambda Parameter Tests
+
+    @Test func defaultLambdaIsHackersDietStandard() {
+        #expect(TrendCalculator.defaultLambda == 0.1)
+    }
+
+    @Test func higherLambdaIsMoreResponsive() {
+        let calendar = Calendar.current
+        let today = Date()
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
+
+        let entries = [
+            WeightEntry(weight: 180.0, unit: .lb, date: yesterday),
+            WeightEntry(weight: 170.0, unit: .lb, date: today)
+        ]
+
+        let lowLambda = TrendCalculator.calculateEWMA(entries: entries, lambda: 0.1)
+        let highLambda = TrendCalculator.calculateEWMA(entries: entries, lambda: 0.5)
+
+        // Higher lambda should be closer to latest weight (170)
+        let lowLambdaDistance = abs(lowLambda[1].weight - 170.0)
+        let highLambdaDistance = abs(highLambda[1].weight - 170.0)
+
+        #expect(highLambdaDistance < lowLambdaDistance)
+    }
+
+    @Test func lambdaOneEqualsRawWeight() {
+        let calendar = Calendar.current
+        let today = Date()
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
+
+        let entries = [
+            WeightEntry(weight: 180.0, unit: .lb, date: yesterday),
+            WeightEntry(weight: 170.0, unit: .lb, date: today)
+        ]
+
+        let result = TrendCalculator.calculateEWMA(entries: entries, lambda: 1.0)
+
+        // Lambda = 1 means trend = current weight (no smoothing)
+        #expect(result[0].weight == 180.0)
+        #expect(result[1].weight == 170.0)
+    }
+
+    // MARK: - Unit Conversion Tests
+
+    @Test func respectsUnitParameter() {
+        let entry = WeightEntry(weight: 100.0, unit: .lb, date: Date())
+
+        let lbResult = TrendCalculator.calculateEWMA(entries: [entry], unit: .lb)
+        let kgResult = TrendCalculator.calculateEWMA(entries: [entry], unit: .kg)
+
+        #expect(lbResult[0].weight == 100.0)
+        // 100 lb ≈ 45.36 kg
+        #expect(abs(kgResult[0].weight - 45.3592) < 0.001)
+    }
+
+    // MARK: - Gap Handling Tests
+
+    @Test func handlesGapsInDates() {
+        let calendar = Calendar.current
+        let today = Date()
+        let threeDaysAgo = calendar.date(byAdding: .day, value: -3, to: today)!
+        let tenDaysAgo = calendar.date(byAdding: .day, value: -10, to: today)!
+
+        // Gap of 7 days between first two entries
+        let entries = [
+            WeightEntry(weight: 180.0, unit: .lb, date: tenDaysAgo),
+            WeightEntry(weight: 175.0, unit: .lb, date: threeDaysAgo),
+            WeightEntry(weight: 170.0, unit: .lb, date: today)
+        ]
+
+        let result = TrendCalculator.calculateEWMA(entries: entries)
+
+        // Should still calculate correctly
+        #expect(result.count == 3)
+        #expect(result[0].weight == 180.0)
+        // Gap doesn't affect formula, just uses previous trend
+        #expect(result[1].weight < 180.0)
+        #expect(result[2].weight < result[1].weight)
+    }
+
+    // MARK: - TrendPoint Tests
+
+    @Test func trendPointEquatable() {
+        let date = Date()
+        let point1 = TrendPoint(date: date, weight: 175.0)
+        let point2 = TrendPoint(date: date, weight: 175.0)
+        let point3 = TrendPoint(date: date, weight: 180.0)
+
+        #expect(point1 == point2)
+        #expect(point1 != point3)
+    }
+
+    // MARK: - Helper Functions
+
+    private func variance(_ values: [Double]) -> Double {
+        guard !values.isEmpty else { return 0 }
+        let mean = values.reduce(0, +) / Double(values.count)
+        let squaredDiffs = values.map { ($0 - mean) * ($0 - mean) }
+        return squaredDiffs.reduce(0, +) / Double(values.count)
+    }
+}
