@@ -20,6 +20,7 @@ struct SettingsView: View {
     @State private var reminderTime: Date
     @State private var showingNotificationPermissionAlert = false
     @State private var showingSmoothingInfo = false
+    @State private var showingExportView = false
 
     init(weightUnit: Binding<WeightUnit>, goalWeight: Binding<Double>, showSmoothing: Binding<Bool>) {
         _weightUnit = weightUnit
@@ -80,6 +81,21 @@ struct SettingsView: View {
         }
     }
     
+    private var dataManagementSection: some View {
+        Section {
+            Button {
+                showingExportView = true
+            } label: {
+                HStack {
+                    Image(systemName: "square.and.arrow.up")
+                    Text("Export Data")
+                }
+            }
+        } header: {
+            Text("Data Management")
+        }
+    }
+
     private var dangerZoneSection: some View {
         Section {
             Button(role: .destructive) {
@@ -177,6 +193,7 @@ struct SettingsView: View {
                 chartSettingsSection
                 reminderSection
                 smartRemindersSection
+                dataManagementSection
                 dangerZoneSection
             }
             .navigationTitle("Settings")
@@ -216,6 +233,9 @@ struct SettingsView: View {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text("Your weight naturally fluctuates 2-4 lbs daily due to water retention, sodium intake, and digestion. Trend smoothing uses a 10-day exponential moving average to reveal your true weight trend, helping you focus on long-term progress rather than day-to-day noise.")
+            }
+            .sheet(isPresented: $showingExportView) {
+                ExportView()
             }
         }
     }
