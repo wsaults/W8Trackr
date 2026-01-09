@@ -21,10 +21,12 @@ struct SummaryView: View {
             ZStack(alignment: .bottom) {
                 VStack {
                     if entries.isEmpty {
-                        ContentUnavailableView(
-                            "Start Tracking!",
-                            systemImage: "person.badge.plus",
-                            description: Text("Tap the + button to track your weight")
+                        EmptyStateView(
+                            illustration: .startTracking,
+                            title: "Begin Your Journey",
+                            description: "Track your weight to see trends and progress toward your goals.",
+                            actionTitle: "Log Your First Weight",
+                            action: { showAddWeightView = true }
                         )
                     } else {
                         if let entry = entries.first {

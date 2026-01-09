@@ -19,10 +19,12 @@ struct LogbookView: View {
         NavigationStack {
             VStack {
                 if entries.isEmpty {
-                    ContentUnavailableView(
-                        "No Weight Entries",
-                        systemImage: "book.closed",
-                        description: Text("Add your first weight entry to start tracking your progress.")
+                    EmptyStateView(
+                        illustration: .emptyLogbook,
+                        title: "Your Logbook Awaits",
+                        description: "Every journey starts with a single step. Add your first entry to begin tracking.",
+                        actionTitle: "Add Entry",
+                        action: { showingAddWeight = true }
                     )
                 } else {
                     HistorySectionView(entries: entries, weightUnit: preferredWeightUnit) { entry in
