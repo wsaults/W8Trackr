@@ -23,7 +23,26 @@ For development, open `W8Trackr.xcodeproj` in Xcode and use Cmd+R to build/run.
 ### Core Stack
 - **SwiftUI** + **SwiftData** (iOS 18.0+)
 - **Swift Charts** for weight visualization
-- **Composable Architecture** (dependency added, migration pending)
+
+### Architectural Approach: Pure SwiftUI
+
+This app uses native SwiftUI patterns without external architecture frameworks.
+
+**State Management:**
+- `@State` / `@Binding` for local view state
+- `@Environment(\.modelContext)` for SwiftData access
+- `@Query` for reactive data fetching
+- `@AppStorage` for user preferences (persisted to UserDefaults)
+
+**Service Layer:**
+- `ObservableObject` managers for stateful services (e.g., `NotificationManager`)
+- Instantiated as `@StateObject` where needed
+
+**Design Principles:**
+- **No ViewModels** - views own their state directly
+- **Simple over clever** - avoid abstraction until needed
+- **Direct @Query binding** - let SwiftData drive the UI
+- **Minimal layers** - data flows from model to view without intermediaries
 
 ### Data Flow Pattern
 The app uses SwiftData with `@Query` for real-time data binding. The model container is configured at the app level (`W8TrackrApp.swift`) and accessed via `@Environment(\.modelContext)`.
