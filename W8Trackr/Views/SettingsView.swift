@@ -75,6 +75,8 @@ struct SettingsView: View {
             }
             .pickerStyle(.segmented)
             .onChange(of: weightUnit) { oldUnit, newUnit in
+                guard oldUnit != newUnit else { return }
+
                 // Validate source value before conversion
                 guard oldUnit.isValidGoalWeight(localGoalWeight) else {
                     // Invalid source value - use the new unit's default
@@ -103,7 +105,7 @@ struct SettingsView: View {
                 TextField("Goal Weight", value: $localGoalWeight, format: .number.precision(.fractionLength(1)))
                     .keyboardType(.decimalPad)
                     .multilineTextAlignment(.trailing)
-                    .foregroundColor(isValidGoalWeight ? Color.primary : Color.red)
+                    .foregroundStyle(isValidGoalWeight ? .primary : .red)
                     .onChange(of: localGoalWeight) { _, newValue in
                         updateGoalWeight(newValue)
                     }

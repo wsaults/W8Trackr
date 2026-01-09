@@ -16,6 +16,7 @@ struct HistorySectionView: View {
 
     @State private var pendingDeletes: [WeightEntry] = []
     @State private var showingUndoToast = false
+    @State private var showDeleteError = false
     @State private var deleteWorkItem: DispatchWorkItem?
 
     private static let undoTimeout: TimeInterval = 5
@@ -120,6 +121,7 @@ struct HistorySectionView: View {
         ) {
             undoDelete()
         }
+        .errorToast(isPresented: $showDeleteError, message: "Failed to delete entry")
         .onChange(of: showingUndoToast) { _, isShowing in
             if !isShowing && !pendingDeletes.isEmpty {
                 commitDeletes()
@@ -159,11 +161,14 @@ struct HistorySectionView: View {
         for entry in pendingDeletes {
             modelContext.delete(entry)
         }
-        try? modelContext.save()
-
-        // Announce to VoiceOver
-        let announcement = count == 1 ? "Entry deleted" : "\(count) entries deleted"
-        UIAccessibility.post(notification: .announcement, argument: announcement)
+        do {
+            try modelContext.save()
+            // Announce to VoiceOver
+            let announcement = count == 1 ? "Entry deleted" : "\(count) entries deleted"
+            UIAccessibility.post(notification: .announcement, argument: announcement)
+        } catch {
+            showDeleteError = true
+        }
 
         pendingDeletes.removeAll()
         deleteWorkItem = nil

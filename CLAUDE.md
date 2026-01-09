@@ -1,6 +1,19 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with code in this repository.
+
+## Rules
+
+Detailed coding patterns and conventions are in `.claude/rules/`:
+
+| File | Purpose |
+|------|---------|
+| `swift.md` | Swift language patterns, naming, error handling |
+| `swiftui.md` | View architecture, state management, composition |
+| `swiftdata.md` | Model definitions, queries, mutations |
+| `ios.md` | Platform conventions, notifications, lifecycle |
+
+**Always reference these rules** when writing or modifying code.
 
 ## Build & Run Commands
 
@@ -44,10 +57,32 @@ This app uses native SwiftUI patterns without external architecture frameworks.
 - **Direct @Query binding** - let SwiftData drive the UI
 - **Minimal layers** - data flows from model to view without intermediaries
 
-### Data Flow Pattern
-The app uses SwiftData with `@Query` for real-time data binding. The model container is configured at the app level (`W8TrackrApp.swift`) and accessed via `@Environment(\.modelContext)`.
+### Project Structure
 
-**Simulator vs Device**: `ContentView` uses `#if targetEnvironment(simulator)` to inject sample data for previews, while device builds use live `@Query` data.
+```
+W8Trackr/
+├── W8TrackrApp.swift           # App entry point, ModelContainer config
+├── Models/
+│   └── WeightEntry.swift       # @Model with unit conversion logic
+├── Views/
+│   ├── ContentView.swift       # Root TabView
+│   ├── SummaryView.swift       # Dashboard with chart
+│   ├── LogbookView.swift       # History list
+│   ├── SettingsView.swift      # User preferences
+│   ├── AddWeightView.swift     # Entry modal
+│   └── ...                     # Supporting views
+└── Managers/
+    └── NotificationManager.swift   # Daily reminders
+```
+
+### Data Flow Pattern
+
+The app uses SwiftData with `@Query` for real-time data binding:
+- Model container configured at app level (`W8TrackrApp.swift`)
+- Views access data via `@Query` (read) and `@Environment(\.modelContext)` (write)
+- User preferences use `@AppStorage` / `UserDefaults` (not SwiftData)
+
+**Simulator vs Device**: `ContentView` uses `#if targetEnvironment(simulator)` to inject sample data for previews.
 
 ### Key Architectural Decisions
 
@@ -62,6 +97,7 @@ The app uses SwiftData with `@Query` for real-time data binding. The model conta
 **Settings Persistence**: User preferences (`goalWeight`, `preferredWeightUnit`, `reminderTime`) use `@AppStorage` and `UserDefaults` rather than SwiftData.
 
 ### View Hierarchy
+
 ```
 W8TrackrApp
 └── ContentView (TabView)
@@ -73,8 +109,10 @@ W8TrackrApp
 Modal: `WeightEntryView` (sheet from SummaryView/LogbookView for add/edit)
 
 ### Notification System
+
 `NotificationManager` is an `ObservableObject` handling daily reminder scheduling via `UNUserNotificationCenter`. Instantiated as `@StateObject` in `SettingsView`.
 
+<<<<<<< HEAD
 ## Code Quality
 
 ### SwiftLint
@@ -93,3 +131,13 @@ brew install swiftlint
 - Relaxed line length (150 warning, 200 error) for SwiftUI modifier chains
 - Disabled rules that conflict with SwiftUI patterns (nesting, function_body_length)
 - Custom rule to warn about print statements in production code
+=======
+## Code Style Quick Reference
+
+- **Navigation**: Use `NavigationStack` (not NavigationView)
+- **State**: `@State` for local, `@Binding` for passed, `@StateObject` for owned ObservableObject
+- **Empty states**: Use `ContentUnavailableView`
+- **Forms**: Structure with `Section` + header/footer
+- **Alerts**: Use modern `.alert(title, isPresented:)` API
+- **Previews**: Use iOS 18 `#Preview(traits:)` with `PreviewModifier`
+>>>>>>> c0de58c (Add Claude Code rules for Swift/SwiftUI/iOS patterns)
