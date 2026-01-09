@@ -8,5 +8,7 @@
 	</array>
 	<key>NSUserNotificationUsageDescription</key>
 	<string>We need to send you notifications for daily weight logging reminders.</string>
+	<key>NSSiriUsageDescription</key>
+	<string>Use Siri to log your weight and check your progress.</string>
 </dict>
 </plist>
