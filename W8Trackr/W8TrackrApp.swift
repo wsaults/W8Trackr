@@ -10,9 +10,17 @@ import SwiftUI
 
 @main
 struct W8TrackrApp: App {
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if hasCompletedOnboarding {
+                ContentView()
+            } else {
+                OnboardingView {
+                    // Callback when onboarding completes
+                }
+            }
         }
         .modelContainer(for: [WeightEntry.self])
     }
