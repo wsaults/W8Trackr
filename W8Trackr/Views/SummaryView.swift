@@ -73,6 +73,9 @@ struct SummaryView: View {
 
                             ChartSectionView(entries: entries, goalWeight: goalWeight, weightUnit: preferredWeightUnit, showSmoothing: showSmoothing)
 
+                            WeeklySummaryView(entries: entries, weightUnit: preferredWeightUnit)
+                                .padding(.top, 16)
+
                             if !completedMilestones.isEmpty {
                                 MilestoneHistoryView(milestones: completedMilestones, unit: preferredWeightUnit)
                                     .padding(.bottom, 80)
