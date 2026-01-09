@@ -311,6 +311,15 @@ struct WeightEntryView: View {
         }
 
         try? modelContext.save()
+
+        // Sync to HealthKit
+        HealthKitManager.shared.saveWeightEntry(
+            weightInUnit: weight,
+            unit: weightUnit,
+            bodyFatPercentage: bodyFat,
+            date: isEditing ? date : Date()
+        )
+
         dismiss()
     }
 }

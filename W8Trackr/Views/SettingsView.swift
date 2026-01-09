@@ -12,6 +12,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @StateObject private var notificationManager = NotificationManager()
+    @ObservedObject private var healthKitManager = HealthKitManager.shared
     @Binding var weightUnit: WeightUnit
     @Binding var goalWeight: Double
     @Binding var showSmoothing: Bool
@@ -19,6 +20,7 @@ struct SettingsView: View {
     @State private var showingDeleteAlert = false
     @State private var reminderTime: Date
     @State private var showingNotificationPermissionAlert = false
+    @State private var showingHealthKitPermissionAlert = false
     @State private var showingSmoothingInfo = false
     @State private var showingExportView = false
 
@@ -186,6 +188,65 @@ struct SettingsView: View {
             Text("Get personalized notifications including streak warnings, milestone alerts, and weekly summaries based on your logging habits.")
         }
     }
+
+    @ViewBuilder
+    private var healthSection: some View {
+        if HealthKitManager.isHealthKitAvailable {
+            Section {
+                Toggle("Sync to Apple Health", isOn: Binding(
+                    get: { healthKitManager.isHealthSyncEnabled },
+                    set: { newValue in
+                        if newValue {
+                            healthKitManager.requestAuthorization { granted, _ in
+                                if granted {
+                                    healthKitManager.isHealthSyncEnabled = true
+                                } else {
+                                    showingHealthKitPermissionAlert = true
+                                }
+                            }
+                        } else {
+                            healthKitManager.isHealthSyncEnabled = false
+                        }
+                    }
+                ))
+
+                if healthKitManager.isHealthSyncEnabled {
+                    HStack {
+                        Text("Sync Status")
+                        Spacer()
+                        syncStatusView
+                    }
+                }
+            } header: {
+                Text("Apple Health")
+            } footer: {
+                Text("When enabled, your weight and body fat entries will be automatically saved to Apple Health.")
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var syncStatusView: some View {
+        switch healthKitManager.lastSyncStatus {
+        case .none:
+            Text("Ready")
+                .foregroundStyle(.secondary)
+        case .syncing:
+            HStack(spacing: 4) {
+                ProgressView()
+                    .scaleEffect(0.8)
+                Text("Syncing...")
+            }
+            .foregroundStyle(.secondary)
+        case .success:
+            Label("Synced", systemImage: "checkmark.circle.fill")
+                .foregroundStyle(.green)
+        case .failed(let error):
+            Label(error, systemImage: "exclamationmark.triangle.fill")
+                .foregroundStyle(.red)
+                .font(.caption)
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -194,6 +255,7 @@ struct SettingsView: View {
                 chartSettingsSection
                 reminderSection
                 smartRemindersSection
+                healthSection
                 dataManagementSection
                 dangerZoneSection
             }
@@ -229,6 +291,16 @@ struct SettingsView: View {
                 }
             } message: {
                 Text("Please enable notifications in Settings to use daily reminders.")
+            }
+            .alert("Health Access Required", isPresented: $showingHealthKitPermissionAlert) {
+                Button("OK", role: .cancel) { }
+                Button("Open Settings") {
+                    if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(settingsUrl)
+                    }
+                }
+            } message: {
+                Text("Please enable Health access in Settings to sync your weight data.")
             }
             .alert("Trend Smoothing", isPresented: $showingSmoothingInfo) {
                 Button("OK", role: .cancel) { }
