@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct ToastView: View {
     let message: String
@@ -35,6 +36,8 @@ struct ToastView: View {
         .background(.ultraThinMaterial)
         .cornerRadius(10)
         .shadow(color: .black.opacity(0.15), radius: 5, x: 0, y: 2)
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isStaticText)
     }
 }
 
@@ -67,6 +70,9 @@ struct ToastModifier: ViewModifier {
         }
         .onChange(of: isPresented) { _, newValue in
             if newValue {
+                // Announce toast message to VoiceOver
+                UIAccessibility.post(notification: .announcement, argument: message)
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                     withAnimation(.easeInOut(duration: 0.3)) {
                         isPresented = false

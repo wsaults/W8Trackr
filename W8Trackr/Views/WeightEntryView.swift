@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct WeightAdjustButton: View {
     let systemName: String
+    let accessibilityLabel: String
+    let accessibilityHint: String
     let action: () -> Void
     @ScaledMetric(relativeTo: .title) private var buttonIconSize: CGFloat = 44
 
@@ -18,6 +21,8 @@ struct WeightAdjustButton: View {
                 .font(.system(size: buttonIconSize))
                 .foregroundStyle(.blue)
         }
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint(accessibilityHint)
     }
 }
 
@@ -136,22 +141,38 @@ struct WeightEntryView: View {
                         }
 
                         HStack(spacing: 40) {
-                            WeightAdjustButton(systemName: "backward.circle.fill") {
+                            WeightAdjustButton(
+                                systemName: "backward.circle.fill",
+                                accessibilityLabel: "Decrease by 1",
+                                accessibilityHint: "Decreases weight by 1 \(weightUnit.rawValue)"
+                            ) {
                                 mediumFeedbackGenerator.impactOccurred()
                                 weight = max(weightUnit.minWeight, weight - 1.0)
                             }
 
-                            WeightAdjustButton(systemName: "backward.end.circle.fill") {
+                            WeightAdjustButton(
+                                systemName: "backward.end.circle.fill",
+                                accessibilityLabel: "Decrease by 0.1",
+                                accessibilityHint: "Decreases weight by 0.1 \(weightUnit.rawValue)"
+                            ) {
                                 lightFeedbackGenerator.impactOccurred()
                                 weight = max(weightUnit.minWeight, weight - 0.1)
                             }
 
-                            WeightAdjustButton(systemName: "forward.end.circle.fill") {
+                            WeightAdjustButton(
+                                systemName: "forward.end.circle.fill",
+                                accessibilityLabel: "Increase by 0.1",
+                                accessibilityHint: "Increases weight by 0.1 \(weightUnit.rawValue)"
+                            ) {
                                 lightFeedbackGenerator.impactOccurred()
                                 weight = min(weightUnit.maxWeight, weight + 0.1)
                             }
 
-                            WeightAdjustButton(systemName: "forward.circle.fill") {
+                            WeightAdjustButton(
+                                systemName: "forward.circle.fill",
+                                accessibilityLabel: "Increase by 1",
+                                accessibilityHint: "Increases weight by 1 \(weightUnit.rawValue)"
+                            ) {
                                 mediumFeedbackGenerator.impactOccurred()
                                 weight = min(weightUnit.maxWeight, weight + 1.0)
                             }
@@ -271,6 +292,10 @@ struct WeightEntryView: View {
             entry.note = note.isEmpty ? nil : note
             entry.bodyFatPercentage = bodyFat
             entry.modifiedDate = Date()
+
+            // Announce to VoiceOver
+            let announcement = "Entry updated: \(weight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue)"
+            UIAccessibility.post(notification: .announcement, argument: announcement)
         } else {
             // Create new entry
             let entry = WeightEntry(
@@ -279,6 +304,10 @@ struct WeightEntryView: View {
                 bodyFatPercentage: bodyFat
             )
             modelContext.insert(entry)
+
+            // Announce to VoiceOver
+            let announcement = "Entry saved: \(weight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue)"
+            UIAccessibility.post(notification: .announcement, argument: announcement)
         }
 
         try? modelContext.save()

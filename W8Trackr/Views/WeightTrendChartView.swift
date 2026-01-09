@@ -5,6 +5,7 @@
 //  Created by Will Saults on 4/28/25.
 //
 
+import Accessibility
 import Charts
 import SwiftUI
 
@@ -142,7 +143,48 @@ struct WeightTrendChartView: View {
         let isIndividualEntry: Bool
         let isSmoothed: Bool
     }
-    
+
+    // MARK: - Accessibility
+
+    private var chartAccessibilitySummary: String {
+        let sorted = filteredEntries.sorted { $0.date < $1.date }
+        guard !sorted.isEmpty else {
+            return "No weight data available"
+        }
+
+        let count = sorted.count
+        let latestWeight = convertWeight(sorted.last!.weightValue)
+        let formattedLatest = latestWeight.formatted(.number.precision(.fractionLength(1)))
+
+        var summary = "Weight trend chart showing \(count) \(count == 1 ? "entry" : "entries"). "
+        summary += "Most recent weight: \(formattedLatest) \(weightUnit.rawValue). "
+
+        if sorted.count >= 2 {
+            let firstWeight = convertWeight(sorted.first!.weightValue)
+            let change = latestWeight - firstWeight
+            let changeFormatted = abs(change).formatted(.number.precision(.fractionLength(1)))
+            let direction = change > 0 ? "gained" : (change < 0 ? "lost" : "maintained")
+
+            if change != 0 {
+                summary += "You have \(direction) \(changeFormatted) \(weightUnit.rawValue) over this period. "
+            }
+        }
+
+        if goalWeight > 0 {
+            let remaining = latestWeight - goalWeight
+            let remainingFormatted = abs(remaining).formatted(.number.precision(.fractionLength(1)))
+            if remaining > 0 {
+                summary += "Goal weight: \(goalWeight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue), \(remainingFormatted) \(weightUnit.rawValue) to go."
+            } else if remaining < 0 {
+                summary += "You are \(remainingFormatted) \(weightUnit.rawValue) below your goal of \(goalWeight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue)."
+            } else {
+                summary += "You have reached your goal weight!"
+            }
+        }
+
+        return summary
+    }
+
     private var chartData: [ChartEntry] {
         // Get all entries sorted by date
         let sortedEntries = filteredEntries.sorted { $0.date < $1.date }
@@ -310,8 +352,63 @@ struct WeightTrendChartView: View {
             }
             .animation(.easeInOut, value: selectedRange)
             .padding(.bottom)
+            .accessibilityChartDescriptor(self)
         }
         .padding(.horizontal)
+    }
+}
+
+// MARK: - AXChartDescriptorRepresentable
+
+extension WeightTrendChartView: AXChartDescriptorRepresentable {
+    func makeChartDescriptor() -> AXChartDescriptor {
+        let sorted = filteredEntries.sorted { $0.date < $1.date }
+
+        // Create date axis
+        let minDate = sorted.first?.date ?? Date()
+        let maxDate = sorted.last?.date ?? Date()
+
+        let dateAxis = AXNumericDataAxisDescriptor(
+            title: "Date",
+            range: minDate.timeIntervalSince1970...maxDate.timeIntervalSince1970,
+            gridlinePositions: []
+        ) { value in
+            let date = Date(timeIntervalSince1970: value)
+            return date.formatted(date: .abbreviated, time: .omitted)
+        }
+
+        // Create weight axis
+        let weightAxis = AXNumericDataAxisDescriptor(
+            title: "Weight (\(weightUnit.rawValue))",
+            range: minWeight...maxWeight,
+            gridlinePositions: []
+        ) { value in
+            "\(value.formatted(.number.precision(.fractionLength(1)))) \(self.weightUnit.rawValue)"
+        }
+
+        // Create data points
+        let dataPoints = sorted.map { entry in
+            AXDataPoint(
+                x: entry.date.timeIntervalSince1970,
+                y: convertWeight(entry.weightValue),
+                label: "\(entry.date.formatted(date: .abbreviated, time: .omitted)): \(convertWeight(entry.weightValue).formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue)"
+            )
+        }
+
+        let series = AXDataSeriesDescriptor(
+            name: "Weight entries",
+            isContinuous: true,
+            dataPoints: dataPoints
+        )
+
+        return AXChartDescriptor(
+            title: "Weight Trend",
+            summary: chartAccessibilitySummary,
+            xAxis: dateAxis,
+            yAxis: weightAxis,
+            additionalAxes: [],
+            series: [series]
+        )
     }
 }
 

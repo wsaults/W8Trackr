@@ -103,6 +103,7 @@ struct SettingsView: View {
             } label: {
                 Text("Delete All Weight Entries")
             }
+            .accessibilityHint("This will permanently delete all your weight tracking data. This action cannot be undone.")
         } header: {
             Text("Danger Zone")
         }

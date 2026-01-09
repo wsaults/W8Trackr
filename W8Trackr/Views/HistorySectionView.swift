@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct HistorySectionView: View {
     @Environment(\.modelContext) private var modelContext
@@ -38,6 +39,17 @@ struct HistorySectionView: View {
         return count == 1 ? "Entry deleted" : "\(count) entries deleted"
     }
 
+    private func accessibilityLabel(for entry: WeightEntry) -> String {
+        let dateStr = Self.dateFormatter.string(from: entry.date)
+        let weightStr = entry.weightValue(in: weightUnit).formatted(.number.precision(.fractionLength(1)))
+        var label = "\(dateStr), \(weightStr) \(weightUnit.rawValue)"
+        if let bodyFat = entry.bodyFatPercentage {
+            let bodyFatValue = NSDecimalNumber(decimal: bodyFat).doubleValue
+            label += ", \(bodyFatValue.formatted(.number.precision(.fractionLength(1)))) percent body fat"
+        }
+        return label
+    }
+
     var body: some View {
         List {
             ForEach(visibleEntries) { entry in
@@ -63,6 +75,10 @@ struct HistorySectionView: View {
                 }
                 .padding(.vertical, 8)
                 .contentShape(Rectangle())
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(accessibilityLabel(for: entry))
+                .accessibilityHint("Swipe right to edit, swipe left to delete")
+                .accessibilityAddTraits(.isButton)
                 .onTapGesture {
                     onEdit?(entry)
                 }
@@ -139,10 +155,16 @@ struct HistorySectionView: View {
     }
 
     private func commitDeletes() {
+        let count = pendingDeletes.count
         for entry in pendingDeletes {
             modelContext.delete(entry)
         }
         try? modelContext.save()
+
+        // Announce to VoiceOver
+        let announcement = count == 1 ? "Entry deleted" : "\(count) entries deleted"
+        UIAccessibility.post(notification: .announcement, argument: announcement)
+
         pendingDeletes.removeAll()
         deleteWorkItem = nil
     }
