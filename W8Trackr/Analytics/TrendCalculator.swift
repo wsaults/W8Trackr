@@ -63,6 +63,23 @@ struct TrendPoint: Identifiable, Equatable {
     }
 }
 
+/// Result of Holt's Double Exponential Smoothing calculation
+struct HoltResult {
+    /// Current smoothed level (best estimate of current value)
+    let level: Double
+    /// Current smoothed trend (rate of change per day)
+    let trend: Double
+    /// Date of the last data point used in calculation
+    let lastDate: Date
+
+    /// Forecasts the value at a future point
+    /// - Parameter daysAhead: Number of days into the future to forecast
+    /// - Returns: Predicted value
+    func forecast(daysAhead: Int) -> Double {
+        level + Double(daysAhead) * trend
+    }
+}
+
 enum TrendCalculator {
 
     /// Default smoothing factor from The Hacker's Diet
@@ -186,5 +203,56 @@ enum TrendCalculator {
         }
 
         return trendPoints
+    }
+
+    /// Calculates Holt's Double Exponential Smoothing for trend-aware predictions
+    ///
+    /// Holt's method extends simple exponential smoothing by adding a trend component,
+    /// making it ideal for weight data that follows upward or downward trends.
+    ///
+    /// - Parameters:
+    ///   - entries: Weight entries (will be sorted by date internally)
+    ///   - alpha: Smoothing factor for level (0-1). Higher = more responsive to recent values. Default: 0.3
+    ///   - beta: Smoothing factor for trend (0-1). Higher = faster trend adaptation. Default: 0.1
+    /// - Returns: HoltResult with level, trend, and forecast capability, or nil if fewer than 2 entries
+    static func calculateHolt(
+        entries: [WeightEntry],
+        alpha: Double = 0.3,
+        beta: Double = 0.1
+    ) -> HoltResult? {
+        // Group by day and calculate daily averages (same preprocessing as EMA)
+        let dailyAverages = Dictionary(grouping: entries) { entry in
+            Calendar.current.startOfDay(for: entry.date)
+        }
+        .map { date, dayEntries -> (date: Date, weight: Double) in
+            let avgWeight = dayEntries.reduce(0.0) { $0 + $1.weightValue } / Double(dayEntries.count)
+            return (date, avgWeight)
+        }
+        .sorted { $0.date < $1.date }
+
+        // Holt's method requires at least 2 data points to establish initial trend
+        guard dailyAverages.count >= 2 else { return nil }
+
+        // Initialize: L₀ = first value, T₀ = second - first
+        var level = dailyAverages[0].weight
+        var trend = dailyAverages[1].weight - dailyAverages[0].weight
+
+        // Process remaining data points
+        for i in 1..<dailyAverages.count {
+            let observation = dailyAverages[i].weight
+            let previousLevel = level
+
+            // Update level: L_t = α * y_t + (1 - α) * (L_{t-1} + T_{t-1})
+            level = alpha * observation + (1 - alpha) * (previousLevel + trend)
+
+            // Update trend: T_t = β * (L_t - L_{t-1}) + (1 - β) * T_{t-1}
+            trend = beta * (level - previousLevel) + (1 - beta) * trend
+        }
+
+        return HoltResult(
+            level: level,
+            trend: trend,
+            lastDate: dailyAverages.last!.date
+        )
     }
 }
