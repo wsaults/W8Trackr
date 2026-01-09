@@ -128,7 +128,7 @@ struct OnboardingView: View {
         guard enteredWeight > 0 else { return }
         let entry = WeightEntry(
             weight: enteredWeight,
-            unit: UnitMass(symbol: preferredWeightUnit.rawValue)
+            unit: preferredWeightUnit
         )
         modelContext.insert(entry)
         try? modelContext.save()

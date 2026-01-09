@@ -300,7 +300,7 @@ struct WeightEntryView: View {
             // Create new entry
             let entry = WeightEntry(
                 weight: weight,
-                unit: UnitMass(symbol: weightUnit.rawValue),
+                unit: weightUnit,
                 bodyFatPercentage: bodyFat
             )
             modelContext.insert(entry)

@@ -137,7 +137,7 @@ struct WeightEntryTests {
 
     @Test func weightEntryInitializesWithCorrectValues() {
         let date = Date.now
-        let entry = WeightEntry(weight: 175.5, unit: .pounds, date: date, note: "Test note", bodyFatPercentage: 20.0)
+        let entry = WeightEntry(weight: 175.5, unit: .lb, date: date, note: "Test note", bodyFatPercentage: 20.0)
 
         #expect(entry.weightValue == 175.5)
         #expect(entry.weightUnit == "lb")
@@ -147,7 +147,7 @@ struct WeightEntryTests {
     }
 
     @Test func weightEntryInitializesWithKilograms() {
-        let entry = WeightEntry(weight: 80.0, unit: .kilograms)
+        let entry = WeightEntry(weight: 80.0, unit: .kg)
 
         #expect(entry.weightValue == 80.0)
         #expect(entry.weightUnit == "kg")
@@ -160,13 +160,13 @@ struct WeightEntryTests {
     }
 
     @Test func weightValueInSameUnitReturnsSameValue() {
-        let entry = WeightEntry(weight: 180.0, unit: .pounds)
+        let entry = WeightEntry(weight: 180.0, unit: .lb)
 
         #expect(entry.weightValue(in: .lb) == 180.0)
     }
 
     @Test func weightValueConvertsPoundsToKilograms() {
-        let entry = WeightEntry(weight: 100.0, unit: .pounds)
+        let entry = WeightEntry(weight: 100.0, unit: .lb)
         let result = entry.weightValue(in: .kg)
         let expected = 45.3592
 
@@ -174,7 +174,7 @@ struct WeightEntryTests {
     }
 
     @Test func weightValueConvertsKilogramsToPounds() {
-        let entry = WeightEntry(weight: 50.0, unit: .kilograms)
+        let entry = WeightEntry(weight: 50.0, unit: .kg)
         let result = entry.weightValue(in: .lb)
         let expected = 110.231
 
@@ -718,7 +718,7 @@ struct DataExporterTests {
 
     @Test func generateCSVWithSingleEntry() {
         let date = Date(timeIntervalSince1970: 1704067200) // 2024-01-01 00:00:00 UTC
-        let entry = WeightEntry(weight: 175.5, unit: .pounds, date: date, note: "Test note", bodyFatPercentage: 20.5)
+        let entry = WeightEntry(weight: 175.5, unit: .lb, date: date, note: "Test note", bodyFatPercentage: 20.5)
 
         let csv = DataExporter.generateCSV(from: [entry])
         let lines = csv.components(separatedBy: "\n")
@@ -732,7 +732,7 @@ struct DataExporterTests {
     }
 
     @Test func generateCSVEscapesCommasInNotes() {
-        let entry = WeightEntry(weight: 170.0, unit: .pounds, date: Date(), note: "Note with, comma")
+        let entry = WeightEntry(weight: 170.0, unit: .lb, date: Date(), note: "Note with, comma")
 
         let csv = DataExporter.generateCSV(from: [entry])
 
@@ -740,7 +740,7 @@ struct DataExporterTests {
     }
 
     @Test func generateCSVEscapesQuotesInNotes() {
-        let entry = WeightEntry(weight: 170.0, unit: .pounds, date: Date(), note: "Note with \"quotes\"")
+        let entry = WeightEntry(weight: 170.0, unit: .lb, date: Date(), note: "Note with \"quotes\"")
 
         let csv = DataExporter.generateCSV(from: [entry])
 
@@ -748,7 +748,7 @@ struct DataExporterTests {
     }
 
     @Test func generateCSVHandlesNilFields() {
-        let entry = WeightEntry(weight: 170.0, unit: .pounds, date: Date())
+        let entry = WeightEntry(weight: 170.0, unit: .lb, date: Date())
 
         let csv = DataExporter.generateCSV(from: [entry])
         let lines = csv.components(separatedBy: "\n")

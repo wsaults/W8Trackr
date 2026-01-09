@@ -76,9 +76,9 @@ final class WeightEntry {
     var bodyFatPercentage: Decimal?
     var modifiedDate: Date?
 
-    init(weight: Double, unit: UnitMass = .pounds, date: Date = .now, note: String? = nil, bodyFatPercentage: Decimal? = nil) {
+    init(weight: Double, unit: WeightUnit = .lb, date: Date = .now, note: String? = nil, bodyFatPercentage: Decimal? = nil) {
         self.weightValue = weight
-        self.weightUnit = unit.symbol
+        self.weightUnit = unit.rawValue
         self.date = date
         self.note = note
         self.bodyFatPercentage = bodyFatPercentage
