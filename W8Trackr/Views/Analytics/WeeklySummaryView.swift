@@ -87,7 +87,7 @@ struct WeeklySummaryView: View {
         // Limit to most recent 12 weeks for performance
         let limitedWeekStarts = Array(weekStarts.prefix(12))
 
-        return limitedWeekStarts.enumerated().compactMap { index, weekStart in
+        return limitedWeekStarts.compactMap { weekStart in
             let weekEnd = calendar.date(byAdding: .day, value: 6, to: weekStart)!
             let weekEndOfDay = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: weekEnd)!
 

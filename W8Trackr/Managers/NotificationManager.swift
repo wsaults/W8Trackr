@@ -26,7 +26,7 @@ class NotificationManager: ObservableObject {
     }
 
     func requestNotificationPermission(completion: @escaping (Bool) -> Void) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, _ in
             DispatchQueue.main.async {
                 self.isReminderEnabled = granted
                 completion(granted)
@@ -108,7 +108,7 @@ class NotificationManager: ObservableObject {
         }
 
         // Schedule milestone notification if close to a milestone
-        if let latestEntry = entries.sorted(by: { $0.date > $1.date }).first {
+        if let latestEntry = entries.max(by: { $0.date < $1.date }) {
             let currentWeight = latestEntry.weightValue(in: unit)
             if let (remaining, milestone) = NotificationScheduler.milestoneProgress(
                 currentWeight: currentWeight,

@@ -756,8 +756,8 @@ struct DataExporterTests {
         let columns = dataLine.components(separatedBy: ",")
 
         // Note should be empty string, bodyFat should be empty
-        #expect(columns[3] == "") // note
-        #expect(columns[4] == "") // bodyFat
+        #expect(columns[3].isEmpty) // note
+        #expect(columns[4].isEmpty) // bodyFat
     }
 
     @Test func generateCSVSortsEntriesByDateAscending() {

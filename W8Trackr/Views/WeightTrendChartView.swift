@@ -51,7 +51,7 @@ struct WeightTrendChartView: View {
     
     // Calculate average weight for each day for the line
     private var dailyAverages: [DailyAverage] {
-        guard let _ = filteredEntries.max(by: { $0.date < $1.date }) else {
+        guard filteredEntries.max(by: { $0.date < $1.date }) != nil else {
             return []
         }
 
@@ -302,7 +302,7 @@ struct WeightTrendChartView: View {
                 }
             }
             .chartXAxis {
-                AxisMarks(values: .stride(by: xAxisStride)) { value in
+                AxisMarks(values: .stride(by: xAxisStride)) { _ in
                     AxisGridLine()
                     AxisTick()
                     AxisValueLabel(format: dateFormatForRange)

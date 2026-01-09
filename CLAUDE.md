@@ -74,3 +74,22 @@ Modal: `WeightEntryView` (sheet from SummaryView/LogbookView for add/edit)
 
 ### Notification System
 `NotificationManager` is an `ObservableObject` handling daily reminder scheduling via `UNUserNotificationCenter`. Instantiated as `@StateObject` in `SettingsView`.
+
+## Code Quality
+
+### SwiftLint
+The project uses [SwiftLint](https://github.com/realm/SwiftLint) for code style enforcement and catching common issues.
+
+**Installation:**
+```bash
+brew install swiftlint
+```
+
+**Usage:**
+- SwiftLint runs automatically during Xcode builds (via Run Script build phase)
+- Run manually: `swiftlint lint --config .swiftlint.yml`
+
+**Configuration:** `.swiftlint.yml` is tuned for SwiftUI/SwiftData patterns:
+- Relaxed line length (150 warning, 200 error) for SwiftUI modifier chains
+- Disabled rules that conflict with SwiftUI patterns (nesting, function_body_length)
+- Custom rule to warn about print statements in production code

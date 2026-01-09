@@ -203,9 +203,7 @@ struct MilestoneHistoryView: View {
 }
 
 #Preview("Celebration") {
-    MilestoneCelebrationView(milestoneWeight: 175, unit: .lb) {
-        print("Dismissed")
-    }
+    MilestoneCelebrationView(milestoneWeight: 175, unit: .lb) { }
 }
 
 #Preview("History") {

@@ -115,6 +115,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BE502ECF2DBFBF7900299FBF /* Build configuration list for PBXNativeTarget "W8Trackr" */;
 			buildPhases = (
+				BE502EE02DBFBF7900299FBF /* SwiftLint */,
 				BE502EAA2DBFBF7700299FBF /* Sources */,
 				BE502EAB2DBFBF7700299FBF /* Frameworks */,
 				BE502EAC2DBFBF7700299FBF /* Resources */,
@@ -248,6 +249,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BE502EE02DBFBF7900299FBF /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.swiftlint.yml",
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# SwiftLint Build Phase\n# Run SwiftLint to enforce code style and catch issues\n\nif [ -f \"${SRCROOT}/.swiftlint.yml\" ]; then\n    if command -v swiftlint >/dev/null 2>&1; then\n        swiftlint lint --config \"${SRCROOT}/.swiftlint.yml\" || true\n    elif [ -f /opt/homebrew/bin/swiftlint ]; then\n        /opt/homebrew/bin/swiftlint lint --config \"${SRCROOT}/.swiftlint.yml\" || true\n    elif [ -f /usr/local/bin/swiftlint ]; then\n        /usr/local/bin/swiftlint lint --config \"${SRCROOT}/.swiftlint.yml\" || true\n    else\n        echo \"warning: SwiftLint not installed. Install via: brew install swiftlint\"\n    fi\nelse\n    echo \"warning: .swiftlint.yml not found at ${SRCROOT}\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BE502EAA2DBFBF7700299FBF /* Sources */ = {

@@ -182,7 +182,7 @@ final class WeightEntry {
             WeightEntry(weight: 179.8, date: dateTime(daysAgo: 5), note: "Getting closer", bodyFatPercentage: 20.5),
             WeightEntry(weight: 175.2, date: dateTime(daysAgo: 4), bodyFatPercentage: 20.0),
             WeightEntry(weight: 175.4, date: dateTime(daysAgo: 3), bodyFatPercentage: 20.0),
-            WeightEntry(weight: 176.8, date: dateTime(daysAgo: 3), bodyFatPercentage: 19.5),
+            WeightEntry(weight: 176.8, date: dateTime(daysAgo: 3), bodyFatPercentage: 19.5)
         ].sorted { $0.date > $1.date }
     }
 }

@@ -43,7 +43,7 @@ struct NotificationScheduler {
         var weightedMinuteSum = 0.0
         var totalWeight = 0.0
 
-        for (index, _) in recentEntries.enumerated() {
+        for index in recentEntries.indices {
             let weight = Double(recentEntries.count - index) // More recent = higher weight
             weightedHourSum += Double(hours[index]) * weight
             weightedMinuteSum += Double(minutes[index]) * weight

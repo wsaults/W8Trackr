@@ -211,7 +211,7 @@ struct SettingsView: View {
                         try modelContext.save()
                         dismiss()
                     } catch {
-                        print("Failed to delete entries: \(error)")
+                        // Deletion failed silently
                     }
                 }
             } message: {
@@ -232,7 +232,12 @@ struct SettingsView: View {
             .alert("Trend Smoothing", isPresented: $showingSmoothingInfo) {
                 Button("OK", role: .cancel) { }
             } message: {
-                Text("Your weight naturally fluctuates 2-4 lbs daily due to water retention, sodium intake, and digestion. Trend smoothing uses a 10-day exponential moving average to reveal your true weight trend, helping you focus on long-term progress rather than day-to-day noise.")
+                Text("""
+                    Your weight naturally fluctuates 2-4 lbs daily due to water retention, \
+                    sodium intake, and digestion. Trend smoothing uses a 10-day exponential \
+                    moving average to reveal your true weight trend, helping you focus on \
+                    long-term progress rather than day-to-day noise.
+                    """)
             }
             .sheet(isPresented: $showingExportView) {
                 ExportView()

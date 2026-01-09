@@ -50,4 +50,3 @@ struct CurrentWeightView: View {
 #Preview {
     CurrentWeightView(weight: 175, weightUnit: .lb)
 }
-

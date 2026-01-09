@@ -82,7 +82,6 @@ struct DataExporter {
             try content.write(to: fileURL, atomically: true, encoding: .utf8)
             return fileURL
         } catch {
-            print("Failed to write CSV file: \(error)")
             return nil
         }
     }
