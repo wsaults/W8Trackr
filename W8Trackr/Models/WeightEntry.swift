@@ -43,8 +43,62 @@ enum WeightUnit: String, CaseIterable {
         }
     }
 
+    // MARK: - Goal Weight Validation
+    // Medical standards for reasonable adult goal weights
+    // Based on BMI ranges for heights 4'10" to 7'0"
+
+    var minGoalWeight: Double {
+        switch self {
+        case .lb:
+            return 66.0  // ~30 kg, low end for small adults
+        case .kg:
+            return 30.0
+        }
+    }
+
+    var maxGoalWeight: Double {
+        switch self {
+        case .lb:
+            return 440.0  // ~200 kg, high end for large individuals
+        case .kg:
+            return 200.0
+        }
+    }
+
+    var warningLowGoalWeight: Double {
+        switch self {
+        case .lb:
+            return 88.0  // ~40 kg, triggers concern
+        case .kg:
+            return 40.0
+        }
+    }
+
+    var warningHighGoalWeight: Double {
+        switch self {
+        case .lb:
+            return 330.0  // ~150 kg, triggers concern
+        case .kg:
+            return 150.0
+        }
+    }
+
     func isValidWeight(_ weight: Double) -> Bool {
         weight >= minWeight && weight <= maxWeight
+    }
+
+    func isValidGoalWeight(_ weight: Double) -> Bool {
+        weight >= minGoalWeight && weight <= maxGoalWeight
+    }
+
+    func goalWeightWarning(_ weight: Double) -> GoalWeightWarning? {
+        guard isValidGoalWeight(weight) else { return nil }
+        if weight < warningLowGoalWeight {
+            return .tooLow
+        } else if weight > warningHighGoalWeight {
+            return .tooHigh
+        }
+        return nil
     }
 
     /// Converts a weight value from this unit to the target unit
@@ -57,6 +111,20 @@ enum WeightUnit: String, CaseIterable {
             return value * Self.kgToLb
         default:
             return value
+        }
+    }
+}
+
+enum GoalWeightWarning {
+    case tooLow
+    case tooHigh
+
+    var message: String {
+        switch self {
+        case .tooLow:
+            return "This goal weight may be unhealthily low. Please consult a healthcare provider."
+        case .tooHigh:
+            return "This is a high goal weight. If intentional, consider consulting a healthcare provider."
         }
     }
 }

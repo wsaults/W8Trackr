@@ -51,6 +51,12 @@ struct ContentView: View {
                 }
         }
         .onAppear {
+            // Validate goal weight on first launch or after unit change
+            // Handles the case where default 170.0 is invalid for metric users
+            if !preferredWeightUnit.isValidGoalWeight(goalWeight) {
+                goalWeight = preferredWeightUnit.defaultWeight
+            }
+
             if entries.isEmpty {
                 WeightEntry.initialData.forEach { entry in
                     modelContext.insert(entry)
