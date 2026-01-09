@@ -24,9 +24,20 @@ struct SettingsView: View {
         _goalWeight = goalWeight
         _reminderTime = State(initialValue: NotificationManager.getReminderTime())
     }
-    
+
+    private var isValidGoalWeight: Bool {
+        weightUnit.isValidWeight(localGoalWeight)
+    }
+
+    private var goalWeightValidationMessage: String? {
+        guard !isValidGoalWeight else { return nil }
+        return "Goal weight must be between \(weightUnit.minWeight.formatted()) and \(weightUnit.maxWeight.formatted()) \(weightUnit.rawValue)"
+    }
+
     private func updateGoalWeight(_ newValue: Double) {
-        goalWeight = newValue
+        if weightUnit.isValidWeight(newValue) {
+            goalWeight = newValue
+        }
     }
     
     private var weightSettingsSection: some View {
@@ -51,10 +62,17 @@ struct SettingsView: View {
                 TextField("Goal Weight", value: $localGoalWeight, format: .number.precision(.fractionLength(1)))
                     .keyboardType(.decimalPad)
                     .multilineTextAlignment(.trailing)
+                    .foregroundStyle(isValidGoalWeight ? .primary : .red)
                     .onChange(of: localGoalWeight) { _, newValue in
                         updateGoalWeight(newValue)
                     }
                 Text(weightUnit.rawValue)
+            }
+
+            if let message = goalWeightValidationMessage {
+                Text(message)
+                    .font(.caption)
+                    .foregroundStyle(.red)
             }
         } header: {
             Text("Weight Settings")

@@ -10,7 +10,7 @@ import SwiftData
 
 enum WeightUnit: String, CaseIterable {
     case lb, kg
-    
+
     var defaultWeight: Double {
         switch self {
         case .lb:
@@ -18,6 +18,28 @@ enum WeightUnit: String, CaseIterable {
         case .kg:
             return 80.0
         }
+    }
+
+    var minWeight: Double {
+        switch self {
+        case .lb:
+            return 1.0
+        case .kg:
+            return 0.5
+        }
+    }
+
+    var maxWeight: Double {
+        switch self {
+        case .lb:
+            return 1500.0
+        case .kg:
+            return 680.0
+        }
+    }
+
+    func isValidWeight(_ weight: Double) -> Bool {
+        weight >= minWeight && weight <= maxWeight
     }
 }
 
