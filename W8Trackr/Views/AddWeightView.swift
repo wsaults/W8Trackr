@@ -7,19 +7,6 @@
 
 import SwiftUI
 
-struct WeightAdjustButton: View {
-    let systemName: String
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: 44))
-                .foregroundStyle(.blue)
-        }
-    }
-}
-
 struct AddWeightView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
@@ -110,7 +97,7 @@ struct AddWeightView: View {
                 Spacer()
                 
                 Button {
-                    let entry = WeightEntry(weight: weight, unit: UnitMass(symbol: weightUnit.rawValue))
+                    let entry = WeightEntry(weight: weight, unit: weightUnit)
                     modelContext.insert(entry)
                     do {
                         try modelContext.save()
