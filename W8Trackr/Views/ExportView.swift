@@ -15,7 +15,7 @@ struct ExportView: View {
     @State private var useDateFilter = false
     @State private var startDate = Calendar.current.date(byAdding: .month, value: -1, to: .now) ?? .now
     @State private var endDate = Date.now
-    @State private var csvFileURL: URL?
+    @State private var selectedFormat: ExportFormat = .csv
 
     private var filteredEntryCount: Int {
         if useDateFilter {
@@ -28,17 +28,22 @@ struct ExportView: View {
         return entries.count
     }
 
-    private var csvContent: String {
-        if useDateFilter {
-            return DataExporter.generateCSV(from: entries, startDate: startDate, endDate: endDate)
+    private var exportContent: String {
+        let start = useDateFilter ? startDate : nil
+        let end = useDateFilter ? endDate : nil
+
+        switch selectedFormat {
+        case .csv:
+            return DataExporter.generateCSV(from: entries, startDate: start, endDate: end)
+        case .json:
+            return DataExporter.generateJSON(from: entries, startDate: start, endDate: end)
         }
-        return DataExporter.generateCSV(from: entries)
     }
 
     private var exportFilename: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        return "w8trackr_export_\(dateFormatter.string(from: .now)).csv"
+        return "w8trackr_export_\(dateFormatter.string(from: .now)).\(selectedFormat.fileExtension)"
     }
 
     private var dateFilterSection: some View {
@@ -60,6 +65,25 @@ struct ExportView: View {
         }
     }
 
+    private var formatSection: some View {
+        Section {
+            Picker("Format", selection: $selectedFormat) {
+                ForEach(ExportFormat.allCases) { format in
+                    Text(format.rawValue).tag(format)
+                }
+            }
+            .pickerStyle(.segmented)
+        } header: {
+            Text("Export Format")
+        } footer: {
+            if selectedFormat == .csv {
+                Text("CSV format works with spreadsheet apps like Excel and Numbers.")
+            } else {
+                Text("JSON format is ideal for backups and can be imported by other apps.")
+            }
+        }
+    }
+
     private var exportSummarySection: some View {
         Section {
             HStack {
@@ -70,14 +94,7 @@ struct ExportView: View {
             }
 
             HStack {
-                Text("Format")
-                Spacer()
-                Text("CSV")
-                    .foregroundStyle(.secondary)
-            }
-
-            HStack {
-                Text("Columns")
+                Text("Fields")
                 Spacer()
                 Text("date, weight, unit, note, bodyFat")
                     .font(.caption)
@@ -92,12 +109,12 @@ struct ExportView: View {
         Section {
             if filteredEntryCount > 0 {
                 ShareLink(
-                    item: CSVFile(content: csvContent, filename: exportFilename),
+                    item: ExportFile(content: exportContent, filename: exportFilename, format: selectedFormat),
                     preview: SharePreview(exportFilename, icon: Image(systemName: "doc.text"))
                 ) {
                     HStack {
                         Image(systemName: "square.and.arrow.up")
-                        Text("Export to CSV")
+                        Text("Export to \(selectedFormat.rawValue)")
                     }
                 }
             } else {
@@ -114,6 +131,7 @@ struct ExportView: View {
     var body: some View {
         NavigationStack {
             Form {
+                formatSection
                 dateFilterSection
                 exportSummarySection
                 exportSection
@@ -131,15 +149,16 @@ struct ExportView: View {
     }
 }
 
-/// Transferable wrapper for CSV content to work with ShareLink
-struct CSVFile: Transferable {
+/// Transferable wrapper for export content to work with ShareLink
+struct ExportFile: Transferable {
     let content: String
     let filename: String
+    let format: ExportFormat
 
     static var transferRepresentation: some TransferRepresentation {
-        FileRepresentation(exportedContentType: .commaSeparatedText) { csvFile in
-            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(csvFile.filename)
-            try csvFile.content.write(to: tempURL, atomically: true, encoding: .utf8)
+        FileRepresentation(exportedContentType: .plainText) { exportFile in
+            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(exportFile.filename)
+            try exportFile.content.write(to: tempURL, atomically: true, encoding: .utf8)
             return SentTransferredFile(tempURL)
         }
     }
