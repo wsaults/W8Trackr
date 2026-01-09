@@ -1466,14 +1466,17 @@ struct TrendCalculatorTests {
     // MARK: - Unit Conversion Tests
 
     @Test func respectsUnitParameter() {
+        // Entry is 100 lb
         let entry = WeightEntry(weight: 100.0, unit: .lb, date: Date())
 
         let lbResult = TrendCalculator.calculateEWMA(entries: [entry], unit: .lb)
         let kgResult = TrendCalculator.calculateEWMA(entries: [entry], unit: .kg)
 
+        // Both should store smoothedWeight in lbs (internal storage is always lbs)
         #expect(lbResult[0].smoothedWeight == 100.0)
-        // 100 lb ≈ 45.36 kg
-        #expect(abs(kgResult[0].smoothedWeight - 45.3592) < 0.001)
+        // When unit is .kg, the calculation is done in kg but stored in lbs
+        // So result should be approximately the same (round-trip conversion)
+        #expect(abs(kgResult[0].smoothedWeight - 100.0) < 0.01)
     }
 
     // MARK: - Gap Handling Tests

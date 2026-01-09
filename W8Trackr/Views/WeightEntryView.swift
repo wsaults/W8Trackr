@@ -10,8 +10,8 @@ import UIKit
 
 struct WeightAdjustButton: View {
     let systemName: String
-    let accessibilityLabel: String
-    let accessibilityHint: String
+    var accessibilityLabel: String = ""
+    var accessibilityHint: String = ""
     let action: () -> Void
     @ScaledMetric(relativeTo: .title) private var buttonIconSize: CGFloat = 44
 
@@ -21,7 +21,7 @@ struct WeightAdjustButton: View {
                 .font(.system(size: buttonIconSize))
                 .foregroundStyle(.blue)
         }
-        .accessibilityLabel(accessibilityLabel)
+        .accessibilityLabel(accessibilityLabel.isEmpty ? systemName : accessibilityLabel)
         .accessibilityHint(accessibilityHint)
     }
 }
