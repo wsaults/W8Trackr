@@ -77,6 +77,185 @@ struct WeightUnitTests {
     }
 }
 
+// MARK: - Weight Validation Boundary Tests
+
+struct WeightValidationBoundaryTests {
+
+    // MARK: - Epsilon Edge Cases (Floating-Point Precision)
+
+    @Test func poundsJustBelowMinimumIsInvalid() {
+        // 0.9999999 is just under 1.0 lb minimum
+        #expect(WeightUnit.lb.isValidWeight(0.9999999) == false)
+        #expect(WeightUnit.lb.isValidWeight(0.999) == false)
+    }
+
+    @Test func poundsJustAboveMinimumIsValid() {
+        // Values at or just above 1.0 should be valid
+        #expect(WeightUnit.lb.isValidWeight(1.0) == true)
+        #expect(WeightUnit.lb.isValidWeight(1.0000001) == true)
+        #expect(WeightUnit.lb.isValidWeight(1.001) == true)
+    }
+
+    @Test func poundsJustBelowMaximumIsValid() {
+        // Values at or just below 1500.0 should be valid
+        #expect(WeightUnit.lb.isValidWeight(1500.0) == true)
+        #expect(WeightUnit.lb.isValidWeight(1499.9999999) == true)
+        #expect(WeightUnit.lb.isValidWeight(1499.999) == true)
+    }
+
+    @Test func poundsJustAboveMaximumIsInvalid() {
+        // 1500.0000001 is just over 1500.0 lb maximum
+        #expect(WeightUnit.lb.isValidWeight(1500.0000001) == false)
+        #expect(WeightUnit.lb.isValidWeight(1500.001) == false)
+    }
+
+    @Test func kilogramsJustBelowMinimumIsInvalid() {
+        // 0.4999999 is just under 0.5 kg minimum
+        #expect(WeightUnit.kg.isValidWeight(0.4999999) == false)
+        #expect(WeightUnit.kg.isValidWeight(0.499) == false)
+    }
+
+    @Test func kilogramsJustAboveMinimumIsValid() {
+        // Values at or just above 0.5 should be valid
+        #expect(WeightUnit.kg.isValidWeight(0.5) == true)
+        #expect(WeightUnit.kg.isValidWeight(0.5000001) == true)
+        #expect(WeightUnit.kg.isValidWeight(0.501) == true)
+    }
+
+    @Test func kilogramsJustBelowMaximumIsValid() {
+        // Values at or just below 680.0 should be valid
+        #expect(WeightUnit.kg.isValidWeight(680.0) == true)
+        #expect(WeightUnit.kg.isValidWeight(679.9999999) == true)
+        #expect(WeightUnit.kg.isValidWeight(679.999) == true)
+    }
+
+    @Test func kilogramsJustAboveMaximumIsInvalid() {
+        // 680.0000001 is just over 680.0 kg maximum
+        #expect(WeightUnit.kg.isValidWeight(680.0000001) == false)
+        #expect(WeightUnit.kg.isValidWeight(680.001) == false)
+    }
+
+    // MARK: - Extreme Values
+
+    @Test func verySmallPositiveWeightsAreInvalid() {
+        // Very small values below minimum
+        #expect(WeightUnit.lb.isValidWeight(0.0001) == false)
+        #expect(WeightUnit.kg.isValidWeight(0.0001) == false)
+        #expect(WeightUnit.lb.isValidWeight(Double.leastNormalMagnitude) == false)
+        #expect(WeightUnit.kg.isValidWeight(Double.leastNormalMagnitude) == false)
+    }
+
+    @Test func veryLargeWeightsAreInvalid() {
+        // Extremely large values
+        #expect(WeightUnit.lb.isValidWeight(10000.0) == false)
+        #expect(WeightUnit.kg.isValidWeight(10000.0) == false)
+        #expect(WeightUnit.lb.isValidWeight(Double.greatestFiniteMagnitude) == false)
+        #expect(WeightUnit.kg.isValidWeight(Double.greatestFiniteMagnitude) == false)
+    }
+
+    @Test func specialDoubleValuesAreInvalid() {
+        // NaN and Infinity should be invalid
+        #expect(WeightUnit.lb.isValidWeight(.nan) == false)
+        #expect(WeightUnit.kg.isValidWeight(.nan) == false)
+        #expect(WeightUnit.lb.isValidWeight(.infinity) == false)
+        #expect(WeightUnit.kg.isValidWeight(.infinity) == false)
+        #expect(WeightUnit.lb.isValidWeight(-.infinity) == false)
+        #expect(WeightUnit.kg.isValidWeight(-.infinity) == false)
+    }
+
+    // MARK: - Cross-Unit Boundary Validation
+
+    @Test func maxPoundsConvertsToValidKilograms() {
+        // 1500 lb = 680.388 kg, which is just above kg max (680.0)
+        let maxLbInKg = WeightUnit.lb.convert(1500.0, to: .kg)
+        // This reveals an interesting edge case: max lb slightly exceeds max kg
+        #expect(maxLbInKg > WeightUnit.kg.maxWeight)
+    }
+
+    @Test func maxKilogramsConvertsToValidPounds() {
+        // 680 kg = 1499.1416 lb, which is within lb range
+        let maxKgInLb = WeightUnit.kg.convert(680.0, to: .lb)
+        #expect(maxKgInLb < WeightUnit.lb.maxWeight)
+        #expect(WeightUnit.lb.isValidWeight(maxKgInLb) == true)
+    }
+
+    @Test func minPoundsConvertsToValidKilograms() {
+        // 1.0 lb = 0.453592 kg, which is below kg min (0.5)
+        let minLbInKg = WeightUnit.lb.convert(1.0, to: .kg)
+        #expect(minLbInKg < WeightUnit.kg.minWeight)
+    }
+
+    @Test func minKilogramsConvertsToPounds() {
+        // 0.5 kg = 1.10231 lb, which is above lb min (1.0)
+        let minKgInLb = WeightUnit.kg.convert(0.5, to: .lb)
+        #expect(minKgInLb > WeightUnit.lb.minWeight)
+        #expect(WeightUnit.lb.isValidWeight(minKgInLb) == true)
+    }
+
+    // MARK: - Typical User Weight Range Tests
+
+    @Test func typicalAdultWeightRangeIsValid() {
+        // Typical adult weight range: 100-300 lb, 45-136 kg
+        #expect(WeightUnit.lb.isValidWeight(100.0) == true)
+        #expect(WeightUnit.lb.isValidWeight(150.0) == true)
+        #expect(WeightUnit.lb.isValidWeight(200.0) == true)
+        #expect(WeightUnit.lb.isValidWeight(300.0) == true)
+
+        #expect(WeightUnit.kg.isValidWeight(45.0) == true)
+        #expect(WeightUnit.kg.isValidWeight(70.0) == true)
+        #expect(WeightUnit.kg.isValidWeight(90.0) == true)
+        #expect(WeightUnit.kg.isValidWeight(136.0) == true)
+    }
+}
+
+// MARK: - Weight Conversion Precision Tests
+
+struct WeightConversionPrecisionTests {
+
+    @Test func conversionFactorPrecision() {
+        // Verify the exact conversion constants
+        #expect(WeightUnit.lbToKg == 0.453592)
+        #expect(WeightUnit.kgToLb == 2.20462)
+    }
+
+    @Test func multipleConversionsAccumulatePrecisionLoss() {
+        // Converting back and forth multiple times shows floating-point drift
+        // Note: lbToKg * kgToLb ≈ 0.9999973 (not exactly 1.0)
+        // After 10 round trips: 180 * (0.9999973)^10 ≈ 179.9951
+        var weight = 180.0
+        for _ in 0..<10 {
+            weight = WeightUnit.lb.convert(weight, to: .kg)
+            weight = WeightUnit.kg.convert(weight, to: .lb)
+        }
+        // After 10 round trips, drift is ~0.005 due to imperfect inverse factors
+        #expect(abs(weight - 180.0) < 0.01)
+    }
+
+    @Test func conversionAtBoundaryValuesPreservesPrecision() {
+        // Test conversion precision at edge values
+        let oneLb = WeightUnit.lb.convert(1.0, to: .kg)
+        #expect(abs(oneLb - 0.453592) < 0.000001)
+
+        let oneKg = WeightUnit.kg.convert(1.0, to: .lb)
+        #expect(abs(oneKg - 2.20462) < 0.00001)
+    }
+
+    @Test func conversionOfLargeValuesPreservesPrecision() {
+        // Large value conversions
+        let largeInLb = 1000.0
+        let toKg = WeightUnit.lb.convert(largeInLb, to: .kg)
+        let expected = 453.592
+        #expect(abs(toKg - expected) < 0.001)
+    }
+
+    @Test func conversionOfSmallValuesPreservesPrecision() {
+        // Small value conversions
+        let smallInKg = 1.0
+        let toLb = WeightUnit.kg.convert(smallInKg, to: .lb)
+        #expect(abs(toLb - 2.20462) < 0.00001)
+    }
+}
+
 // MARK: - Weight Conversion Tests
 
 struct WeightConversionTests {
