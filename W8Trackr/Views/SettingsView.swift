@@ -55,7 +55,26 @@ struct SettingsView: View {
             }
             .pickerStyle(.segmented)
             .onChange(of: weightUnit) { oldUnit, newUnit in
-                localGoalWeight = oldUnit.convert(localGoalWeight, to: newUnit)
+                // Validate source value before conversion
+                guard oldUnit.isValidWeight(localGoalWeight) else {
+                    // Invalid source value - use the new unit's default
+                    localGoalWeight = newUnit.defaultWeight
+                    goalWeight = newUnit.defaultWeight
+                    return
+                }
+
+                let convertedWeight = oldUnit.convert(localGoalWeight, to: newUnit)
+
+                // Validate converted result falls within new unit's bounds
+                if newUnit.isValidWeight(convertedWeight) {
+                    localGoalWeight = convertedWeight
+                    goalWeight = convertedWeight
+                } else {
+                    // Conversion produced out-of-bounds value - clamp to valid range
+                    let clampedWeight = min(max(convertedWeight, newUnit.minWeight), newUnit.maxWeight)
+                    localGoalWeight = clampedWeight
+                    goalWeight = clampedWeight
+                }
             }
             
             HStack {
