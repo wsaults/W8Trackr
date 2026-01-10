@@ -362,4 +362,58 @@ final class WeightEntry {
         _initialDataCache = data
         return data
     }
+
+    // MARK: - Edge Case Sample Data
+    // These datasets are for testing specific edge cases in previews and tests.
+
+    /// Empty dataset for testing empty state displays.
+    static var emptyData: [WeightEntry] { [] }
+
+    /// Single entry for testing edge case displays with minimal data.
+    static var singleEntry: [WeightEntry] {
+        [WeightEntry(
+            weight: 175.0,
+            date: fixedDate(from: .now, addingDays: 0),
+            note: "Only entry"
+        )]
+    }
+
+    /// Minimal dataset (2 entries) for testing prediction with sparse data.
+    /// Two entries is the minimum needed for trend calculation.
+    static var minimalData: [WeightEntry] {
+        [
+            WeightEntry(
+                weight: 180.0,
+                date: fixedDate(from: .now, addingDays: -7),
+                note: "Start"
+            ),
+            WeightEntry(
+                weight: 175.0,
+                date: fixedDate(from: .now, addingDays: 0),
+                note: "Current"
+            )
+        ]
+    }
+
+    /// Boundary dataset for testing min/max weight value handling.
+    /// Tests the extremes allowed by WeightUnit validation.
+    static var boundaryData: [WeightEntry] {
+        [
+            WeightEntry(
+                weight: WeightUnit.lb.minWeight,  // 1.0 lb
+                date: fixedDate(from: .now, addingDays: -2),
+                note: "Minimum weight"
+            ),
+            WeightEntry(
+                weight: WeightUnit.lb.maxWeight,  // 1500.0 lb
+                date: fixedDate(from: .now, addingDays: -1),
+                note: "Maximum weight"
+            ),
+            WeightEntry(
+                weight: 175.0,  // Normal weight for comparison
+                date: fixedDate(from: .now, addingDays: 0),
+                note: "Normal weight"
+            )
+        ]
+    }
 }
