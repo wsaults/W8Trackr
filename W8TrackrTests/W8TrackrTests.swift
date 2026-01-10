@@ -1452,6 +1452,217 @@ struct SampleDataTests {
     }
 }
 
+// MARK: - Double.weightValue(from:to:) Comprehensive Tests
+
+struct DoubleWeightValueTests {
+
+    // MARK: - Identity Conversion Tests
+
+    @Test func identityConversionPoundsReturnsExactValue() {
+        let values = [0.0, 1.0, 100.0, 150.5, 180.123456789, 1500.0]
+        for value in values {
+            #expect(value.weightValue(from: .lb, to: .lb) == value)
+        }
+    }
+
+    @Test func identityConversionKilogramsReturnsExactValue() {
+        let values = [0.0, 0.5, 50.0, 75.5, 90.123456789, 680.0]
+        for value in values {
+            #expect(value.weightValue(from: .kg, to: .kg) == value)
+        }
+    }
+
+    @Test func identityConversionPreservesFullPrecision() {
+        // Test with maximum precision Double values
+        let preciseValue = 175.123456789012345
+        #expect(preciseValue.weightValue(from: .lb, to: .lb) == preciseValue)
+        #expect(preciseValue.weightValue(from: .kg, to: .kg) == preciseValue)
+    }
+
+    // MARK: - Round-Trip Accuracy Tests
+
+    @Test func roundTripLbToKgToLbIsAccurate() {
+        let testValues = [100.0, 150.0, 175.5, 200.0, 250.0]
+        for original in testValues {
+            let toKg = original.weightValue(from: .lb, to: .kg)
+            let backToLb = toKg.weightValue(from: .kg, to: .lb)
+            // Due to non-inverse conversion factors, expect small drift
+            #expect(abs(backToLb - original) < 0.01)
+        }
+    }
+
+    @Test func roundTripKgToLbToKgIsAccurate() {
+        let testValues = [50.0, 70.0, 80.5, 100.0, 150.0]
+        for original in testValues {
+            let toLb = original.weightValue(from: .kg, to: .lb)
+            let backToKg = toLb.weightValue(from: .lb, to: .kg)
+            #expect(abs(backToKg - original) < 0.01)
+        }
+    }
+
+    @Test func multipleRoundTripsAccumulatePredictableDrift() {
+        var weight = 180.0
+        let roundTripFactor = WeightUnit.lbToKg * WeightUnit.kgToLb // ~0.9999973
+
+        for _ in 0..<10 {
+            weight = weight.weightValue(from: .lb, to: .kg)
+            weight = weight.weightValue(from: .kg, to: .lb)
+        }
+
+        // After 10 round trips: 180 * (0.9999973)^10 ≈ 179.9951
+        let expectedDrift = 180.0 * pow(roundTripFactor, 10)
+        #expect(abs(weight - expectedDrift) < 0.0001)
+        #expect(abs(weight - 180.0) < 0.01) // Still within usable tolerance
+    }
+
+    // MARK: - Precision and Rounding Tests
+
+    @Test func conversionPreservesReasonablePrecision() {
+        // 1 lb = 0.453592 kg exactly
+        let oneLbToKg = 1.0.weightValue(from: .lb, to: .kg)
+        #expect(abs(oneLbToKg - 0.453592) < 0.0000001)
+
+        // 1 kg = 2.20462 lb exactly
+        let oneKgToLb = 1.0.weightValue(from: .kg, to: .lb)
+        #expect(abs(oneKgToLb - 2.20462) < 0.00001)
+    }
+
+    @Test func decimalPrecisionIsPreserved() {
+        // Test with values that have many decimal places
+        let precise = 175.123456
+        let toKg = precise.weightValue(from: .lb, to: .kg)
+        let expected = 175.123456 * WeightUnit.lbToKg
+
+        #expect(abs(toKg - expected) < 0.0000001)
+    }
+
+    @Test func verySmallFractionalDifferencesAreHandled() {
+        // Test values that differ by tiny amounts
+        let a = 180.00001
+        let b = 180.00002
+
+        let aKg = a.weightValue(from: .lb, to: .kg)
+        let bKg = b.weightValue(from: .lb, to: .kg)
+
+        // The difference should be preserved proportionally
+        let originalDiff = b - a
+        let convertedDiff = bKg - aKg
+        let expectedConvertedDiff = originalDiff * WeightUnit.lbToKg
+
+        #expect(abs(convertedDiff - expectedConvertedDiff) < 0.0000001)
+    }
+
+    // MARK: - Large Value Handling Tests
+
+    @Test func largeWeightConversionPoundsToKilograms() {
+        let largeLb = 1500.0 // Max valid lb
+        let result = largeLb.weightValue(from: .lb, to: .kg)
+        let expected = 1500.0 * WeightUnit.lbToKg // 680.388
+
+        #expect(abs(result - expected) < 0.001)
+        #expect(result > 680.0)
+    }
+
+    @Test func largeWeightConversionKilogramsToPounds() {
+        let largeKg = 680.0 // Max valid kg
+        let result = largeKg.weightValue(from: .kg, to: .lb)
+        let expected = 680.0 * WeightUnit.kgToLb // 1499.1416
+
+        #expect(abs(result - expected) < 0.001)
+        #expect(result < 1500.0)
+    }
+
+    @Test func veryLargeValuesMaintainPrecision() {
+        // Test with values beyond typical weight range
+        let extremeLb = 10000.0
+        let toKg = extremeLb.weightValue(from: .lb, to: .kg)
+        let expected = 10000.0 * WeightUnit.lbToKg
+
+        #expect(abs(toKg - expected) < 0.01)
+
+        // Round trip should still be reasonably accurate
+        let backToLb = toKg.weightValue(from: .kg, to: .lb)
+        #expect(abs(backToLb - extremeLb) < 0.1)
+    }
+
+    // MARK: - Edge Cases
+
+    @Test func zeroWeightConvertsToZero() {
+        #expect(0.0.weightValue(from: .lb, to: .kg) == 0.0)
+        #expect(0.0.weightValue(from: .kg, to: .lb) == 0.0)
+        #expect(0.0.weightValue(from: .lb, to: .lb) == 0.0)
+        #expect(0.0.weightValue(from: .kg, to: .kg) == 0.0)
+    }
+
+    @Test func negativeValuesConvertCorrectly() {
+        // While not valid weights, the conversion should handle them mathematically
+        let negativeLb = -100.0
+        let toKg = negativeLb.weightValue(from: .lb, to: .kg)
+        #expect(toKg < 0)
+        #expect(abs(toKg - (-45.3592)) < 0.0001)
+    }
+
+    @Test func verySmallPositiveValuesConvert() {
+        let tinyLb = 0.001
+        let toKg = tinyLb.weightValue(from: .lb, to: .kg)
+        #expect(toKg > 0)
+        #expect(toKg < tinyLb) // kg value should be smaller
+
+        let tinyKg = 0.001
+        let toLb = tinyKg.weightValue(from: .kg, to: .lb)
+        #expect(toLb > 0)
+        #expect(toLb > tinyKg) // lb value should be larger
+    }
+
+    @Test func specialDoubleValuesHandledGracefully() {
+        // Infinity
+        let infLb = Double.infinity
+        let infToKg = infLb.weightValue(from: .lb, to: .kg)
+        #expect(infToKg.isInfinite)
+
+        // NaN
+        let nanLb = Double.nan
+        let nanToKg = nanLb.weightValue(from: .lb, to: .kg)
+        #expect(nanToKg.isNaN)
+    }
+
+    // MARK: - Typical User Weight Range Tests
+
+    @Test func typicalWeightConversionsAreAccurate() {
+        // Common user weights
+        let testCases: [(lb: Double, expectedKg: Double)] = [
+            (100.0, 45.3592),
+            (120.0, 54.4310),
+            (150.0, 68.0388),
+            (175.0, 79.3786),
+            (200.0, 90.7184),
+            (250.0, 113.398),
+            (300.0, 136.0776)
+        ]
+
+        for (lb, expectedKg) in testCases {
+            let result = lb.weightValue(from: .lb, to: .kg)
+            #expect(abs(result - expectedKg) < 0.001)
+        }
+    }
+
+    @Test func typicalKilogramConversionsAreAccurate() {
+        let testCases: [(kg: Double, expectedLb: Double)] = [
+            (50.0, 110.231),
+            (60.0, 132.2772),
+            (70.0, 154.3234),
+            (80.0, 176.3696),
+            (90.0, 198.4158),
+            (100.0, 220.462)
+        ]
+
+        for (kg, expectedLb) in testCases {
+            let result = kg.weightValue(from: .kg, to: .lb)
+            #expect(abs(result - expectedLb) < 0.001)
+        }
+    }
+}
+
 // MARK: - SmoothedTrend Extension Tests
 
 struct SmoothedTrendTests {
