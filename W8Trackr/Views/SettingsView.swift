@@ -309,6 +309,7 @@ struct SettingsView: View {
                 dangerZoneSection
             }
             .navigationTitle("Settings")
+            .syncStatusToolbar()
             .onAppear {
                 localGoalWeight = goalWeight
             }

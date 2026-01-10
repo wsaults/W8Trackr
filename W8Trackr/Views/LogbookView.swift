@@ -34,6 +34,9 @@ struct LogbookView: View {
             }
             .navigationTitle("Logbook")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    SyncStatusView()
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         showingAddWeight = true
