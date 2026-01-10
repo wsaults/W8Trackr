@@ -203,23 +203,29 @@ final class WeightEntry {
     /// Entry specification for data-driven sample generation
     private typealias EntrySpec = (weight: Double, days: Int, note: String?, bodyFat: Decimal?)
 
-    /// Generates a date with random time component for natural-looking entries
+    /// Generates a date with fixed time component for deterministic previews
     /// - Parameters:
     ///   - baseDate: The reference date to offset from
     ///   - days: Number of days to add (positive) or subtract (negative)
-    ///   - hourRange: Range for random hour (default 6...10 for morning weigh-ins)
-    /// - Returns: Date with randomized time component
-    private static func randomDate(
+    ///   - hour: Fixed hour for the time (default 8 for morning weigh-ins)
+    ///   - minute: Fixed minute for the time (default 0)
+    /// - Returns: Date with fixed time component
+    private static func fixedDate(
         from baseDate: Date,
         addingDays days: Int,
-        hourRange: ClosedRange<Int> = 6...10
+        hour: Int = 8,
+        minute: Int = 0
     ) -> Date {
         let calendar = Calendar.current
-        guard let withDays = calendar.date(byAdding: .day, value: days, to: baseDate),
-              let withHours = calendar.date(byAdding: .hour, value: Int.random(in: hourRange), to: withDays),
-              let withMinutes = calendar.date(byAdding: .minute, value: Int.random(in: 0...59), to: withHours)
-        else { return baseDate }
-        return withMinutes
+        guard let withDays = calendar.date(byAdding: .day, value: days, to: baseDate) else {
+            return baseDate
+        }
+        // Set fixed time components for deterministic previews
+        let components = DateComponents(hour: hour, minute: minute)
+        return calendar.date(bySettingHour: components.hour ?? 8,
+                            minute: components.minute ?? 0,
+                            second: 0,
+                            of: withDays) ?? withDays
     }
 
     /// Generates entries from a data-driven specification
@@ -227,21 +233,21 @@ final class WeightEntry {
     ///   - specs: Array of (weight, dayOffset, note, bodyFat) tuples
     ///   - baseDate: Reference date for day offsets
     ///   - daysAreNegative: If true, day values are subtracted from baseDate
-    ///   - hourRange: Range for random hour in generated times
+    ///   - hour: Fixed hour for all entries (default 8 AM)
     /// - Returns: Array of WeightEntry objects
     private static func generateEntries(
         from specs: [EntrySpec],
         baseDate: Date,
         daysAreNegative: Bool = false,
-        hourRange: ClosedRange<Int> = 6...10
+        hour: Int = 8
     ) -> [WeightEntry] {
         specs.map { spec in
             WeightEntry(
                 weight: spec.weight,
-                date: randomDate(
+                date: fixedDate(
                     from: baseDate,
                     addingDays: daysAreNegative ? -spec.days : spec.days,
-                    hourRange: hourRange
+                    hour: hour
                 ),
                 note: spec.note,
                 bodyFatPercentage: spec.bodyFat
@@ -303,7 +309,7 @@ final class WeightEntry {
             (162.0, 348, "Goal weight reached!", 16.2)
         ]
 
-        let data = generateEntries(from: specs, baseDate: startDate, hourRange: 0...23)
+        let data = generateEntries(from: specs, baseDate: startDate)
         _sampleDataCache = data
         return data
     }
