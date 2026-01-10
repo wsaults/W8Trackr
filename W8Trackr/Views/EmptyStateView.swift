@@ -45,6 +45,7 @@ struct EmptyStateView: View {
                         .foregroundStyle(.white)
                         .clipShape(Capsule())
                 }
+                .accessibilityHint("Tap to get started")
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

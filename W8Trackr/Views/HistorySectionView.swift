@@ -121,7 +121,7 @@ struct HistorySectionView: View {
         ) {
             undoDelete()
         }
-        .errorToast(isPresented: $showDeleteError, message: "Failed to delete entry")
+        .toast(isPresented: $showDeleteError, message: "Failed to delete entry", systemImage: "exclamationmark.triangle.fill")
         .onChange(of: showingUndoToast) { _, isShowing in
             if !isShowing && !pendingDeletes.isEmpty {
                 commitDeletes()
@@ -175,6 +175,54 @@ struct HistorySectionView: View {
     }
 }
 
-#Preview {
-    HistorySectionView(entries: WeightEntry.sortedSampleData, weightUnit: .lb)
+// MARK: - Previews
+
+#if DEBUG
+@available(iOS 18, macOS 15, *)
+#Preview("Populated", traits: .modifier(EntriesPreview())) {
+    NavigationStack {
+        HistorySectionView(
+            entries: WeightEntry.sortedSampleData,
+            weightUnit: .lb
+        ) { entry in
+            print("Edit: \(entry.id)")
+        }
+        .navigationTitle("History")
+    }
 }
+
+@available(iOS 18, macOS 15, *)
+#Preview("Empty", traits: .modifier(EmptyEntriesPreview())) {
+    NavigationStack {
+        HistorySectionView(
+            entries: [],
+            weightUnit: .lb
+        )
+        .navigationTitle("History")
+    }
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Single Entry", traits: .modifier(MinimalEntriesPreview())) {
+    NavigationStack {
+        HistorySectionView(
+            entries: [WeightEntry(weight: 175.5)],
+            weightUnit: .lb
+        ) { entry in
+            print("Edit: \(entry.id)")
+        }
+        .navigationTitle("History")
+    }
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Kilograms", traits: .modifier(EntriesPreview())) {
+    NavigationStack {
+        HistorySectionView(
+            entries: WeightEntry.shortSampleData,
+            weightUnit: .kg
+        )
+        .navigationTitle("History")
+    }
+}
+#endif

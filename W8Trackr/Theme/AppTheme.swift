@@ -38,9 +38,14 @@ enum AppTheme {
 
     // MARK: - Typography Scale
 
-    /// Font styles following iOS guidelines with custom weights
+    /// Font styles following iOS guidelines with custom weights.
+    ///
+    /// Note: For custom-sized fonts that need Dynamic Type support,
+    /// use `@ScaledMetric` in your view instead of static font sizes.
+    /// Example: `@ScaledMetric(relativeTo: .largeTitle) private var fontSize: CGFloat = 48`
     enum Typography {
-        /// Hero numbers (current weight display)
+        /// Hero numbers (current weight display).
+        /// - Important: Prefer using `@ScaledMetric` in views for Dynamic Type support.
         static let heroNumber = Font.system(size: 48, weight: .bold, design: .rounded)
 
         /// Large titles

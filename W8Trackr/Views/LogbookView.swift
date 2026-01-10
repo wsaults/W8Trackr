@@ -34,6 +34,9 @@ struct LogbookView: View {
             }
             .navigationTitle("Logbook")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    SyncStatusView()
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         showingAddWeight = true
@@ -52,6 +55,24 @@ struct LogbookView: View {
     }
 }
 
-#Preview {
-    LogbookView(entries: WeightEntry.shortSampleData, preferredWeightUnit: .lb, goalWeight: 160)
+// MARK: - Previews
+
+#if DEBUG
+@available(iOS 18, macOS 15, *)
+#Preview("Populated", traits: .modifier(EntriesPreview())) {
+    LogbookView(
+        entries: WeightEntry.sortedSampleData,
+        preferredWeightUnit: .lb,
+        goalWeight: 160
+    )
 }
+
+@available(iOS 18, macOS 15, *)
+#Preview("Empty", traits: .modifier(EmptyEntriesPreview())) {
+    LogbookView(
+        entries: [],
+        preferredWeightUnit: .lb,
+        goalWeight: 160
+    )
+}
+#endif

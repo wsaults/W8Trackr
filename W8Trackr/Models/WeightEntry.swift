@@ -135,15 +135,41 @@ extension Double {
     }
 }
 
+/// A single weight measurement entry persisted via SwiftData.
+///
+/// Each entry stores the weight in its original unit of measurement,
+/// allowing accurate conversion when the user switches between lb and kg.
 @Model
 final class WeightEntry {
+    /// The numeric weight value in the unit specified by `weightUnit`.
     var weightValue: Double = 0
+
+    /// The unit of measurement as a raw string value.
+    ///
+    /// Stored as `String` rather than `WeightUnit` enum because SwiftData
+    /// requires `Codable` types for persistence, and enums with raw values
+    /// serialize more reliably as their raw string representation.
     var weightUnit: String = WeightUnit.lb.rawValue
+
+    /// When this weight was recorded (defaults to creation time).
     var date: Date = Date.now
+
+    /// Optional user note for context (e.g., "Morning weigh-in", "After workout").
     var note: String?
+
+    /// Optional body fat percentage (1-60%), stored as Decimal for precision.
     var bodyFatPercentage: Decimal?
+
+    /// Timestamp of last edit, `nil` if never modified after creation.
     var modifiedDate: Date?
 
+    /// Creates a new weight entry.
+    /// - Parameters:
+    ///   - weight: The numeric weight value
+    ///   - unit: Unit of measurement (defaults to pounds)
+    ///   - date: When the weight was recorded (defaults to now)
+    ///   - note: Optional context note
+    ///   - bodyFatPercentage: Optional body fat percentage
     init(weight: Double, unit: WeightUnit = .lb, date: Date = .now, note: String? = nil, bodyFatPercentage: Decimal? = nil) {
         self.weightValue = weight
         self.weightUnit = unit.rawValue
@@ -152,105 +178,242 @@ final class WeightEntry {
         self.bodyFatPercentage = bodyFatPercentage
         // modifiedDate is nil on creation, set when entry is edited
     }
-    
+
+    /// Returns the weight converted to the specified unit.
+    ///
+    /// Handles conversion between lb and kg using standard conversion factors.
+    /// If the stored unit matches the requested unit, returns the value unchanged.
+    ///
+    /// - Parameter unit: The target unit for the weight value
+    /// - Returns: The weight value converted to the target unit
     func weightValue(in unit: WeightUnit) -> Double {
         let currentUnit = WeightUnit(rawValue: weightUnit) ?? .lb
         return weightValue.weightValue(from: currentUnit, to: unit)
     }
     
-    // MARK: - Sample Data
+    // MARK: - Sample Data Generation
+    //
+    // Three datasets serve different preview/testing purposes:
+    // - sampleData: Full year of entries for comprehensive previews (30 entries)
+    // - shortSampleData: 2 weeks of entries for simulator builds (14 entries)
+    // - initialData: Minimal seed data for first-launch experience (5 entries)
+    //
+    // Implementation uses a single generator with lazy caching for performance.
+
+    /// Entry specification for data-driven sample generation
+    private typealias EntrySpec = (weight: Double, days: Int, note: String?, bodyFat: Decimal?)
+
+    /// Generates a date with fixed time component for deterministic previews
+    /// - Parameters:
+    ///   - baseDate: The reference date to offset from
+    ///   - days: Number of days to add (positive) or subtract (negative)
+    ///   - hour: Fixed hour for the time (default 8 for morning weigh-ins)
+    ///   - minute: Fixed minute for the time (default 0)
+    /// - Returns: Date with fixed time component
+    private static func fixedDate(
+        from baseDate: Date,
+        addingDays days: Int,
+        hour: Int = 8,
+        minute: Int = 0
+    ) -> Date {
+        let calendar = Calendar.current
+        guard let withDays = calendar.date(byAdding: .day, value: days, to: baseDate) else {
+            return baseDate
+        }
+        // Set fixed time components for deterministic previews
+        let components = DateComponents(hour: hour, minute: minute)
+        return calendar.date(bySettingHour: components.hour ?? 8,
+                            minute: components.minute ?? 0,
+                            second: 0,
+                            of: withDays) ?? withDays
+    }
+
+    /// Generates entries from a data-driven specification
+    /// - Parameters:
+    ///   - specs: Array of (weight, dayOffset, note, bodyFat) tuples
+    ///   - baseDate: Reference date for day offsets
+    ///   - daysAreNegative: If true, day values are subtracted from baseDate
+    ///   - hour: Fixed hour for all entries (default 8 AM)
+    /// - Returns: Array of WeightEntry objects
+    private static func generateEntries(
+        from specs: [EntrySpec],
+        baseDate: Date,
+        daysAreNegative: Bool = false,
+        hour: Int = 8
+    ) -> [WeightEntry] {
+        specs.map { spec in
+            WeightEntry(
+                weight: spec.weight,
+                date: fixedDate(
+                    from: baseDate,
+                    addingDays: daysAreNegative ? -spec.days : spec.days,
+                    hour: hour
+                ),
+                note: spec.note,
+                bodyFatPercentage: spec.bodyFat
+            )
+        }
+    }
+
+    // MARK: - Cached Sample Data
+    // Using nonisolated(unsafe) for lazy initialization of preview-only data.
+    // This avoids regenerating entries on every computed property access.
+
+    private nonisolated(unsafe) static var _sampleDataCache: [WeightEntry]?
+    private nonisolated(unsafe) static var _shortSampleDataCache: [WeightEntry]?
+    private nonisolated(unsafe) static var _initialDataCache: [WeightEntry]?
+
+    /// Full sample data sorted by date descending (newest first).
+    /// Used in previews requiring sorted data display.
     static var sortedSampleData: [WeightEntry] {
         sampleData.sorted { $0.date > $1.date }
     }
-    
+
+    /// Comprehensive sample data spanning ~1 year with 30 entries.
+    /// Shows realistic weight loss journey from 200 lb to goal weight.
+    /// Used for chart previews and "All Time" range testing.
     static var sampleData: [WeightEntry] {
-        let calendar = Calendar.current
-        let startDate = calendar.date(byAdding: .year, value: -1, to: .now)!
-        
-        func randomDateTime(daysToAdd: Int) -> Date {
-            let dateWithDays = calendar.date(byAdding: .day, value: daysToAdd, to: startDate)!
-            let dateWithHours = calendar.date(byAdding: .hour, value: Int.random(in: 0...23), to: dateWithDays)!
-            return calendar.date(byAdding: .minute, value: Int.random(in: 0...59), to: dateWithHours)!
-        }
-        
-        return [
-            WeightEntry(weight: 200.0, date: randomDateTime(daysToAdd: 0), note: "Starting weight", bodyFatPercentage: 22.0),
-            WeightEntry(weight: 199.2, date: randomDateTime(daysToAdd: 2), bodyFatPercentage: 21.8),
-            WeightEntry(weight: 198.5, date: randomDateTime(daysToAdd: 4), note: "Monthly check-in", bodyFatPercentage: 21.6),
-            WeightEntry(weight: 197.8, date: randomDateTime(daysToAdd: 5), bodyFatPercentage: 21.4),
-            WeightEntry(weight: 196.9, date: randomDateTime(daysToAdd: 5), bodyFatPercentage: 21.2),
-            WeightEntry(weight: 195.5, date: randomDateTime(daysToAdd: 6), note: "Monthly check-in", bodyFatPercentage: 21.0),
-            WeightEntry(weight: 194.7, date: randomDateTime(daysToAdd: 12), bodyFatPercentage: 20.8),
-            WeightEntry(weight: 193.8, date: randomDateTime(daysToAdd: 14), bodyFatPercentage: 20.6),
-            WeightEntry(weight: 192.5, date: randomDateTime(daysToAdd: 18), note: "Monthly check-in", bodyFatPercentage: 20.4),
-            WeightEntry(weight: 191.6, date: randomDateTime(daysToAdd: 25), bodyFatPercentage: 20.2),
-            WeightEntry(weight: 190.8, date: randomDateTime(daysToAdd: 31), bodyFatPercentage: 20.0),
-            WeightEntry(weight: 189.5, date: randomDateTime(daysToAdd: 31), note: "Monthly check-in", bodyFatPercentage: 19.8),
-            WeightEntry(weight: 188.7, date: randomDateTime(daysToAdd: 40), bodyFatPercentage: 19.6),
-            WeightEntry(weight: 187.9, date: randomDateTime(daysToAdd: 50), bodyFatPercentage: 19.4),
-            WeightEntry(weight: 186.5, date: randomDateTime(daysToAdd: 55), note: "Monthly check-in", bodyFatPercentage: 19.2),
-            WeightEntry(weight: 185.8, date: randomDateTime(daysToAdd: 66), bodyFatPercentage: 19.0),
-            WeightEntry(weight: 184.9, date: randomDateTime(daysToAdd: 80), bodyFatPercentage: 18.8),
-            WeightEntry(weight: 183.5, date: randomDateTime(daysToAdd: 100), note: "Monthly check-in", bodyFatPercentage: 18.6),
-            WeightEntry(weight: 182.7, date: randomDateTime(daysToAdd: 120), bodyFatPercentage: 18.4),
-            WeightEntry(weight: 172.9, date: randomDateTime(daysToAdd: 140), bodyFatPercentage: 18.2),
-            WeightEntry(weight: 170.5, date: randomDateTime(daysToAdd: 338), note: "Monthly check-in", bodyFatPercentage: 18.0),
-            WeightEntry(weight: 169.8, date: randomDateTime(daysToAdd: 340), bodyFatPercentage: 17.8),
-            WeightEntry(weight: 167.9, date: randomDateTime(daysToAdd: 342), bodyFatPercentage: 17.6),
-            WeightEntry(weight: 165.5, date: randomDateTime(daysToAdd: 343), note: "Monthly check-in", bodyFatPercentage: 17.4),
-            WeightEntry(weight: 165.8, date: randomDateTime(daysToAdd: 343), bodyFatPercentage: 17.2),
-            WeightEntry(weight: 166.2, date: randomDateTime(daysToAdd: 344), bodyFatPercentage: 17.0),
-            WeightEntry(weight: 164.8, date: randomDateTime(daysToAdd: 345), note: "Monthly check-in", bodyFatPercentage: 16.8),
-            WeightEntry(weight: 163.5, date: randomDateTime(daysToAdd: 346), bodyFatPercentage: 16.6),
-            WeightEntry(weight: 163.3, date: randomDateTime(daysToAdd: 347), bodyFatPercentage: 16.4),
-            WeightEntry(weight: 162.0, date: randomDateTime(daysToAdd: 348), note: "Goal weight reached!", bodyFatPercentage: 16.2)
+        if let cached = _sampleDataCache { return cached }
+
+        let startDate = Calendar.current.date(byAdding: .year, value: -1, to: .now)!
+        let specs: [EntrySpec] = [
+            (200.0, 0, "Starting weight", 22.0),
+            (199.2, 2, nil, 21.8),
+            (198.5, 4, "Monthly check-in", 21.6),
+            (197.8, 5, nil, 21.4),
+            (196.9, 5, nil, 21.2),
+            (195.5, 6, "Monthly check-in", 21.0),
+            (194.7, 12, nil, 20.8),
+            (193.8, 14, nil, 20.6),
+            (192.5, 18, "Monthly check-in", 20.4),
+            (191.6, 25, nil, 20.2),
+            (190.8, 31, nil, 20.0),
+            (189.5, 31, "Monthly check-in", 19.8),
+            (188.7, 40, nil, 19.6),
+            (187.9, 50, nil, 19.4),
+            (186.5, 55, "Monthly check-in", 19.2),
+            (185.8, 66, nil, 19.0),
+            (184.9, 80, nil, 18.8),
+            (183.5, 100, "Monthly check-in", 18.6),
+            (182.7, 120, nil, 18.4),
+            (172.9, 140, nil, 18.2),
+            (170.5, 338, "Monthly check-in", 18.0),
+            (169.8, 340, nil, 17.8),
+            (167.9, 342, nil, 17.6),
+            (165.5, 343, "Monthly check-in", 17.4),
+            (165.8, 343, nil, 17.2),
+            (166.2, 344, nil, 17.0),
+            (164.8, 345, "Monthly check-in", 16.8),
+            (163.5, 346, nil, 16.6),
+            (163.3, 347, nil, 16.4),
+            (162.0, 348, "Goal weight reached!", 16.2)
+        ]
+
+        let data = generateEntries(from: specs, baseDate: startDate)
+        _sampleDataCache = data
+        return data
+    }
+
+    /// Short sample data spanning 2 weeks with 14 entries.
+    /// Used in simulator builds for quick iteration without database.
+    /// Dates are relative to "today" for realistic 7-day chart views.
+    static var shortSampleData: [WeightEntry] {
+        if let cached = _shortSampleDataCache { return cached }
+
+        let specs: [EntrySpec] = [
+            (200.0, 14, "Started tracking", 25.0),
+            (197.2, 13, nil, 24.5),
+            (193.8, 12, nil, 24.0),
+            (194.5, 11, "Good workout", 23.5),
+            (190.8, 10, nil, 23.0),
+            (191.2, 9, nil, 22.5),
+            (185.8, 8, "One week in", 22.0),
+            (180.5, 7, nil, 21.5),
+            (182.3, 6, nil, 21.0),
+            (179.8, 5, "Getting closer", 20.5),
+            (175.2, 4, nil, 20.0),
+            (176.8, 3, nil, 19.5),
+            (170.5, 2, "Almost there", 19.0),
+            (171.0, 1, "Goal weight reached!", 18.5)
+        ]
+
+        let data = generateEntries(from: specs, baseDate: .now, daysAreNegative: true)
+            .sorted { $0.date > $1.date }
+        _shortSampleDataCache = data
+        return data
+    }
+
+    /// Minimal seed data for first-launch experience (5 entries).
+    /// Inserted when user's database is empty to demonstrate app features.
+    /// Small enough to delete easily, large enough to show chart functionality.
+    static var initialData: [WeightEntry] {
+        if let cached = _initialDataCache { return cached }
+
+        let specs: [EntrySpec] = [
+            (182.3, 7, nil, 21.0),
+            (179.8, 5, "Getting closer", 20.5),
+            (175.2, 4, nil, 20.0),
+            (175.4, 3, nil, 20.0),
+            (176.8, 3, nil, 19.5)
+        ]
+
+        let data = generateEntries(from: specs, baseDate: .now, daysAreNegative: true)
+            .sorted { $0.date > $1.date }
+        _initialDataCache = data
+        return data
+    }
+
+    // MARK: - Edge Case Sample Data
+    // These datasets are for testing specific edge cases in previews and tests.
+
+    /// Empty dataset for testing empty state displays.
+    static var emptyData: [WeightEntry] { [] }
+
+    /// Single entry for testing edge case displays with minimal data.
+    static var singleEntry: [WeightEntry] {
+        [WeightEntry(
+            weight: 175.0,
+            date: fixedDate(from: .now, addingDays: 0),
+            note: "Only entry"
+        )]
+    }
+
+    /// Minimal dataset (2 entries) for testing prediction with sparse data.
+    /// Two entries is the minimum needed for trend calculation.
+    static var minimalData: [WeightEntry] {
+        [
+            WeightEntry(
+                weight: 180.0,
+                date: fixedDate(from: .now, addingDays: -7),
+                note: "Start"
+            ),
+            WeightEntry(
+                weight: 175.0,
+                date: fixedDate(from: .now, addingDays: 0),
+                note: "Current"
+            )
         ]
     }
-    
-    static var shortSampleData: [WeightEntry] {
-        let calendar = Calendar.current
-        let today = Date.now
-        
-        func dateTime(daysAgo: Int) -> Date {
-            let dateWithDays = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
-            let dateWithHours = calendar.date(byAdding: .hour, value: Int.random(in: 6...10), to: dateWithDays)!
-            return calendar.date(byAdding: .minute, value: Int.random(in: 0...59), to: dateWithHours)!
-        }
-        
-        return [
-            WeightEntry(weight: 200.0, date: dateTime(daysAgo: 14), note: "Started tracking", bodyFatPercentage: 25.0),
-            WeightEntry(weight: 197.2, date: dateTime(daysAgo: 13), bodyFatPercentage: 24.5),
-            WeightEntry(weight: 193.8, date: dateTime(daysAgo: 12), bodyFatPercentage: 24.0),
-            WeightEntry(weight: 194.5, date: dateTime(daysAgo: 11), note: "Good workout", bodyFatPercentage: 23.5),
-            WeightEntry(weight: 190.8, date: dateTime(daysAgo: 10), bodyFatPercentage: 23.0),
-            WeightEntry(weight: 191.2, date: dateTime(daysAgo: 9), bodyFatPercentage: 22.5),
-            WeightEntry(weight: 185.8, date: dateTime(daysAgo: 8), note: "One week in", bodyFatPercentage: 22.0),
-            WeightEntry(weight: 180.5, date: dateTime(daysAgo: 7), bodyFatPercentage: 21.5),
-            WeightEntry(weight: 182.3, date: dateTime(daysAgo: 6), bodyFatPercentage: 21.0),
-            WeightEntry(weight: 179.8, date: dateTime(daysAgo: 5), note: "Getting closer", bodyFatPercentage: 20.5),
-            WeightEntry(weight: 175.2, date: dateTime(daysAgo: 4), bodyFatPercentage: 20.0),
-            WeightEntry(weight: 176.8, date: dateTime(daysAgo: 3), bodyFatPercentage: 19.5),
-            WeightEntry(weight: 170.5, date: dateTime(daysAgo: 2), note: "Almost there", bodyFatPercentage: 19.0),
-            WeightEntry(weight: 171.0, date: dateTime(daysAgo: 1), note: "Goal weight reached!", bodyFatPercentage: 18.5)
-        ].sorted { $0.date > $1.date }
-    }
-    
-    static var initialData: [WeightEntry] {
-        let calendar = Calendar.current
-        let today = Date.now
-        
-        func dateTime(daysAgo: Int) -> Date {
-            let dateWithDays = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
-            let dateWithHours = calendar.date(byAdding: .hour, value: Int.random(in: 6...10), to: dateWithDays)!
-            return calendar.date(byAdding: .minute, value: Int.random(in: 0...59), to: dateWithHours)!
-        }
-        
-        return [
-            WeightEntry(weight: 182.3, date: dateTime(daysAgo: 7), bodyFatPercentage: 21.0),
-            WeightEntry(weight: 179.8, date: dateTime(daysAgo: 5), note: "Getting closer", bodyFatPercentage: 20.5),
-            WeightEntry(weight: 175.2, date: dateTime(daysAgo: 4), bodyFatPercentage: 20.0),
-            WeightEntry(weight: 175.4, date: dateTime(daysAgo: 3), bodyFatPercentage: 20.0),
-            WeightEntry(weight: 176.8, date: dateTime(daysAgo: 3), bodyFatPercentage: 19.5)
-        ].sorted { $0.date > $1.date }
+
+    /// Boundary dataset for testing min/max weight value handling.
+    /// Tests the extremes allowed by WeightUnit validation.
+    static var boundaryData: [WeightEntry] {
+        [
+            WeightEntry(
+                weight: WeightUnit.lb.minWeight,  // 1.0 lb
+                date: fixedDate(from: .now, addingDays: -2),
+                note: "Minimum weight"
+            ),
+            WeightEntry(
+                weight: WeightUnit.lb.maxWeight,  // 1500.0 lb
+                date: fixedDate(from: .now, addingDays: -1),
+                note: "Maximum weight"
+            ),
+            WeightEntry(
+                weight: 175.0,  // Normal weight for comparison
+                date: fixedDate(from: .now, addingDays: 0),
+                note: "Normal weight"
+            )
+        ]
     }
 }

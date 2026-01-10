@@ -10,7 +10,9 @@ import SwiftData
 
 enum OnboardingStep: Int, CaseIterable {
     case welcome
+    case unitPreference
     case goal
+    case tour
     case firstWeight
     case complete
 }
@@ -40,12 +42,21 @@ struct OnboardingView: View {
                     WelcomeStepView(onContinue: { advanceStep() })
                         .tag(OnboardingStep.welcome)
 
+                    UnitPreferenceStepView(
+                        weightUnit: $preferredWeightUnit,
+                        onContinue: { advanceStep() }
+                    )
+                    .tag(OnboardingStep.unitPreference)
+
                     GoalStepView(
                         weightUnit: preferredWeightUnit,
                         goalWeight: $goalWeight,
                         onContinue: { advanceStep() }
                     )
                     .tag(OnboardingStep.goal)
+
+                    FeatureTourStepView(onContinue: { advanceStep() })
+                        .tag(OnboardingStep.tour)
 
                     FirstWeightStepView(
                         weightUnit: preferredWeightUnit,

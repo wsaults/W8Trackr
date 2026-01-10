@@ -255,4 +255,98 @@ enum TrendCalculator {
             lastDate: dailyAverages.last!.date
         )
     }
+
+    // MARK: - Goal Prediction
+
+    /// Predicts when user will reach their goal weight based on current trend
+    ///
+    /// - Parameters:
+    ///   - entries: Weight entries to analyze
+    ///   - goalWeight: Target weight in the specified unit
+    ///   - unit: Weight unit for the prediction
+    /// - Returns: GoalPrediction with status and estimated date
+    static func predictGoalDate(
+        entries: [WeightEntry],
+        goalWeight: Double,
+        unit: WeightUnit
+    ) -> GoalPrediction {
+        // Need enough data for trend calculation
+        guard entries.count >= 7 else {
+            return GoalPrediction(
+                predictedDate: nil,
+                weeklyVelocity: 0,
+                status: entries.isEmpty ? .noData : .insufficientData,
+                weightToGoal: 0,
+                unit: unit
+            )
+        }
+
+        // Calculate trend using Holt's method
+        guard let holt = calculateHolt(entries: entries) else {
+            return GoalPrediction(
+                predictedDate: nil,
+                weeklyVelocity: 0,
+                status: .insufficientData,
+                weightToGoal: 0,
+                unit: unit
+            )
+        }
+
+        let currentWeight = holt.level
+        let dailyTrend = holt.trend
+        let weeklyVelocity = dailyTrend * 7
+
+        // Convert goal weight to stored unit if needed
+        let goalInStoredUnit = goalWeight
+
+        let weightToGoal = abs(currentWeight - goalInStoredUnit)
+        let needsToLose = currentWeight > goalInStoredUnit
+
+        // Check if already at goal (within 0.5 units)
+        if weightToGoal < 0.5 {
+            return GoalPrediction(
+                predictedDate: nil,
+                weeklyVelocity: weeklyVelocity,
+                status: .atGoal,
+                weightToGoal: weightToGoal,
+                unit: unit
+            )
+        }
+
+        // Check if trending wrong direction
+        let isLosingWeight = dailyTrend < 0
+        if (needsToLose && !isLosingWeight) || (!needsToLose && isLosingWeight) {
+            return GoalPrediction(
+                predictedDate: nil,
+                weeklyVelocity: weeklyVelocity,
+                status: .wrongDirection,
+                weightToGoal: weightToGoal,
+                unit: unit
+            )
+        }
+
+        // Calculate days to goal
+        let daysToGoal = Int(weightToGoal / abs(dailyTrend))
+
+        // If more than 2 years out, mark as too slow
+        if daysToGoal > 730 {
+            return GoalPrediction(
+                predictedDate: nil,
+                weeklyVelocity: weeklyVelocity,
+                status: .tooSlow,
+                weightToGoal: weightToGoal,
+                unit: unit
+            )
+        }
+
+        let predictedDate = Calendar.current.date(byAdding: .day, value: daysToGoal, to: Date())!
+
+        return GoalPrediction(
+            predictedDate: predictedDate,
+            weeklyVelocity: weeklyVelocity,
+            status: .onTrack(predictedDate),
+            weightToGoal: weightToGoal,
+            unit: unit
+        )
+    }
 }

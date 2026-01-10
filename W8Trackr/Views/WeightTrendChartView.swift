@@ -75,6 +75,10 @@ struct WeightTrendChartView: View {
         switch selectedRange {
         case .sevenDay:
             return .dateTime.day()
+        case .thirtyDay, .ninetyDay:
+            return .dateTime.day().month(.abbreviated)
+        case .oneEightyDay, .oneYear:
+            return .dateTime.month(.abbreviated)
         case .allTime:
             return .dateTime.month(.abbreviated).year()
         }
@@ -84,7 +88,11 @@ struct WeightTrendChartView: View {
         switch selectedRange {
         case .sevenDay:
             return .day
-        case .allTime:
+        case .thirtyDay:
+            return .weekOfYear
+        case .ninetyDay, .oneEightyDay:
+            return .month
+        case .oneYear, .allTime:
             return .month
         }
     }
