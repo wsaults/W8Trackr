@@ -17,11 +17,19 @@
 			remoteGlobalIDString = BE502EAD2DBFBF7700299FBF;
 			remoteInfo = W8Trackr;
 		};
+		BEUI00032DBFBF7900299FBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BE502EA62DBFBF7700299FBF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BE502EAD2DBFBF7700299FBF;
+			remoteInfo = W8Trackr;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		BE502EAE2DBFBF7700299FBF /* W8Trackr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = W8Trackr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE502EBB2DBFBF7900299FBF /* W8TrackrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = W8TrackrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEUI00012DBFBF7900299FBF /* W8TrackrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = W8TrackrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -48,6 +56,11 @@
 			path = W8TrackrTests;
 			sourceTree = "<group>";
 		};
+		BEUI00022DBFBF7900299FBF /* W8TrackrUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = W8TrackrUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +78,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BEUI00062DBFBF7900299FBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -73,6 +93,7 @@
 			children = (
 				BE502EB02DBFBF7700299FBF /* W8Trackr */,
 				BE502EBE2DBFBF7900299FBF /* W8TrackrTests */,
+				BEUI00022DBFBF7900299FBF /* W8TrackrUITests */,
 				BE502EAF2DBFBF7700299FBF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -82,6 +103,7 @@
 			children = (
 				BE502EAE2DBFBF7700299FBF /* W8Trackr.app */,
 				BE502EBB2DBFBF7900299FBF /* W8TrackrTests.xctest */,
+				BEUI00012DBFBF7900299FBF /* W8TrackrUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,6 +157,29 @@
 			productReference = BE502EBB2DBFBF7900299FBF /* W8TrackrTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		BEUI00082DBFBF7900299FBF /* W8TrackrUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BEUI000B2DBFBF7900299FBF /* Build configuration list for PBXNativeTarget "W8TrackrUITests" */;
+			buildPhases = (
+				BEUI00052DBFBF7900299FBF /* Sources */,
+				BEUI00062DBFBF7900299FBF /* Frameworks */,
+				BEUI00072DBFBF7900299FBF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BEUI00042DBFBF7900299FBF /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				BEUI00022DBFBF7900299FBF /* W8TrackrUITests */,
+			);
+			name = W8TrackrUITests;
+			packageProductDependencies = (
+			);
+			productName = W8TrackrUITests;
+			productReference = BEUI00012DBFBF7900299FBF /* W8TrackrUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -149,6 +194,10 @@
 						CreatedOnToolsVersion = 16.3;
 					};
 					BE502EBA2DBFBF7900299FBF = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = BE502EAD2DBFBF7700299FBF;
+					};
+					BEUI00082DBFBF7900299FBF = {
 						CreatedOnToolsVersion = 16.3;
 						TestTargetID = BE502EAD2DBFBF7700299FBF;
 					};
@@ -172,6 +221,7 @@
 			targets = (
 				BE502EAD2DBFBF7700299FBF /* W8Trackr */,
 				BE502EBA2DBFBF7900299FBF /* W8TrackrTests */,
+				BEUI00082DBFBF7900299FBF /* W8TrackrUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -185,6 +235,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		BE502EB92DBFBF7900299FBF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BEUI00072DBFBF7900299FBF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -231,6 +288,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BEUI00052DBFBF7900299FBF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -238,6 +302,11 @@
 			isa = PBXTargetDependency;
 			target = BE502EAD2DBFBF7700299FBF /* W8Trackr */;
 			targetProxy = BE502EBC2DBFBF7900299FBF /* PBXContainerItemProxy */;
+		};
+		BEUI00042DBFBF7900299FBF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BE502EAD2DBFBF7700299FBF /* W8Trackr */;
+			targetProxy = BEUI00032DBFBF7900299FBF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -467,6 +536,42 @@
 			};
 			name = Release;
 		};
+		BEUI00092DBFBF7900299FBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 77QB78PHPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.saults.W8TrackrUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = W8Trackr;
+			};
+			name = Debug;
+		};
+		BEUI000A2DBFBF7900299FBF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 77QB78PHPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.saults.W8TrackrUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = W8Trackr;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -493,6 +598,15 @@
 			buildConfigurations = (
 				BE502ED32DBFBF7900299FBF /* Debug */,
 				BE502ED42DBFBF7900299FBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BEUI000B2DBFBF7900299FBF /* Build configuration list for PBXNativeTarget "W8TrackrUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEUI00092DBFBF7900299FBF /* Debug */,
+				BEUI000A2DBFBF7900299FBF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

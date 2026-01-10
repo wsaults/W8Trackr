@@ -1,0 +1,49 @@
+# frozen_string_literal: true
+
+# Snapfile - fastlane snapshot configuration
+# Reference: https://docs.fastlane.tools/actions/snapshot/
+
+# Xcode project and scheme
+project "W8Trackr.xcodeproj"
+scheme "W8TrackrUITests"
+
+# Device types for App Store screenshots
+devices([
+  "iPhone 17 Pro Max",
+  "iPhone 17",
+  "iPad Pro 13-inch (M5)"
+])
+
+# Languages to capture (App Store requires at least en-US)
+languages([
+  "en-US"
+])
+
+# Screenshot output configuration
+output_directory "./fastlane/screenshots"
+clear_previous_screenshots true
+
+# Stop on first error during testing
+stop_after_first_error true
+
+# Override status bar to show clean state (iOS 17+)
+override_status_bar true
+override_status_bar_arguments "--time 9:41 --batteryState charged --batteryLevel 100 --cellularMode active --cellularBars 4"
+
+# Launch arguments to pass to the app during screenshots
+launch_arguments(["-FASTLANE_SNAPSHOT", "YES", "-AppleLanguages", "(en-US)"])
+
+# Concurrent simulators (adjust based on machine capability)
+concurrent_simulators true
+
+# Clean build before capturing
+clean true
+
+# Erase simulator before running (ensures clean state)
+erase_simulator true
+
+# Disable slide to type for more consistent input
+disable_slide_to_type true
+
+# Test without building (if build already done)
+# test_without_building true
