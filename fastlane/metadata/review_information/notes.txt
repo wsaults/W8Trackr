@@ -1,0 +1,1 @@
+No special demo account required. The app stores all data locally on device. Simply launch the app and tap the + button to log a weight entry.
