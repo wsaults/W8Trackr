@@ -57,21 +57,37 @@ xcrun simctl launch booted com.willsaults.W8Trackr
 
 ```
 W8Trackr/
-├── W8Trackr/              # Main app directory
-│   ├── W8TrackrApp.swift  # App entry point
-│   ├── ContentView.swift  # Main view
-│   └── Models/           # Data models
-├── W8TrackrTests/        # Unit tests
-└── W8TrackrUITests/      # UI tests
+├── W8Trackr/
+│   ├── W8TrackrApp.swift     # App entry point with ModelContainer
+│   ├── ContentView.swift     # Root tab navigation
+│   ├── Models/               # SwiftData @Model types
+│   ├── Views/                # SwiftUI views
+│   ├── Managers/             # Service managers (HealthKit, Notifications)
+│   ├── Algorithms/           # Trend smoothing, predictions
+│   └── Preview Content/      # Preview modifiers and sample data
+└── W8TrackrTests/            # Unit tests
 ```
 
 ## Architecture
 
-The app is built using:
-- SwiftUI for the user interface
-- SwiftData for data persistence
-- MVVM architecture pattern (TODO)
-- Swift's latest features including Observation framework
+W8Trackr uses a **View-first SwiftUI architecture** that leverages SwiftUI's built-in state management:
+
+- **SwiftUI Views** - Declarative UI with `@State`, `@Binding`, and `@Environment`
+- **SwiftData** - Persistence via `@Model` types and `@Query` for reactive data fetching
+- **Service Managers** - Singleton managers (`HealthKitManager`, `NotificationManager`) for external integrations
+- **Pure Functions** - Algorithm logic (trend smoothing, predictions) in testable, stateless functions
+
+```
+┌─────────────────────────────────────────────────────┐
+│                    SwiftUI Views                     │
+│         (State management via @State, @Query)        │
+├─────────────────────────────────────────────────────┤
+│   SwiftData ModelContext    │   Service Managers    │
+│   (@Environment, @Query)    │   (HealthKit, etc.)   │
+├─────────────────────────────────────────────────────┤
+│              @Model Types (WeightEntry)              │
+└─────────────────────────────────────────────────────┘
+```
 
 ## License
 
