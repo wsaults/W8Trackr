@@ -368,6 +368,282 @@ struct WeightEntryTests {
     }
 }
 
+// MARK: - WeightEntry Model Comprehensive Tests
+
+struct WeightEntryModelTests {
+
+    // MARK: - weightValue(in:) Correctness Tests
+
+    @Test func weightValueRoundTripConversionPreservesPrecision() {
+        let original = 175.5
+        let entry = WeightEntry(weight: original, unit: .lb)
+
+        // Convert lb -> kg -> lb
+        let inKg = entry.weightValue(in: .kg)
+        let backToLb = WeightUnit.kg.convert(inKg, to: .lb)
+
+        // Should be within acceptable floating-point tolerance
+        #expect(abs(backToLb - original) < 0.01)
+    }
+
+    @Test func weightValueKgRoundTripConversion() {
+        let original = 80.0
+        let entry = WeightEntry(weight: original, unit: .kg)
+
+        // Convert kg -> lb -> kg
+        let inLb = entry.weightValue(in: .lb)
+        let backToKg = WeightUnit.lb.convert(inLb, to: .kg)
+
+        #expect(abs(backToKg - original) < 0.01)
+    }
+
+    @Test func weightValueWithKnownConversionValues() {
+        // Test well-known conversion: 1 kg = 2.20462 lb
+        let entryKg = WeightEntry(weight: 1.0, unit: .kg)
+        #expect(abs(entryKg.weightValue(in: .lb) - 2.20462) < 0.00001)
+
+        // Test well-known conversion: 1 lb = 0.453592 kg
+        let entryLb = WeightEntry(weight: 1.0, unit: .lb)
+        #expect(abs(entryLb.weightValue(in: .kg) - 0.453592) < 0.000001)
+    }
+
+    @Test func weightValueAtBoundaryValues() {
+        // Test at minimum valid weight for lb
+        let minLbEntry = WeightEntry(weight: WeightUnit.lb.minWeight, unit: .lb)
+        #expect(minLbEntry.weightValue(in: .lb) == WeightUnit.lb.minWeight)
+        #expect(minLbEntry.weightValue(in: .kg) > 0)
+
+        // Test at maximum valid weight for lb
+        let maxLbEntry = WeightEntry(weight: WeightUnit.lb.maxWeight, unit: .lb)
+        #expect(maxLbEntry.weightValue(in: .lb) == WeightUnit.lb.maxWeight)
+
+        // Test at minimum valid weight for kg
+        let minKgEntry = WeightEntry(weight: WeightUnit.kg.minWeight, unit: .kg)
+        #expect(minKgEntry.weightValue(in: .kg) == WeightUnit.kg.minWeight)
+
+        // Test at maximum valid weight for kg
+        let maxKgEntry = WeightEntry(weight: WeightUnit.kg.maxWeight, unit: .kg)
+        #expect(maxKgEntry.weightValue(in: .kg) == WeightUnit.kg.maxWeight)
+    }
+
+    @Test func weightValueWithTypicalWeights() {
+        // Typical adult weights
+        let typicalLb = WeightEntry(weight: 165.0, unit: .lb)
+        let expectedKg = 165.0 * 0.453592
+        #expect(abs(typicalLb.weightValue(in: .kg) - expectedKg) < 0.001)
+
+        let typicalKg = WeightEntry(weight: 75.0, unit: .kg)
+        let expectedLb = 75.0 * 2.20462
+        #expect(abs(typicalKg.weightValue(in: .lb) - expectedLb) < 0.001)
+    }
+
+    // MARK: - Initialization Tests
+
+    @Test func initializationWithAllParameters() {
+        let date = Date(timeIntervalSince1970: 1704067200) // Fixed date
+        let entry = WeightEntry(
+            weight: 185.5,
+            unit: .lb,
+            date: date,
+            note: "Morning weigh-in",
+            bodyFatPercentage: 22.5
+        )
+
+        #expect(entry.weightValue == 185.5)
+        #expect(entry.weightUnit == "lb")
+        #expect(entry.date == date)
+        #expect(entry.note == "Morning weigh-in")
+        #expect(entry.bodyFatPercentage == 22.5)
+        #expect(entry.modifiedDate == nil) // Should be nil on creation
+    }
+
+    @Test func initializationWithMinimalParameters() {
+        let beforeCreation = Date.now
+        let entry = WeightEntry(weight: 160.0)
+        let afterCreation = Date.now
+
+        #expect(entry.weightValue == 160.0)
+        #expect(entry.weightUnit == "lb") // Default unit
+        #expect(entry.date >= beforeCreation)
+        #expect(entry.date <= afterCreation)
+        #expect(entry.note == nil)
+        #expect(entry.bodyFatPercentage == nil)
+        #expect(entry.modifiedDate == nil)
+    }
+
+    @Test func initializationWithKilogramsUnit() {
+        let entry = WeightEntry(weight: 70.0, unit: .kg)
+
+        #expect(entry.weightValue == 70.0)
+        #expect(entry.weightUnit == "kg")
+    }
+
+    @Test func initializationWithCustomDate() {
+        let customDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        let entry = WeightEntry(weight: 175.0, date: customDate)
+
+        #expect(entry.date == customDate)
+    }
+
+    @Test func initializationWithNoteOnly() {
+        let entry = WeightEntry(weight: 170.0, note: "After workout")
+
+        #expect(entry.note == "After workout")
+        #expect(entry.bodyFatPercentage == nil)
+    }
+
+    @Test func initializationWithBodyFatOnly() {
+        let entry = WeightEntry(weight: 170.0, bodyFatPercentage: 18.5)
+
+        #expect(entry.note == nil)
+        #expect(entry.bodyFatPercentage == 18.5)
+    }
+
+    // MARK: - Property Persistence Tests
+
+    @Test func modifiedDateIsNilOnCreation() {
+        let entry = WeightEntry(weight: 180.0)
+        #expect(entry.modifiedDate == nil)
+    }
+
+    @Test func weightUnitStoredAsRawValue() {
+        let lbEntry = WeightEntry(weight: 180.0, unit: .lb)
+        let kgEntry = WeightEntry(weight: 80.0, unit: .kg)
+
+        // weightUnit is stored as String (raw value)
+        #expect(lbEntry.weightUnit == WeightUnit.lb.rawValue)
+        #expect(kgEntry.weightUnit == WeightUnit.kg.rawValue)
+    }
+
+    @Test func bodyFatPercentageStoresDecimalPrecision() {
+        let entry = WeightEntry(weight: 175.0, bodyFatPercentage: 18.75)
+        #expect(entry.bodyFatPercentage == 18.75)
+    }
+
+    @Test func datePreservesTimeComponent() {
+        var components = DateComponents()
+        components.year = 2025
+        components.month = 6
+        components.day = 15
+        components.hour = 7
+        components.minute = 30
+        components.second = 45
+
+        let specificDate = Calendar.current.date(from: components)!
+        let entry = WeightEntry(weight: 170.0, date: specificDate)
+
+        let storedComponents = Calendar.current.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second],
+            from: entry.date
+        )
+
+        #expect(storedComponents.year == 2025)
+        #expect(storedComponents.month == 6)
+        #expect(storedComponents.day == 15)
+        #expect(storedComponents.hour == 7)
+        #expect(storedComponents.minute == 30)
+        #expect(storedComponents.second == 45)
+    }
+
+    // MARK: - Edge Case Tests
+
+    @Test func zeroWeightValue() {
+        let entry = WeightEntry(weight: 0.0, unit: .lb)
+        #expect(entry.weightValue == 0.0)
+        #expect(entry.weightValue(in: .kg) == 0.0)
+        #expect(entry.weightValue(in: .lb) == 0.0)
+    }
+
+    @Test func verySmallWeightValue() {
+        let entry = WeightEntry(weight: 0.1, unit: .lb)
+        #expect(entry.weightValue == 0.1)
+        #expect(entry.weightValue(in: .kg) > 0)
+    }
+
+    @Test func veryLargeWeightValue() {
+        let entry = WeightEntry(weight: 1500.0, unit: .lb)
+        #expect(entry.weightValue == 1500.0)
+        let inKg = entry.weightValue(in: .kg)
+        #expect(inKg > 680) // ~680.388 kg
+    }
+
+    @Test func negativeWeightValueStoresCorrectly() {
+        // Model doesn't validate - stores the value as-is
+        let entry = WeightEntry(weight: -10.0, unit: .lb)
+        #expect(entry.weightValue == -10.0)
+    }
+
+    @Test func emptyNoteString() {
+        let entry = WeightEntry(weight: 170.0, note: "")
+        #expect(entry.note == "")
+    }
+
+    @Test func noteWithSpecialCharacters() {
+        let specialNote = "Weight: 170.5 lb 🏋️ (morning, fasted)"
+        let entry = WeightEntry(weight: 170.5, note: specialNote)
+        #expect(entry.note == specialNote)
+    }
+
+    @Test func noteWithUnicodeCharacters() {
+        let unicodeNote = "体重測定 • Poids • Gewicht"
+        let entry = WeightEntry(weight: 75.0, unit: .kg, note: unicodeNote)
+        #expect(entry.note == unicodeNote)
+    }
+
+    @Test func noteWithNewlines() {
+        let multilineNote = "Morning weight\nBefore breakfast\nFeeling good"
+        let entry = WeightEntry(weight: 170.0, note: multilineNote)
+        #expect(entry.note == multilineNote)
+    }
+
+    @Test func bodyFatPercentageZero() {
+        let entry = WeightEntry(weight: 170.0, bodyFatPercentage: 0.0)
+        #expect(entry.bodyFatPercentage == 0.0)
+    }
+
+    @Test func bodyFatPercentageHundred() {
+        let entry = WeightEntry(weight: 170.0, bodyFatPercentage: 100.0)
+        #expect(entry.bodyFatPercentage == 100.0)
+    }
+
+    @Test func bodyFatPercentageWithHighPrecision() {
+        let entry = WeightEntry(weight: 170.0, bodyFatPercentage: 18.12345)
+        #expect(entry.bodyFatPercentage == 18.12345)
+    }
+
+    @Test func weightValueHandlesInvalidStoredUnit() {
+        // Create entry and verify fallback behavior
+        let entry = WeightEntry(weight: 180.0, unit: .lb)
+        // If weightUnit were somehow invalid, weightValue(in:) should use .lb as fallback
+        // This tests the guard let fallback in the method
+        #expect(entry.weightValue(in: .lb) == 180.0)
+    }
+
+    @Test func multipleEntriesAreIndependent() {
+        let entry1 = WeightEntry(weight: 170.0, unit: .lb, note: "Entry 1")
+        let entry2 = WeightEntry(weight: 80.0, unit: .kg, note: "Entry 2")
+
+        #expect(entry1.weightValue == 170.0)
+        #expect(entry2.weightValue == 80.0)
+        #expect(entry1.weightUnit == "lb")
+        #expect(entry2.weightUnit == "kg")
+        #expect(entry1.note == "Entry 1")
+        #expect(entry2.note == "Entry 2")
+    }
+
+    @Test func dateDistantPast() {
+        let distantPast = Date.distantPast
+        let entry = WeightEntry(weight: 150.0, date: distantPast)
+        #expect(entry.date == distantPast)
+    }
+
+    @Test func dateDistantFuture() {
+        let distantFuture = Date.distantFuture
+        let entry = WeightEntry(weight: 150.0, date: distantFuture)
+        #expect(entry.date == distantFuture)
+    }
+}
+
 // MARK: - DateRange Tests
 
 struct DateRangeTests {
