@@ -81,6 +81,8 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+fastlane/api_key.json
+*.p8
 
 # Environment files (keep .env.default as template)
 .env

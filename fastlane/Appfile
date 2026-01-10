@@ -7,5 +7,14 @@ team_id("77QB78PHPH")
 # App Store Connect Team ID (same as Developer Portal for individual accounts)
 itc_team_id("77QB78PHPH")
 
+# App Store Connect API Key for authentication
+# See fastlane/api_key.json.example for setup instructions
+api_key_path = ENV["API_KEY_PATH"] || "fastlane/api_key.json"
+if File.exist?(api_key_path)
+  app_store_connect_api_key(
+    key_filepath: api_key_path
+  )
+end
+
 # For more information about the Appfile, see:
 # https://docs.fastlane.tools/advanced/#appfile
