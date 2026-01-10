@@ -8,6 +8,23 @@
 import SwiftData
 import SwiftUI
 
+/// Root view containing the main tab navigation.
+///
+/// ## Data Strategy
+/// ContentView uses three different data sources depending on context:
+///
+/// 1. **Simulator builds** (`#if targetEnvironment(simulator)`):
+///    Uses `WeightEntry.shortSampleData` - 14 entries over 2 weeks.
+///    Provides consistent preview data without database dependencies.
+///
+/// 2. **Device builds** (`@Query`):
+///    Uses live SwiftData queries for real user data.
+///    Sorted by date descending (newest first).
+///
+/// 3. **First launch seeding** (`WeightEntry.initialData`):
+///    When entries are empty on device, seeds 5 sample entries.
+///    Gives new users immediate data to explore the app.
+///    A toast informs users they can delete and add their own entries.
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("preferredWeightUnit") var preferredWeightUnit: WeightUnit = Locale.current.measurementSystem == .metric ? .kg : .lb
@@ -15,6 +32,9 @@ struct ContentView: View {
     @AppStorage("showSmoothing") var showSmoothing: Bool = true
     @State private var showingInitialDataToast = false
 
+    // MARK: - Data Sources
+    // Simulator: Static sample data for consistent previews
+    // Device: Live SwiftData queries for real user data
     #if targetEnvironment(simulator)
     private var entries: [WeightEntry] = WeightEntry.shortSampleData
     private var completedMilestones: [CompletedMilestone] = []

@@ -192,10 +192,21 @@ final class WeightEntry {
     }
     
     // MARK: - Sample Data
+    // These datasets serve different purposes in the app:
+    // - sampleData: Full year of entries for comprehensive previews (30 entries)
+    // - sortedSampleData: Same as sampleData, sorted newest-first
+    // - shortSampleData: 2 weeks of entries for simulator builds (14 entries)
+    // - initialData: Minimal seed data for first-launch experience (5 entries)
+
+    /// Full sample data sorted by date descending (newest first).
+    /// Used in previews requiring sorted data display.
     static var sortedSampleData: [WeightEntry] {
         sampleData.sorted { $0.date > $1.date }
     }
-    
+
+    /// Comprehensive sample data spanning ~1 year with 30 entries.
+    /// Shows realistic weight loss journey from 200 lb to goal weight.
+    /// Used for chart previews and "All Time" range testing.
     static var sampleData: [WeightEntry] {
         let calendar = Calendar.current
         let startDate = calendar.date(byAdding: .year, value: -1, to: .now)!
@@ -240,10 +251,13 @@ final class WeightEntry {
         ]
     }
     
+    /// Short sample data spanning 2 weeks with 14 entries.
+    /// Used in simulator builds for quick iteration without database.
+    /// Dates are relative to "today" for realistic 7-day chart views.
     static var shortSampleData: [WeightEntry] {
         let calendar = Calendar.current
         let today = Date.now
-        
+
         func dateTime(daysAgo: Int) -> Date {
             let dateWithDays = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
             let dateWithHours = calendar.date(byAdding: .hour, value: Int.random(in: 6...10), to: dateWithDays)!
@@ -268,10 +282,13 @@ final class WeightEntry {
         ].sorted { $0.date > $1.date }
     }
     
+    /// Minimal seed data for first-launch experience (5 entries).
+    /// Inserted when user's database is empty to demonstrate app features.
+    /// Small enough to delete easily, large enough to show chart functionality.
     static var initialData: [WeightEntry] {
         let calendar = Calendar.current
         let today = Date.now
-        
+
         func dateTime(daysAgo: Int) -> Date {
             let dateWithDays = calendar.date(byAdding: .day, value: -daysAgo, to: today)!
             let dateWithHours = calendar.date(byAdding: .hour, value: Int.random(in: 6...10), to: dateWithDays)!
