@@ -110,6 +110,8 @@ struct QuickStatCard: View {
         .background(AppColors.Fallback.surfaceLight)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title): \(value) \(subtitle)")
     }
 }
 

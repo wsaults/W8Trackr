@@ -577,11 +577,15 @@ private struct SelectionCallout: View {
                     .foregroundStyle(.secondary)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Dismiss")
+            .accessibilityHint("Close the weight details popup")
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
         .padding(.horizontal)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Selected weight: \(formattedWeight) \(weightUnit.rawValue), recorded \(formattedDate)")
     }
 }
 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct MilestoneCelebrationView: View {
     let milestoneWeight: Double
@@ -72,6 +73,8 @@ struct MilestoneCelebrationView: View {
                         .foregroundStyle(.white)
                         .cornerRadius(12)
                 }
+                .accessibilityLabel("Continue")
+                .accessibilityHint("Dismiss celebration and return to dashboard")
                 .opacity(showContent ? 1.0 : 0)
                 .padding(.top, 8)
             }
@@ -81,8 +84,15 @@ struct MilestoneCelebrationView: View {
             .shadow(radius: 20)
             .padding(40)
             .scaleEffect(showContent ? 1.0 : 0.8)
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Milestone reached! You've hit \(Int(milestoneWeight)) \(unit.rawValue). Keep up the great work!")
         }
         .onAppear {
+            // Announce milestone to VoiceOver
+            UIAccessibility.post(
+                notification: .announcement,
+                argument: "Congratulations! You've reached \(Int(milestoneWeight)) \(unit.rawValue) milestone!"
+            )
             withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
                 showContent = true
             }
@@ -193,6 +203,8 @@ struct MilestoneHistoryView: View {
                         Spacer()
                     }
                     .padding(.horizontal)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Milestone \(Int(milestone.targetWeight(in: unit))) \(unit.rawValue), achieved \(milestone.achievedDate.formatted(date: .abbreviated, time: .omitted))")
                 }
             }
         }

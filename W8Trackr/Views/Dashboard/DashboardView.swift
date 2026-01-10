@@ -202,6 +202,8 @@ struct DashboardView: View {
                 .clipShape(Circle())
                 .shadow(color: AppColors.Fallback.primary.opacity(0.3), radius: 8, x: 0, y: 4)
         }
+        .accessibilityLabel("Add weight entry")
+        .accessibilityHint("Opens form to log a new weight measurement")
     }
 
     // MARK: - Milestone Logic

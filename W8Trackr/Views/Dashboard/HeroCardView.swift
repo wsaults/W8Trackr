@@ -84,6 +84,22 @@ struct HeroCardView: View {
         return "\(sign)\(change.formatted(.number.precision(.fractionLength(1))))"
     }
 
+    private var accessibilityDescription: String {
+        var description = "Current weight: \(formattedWeight) \(weightUnit.rawValue)"
+
+        if let changeText = formattedChange {
+            let direction = trendDirection == .down ? "down" : trendDirection == .up ? "up" : "stable"
+            description += ". \(direction) \(changeText) \(weightUnit.rawValue) this week"
+        }
+
+        if let bodyFat = bodyFatPercentage {
+            let bodyFatValue = NSDecimalNumber(decimal: bodyFat).doubleValue
+            description += ". Body fat: \(bodyFatValue.formatted(.number.precision(.fractionLength(1)))) percent"
+        }
+
+        return description
+    }
+
     var body: some View {
         VStack(spacing: 12) {
             // Label
@@ -140,6 +156,8 @@ struct HeroCardView: View {
         .background(AppGradients.primary)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: AppColors.Fallback.primary.opacity(0.3), radius: 10, x: 0, y: 5)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityDescription)
     }
 }
 
