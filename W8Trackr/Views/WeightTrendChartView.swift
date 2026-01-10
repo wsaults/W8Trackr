@@ -43,26 +43,6 @@ struct WeightTrendChartView: View {
         return max(dataMax, goalMax) + yAxisPadding
     }
     
-    // Group entries by date, maintaining the full WeightEntry objects
-    private var entriesByDay: [Date: [WeightEntry]] {
-        Dictionary(grouping: filteredEntries) { entry in
-            Calendar.current.startOfDay(for: entry.date)
-        }
-    }
-    
-    // Calculate average weight for each day for the line
-    private var dailyAverages: [DailyAverage] {
-        guard filteredEntries.max(by: { $0.date < $1.date }) != nil else {
-            return []
-        }
-
-        return entriesByDay.map { date, entries in
-            let avgWeight = entries.reduce(0.0) { $0 + $1.weightValue } / Double(entries.count)
-            return DailyAverage(date: date, weight: convertWeight(avgWeight))
-        }
-        .sorted { $0.date < $1.date }
-    }
-
     // Calculate smoothed trend using exponential moving average
     private var smoothedTrend: [TrendPoint] {
         TrendCalculator.exponentialMovingAverage(
@@ -176,33 +156,8 @@ struct WeightTrendChartView: View {
 
         var data: [ChartEntry] = []
 
-        // Add daily averages for the trend line (when smoothing is off)
-        if !showSmoothing {
-            data.append(contentsOf: dailyAverages.map {
-                ChartEntry(
-                    date: $0.date,
-                    weight: $0.weight,
-                    isPrediction: false,
-                    showPoint: false,
-                    isIndividualEntry: false,
-                    isSmoothed: false
-                )
-            })
-
-            // Add the last actual point to both the trend line and individual points
-            if let lastEntry = sortedEntries.last {
-                data.append(ChartEntry(
-                    date: lastEntry.date,
-                    weight: convertWeight(lastEntry.weightValue),
-                    isPrediction: false,
-                    showPoint: false,
-                    isIndividualEntry: false,
-                    isSmoothed: false
-                ))
-            }
-        }
-
         // Add smoothed trend line (when smoothing is on)
+        // Uses EWMA-smoothed TrendPoints instead of simple daily averages
         if showSmoothing {
             data.append(contentsOf: smoothedTrend.map { point in
                 ChartEntry(
@@ -280,16 +235,6 @@ struct WeightTrendChartView: View {
                     .lineStyle(StrokeStyle(lineWidth: 3))
                 }
 
-                // Draw actual daily average line (when smoothing is off)
-                ForEach(chartData.filter { !$0.isPrediction && !$0.isIndividualEntry && !$0.isSmoothed }) { entry in
-                    LineMark(
-                        x: .value("Date", entry.date),
-                        y: .value("Weight", entry.weight)
-                    )
-                    .foregroundStyle(by: .value("Type", "Average"))
-                    .interpolationMethod(.catmullRom)
-                }
-                
                 // Draw prediction line
                 ForEach(chartData.filter { $0.isPrediction }) { entry in
                     LineMark(
@@ -311,8 +256,7 @@ struct WeightTrendChartView: View {
             }
             .chartForegroundStyleScale([
                 "Entry": Color.blue,
-                "Average": Color.blue.opacity(0.5),
-                "Trend": Color.purple,
+                "Trend": Color.blue,
                 "Predicted": Color.orange
             ])
             .chartYScale(domain: minWeight...maxWeight)
@@ -394,12 +338,6 @@ extension WeightTrendChartView: AXChartDescriptorRepresentable {
             series: [series]
         )
     }
-}
-
-private struct DailyAverage: Identifiable {
-    let id = UUID()
-    let date: Date
-    let weight: Double
 }
 
 #Preview("Without Smoothing") {

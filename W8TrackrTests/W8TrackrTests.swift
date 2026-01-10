@@ -381,14 +381,22 @@ struct DateRangeTests {
     }
 
     @Test func dateRangeRawValues() {
-        #expect(DateRange.sevenDay.rawValue == "7 Day")
+        #expect(DateRange.sevenDay.rawValue == "7D")
+        #expect(DateRange.thirtyDay.rawValue == "30D")
+        #expect(DateRange.ninetyDay.rawValue == "90D")
+        #expect(DateRange.oneEightyDay.rawValue == "180D")
+        #expect(DateRange.oneYear.rawValue == "1Y")
         #expect(DateRange.allTime.rawValue == "All")
     }
 
     @Test func dateRangeAllCases() {
         let allCases = DateRange.allCases
-        #expect(allCases.count == 2)
+        #expect(allCases.count == 6)
         #expect(allCases.contains(.sevenDay))
+        #expect(allCases.contains(.thirtyDay))
+        #expect(allCases.contains(.ninetyDay))
+        #expect(allCases.contains(.oneEightyDay))
+        #expect(allCases.contains(.oneYear))
         #expect(allCases.contains(.allTime))
     }
 }
