@@ -119,7 +119,7 @@ struct SettingsView: View {
             }
 
             if let warning = goalWeightWarning {
-                HStack(alignment: .top, spacing: 8) {
+                HStack(alignment: .top, spacing: 6) {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundStyle(.orange)
                     Text(warning.message)

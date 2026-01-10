@@ -72,9 +72,10 @@ struct ContentView: View {
                 }
         }
         .onAppear {
-            // Validate and sanitize stored goal weight for current unit
+            // Validate goal weight on first launch or after unit change
+            // Handles the case where default 170.0 is invalid for metric users
             if !preferredWeightUnit.isValidGoalWeight(goalWeight) {
-                goalWeight = min(max(goalWeight, preferredWeightUnit.minGoalWeight), preferredWeightUnit.maxGoalWeight)
+                goalWeight = preferredWeightUnit.defaultWeight
             }
 
             if entries.isEmpty {
