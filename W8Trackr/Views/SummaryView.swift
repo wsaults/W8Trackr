@@ -43,6 +43,14 @@ struct SummaryView: View {
         )
     }
 
+    private var goalPrediction: GoalPrediction {
+        TrendCalculator.predictGoalDate(
+            entries: entries,
+            goalWeight: goalWeight,
+            unit: preferredWeightUnit
+        )
+    }
+
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
@@ -74,6 +82,10 @@ struct SummaryView: View {
                             ChartSectionView(entries: entries, goalWeight: goalWeight, weightUnit: preferredWeightUnit, showSmoothing: showSmoothing)
 
                             WeeklySummaryView(entries: entries, weightUnit: preferredWeightUnit)
+                                .padding(.top, 16)
+
+                            GoalPredictionView(prediction: goalPrediction)
+                                .padding(.horizontal)
                                 .padding(.top, 16)
 
                             if !completedMilestones.isEmpty {
