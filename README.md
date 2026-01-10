@@ -32,6 +32,27 @@ git clone https://github.com/wsaults/W8Trackr.git
 
 3. Build and run the project (⌘R)
 
+## Build Commands
+
+Build, test, and run from the command line using `xcodebuild`:
+
+```bash
+# Build for simulator
+xcodebuild -scheme W8Trackr -destination 'platform=iOS Simulator,name=iPhone 17' build
+
+# Run tests
+xcodebuild -scheme W8Trackr -destination 'platform=iOS Simulator,name=iPhone 17' test
+
+# Archive for distribution
+xcodebuild -scheme W8Trackr -archivePath ./build/W8Trackr.xcarchive archive
+
+# Build and run on simulator
+xcrun simctl boot "iPhone 17"
+xcodebuild -scheme W8Trackr -destination 'platform=iOS Simulator,name=iPhone 17' build
+xcrun simctl install booted ./build/Build/Products/Debug-iphonesimulator/W8Trackr.app
+xcrun simctl launch booted com.willsaults.W8Trackr
+```
+
 ## Project Structure
 
 ```
