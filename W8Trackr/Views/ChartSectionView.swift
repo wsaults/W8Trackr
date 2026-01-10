@@ -9,12 +9,20 @@ import Charts
 import SwiftUI
 
 enum DateRange: String, CaseIterable {
-    case sevenDay = "7 Day"
+    case sevenDay = "7D"
+    case thirtyDay = "30D"
+    case ninetyDay = "90D"
+    case oneEightyDay = "180D"
+    case oneYear = "1Y"
     case allTime = "All"
-    
+
     var days: Int? {
         switch self {
         case .sevenDay: return 7
+        case .thirtyDay: return 30
+        case .ninetyDay: return 90
+        case .oneEightyDay: return 180
+        case .oneYear: return 365
         case .allTime: return nil
         }
     }

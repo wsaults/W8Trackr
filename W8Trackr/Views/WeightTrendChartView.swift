@@ -15,7 +15,16 @@ struct WeightTrendChartView: View {
     let weightUnit: WeightUnit
     let selectedRange: DateRange
     let showSmoothing: Bool
-    
+
+    /// Currently selected entry for tap overlay display
+    @State private var selectedEntry: WeightEntry?
+    /// X position for the selection indicator line
+    @State private var selectionX: CGFloat?
+    /// Current zoom scale (1.0 = no zoom, 2.0 = 2x zoom, etc.)
+    @State private var zoomScale: CGFloat = 1.0
+    /// Base zoom scale before current gesture
+    @State private var baseZoomScale: CGFloat = 1.0
+
     private var filteredEntries: [WeightEntry] {
         guard let days = selectedRange.days else { return entries }
         
@@ -75,7 +84,11 @@ struct WeightTrendChartView: View {
         switch selectedRange {
         case .sevenDay:
             return .dateTime.day()
-        case .allTime:
+        case .thirtyDay:
+            return .dateTime.day().month(.abbreviated)
+        case .ninetyDay, .oneEightyDay:
+            return .dateTime.month(.abbreviated)
+        case .oneYear, .allTime:
             return .dateTime.month(.abbreviated).year()
         }
     }
@@ -84,11 +97,40 @@ struct WeightTrendChartView: View {
         switch selectedRange {
         case .sevenDay:
             return .day
-        case .allTime:
+        case .thirtyDay:
+            return .weekOfYear
+        case .ninetyDay:
+            return .weekOfYear
+        case .oneEightyDay:
+            return .month
+        case .oneYear, .allTime:
             return .month
         }
     }
-    
+
+    // MARK: - Zoom Support
+
+    /// Date range of filtered entries
+    private var dateRange: (start: Date, end: Date)? {
+        let sorted = filteredEntries.sorted { $0.date < $1.date }
+        guard let first = sorted.first?.date, let last = sorted.last?.date else { return nil }
+        return (first, last)
+    }
+
+    /// Visible domain length in seconds, adjusted for zoom
+    private var visibleDomainLength: TimeInterval {
+        guard let range = dateRange else { return 7 * 24 * 3600 }
+        let totalDuration = range.end.timeIntervalSince(range.start)
+        // Clamp zoom between 1x and 10x
+        let clampedZoom = min(max(zoomScale, 1.0), 10.0)
+        return totalDuration / clampedZoom
+    }
+
+    /// Whether chart is zoomed in
+    private var isZoomed: Bool {
+        zoomScale > 1.05
+    }
+
     // MARK: - Weight Trend Prediction
 
     /// Calculates a 1-day weight prediction using Ordinary Least Squares (OLS) linear regression.
@@ -321,6 +363,13 @@ struct WeightTrendChartView: View {
     var body: some View {
         VStack {
             Chart {
+                // Selection indicator line
+                if let entry = selectedEntry {
+                    RuleMark(x: .value("Selected", entry.date))
+                        .foregroundStyle(.gray.opacity(0.5))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [5, 3]))
+                }
+
                 // Goal weight line remains the same
                 if goalWeight > 0 {
                     RuleMark(y: .value("Goal Weight", goalWeight))
@@ -399,10 +448,139 @@ struct WeightTrendChartView: View {
                     AxisValueLabel(format: dateFormatForRange)
                 }
             }
+            .chartScrollableAxes(isZoomed ? .horizontal : [])
+            .chartXVisibleDomain(length: visibleDomainLength)
             .animation(.easeInOut, value: selectedRange)
             .padding(.bottom)
             .accessibilityChartDescriptor(self)
+            .chartOverlay { proxy in
+                GeometryReader { geometry in
+                    Rectangle()
+                        .fill(.clear)
+                        .contentShape(Rectangle())
+                        .gesture(
+                            MagnificationGesture()
+                                .onChanged { scale in
+                                    zoomScale = baseZoomScale * scale
+                                }
+                                .onEnded { scale in
+                                    baseZoomScale = min(max(baseZoomScale * scale, 1.0), 10.0)
+                                    zoomScale = baseZoomScale
+                                }
+                        )
+                        .simultaneousGesture(
+                            TapGesture()
+                                .onEnded { _ in
+                                    // Handled by onTapGesture below
+                                }
+                        )
+                        .onTapGesture { location in
+                            handleChartInteraction(at: location, proxy: proxy, geometry: geometry)
+                        }
+                        .onLongPressGesture(minimumDuration: 0.3) {
+                            // Reset zoom on long press
+                            withAnimation(.easeOut(duration: 0.2)) {
+                                zoomScale = 1.0
+                                baseZoomScale = 1.0
+                            }
+                        }
+                }
+            }
+
+            // Selection overlay callout
+            if let entry = selectedEntry {
+                SelectionCallout(
+                    entry: entry,
+                    weightUnit: weightUnit,
+                    onDismiss: { selectedEntry = nil }
+                )
+                .transition(.opacity.combined(with: .scale(scale: 0.9)))
+            }
+
+            // Zoom indicator
+            if isZoomed {
+                HStack {
+                    Spacer()
+                    Text("\(zoomScale, format: .number.precision(.fractionLength(1)))×")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(.ultraThinMaterial, in: Capsule())
+                }
+                .padding(.trailing, 8)
+            }
         }
+        .padding(.horizontal)
+        .animation(.easeOut(duration: 0.15), value: selectedEntry?.id)
+        .onChange(of: selectedRange) { _, _ in
+            // Reset zoom when changing date range
+            zoomScale = 1.0
+            baseZoomScale = 1.0
+            selectedEntry = nil
+        }
+    }
+
+    /// Finds the nearest entry to a touch point on the chart
+    private func handleChartInteraction(at location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) {
+        let plotFrame = geometry[proxy.plotFrame!]
+        let xPosition = location.x - plotFrame.origin.x
+
+        guard let date: Date = proxy.value(atX: xPosition) else { return }
+
+        // Find the closest entry to the tapped date
+        let sorted = filteredEntries.sorted { $0.date < $1.date }
+        guard !sorted.isEmpty else { return }
+
+        let closest = sorted.min(by: { abs($0.date.timeIntervalSince(date)) < abs($1.date.timeIntervalSince(date)) })
+        selectedEntry = closest
+        selectionX = xPosition
+    }
+}
+
+/// Callout view showing selected entry details
+private struct SelectionCallout: View {
+    let entry: WeightEntry
+    let weightUnit: WeightUnit
+    let onDismiss: () -> Void
+
+    private var formattedWeight: String {
+        let weight = entry.weightValue(in: weightUnit)
+        return weight.formatted(.number.precision(.fractionLength(1)))
+    }
+
+    private var formattedDate: String {
+        entry.date.formatted(date: .abbreviated, time: .shortened)
+    }
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("\(formattedWeight) \(weightUnit.rawValue)")
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                Text(formattedDate)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                if let note = entry.note, !note.isEmpty {
+                    Text(note)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+            }
+            Spacer()
+            Button {
+                onDismiss()
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
         .padding(.horizontal)
     }
 }
