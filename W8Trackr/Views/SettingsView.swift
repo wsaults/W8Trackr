@@ -370,3 +370,70 @@ struct SettingsView: View {
         }
     }
 }
+
+// MARK: - Previews
+
+#if DEBUG
+@available(iOS 18, macOS 15, *)
+#Preview("Default (lb)", traits: .modifier(SettingsViewPreview())) {
+    @Previewable @State var weightUnit: WeightUnit = .lb
+    @Previewable @State var goalWeight: Double = 160.0
+    @Previewable @State var showSmoothing: Bool = true
+
+    SettingsView(
+        weightUnit: $weightUnit,
+        goalWeight: $goalWeight,
+        showSmoothing: $showSmoothing
+    )
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Metric (kg)", traits: .modifier(SettingsViewPreview())) {
+    @Previewable @State var weightUnit: WeightUnit = .kg
+    @Previewable @State var goalWeight: Double = 72.5
+    @Previewable @State var showSmoothing: Bool = true
+
+    SettingsView(
+        weightUnit: $weightUnit,
+        goalWeight: $goalWeight,
+        showSmoothing: $showSmoothing
+    )
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("With Sample Data", traits: .modifier(SettingsViewPreview(withSampleData: true))) {
+    @Previewable @State var weightUnit: WeightUnit = .lb
+    @Previewable @State var goalWeight: Double = 165.0
+    @Previewable @State var showSmoothing: Bool = false
+
+    SettingsView(
+        weightUnit: $weightUnit,
+        goalWeight: $goalWeight,
+        showSmoothing: $showSmoothing
+    )
+}
+
+@available(iOS 18, macOS 15, *)
+struct SettingsViewPreview: PreviewModifier {
+    var withSampleData: Bool = false
+
+    static func makeSharedContext() async throws -> ModelContainer {
+        try ModelContainer(
+            for: WeightEntry.self, CompletedMilestone.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+    }
+
+    func body(content: Content, context: ModelContainer) -> some View {
+        if withSampleData {
+            let _ = {
+                WeightEntry.shortSampleData.forEach { entry in
+                    context.mainContext.insert(entry)
+                }
+                try? context.mainContext.save()
+            }()
+        }
+        return content.modelContainer(context)
+    }
+}
+#endif
