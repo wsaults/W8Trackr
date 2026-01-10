@@ -310,9 +310,9 @@ struct WeightConversionTests {
     }
 }
 
-// MARK: - Weight Validation Boundary Tests
+// MARK: - Weight Conversion Boundary Tests
 
-struct WeightValidationBoundaryTests {
+struct WeightConversionBoundaryTests {
 
     // MARK: - Epsilon Boundary Tests
 
@@ -573,56 +573,56 @@ struct GoalSpecificWeightValidationTests {
     // MARK: - Goal Weight Bounds Tests
 
     @Test func minGoalWeightForPounds() {
-        #expect(WeightUnit.lb.minGoalWeight == 70.0)
+        #expect(WeightUnit.lb.minGoalWeight == 66.0)
     }
 
     @Test func minGoalWeightForKilograms() {
-        #expect(WeightUnit.kg.minGoalWeight == 32.0)
+        #expect(WeightUnit.kg.minGoalWeight == 30.0)
     }
 
     @Test func maxGoalWeightForPounds() {
-        #expect(WeightUnit.lb.maxGoalWeight == 450.0)
+        #expect(WeightUnit.lb.maxGoalWeight == 440.0)
     }
 
     @Test func maxGoalWeightForKilograms() {
-        #expect(WeightUnit.kg.maxGoalWeight == 205.0)
+        #expect(WeightUnit.kg.maxGoalWeight == 200.0)
     }
 
     // MARK: - Goal Weight Validation Tests
 
     @Test func validGoalWeightWithinMedicalBounds() {
         #expect(WeightUnit.lb.isValidGoalWeight(160.0) == true)
-        #expect(WeightUnit.lb.isValidGoalWeight(70.0) == true)  // Min boundary
-        #expect(WeightUnit.lb.isValidGoalWeight(450.0) == true) // Max boundary
+        #expect(WeightUnit.lb.isValidGoalWeight(66.0) == true)  // Min boundary
+        #expect(WeightUnit.lb.isValidGoalWeight(440.0) == true) // Max boundary
         #expect(WeightUnit.kg.isValidGoalWeight(70.0) == true)
-        #expect(WeightUnit.kg.isValidGoalWeight(32.0) == true)  // Min boundary
-        #expect(WeightUnit.kg.isValidGoalWeight(205.0) == true) // Max boundary
+        #expect(WeightUnit.kg.isValidGoalWeight(30.0) == true)  // Min boundary
+        #expect(WeightUnit.kg.isValidGoalWeight(200.0) == true) // Max boundary
     }
 
     @Test func invalidGoalWeightBelowMinimum() {
-        #expect(WeightUnit.lb.isValidGoalWeight(69.9) == false)
+        #expect(WeightUnit.lb.isValidGoalWeight(65.9) == false)
         #expect(WeightUnit.lb.isValidGoalWeight(50.0) == false)
-        #expect(WeightUnit.kg.isValidGoalWeight(31.9) == false)
+        #expect(WeightUnit.kg.isValidGoalWeight(29.9) == false)
         #expect(WeightUnit.kg.isValidGoalWeight(20.0) == false)
     }
 
     @Test func invalidGoalWeightAboveMaximum() {
-        #expect(WeightUnit.lb.isValidGoalWeight(450.1) == false)
+        #expect(WeightUnit.lb.isValidGoalWeight(440.1) == false)
         #expect(WeightUnit.lb.isValidGoalWeight(500.0) == false)
-        #expect(WeightUnit.kg.isValidGoalWeight(205.1) == false)
+        #expect(WeightUnit.kg.isValidGoalWeight(200.1) == false)
         #expect(WeightUnit.kg.isValidGoalWeight(250.0) == false)
     }
 
     // MARK: - Goal Weight Warning Tests
 
     @Test func lowGoalWeightWarningThresholds() {
-        #expect(WeightUnit.lb.lowGoalWarningThreshold == 100.0)
-        #expect(WeightUnit.kg.lowGoalWarningThreshold == 45.0)
+        #expect(WeightUnit.lb.warningLowGoalWeight == 88.0)
+        #expect(WeightUnit.kg.warningLowGoalWeight == 40.0)
     }
 
     @Test func highGoalWeightWarningThresholds() {
-        #expect(WeightUnit.lb.highGoalWarningThreshold == 350.0)
-        #expect(WeightUnit.kg.highGoalWarningThreshold == 159.0)
+        #expect(WeightUnit.lb.warningHighGoalWeight == 330.0)
+        #expect(WeightUnit.kg.warningHighGoalWeight == 150.0)
     }
 
     @Test func noWarningForNormalGoalWeight() {
@@ -633,19 +633,19 @@ struct GoalSpecificWeightValidationTests {
     }
 
     @Test func lowWarningForLowGoalWeight() {
-        let warning = WeightUnit.lb.goalWeightWarning(90.0)
-        #expect(warning == .low)
+        let warning = WeightUnit.lb.goalWeightWarning(80.0)
+        #expect(warning == .tooLow)
 
-        let kgWarning = WeightUnit.kg.goalWeightWarning(40.0)
-        #expect(kgWarning == .low)
+        let kgWarning = WeightUnit.kg.goalWeightWarning(35.0)
+        #expect(kgWarning == .tooLow)
     }
 
     @Test func highWarningForHighGoalWeight() {
         let warning = WeightUnit.lb.goalWeightWarning(400.0)
-        #expect(warning == .high)
+        #expect(warning == .tooHigh)
 
         let kgWarning = WeightUnit.kg.goalWeightWarning(180.0)
-        #expect(kgWarning == .high)
+        #expect(kgWarning == .tooHigh)
     }
 
     @Test func noWarningForInvalidGoalWeight() {
@@ -655,8 +655,8 @@ struct GoalSpecificWeightValidationTests {
     }
 
     @Test func warningMessagesAreNotEmpty() {
-        #expect(!GoalWeightWarning.low.message.isEmpty)
-        #expect(!GoalWeightWarning.high.message.isEmpty)
+        #expect(!GoalWeightWarning.tooLow.message.isEmpty)
+        #expect(!GoalWeightWarning.tooHigh.message.isEmpty)
     }
 }
 
