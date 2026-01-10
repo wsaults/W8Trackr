@@ -149,6 +149,8 @@ brew install swiftlint
 - SwiftData for milestone achievements; @AppStorage for notification preferences (002-goal-notifications)
 - Swift 5.9+ + SwiftUI, SwiftData, UIKit (for UIActivityViewController), Core Graphics (for image generation) (003-social-sharing)
 - @AppStorage for sharing preferences; relies on MilestoneAchievement model from 002-goal-notifications (003-social-sharing)
+- Swift 5.9+ + WidgetKit, SwiftUI, SwiftData (004-ios-widget)
+- SwiftData via App Group shared container (004-ios-widget)
 
 ## Recent Changes
 - 001-apple-health-sync: Added Swift 5.9+ + HealthKit framework, SwiftUI, SwiftData
