@@ -467,12 +467,92 @@ private struct DailyAverage: Identifiable {
     let weight: Double
 }
 
-#Preview("Without Smoothing") {
-    WeightTrendChartView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb, selectedRange: .sevenDay, showSmoothing: false)
-        .padding()
+// MARK: - Previews
+
+#if DEBUG
+@available(iOS 18, macOS 15, *)
+#Preview("7 Day Range", traits: .modifier(EntriesPreview())) {
+    WeightTrendChartView(
+        entries: WeightEntry.sortedSampleData,
+        goalWeight: 160.0,
+        weightUnit: .lb,
+        selectedRange: .sevenDay,
+        showSmoothing: true
+    )
+    .frame(height: 300)
+    .padding()
 }
 
-#Preview("With Smoothing") {
-    WeightTrendChartView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb, selectedRange: .sevenDay, showSmoothing: true)
-        .padding()
+@available(iOS 18, macOS 15, *)
+#Preview("All Time Range", traits: .modifier(EntriesPreview())) {
+    WeightTrendChartView(
+        entries: WeightEntry.sortedSampleData,
+        goalWeight: 160.0,
+        weightUnit: .lb,
+        selectedRange: .allTime,
+        showSmoothing: true
+    )
+    .frame(height: 300)
+    .padding()
 }
+
+@available(iOS 18, macOS 15, *)
+#Preview("Minimal Data (3 entries)", traits: .modifier(MinimalEntriesPreview())) {
+    let calendar = Calendar.current
+    let today = Date()
+    let minimalEntries = [
+        WeightEntry(weight: 175.0, date: today),
+        WeightEntry(weight: 176.5, date: calendar.date(byAdding: .day, value: -2, to: today)!),
+        WeightEntry(weight: 178.0, date: calendar.date(byAdding: .day, value: -5, to: today)!)
+    ]
+
+    WeightTrendChartView(
+        entries: minimalEntries,
+        goalWeight: 170.0,
+        weightUnit: .lb,
+        selectedRange: .sevenDay,
+        showSmoothing: true
+    )
+    .frame(height: 300)
+    .padding()
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Empty Data", traits: .modifier(EmptyEntriesPreview())) {
+    WeightTrendChartView(
+        entries: [],
+        goalWeight: 160.0,
+        weightUnit: .lb,
+        selectedRange: .sevenDay,
+        showSmoothing: true
+    )
+    .frame(height: 300)
+    .padding()
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Metric (kg)", traits: .modifier(EntriesPreview())) {
+    WeightTrendChartView(
+        entries: WeightEntry.shortSampleData,
+        goalWeight: 72.5,
+        weightUnit: .kg,
+        selectedRange: .sevenDay,
+        showSmoothing: true
+    )
+    .frame(height: 300)
+    .padding()
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("No Smoothing", traits: .modifier(EntriesPreview())) {
+    WeightTrendChartView(
+        entries: WeightEntry.sortedSampleData,
+        goalWeight: 160.0,
+        weightUnit: .lb,
+        selectedRange: .sevenDay,
+        showSmoothing: false
+    )
+    .frame(height: 300)
+    .padding()
+}
+#endif
