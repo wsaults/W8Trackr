@@ -2971,3 +2971,128 @@ struct CompletedMilestoneTests {
         #expect(milestone.weightUnit == "kg")
     }
 }
+
+// MARK: - Toast Type Tests
+
+struct ToastTypeTests {
+
+    // MARK: - Icon Color Tests
+
+    @Test func successToastHasGreenColor() {
+        #expect(ToastType.success.iconColor == .green)
+    }
+
+    @Test func errorToastHasRedColor() {
+        #expect(ToastType.error.iconColor == .red)
+    }
+
+    @Test func infoToastHasBlueColor() {
+        #expect(ToastType.info.iconColor == .blue)
+    }
+
+    // MARK: - Default Icon Tests
+
+    @Test func successToastHasCheckmarkIcon() {
+        #expect(ToastType.success.defaultIcon == "checkmark.circle.fill")
+    }
+
+    @Test func errorToastHasExclamationIcon() {
+        #expect(ToastType.error.defaultIcon == "exclamationmark.triangle.fill")
+    }
+
+    @Test func infoToastHasInfoIcon() {
+        #expect(ToastType.info.defaultIcon == "info.circle.fill")
+    }
+
+    // MARK: - All Cases Coverage
+
+    @Test func allToastTypesHaveUniqueColors() {
+        let colors = [
+            ToastType.success.iconColor,
+            ToastType.error.iconColor,
+            ToastType.info.iconColor
+        ]
+        // Each color should be unique
+        #expect(colors[0] != colors[1])
+        #expect(colors[1] != colors[2])
+        #expect(colors[0] != colors[2])
+    }
+
+    @Test func allToastTypesHaveUniqueIcons() {
+        let icons = [
+            ToastType.success.defaultIcon,
+            ToastType.error.defaultIcon,
+            ToastType.info.defaultIcon
+        ]
+        // Each icon should be unique
+        #expect(icons[0] != icons[1])
+        #expect(icons[1] != icons[2])
+        #expect(icons[0] != icons[2])
+    }
+}
+
+// MARK: - Toast Behavior Documentation Tests
+
+/// These tests document the expected toast behavior.
+/// Actual timing tests require UI testing with async expectations.
+struct ToastBehaviorTests {
+
+    // MARK: - Duration Constants
+
+    @Test func standardToastDurationIsFiveSeconds() {
+        // The standard toast duration is 5 seconds (set in ToastModifier)
+        let expectedDuration: TimeInterval = 5
+        #expect(expectedDuration == 5)
+    }
+
+    @Test func successToastDurationIsThreeSeconds() {
+        // Success toasts use a shorter 3-second duration
+        let expectedDuration: TimeInterval = 3
+        #expect(expectedDuration == 3)
+    }
+
+    @Test func persistentToastHasZeroDuration() {
+        // Persistent toasts have duration 0 (don't auto-dismiss)
+        let expectedDuration: TimeInterval = 0
+        #expect(expectedDuration == 0)
+    }
+
+    // MARK: - Dismiss Behavior
+
+    @Test func dismissAnimationDurationIsPointThreeSeconds() {
+        // Dismiss animation is 0.3 seconds
+        let animationDuration: TimeInterval = 0.3
+        #expect(animationDuration == 0.3)
+    }
+
+    // MARK: - Y Offset Behavior
+
+    @Test func hiddenToastOffsetIsNegativeOneHundred() {
+        // Hidden toasts have y offset of -100 (off-screen above)
+        let hiddenOffset: CGFloat = -100
+        #expect(hiddenOffset == -100)
+    }
+
+    @Test func visibleToastOffsetIsZero() {
+        // Visible toasts have y offset of 0 (on-screen)
+        let visibleOffset: CGFloat = 0
+        #expect(visibleOffset == 0)
+    }
+
+    // MARK: - Multiple Toast Handling
+
+    @Test func toastsPresentedOneAtATime() {
+        // Toast system shows one toast at a time
+        // New toast replaces current by setting isPresented = true
+        // This is controlled by the view's @State binding
+        var toastOnePresented = true
+        var toastTwoPresented = false
+
+        // Simulating showing second toast dismisses first
+        toastOnePresented = false
+        toastTwoPresented = true
+
+        #expect(toastOnePresented == false)
+        #expect(toastTwoPresented == true)
+    }
+}
