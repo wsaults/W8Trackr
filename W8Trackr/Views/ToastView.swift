@@ -111,3 +111,34 @@ extension View {
         ))
     }
 }
+
+// MARK: - Previews
+
+#if DEBUG
+@available(iOS 18, macOS 15, *)
+#Preview("Info Toast") {
+    @Previewable @State var isPresented = true
+
+    Color.clear
+        .toast(
+            isPresented: $isPresented,
+            message: "Entry saved successfully",
+            systemImage: "checkmark.circle.fill"
+        )
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Error Toast with Action") {
+    @Previewable @State var isPresented = true
+
+    Color.clear
+        .toast(
+            isPresented: $isPresented,
+            message: "Entry deleted",
+            systemImage: "trash",
+            actionLabel: "Undo"
+        ) {
+            print("Undo tapped")
+        }
+}
+#endif
