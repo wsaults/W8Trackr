@@ -25,32 +25,56 @@ struct WeightTrendChartView: View {
     /// Base zoom scale before current gesture
     @State private var baseZoomScale: CGFloat = 1.0
 
+    // MARK: - Memoized Data Processing
+    // All computed properties reference these cached values to avoid redundant sorting/filtering
+
+    /// Filtered entries based on selected date range
     private var filteredEntries: [WeightEntry] {
         guard let days = selectedRange.days else { return entries }
-        
         let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
         return entries.filter { $0.date >= cutoffDate }
     }
-    
+
+    /// Single sorted source - all other properties should reference this instead of re-sorting
+    private var sortedFilteredEntries: [WeightEntry] {
+        filteredEntries.sorted { $0.date < $1.date }
+    }
+
     private func convertWeight(_ weight: Double) -> Double {
         WeightUnit.lb.convert(weight, to: weightUnit)
     }
-    
+
     private var yAxisPadding: Double {
         weightUnit == .kg ? 2.0 : 5.0
     }
-    
-    private var minWeight: Double {
-        let dataMin = filteredEntries.map { convertWeight($0.weightValue) }.min() ?? 0
-        let goalMin = goalWeight > 0 ? goalWeight : Double.infinity
-        return min(dataMin, goalMin) - yAxisPadding
+
+    /// Single-pass computation of weight range for Y-axis bounds
+    private var weightRange: (min: Double, max: Double) {
+        guard !sortedFilteredEntries.isEmpty else {
+            let goal = goalWeight > 0 ? goalWeight : 150.0
+            return (goal - yAxisPadding, goal + yAxisPadding)
+        }
+
+        var minW = Double.infinity
+        var maxW = -Double.infinity
+
+        for entry in sortedFilteredEntries {
+            let weight = convertWeight(entry.weightValue)
+            minW = Swift.min(minW, weight)
+            maxW = Swift.max(maxW, weight)
+        }
+
+        // Include goal weight in range
+        if goalWeight > 0 {
+            minW = Swift.min(minW, goalWeight)
+            maxW = Swift.max(maxW, goalWeight)
+        }
+
+        return (minW - yAxisPadding, maxW + yAxisPadding)
     }
-    
-    private var maxWeight: Double {
-        let dataMax = filteredEntries.map { convertWeight($0.weightValue) }.max() ?? 0
-        let goalMax = goalWeight > 0 ? goalWeight : 0
-        return max(dataMax, goalMax) + yAxisPadding
-    }
+
+    private var minWeight: Double { weightRange.min }
+    private var maxWeight: Double { weightRange.max }
     
     // Group entries by date, maintaining the full WeightEntry objects
     private var entriesByDay: [Date: [WeightEntry]] {
@@ -110,10 +134,10 @@ struct WeightTrendChartView: View {
 
     // MARK: - Zoom Support
 
-    /// Date range of filtered entries
+    /// Date range of filtered entries (uses cached sorted entries)
     private var dateRange: (start: Date, end: Date)? {
-        let sorted = filteredEntries.sorted { $0.date < $1.date }
-        guard let first = sorted.first?.date, let last = sorted.last?.date else { return nil }
+        guard let first = sortedFilteredEntries.first?.date,
+              let last = sortedFilteredEntries.last?.date else { return nil }
         return (first, last)
     }
 
@@ -179,7 +203,7 @@ struct WeightTrendChartView: View {
     ///
     /// For production use, consider R² calculation or prediction intervals for confidence indication.
     private var prediction: (date: Date, weight: Double)? {
-        let sorted = filteredEntries.sorted { $0.date < $1.date }
+        let sorted = sortedFilteredEntries
         guard sorted.count >= 2 else { return nil }
 
         // Require a minimum span of one hour between first and last entry
@@ -238,7 +262,7 @@ struct WeightTrendChartView: View {
     // MARK: - Accessibility
 
     private var chartAccessibilitySummary: String {
-        let sorted = filteredEntries.sorted { $0.date < $1.date }
+        let sorted = sortedFilteredEntries
         guard !sorted.isEmpty else {
             return "No weight data available"
         }
@@ -277,8 +301,8 @@ struct WeightTrendChartView: View {
     }
 
     private var chartData: [ChartEntry] {
-        // Get all entries sorted by date
-        let sortedEntries = filteredEntries.sorted { $0.date < $1.date }
+        // Use cached sorted entries
+        let sortedEntries = sortedFilteredEntries
 
         var data: [ChartEntry] = []
 
@@ -528,8 +552,8 @@ struct WeightTrendChartView: View {
 
         guard let date: Date = proxy.value(atX: xPosition) else { return }
 
-        // Find the closest entry to the tapped date
-        let sorted = filteredEntries.sorted { $0.date < $1.date }
+        // Find the closest entry to the tapped date (uses cached sorted entries)
+        let sorted = sortedFilteredEntries
         guard !sorted.isEmpty else { return }
 
         let closest = sorted.min(by: { abs($0.date.timeIntervalSince(date)) < abs($1.date.timeIntervalSince(date)) })
@@ -593,7 +617,8 @@ private struct SelectionCallout: View {
 
 extension WeightTrendChartView: AXChartDescriptorRepresentable {
     func makeChartDescriptor() -> AXChartDescriptor {
-        let sorted = filteredEntries.sorted { $0.date < $1.date }
+        // Use cached sorted entries
+        let sorted = sortedFilteredEntries
 
         // Create date axis
         let minDate = sorted.first?.date ?? Date()
