@@ -135,15 +135,41 @@ extension Double {
     }
 }
 
+/// A single weight measurement entry persisted via SwiftData.
+///
+/// Each entry stores the weight in its original unit of measurement,
+/// allowing accurate conversion when the user switches between lb and kg.
 @Model
 final class WeightEntry {
+    /// The numeric weight value in the unit specified by `weightUnit`.
     var weightValue: Double = 0
+
+    /// The unit of measurement as a raw string value.
+    ///
+    /// Stored as `String` rather than `WeightUnit` enum because SwiftData
+    /// requires `Codable` types for persistence, and enums with raw values
+    /// serialize more reliably as their raw string representation.
     var weightUnit: String = WeightUnit.lb.rawValue
+
+    /// When this weight was recorded (defaults to creation time).
     var date: Date = Date.now
+
+    /// Optional user note for context (e.g., "Morning weigh-in", "After workout").
     var note: String?
+
+    /// Optional body fat percentage (1-60%), stored as Decimal for precision.
     var bodyFatPercentage: Decimal?
+
+    /// Timestamp of last edit, `nil` if never modified after creation.
     var modifiedDate: Date?
 
+    /// Creates a new weight entry.
+    /// - Parameters:
+    ///   - weight: The numeric weight value
+    ///   - unit: Unit of measurement (defaults to pounds)
+    ///   - date: When the weight was recorded (defaults to now)
+    ///   - note: Optional context note
+    ///   - bodyFatPercentage: Optional body fat percentage
     init(weight: Double, unit: WeightUnit = .lb, date: Date = .now, note: String? = nil, bodyFatPercentage: Decimal? = nil) {
         self.weightValue = weight
         self.weightUnit = unit.rawValue
@@ -152,7 +178,14 @@ final class WeightEntry {
         self.bodyFatPercentage = bodyFatPercentage
         // modifiedDate is nil on creation, set when entry is edited
     }
-    
+
+    /// Returns the weight converted to the specified unit.
+    ///
+    /// Handles conversion between lb and kg using standard conversion factors.
+    /// If the stored unit matches the requested unit, returns the value unchanged.
+    ///
+    /// - Parameter unit: The target unit for the weight value
+    /// - Returns: The weight value converted to the target unit
     func weightValue(in unit: WeightUnit) -> Double {
         let currentUnit = WeightUnit(rawValue: weightUnit) ?? .lb
         return weightValue.weightValue(from: currentUnit, to: unit)
