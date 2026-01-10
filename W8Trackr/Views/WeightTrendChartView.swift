@@ -89,37 +89,87 @@ struct WeightTrendChartView: View {
         }
     }
     
-    // Improved prediction calculation: recentered days-based regression
+    // MARK: - Weight Trend Prediction
+
+    /// Calculates a 1-day weight prediction using Ordinary Least Squares (OLS) linear regression.
+    ///
+    /// ## Algorithm
+    /// Uses simple linear regression to fit a line through historical weight data points,
+    /// then extrapolates 1 day into the future. This provides a short-term trend indicator
+    /// without overconfident long-range predictions.
+    ///
+    /// ## Mathematical Formula
+    /// Given n data points (x₁, y₁), ..., (xₙ, yₙ) where:
+    /// - x = days since first entry (normalized for numerical stability)
+    /// - y = weight in user's preferred unit
+    ///
+    /// The regression line y = mx + b is calculated as:
+    /// ```
+    /// slope (m)     = (n∑xy - ∑x∑y) / (n∑x² - (∑x)²)
+    /// intercept (b) = (∑y - m∑x) / n
+    /// ```
+    ///
+    /// Prediction: y_future = m × (x_last + 1) + b
+    ///
+    /// ## Input Requirements
+    /// - **Minimum entries**: 2 (required for regression line)
+    /// - **Minimum time span**: 1 hour between first and last entry
+    /// - **Data source**: `filteredEntries` (respects current date range filter)
+    ///
+    /// ## Output
+    /// Returns a tuple of (predictedDate, predictedWeight) or nil if prediction is not possible.
+    /// - `predictedDate`: 1 day after the most recent entry
+    /// - `predictedWeight`: Extrapolated weight in user's preferred unit
+    ///
+    /// ## Edge Cases Handled
+    /// - Returns `nil` if fewer than 2 entries exist
+    /// - Returns `nil` if time span is less than 1 hour (prevents unstable predictions)
+    /// - Returns `nil` if denominator is zero (all entries on same day, or numerical edge case)
+    /// - Returns `nil` if date calculation fails
+    ///
+    /// ## Confidence Considerations
+    /// This is a simple linear model with inherent limitations:
+    /// - **No confidence interval**: Does not account for data variance or prediction uncertainty
+    /// - **Assumes linearity**: Weight loss/gain is rarely perfectly linear over time
+    /// - **Short horizon**: Only predicts 1 day ahead to minimize extrapolation error
+    /// - **Sensitive to outliers**: A single unusual reading can skew the prediction
+    /// - **No plateau detection**: Cannot detect weight loss stalls or rebounds
+    ///
+    /// For production use, consider R² calculation or prediction intervals for confidence indication.
     private var prediction: (date: Date, weight: Double)? {
         let sorted = filteredEntries.sorted { $0.date < $1.date }
         guard sorted.count >= 2 else { return nil }
 
         // Require a minimum span of one hour between first and last entry
+        // This prevents unstable predictions from entries clustered in a short time
         guard let firstDate = sorted.first?.date,
               let lastDate = sorted.last?.date,
               lastDate.timeIntervalSince(firstDate) >= 3600 else {
             return nil
         }
 
-        // Convert timestamps to days since first entry
+        // Convert timestamps to days since first entry (recentering improves numerical stability)
         let firstTime = firstDate.timeIntervalSince1970
         let xs = sorted.map { ($0.date.timeIntervalSince1970 - firstTime) / 86400.0 }
         let ys = sorted.map { convertWeight($0.weightValue) }
 
-        // Calculate regression sums
+        // Calculate regression sums for OLS formula
         let n = Double(xs.count)
-        let sumX  = xs.reduce(0, +)
-        let sumY  = ys.reduce(0, +)
-        let sumXX = xs.reduce(0) { $0 + $1 * $1 }
-        let sumXY = zip(xs, ys).reduce(0) { $0 + $1.0 * $1.1 }
+        let sumX  = xs.reduce(0, +)                              // ∑x
+        let sumY  = ys.reduce(0, +)                              // ∑y
+        let sumXX = xs.reduce(0) { $0 + $1 * $1 }                // ∑x²
+        let sumXY = zip(xs, ys).reduce(0) { $0 + $1.0 * $1.1 }   // ∑xy
 
+        // Denominator of slope formula: n∑x² - (∑x)²
+        // Zero denominator occurs when all x values are identical (division by zero)
         let denom = n * sumXX - sumX * sumX
         guard denom != 0 else { return nil }
 
+        // OLS coefficients
         let slope     = (n * sumXY - sumX * sumY) / denom      // weight change per day
-        let intercept = (sumY - slope * sumX) / n               // starting weight
+        let intercept = (sumY - slope * sumX) / n               // y-intercept (adjusted for recentering)
 
-        // Predict 1 day ahead (adjustable via `daysAhead`)
+        // Predict 1 day ahead from the last data point
         let daysAhead = 1.0
         guard let lastX = xs.last else { return nil }
         let futureX = lastX + daysAhead
