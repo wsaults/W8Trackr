@@ -1,0 +1,36 @@
+# frozen_string_literal: true
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Run unit tests"
+  lane :test do
+    run_tests(
+      project: "W8Trackr.xcodeproj",
+      scheme: "W8Trackr",
+      device: "iPhone 17",
+      clean: true
+    )
+  end
+
+  desc "Build the app"
+  lane :build do
+    build_app(
+      project: "W8Trackr.xcodeproj",
+      scheme: "W8Trackr",
+      export_method: "app-store",
+      skip_codesigning: true
+    )
+  end
+
+  desc "Build and upload to TestFlight"
+  lane :beta do
+    increment_build_number
+    build_app(
+      project: "W8Trackr.xcodeproj",
+      scheme: "W8Trackr",
+      export_method: "app-store"
+    )
+    upload_to_testflight(skip_waiting_for_build_processing: true)
+  end
+end

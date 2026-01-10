@@ -1,0 +1,11 @@
+# App identifier (bundle ID)
+app_identifier("com.saults.W8Trackr")
+
+# Apple Developer Portal Team ID
+team_id("77QB78PHPH")
+
+# App Store Connect Team ID (same as Developer Portal for individual accounts)
+itc_team_id("77QB78PHPH")
+
+# For more information about the Appfile, see:
+# https://docs.fastlane.tools/advanced/#appfile
