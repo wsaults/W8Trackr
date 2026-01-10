@@ -89,48 +89,26 @@ struct WeightTrendChartView: View {
         }
     }
     
-    // Improved prediction calculation: recentered days-based regression
-    private var prediction: (date: Date, weight: Double)? {
-        let sorted = filteredEntries.sorted { $0.date < $1.date }
-        guard sorted.count >= 2 else { return nil }
-
-        // Require a minimum span of one hour between first and last entry
-        guard let firstDate = sorted.first?.date,
-              let lastDate = sorted.last?.date,
-              lastDate.timeIntervalSince(firstDate) >= 3600 else {
+    // Holt's Double Exponential Smoothing prediction
+    // Returns start point (last smoothed value) and end point (forecast)
+    private var prediction: (startDate: Date, startWeight: Double, endDate: Date, endWeight: Double)? {
+        guard let holtResult = TrendCalculator.calculateHolt(entries: filteredEntries) else {
             return nil
         }
 
-        // Convert timestamps to days since first entry
-        let firstTime = firstDate.timeIntervalSince1970
-        let xs = sorted.map { ($0.date.timeIntervalSince1970 - firstTime) / 86400.0 }
-        let ys = sorted.map { convertWeight($0.weightValue) }
-
-        // Calculate regression sums
-        let n = Double(xs.count)
-        let sumX  = xs.reduce(0, +)
-        let sumY  = ys.reduce(0, +)
-        let sumXX = xs.reduce(0) { $0 + $1 * $1 }
-        let sumXY = zip(xs, ys).reduce(0) { $0 + $1.0 * $1.1 }
-
-        let denom = n * sumXX - sumX * sumX
-        guard denom != 0 else { return nil }
-
-        let slope     = (n * sumXY - sumX * sumY) / denom      // weight change per day
-        let intercept = (sumY - slope * sumX) / n               // starting weight
-
-        // Predict 1 day ahead (adjustable via `daysAhead`)
-        let daysAhead = 1.0
-        guard let lastX = xs.last else { return nil }
-        let futureX = lastX + daysAhead
-        let predictedWeight = slope * futureX + intercept
+        let daysAhead = 1
+        let predictedWeight = holtResult.forecast(daysAhead: daysAhead)
 
         guard let predictedDate = Calendar.current.date(
-            byAdding: .day, value: Int(daysAhead),
-            to: lastDate
+            byAdding: .day, value: daysAhead, to: holtResult.lastDate
         ) else { return nil }
 
-        return (predictedDate, predictedWeight)
+        return (
+            startDate: holtResult.lastDate,
+            startWeight: convertWeight(holtResult.level),
+            endDate: predictedDate,
+            endWeight: convertWeight(predictedWeight)
+        )
     }
     
     private struct ChartEntry: Identifiable {
@@ -242,22 +220,21 @@ struct WeightTrendChartView: View {
             )
         })
 
-        // Add prediction line if available
-        if let prediction = prediction,
-           let lastEntry = sortedEntries.last {
-            // Add the last actual point as part of prediction line
+        // Add prediction line if available (starts from last smoothed value)
+        if let prediction = prediction {
+            // Add the last smoothed point as start of prediction line
             data.append(ChartEntry(
-                date: lastEntry.date,
-                weight: convertWeight(lastEntry.weightValue),
+                date: prediction.startDate,
+                weight: prediction.startWeight,
                 isPrediction: true,
                 showPoint: false,
                 isIndividualEntry: false,
                 isSmoothed: false
             ))
-            // Add the prediction point
+            // Add the predicted point
             data.append(ChartEntry(
-                date: prediction.date,
-                weight: prediction.weight,
+                date: prediction.endDate,
+                weight: prediction.endWeight,
                 isPrediction: true,
                 showPoint: false,
                 isIndividualEntry: false,
