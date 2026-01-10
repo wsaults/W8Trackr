@@ -1,0 +1,64 @@
+name: TestFlight Deployment
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    name: Deploy to TestFlight
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Create API key file
+        env:
+          API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        run: |
+          # Decode the base64 p8 key
+          P8_KEY=$(echo "$API_KEY_BASE64" | base64 --decode)
+
+          # Create the api_key.json file
+          cat > fastlane/api_key.json << EOF
+          {
+            "key_id": "$KEY_ID",
+            "issuer_id": "$ISSUER_ID",
+            "key": "$P8_KEY",
+            "in_house": false
+          }
+          EOF
+
+      - name: Deploy to TestFlight
+        run: bundle exec fastlane ios beta
+
+      - name: Cleanup API key
+        if: always()
+        run: rm -f fastlane/api_key.json
+
+      - name: Create release summary
+        if: success()
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          echo "## TestFlight Deployment Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** $TAG_NAME" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The build has been uploaded to TestFlight and is processing." >> $GITHUB_STEP_SUMMARY

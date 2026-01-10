@@ -112,7 +112,6 @@ Modal: `WeightEntryView` (sheet from SummaryView/LogbookView for add/edit)
 
 `NotificationManager` is an `ObservableObject` handling daily reminder scheduling via `UNUserNotificationCenter`. Instantiated as `@StateObject` in `SettingsView`.
 
-<<<<<<< HEAD
 ## Code Quality
 
 ### SwiftLint
@@ -131,8 +130,16 @@ brew install swiftlint
 - Relaxed line length (150 warning, 200 error) for SwiftUI modifier chains
 - Disabled rules that conflict with SwiftUI patterns (nesting, function_body_length)
 - Custom rule to warn about print statements in production code
-=======
-## Code Style Quick Reference
+
+## Additional Guidelines
+
+### SwiftUI Conventions
+See [.claude/rules/swiftui.md](.claude/rules/swiftui.md) for:
+- Preview patterns (iOS 18+ PreviewModifier)
+- Available preview modifiers
+- Creating new preview modifiers
+
+### Code Style Quick Reference
 
 - **Navigation**: Use `NavigationStack` (not NavigationView)
 - **State**: `@State` for local, `@Binding` for passed, `@StateObject` for owned ObservableObject
@@ -140,4 +147,3 @@ brew install swiftlint
 - **Forms**: Structure with `Section` + header/footer
 - **Alerts**: Use modern `.alert(title, isPresented:)` API
 - **Previews**: Use iOS 18 `#Preview(traits:)` with `PreviewModifier`
->>>>>>> c0de58c (Add Claude Code rules for Swift/SwiftUI/iOS patterns)

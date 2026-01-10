@@ -1,0 +1,7 @@
+What's New in W8Trackr:
+
+• Initial release
+• Simple weight logging with optional body fat tracking
+• Beautiful trend charts with EWMA smoothing
+• Support for pounds and kilograms
+• Private, on-device storage

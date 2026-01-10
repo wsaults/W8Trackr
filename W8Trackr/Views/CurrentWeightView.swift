@@ -58,6 +58,24 @@ struct CurrentWeightView: View {
     }
 }
 
-#Preview {
-    CurrentWeightView(weight: 175, weightUnit: .lb)
+#if DEBUG
+@available(iOS 18, macOS 15, *)
+#Preview("Pounds") {
+    CurrentWeightView(weight: 175.5, weightUnit: .lb, bodyFatPercentage: 18.5)
 }
+
+@available(iOS 18, macOS 15, *)
+#Preview("Kilograms") {
+    CurrentWeightView(weight: 79.8, weightUnit: .kg, bodyFatPercentage: 18.5)
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Large Weight (300+ lb)") {
+    CurrentWeightView(weight: 325.0, weightUnit: .lb)
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Small Weight (< 100 lb)") {
+    CurrentWeightView(weight: 92.5, weightUnit: .lb)
+}
+#endif

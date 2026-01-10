@@ -43,6 +43,14 @@ struct SummaryView: View {
         )
     }
 
+    private var goalPrediction: GoalPrediction {
+        TrendCalculator.predictGoalDate(
+            entries: entries,
+            goalWeight: goalWeight,
+            unit: preferredWeightUnit
+        )
+    }
+
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
@@ -76,6 +84,10 @@ struct SummaryView: View {
                             WeeklySummaryView(entries: entries, weightUnit: preferredWeightUnit)
                                 .padding(.top, 16)
 
+                            GoalPredictionView(prediction: goalPrediction)
+                                .padding(.horizontal)
+                                .padding(.top, 16)
+
                             if !completedMilestones.isEmpty {
                                 MilestoneHistoryView(milestones: completedMilestones, unit: preferredWeightUnit)
                                     .padding(.bottom, 80)
@@ -107,6 +119,7 @@ struct SummaryView: View {
             .background(.gray.opacity(0.1))
             .navigationTitle("Summary")
             .navigationBarTitleDisplayMode(.inline)
+            .syncStatusToolbar()
             .sheet(isPresented: $showAddWeightView) {
                 WeightEntryView(entries: entries, weightUnit: preferredWeightUnit)
             }
@@ -153,10 +166,11 @@ struct SummaryView: View {
     }
 }
 
+// MARK: - Previews
+
+#if DEBUG
 @available(iOS 18, macOS 15, *)
 #Preview(traits: .modifier(EntriesPreview())) {
-    @Previewable @Query var entries: [WeightEntry]
-
     SummaryView(
         entries: WeightEntry.shortSampleData,
         completedMilestones: [],
@@ -166,20 +180,14 @@ struct SummaryView: View {
     )
 }
 
-struct EntriesPreview: PreviewModifier {
-    static func makeSharedContext() async throws -> ModelContainer {
-        let container = try ModelContainer(
-            for: WeightEntry.self, CompletedMilestone.self,
-            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-        )
-        let examples = WeightEntry.sampleData
-        examples.forEach { example in
-            container.mainContext.insert(example)
-        }
-        return container
-    }
-
-    func body(content: Content, context: ModelContainer) -> some View {
-        content.modelContainer(context)
-    }
+@available(iOS 18, macOS 15, *)
+#Preview("Empty", traits: .modifier(EmptyEntriesPreview())) {
+    SummaryView(
+        entries: [],
+        completedMilestones: [],
+        preferredWeightUnit: .lb,
+        goalWeight: 160,
+        showSmoothing: true
+    )
 }
+#endif

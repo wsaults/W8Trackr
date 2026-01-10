@@ -7,15 +7,23 @@
 
 import SwiftUI
 import SwiftData
+import UniformTypeIdentifiers
 
 struct ExportView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @Query(sort: \WeightEntry.date) private var entries: [WeightEntry]
 
     @State private var useDateFilter = false
     @State private var startDate = Calendar.current.date(byAdding: .month, value: -1, to: .now) ?? .now
     @State private var endDate = Date.now
     @State private var selectedFormat: ExportFormat = .csv
+    @State private var showingImportPicker = false
+    @State private var showingImportConfirmation = false
+    @State private var importResult: ImportResult?
+    @State private var showingImportSuccessToast = false
+    @State private var showingImportErrorAlert = false
+    @State private var importErrorMessage = ""
 
     private var filteredEntryCount: Int {
         if useDateFilter {
@@ -94,10 +102,9 @@ struct ExportView: View {
             }
 
             HStack {
-                Text("Fields")
+                Text("Format")
                 Spacer()
-                Text("date, weight, unit, note, bodyFat")
-                    .font(.caption)
+                Text(selectedFormat.rawValue)
                     .foregroundStyle(.secondary)
             }
         } header: {
@@ -114,7 +121,7 @@ struct ExportView: View {
                 ) {
                     HStack {
                         Image(systemName: "square.and.arrow.up")
-                        Text("Export to \(selectedFormat.rawValue)")
+                        Text("Export \(selectedFormat.rawValue)")
                     }
                 }
             } else {
@@ -128,6 +135,85 @@ struct ExportView: View {
         }
     }
 
+    private var importSection: some View {
+        Section {
+            Button {
+                showingImportPicker = true
+            } label: {
+                HStack {
+                    Image(systemName: "square.and.arrow.down")
+                    Text("Import from File")
+                }
+            }
+        } header: {
+            Text("Import Data")
+        } footer: {
+            Text("Import weight entries from a CSV or JSON backup file")
+        }
+    }
+
+    private func handleImportedFile(result: Result<URL, Error>) {
+        switch result {
+        case .success(let url):
+            guard url.startAccessingSecurityScopedResource() else {
+                importErrorMessage = "Could not access the selected file"
+                showingImportErrorAlert = true
+                return
+            }
+            defer { url.stopAccessingSecurityScopedResource() }
+
+            do {
+                let data = try Data(contentsOf: url)
+                let fileExtension = url.pathExtension.lowercased()
+
+                let result: ImportResult
+                if fileExtension == "json" {
+                    result = DataExporter.importJSON(from: data)
+                } else {
+                    result = DataExporter.importCSV(from: data)
+                }
+
+                if result.entries.isEmpty && !result.errors.isEmpty {
+                    importErrorMessage = result.errors.joined(separator: "\n")
+                    showingImportErrorAlert = true
+                } else {
+                    importResult = result
+                    showingImportConfirmation = true
+                }
+            } catch {
+                importErrorMessage = "Failed to read file: \(error.localizedDescription)"
+                showingImportErrorAlert = true
+            }
+
+        case .failure(let error):
+            importErrorMessage = "Failed to select file: \(error.localizedDescription)"
+            showingImportErrorAlert = true
+        }
+    }
+
+    private func performImport() {
+        guard let result = importResult else { return }
+
+        for imported in result.entries {
+            let entry = WeightEntry(
+                weight: imported.weight,
+                unit: imported.unit,
+                date: imported.date,
+                note: imported.note,
+                bodyFatPercentage: imported.bodyFatPercentage
+            )
+            modelContext.insert(entry)
+        }
+
+        do {
+            try modelContext.save()
+            showingImportSuccessToast = true
+        } catch {
+            importErrorMessage = "Failed to save imported entries: \(error.localizedDescription)"
+            showingImportErrorAlert = true
+        }
+    }
+
     var body: some View {
         NavigationStack {
             Form {
@@ -135,8 +221,9 @@ struct ExportView: View {
                 dateFilterSection
                 exportSummarySection
                 exportSection
+                importSection
             }
-            .navigationTitle("Export Data")
+            .navigationTitle("Backup & Export")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -145,6 +232,43 @@ struct ExportView: View {
                     }
                 }
             }
+            .fileImporter(
+                isPresented: $showingImportPicker,
+                allowedContentTypes: [.commaSeparatedText, .json],
+                allowsMultipleSelection: false
+            ) { result in
+                if case .success(let urls) = result, let url = urls.first {
+                    handleImportedFile(result: .success(url))
+                } else if case .failure(let error) = result {
+                    handleImportedFile(result: .failure(error))
+                }
+            }
+            .alert("Import \(importResult?.successCount ?? 0) Entries?", isPresented: $showingImportConfirmation) {
+                Button("Cancel", role: .cancel) {
+                    importResult = nil
+                }
+                Button("Import") {
+                    performImport()
+                }
+            } message: {
+                if let result = importResult {
+                    if result.errors.isEmpty {
+                        Text("This will add \(result.successCount) weight entries to your data.")
+                    } else {
+                        Text("This will add \(result.successCount) entries. \(result.errorCount) rows had errors and will be skipped.")
+                    }
+                }
+            }
+            .alert("Import Error", isPresented: $showingImportErrorAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(importErrorMessage)
+            }
+            .toast(
+                isPresented: $showingImportSuccessToast,
+                message: "\(importResult?.successCount ?? 0) entries imported",
+                systemImage: "checkmark.circle.fill"
+            )
         }
     }
 }
@@ -156,9 +280,20 @@ struct ExportFile: Transferable {
     let format: ExportFormat
 
     static var transferRepresentation: some TransferRepresentation {
-        FileRepresentation(exportedContentType: .plainText) { exportFile in
-            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(exportFile.filename)
-            try exportFile.content.write(to: tempURL, atomically: true, encoding: .utf8)
+        FileRepresentation(exportedContentType: .commaSeparatedText) { file in
+            guard file.format == .csv else {
+                throw CocoaError(.fileWriteUnknown)
+            }
+            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(file.filename)
+            try file.content.write(to: tempURL, atomically: true, encoding: .utf8)
+            return SentTransferredFile(tempURL)
+        }
+        FileRepresentation(exportedContentType: .json) { file in
+            guard file.format == .json else {
+                throw CocoaError(.fileWriteUnknown)
+            }
+            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(file.filename)
+            try file.content.write(to: tempURL, atomically: true, encoding: .utf8)
             return SentTransferredFile(tempURL)
         }
     }

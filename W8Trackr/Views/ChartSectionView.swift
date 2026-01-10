@@ -9,12 +9,20 @@ import Charts
 import SwiftUI
 
 enum DateRange: String, CaseIterable {
-    case sevenDay = "7 Day"
+    case sevenDay = "7D"
+    case thirtyDay = "30D"
+    case ninetyDay = "90D"
+    case oneEightyDay = "180D"
+    case oneYear = "1Y"
     case allTime = "All"
-    
+
     var days: Int? {
         switch self {
         case .sevenDay: return 7
+        case .thirtyDay: return 30
+        case .ninetyDay: return 90
+        case .oneEightyDay: return 180
+        case .oneYear: return 365
         case .allTime: return nil
         }
     }
@@ -60,6 +68,66 @@ struct ChartSectionView: View {
     }
 }
 
-#Preview {
-    ChartSectionView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb, showSmoothing: true)
+// MARK: - Previews
+
+#if DEBUG
+@available(iOS 18, macOS 15, *)
+#Preview("Default", traits: .modifier(EntriesPreview())) {
+    ScrollView {
+        ChartSectionView(
+            entries: WeightEntry.sortedSampleData,
+            goalWeight: 160.0,
+            weightUnit: .lb,
+            showSmoothing: true
+        )
+    }
 }
+
+@available(iOS 18, macOS 15, *)
+#Preview("Empty", traits: .modifier(EmptyEntriesPreview())) {
+    ScrollView {
+        ChartSectionView(
+            entries: [],
+            goalWeight: 160.0,
+            weightUnit: .lb,
+            showSmoothing: true
+        )
+    }
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Short Data (7 days)", traits: .modifier(ShortSamplePreview())) {
+    ScrollView {
+        ChartSectionView(
+            entries: WeightEntry.shortSampleData,
+            goalWeight: 160.0,
+            weightUnit: .lb,
+            showSmoothing: true
+        )
+    }
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Kilograms", traits: .modifier(EntriesPreview())) {
+    ScrollView {
+        ChartSectionView(
+            entries: WeightEntry.shortSampleData,
+            goalWeight: 72.5,
+            weightUnit: .kg,
+            showSmoothing: true
+        )
+    }
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("No Smoothing", traits: .modifier(EntriesPreview())) {
+    ScrollView {
+        ChartSectionView(
+            entries: WeightEntry.sortedSampleData,
+            goalWeight: 160.0,
+            weightUnit: .lb,
+            showSmoothing: false
+        )
+    }
+}
+#endif

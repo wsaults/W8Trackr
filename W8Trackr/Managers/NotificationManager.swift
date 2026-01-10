@@ -8,14 +8,41 @@
 import Foundation
 import UserNotifications
 
+/// Manages local notification permissions and scheduling for weight logging reminders.
+///
+/// This class handles two types of notifications:
+/// 1. **Daily reminders** - Fixed-time notifications to prompt weight logging
+/// 2. **Smart reminders** - Adaptive notifications including streak warnings,
+///    milestone alerts, and weekly summaries
+///
+/// ## Threading
+/// All `@Published` property updates are dispatched to the main thread to ensure
+/// safe UI binding. Notification permission callbacks are also main-thread dispatched.
+///
+/// ## Usage
+/// ```swift
+/// @StateObject private var notificationManager = NotificationManager()
+/// ```
 class NotificationManager: ObservableObject {
+    /// Whether the user has granted notification permissions and enabled daily reminders.
+    /// Updated asynchronously on init and after permission requests.
     @Published var isReminderEnabled = false
+
+    /// Whether adaptive smart notifications (streaks, milestones, summaries) are enabled.
+    /// Persisted to UserDefaults.
     @Published var isSmartRemindersEnabled = false
+
+    /// AI-suggested optimal reminder time based on user's historical logging patterns.
+    /// `nil` if insufficient data or smart reminders disabled.
     @Published var suggestedReminderTime: Date?
 
     private static let reminderTimeKey = "reminderTime"
     private static let smartRemindersKey = "smartRemindersEnabled"
 
+    /// Initializes the manager and checks current notification authorization status.
+    ///
+    /// Loads persisted smart reminder preference and asynchronously queries
+    /// the system for notification permission status.
     init() {
         isSmartRemindersEnabled = UserDefaults.standard.bool(forKey: Self.smartRemindersKey)
         UNUserNotificationCenter.current().getNotificationSettings { settings in
@@ -25,6 +52,13 @@ class NotificationManager: ObservableObject {
         }
     }
 
+    /// Requests notification permission from the system.
+    ///
+    /// - Parameter completion: Called on main thread with `true` if permission granted.
+    ///
+    /// If the user has previously denied permission, this will not show a prompt;
+    /// the completion will be called with `false` and the app should direct
+    /// the user to Settings.
     func requestNotificationPermission(completion: @escaping (Bool) -> Void) {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, _ in
             DispatchQueue.main.async {
@@ -34,6 +68,12 @@ class NotificationManager: ObservableObject {
         }
     }
 
+    /// Schedules a daily repeating notification at the specified time.
+    ///
+    /// - Parameter time: The time of day to send the reminder (date component ignored).
+    ///
+    /// Replaces any existing daily reminder while preserving smart notifications.
+    /// Only schedules if `isReminderEnabled` is `true`.
     func scheduleNotification(at time: Date) {
         let center = UNUserNotificationCenter.current()
 
@@ -61,21 +101,36 @@ class NotificationManager: ObservableObject {
         }
     }
 
+    /// Removes all pending notifications and disables reminders.
+    ///
+    /// Clears both daily reminders and smart notifications.
     func disableNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         isReminderEnabled = false
     }
 
+    /// Persists the user's preferred reminder time to UserDefaults.
+    ///
+    /// - Parameter time: The time to save (only hour/minute components are used).
     func saveReminderTime(_ time: Date) {
         UserDefaults.standard.set(time, forKey: Self.reminderTimeKey)
     }
 
+    /// Retrieves the persisted reminder time, or current time if none saved.
+    ///
+    /// - Returns: The saved reminder time, or `Date()` as default.
     static func getReminderTime() -> Date {
         UserDefaults.standard.object(forKey: reminderTimeKey) as? Date ?? Date()
     }
 
     // MARK: - Smart Reminders
 
+    /// Enables or disables smart reminder notifications.
+    ///
+    /// - Parameter enabled: Whether smart reminders should be active.
+    ///
+    /// When disabled, removes all pending smart notifications (streak warnings,
+    /// milestones, weekly summaries) but preserves daily reminders.
     func setSmartRemindersEnabled(_ enabled: Bool) {
         isSmartRemindersEnabled = enabled
         UserDefaults.standard.set(enabled, forKey: Self.smartRemindersKey)
@@ -85,8 +140,18 @@ class NotificationManager: ObservableObject {
         }
     }
 
-    /// Updates smart notifications based on current weight entries
-    /// Call this after adding/editing entries
+    /// Updates smart notifications based on current weight data.
+    ///
+    /// Call this after adding or editing weight entries to refresh:
+    /// - Suggested optimal reminder time (based on logging patterns)
+    /// - Streak warning (if user hasn't logged recently)
+    /// - Milestone notification (if close to a weight milestone)
+    /// - Weekly summary (progress recap)
+    ///
+    /// - Parameters:
+    ///   - entries: All weight entries for analysis
+    ///   - goalWeight: User's target weight
+    ///   - unit: Current weight unit preference
     func updateSmartNotifications(entries: [WeightEntry], goalWeight: Double, unit: WeightUnit) {
         guard isReminderEnabled && isSmartRemindersEnabled else { return }
 
