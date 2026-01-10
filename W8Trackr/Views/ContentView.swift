@@ -29,7 +29,7 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
-            SummaryView(
+            DashboardView(
                 entries: entries,
                 completedMilestones: completedMilestones,
                 preferredWeightUnit: preferredWeightUnit,
@@ -37,7 +37,7 @@ struct ContentView: View {
                 showSmoothing: showSmoothing
             )
                 .tabItem {
-                    Label("Summary", systemImage: "chart.line.uptrend.xyaxis")
+                    Label("Dashboard", systemImage: "gauge.with.dots.needle.bottom.50percent")
                 }
             
             LogbookView(entries: entries, preferredWeightUnit: preferredWeightUnit, goalWeight: goalWeight)
