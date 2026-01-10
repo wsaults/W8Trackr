@@ -69,4 +69,37 @@ platform :ios do
   lane :submit do
     release(submit: true)
   end
+
+  # ──────────────────────────────────────────────────────────
+  # Screenshot Lanes
+  # ──────────────────────────────────────────────────────────
+
+  desc "Capture App Store screenshots using snapshot"
+  lane :screenshots do
+    capture_screenshots(
+      project: "W8Trackr.xcodeproj",
+      scheme: "W8TrackrUITests",
+      output_directory: "./fastlane/screenshots",
+      clear_previous_screenshots: true,
+      devices: [
+        "iPhone 17 Pro Max",
+        "iPhone 17",
+        "iPad Pro 13-inch (M5)"
+      ],
+      languages: ["en-US"]
+    )
+  end
+
+  desc "Add device frames to screenshots using frameit"
+  lane :frames do
+    frame_screenshots(
+      path: "./fastlane/screenshots"
+    )
+  end
+
+  desc "Capture screenshots and add device frames"
+  lane :screenshots_framed do
+    screenshots
+    frames
+  end
 end
