@@ -147,3 +147,18 @@ See [.claude/rules/swiftui.md](.claude/rules/swiftui.md) for:
 - **Forms**: Structure with `Section` + header/footer
 - **Alerts**: Use modern `.alert(title, isPresented:)` API
 - **Previews**: Use iOS 18 `#Preview(traits:)` with `PreviewModifier`
+
+## Active Technologies
+- Swift 5.9+ + HealthKit framework, SwiftUI, SwiftData (001-apple-health-sync)
+- SwiftData (existing WeightEntry model, extended with sync metadata) (001-apple-health-sync)
+- Swift 5.9+ + SwiftUI, SwiftData, UserNotifications (002-goal-notifications)
+- SwiftData for milestone achievements; @AppStorage for notification preferences (002-goal-notifications)
+- Swift 5.9+ + SwiftUI, SwiftData, UIKit (for UIActivityViewController), Core Graphics (for image generation) (003-social-sharing)
+- @AppStorage for sharing preferences; relies on MilestoneAchievement model from 002-goal-notifications (003-social-sharing)
+- Swift 5.9+ + WidgetKit, SwiftUI, SwiftData (004-ios-widget)
+- SwiftData via App Group shared container (004-ios-widget)
+- Swift 6 (upgrading from Swift 5.9+) + SwiftUI, SwiftData, Swift Charts, WidgetKit, HealthKit (005-ios26-swift6-upgrade)
+- SwiftData via ModelContainer (with App Group for widget) (005-ios26-swift6-upgrade)
+
+## Recent Changes
+- 001-apple-health-sync: Added Swift 5.9+ + HealthKit framework, SwiftUI, SwiftData
