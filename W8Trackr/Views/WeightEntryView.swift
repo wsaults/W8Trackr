@@ -324,14 +324,60 @@ struct WeightEntryView: View {
     }
 }
 
-#Preview("Add Mode") {
-    WeightEntryView(entries: WeightEntry.sortedSampleData, weightUnit: .lb)
+// MARK: - Previews
+
+#if DEBUG
+@available(iOS 18, macOS 15, *)
+#Preview("Add Mode (lb)", traits: .modifier(EntriesPreview())) {
+    WeightEntryView(
+        entries: WeightEntry.sortedSampleData,
+        weightUnit: .lb
+    )
 }
 
-#Preview("Edit Mode") {
+@available(iOS 18, macOS 15, *)
+#Preview("Add Mode (kg)", traits: .modifier(EntriesPreview())) {
+    WeightEntryView(
+        entries: WeightEntry.sortedSampleData,
+        weightUnit: .kg
+    )
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Edit Mode", traits: .modifier(EntriesPreview())) {
     WeightEntryView(
         entries: WeightEntry.sortedSampleData,
         weightUnit: .lb,
-        existingEntry: WeightEntry(weight: 175.5, date: .now, note: "Morning weigh-in", bodyFatPercentage: 18.5)
+        existingEntry: WeightEntry(
+            weight: 175.5,
+            date: .now,
+            note: "Morning weigh-in",
+            bodyFatPercentage: 18.5
+        )
     )
 }
+
+@available(iOS 18, macOS 15, *)
+#Preview("Min Boundary (lb)", traits: .modifier(EmptyEntriesPreview())) {
+    WeightEntryView(
+        entries: [WeightEntry(weight: WeightUnit.lb.minWeight + 5)],
+        weightUnit: .lb
+    )
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Max Boundary (lb)", traits: .modifier(EmptyEntriesPreview())) {
+    WeightEntryView(
+        entries: [WeightEntry(weight: WeightUnit.lb.maxWeight - 50)],
+        weightUnit: .lb
+    )
+}
+
+@available(iOS 18, macOS 15, *)
+#Preview("Empty Entries", traits: .modifier(EmptyEntriesPreview())) {
+    WeightEntryView(
+        entries: [],
+        weightUnit: .lb
+    )
+}
+#endif
