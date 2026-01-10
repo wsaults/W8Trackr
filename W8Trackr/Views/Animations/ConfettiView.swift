@@ -149,6 +149,9 @@ struct EmojiParticle: View {
     let delay: Double
     let duration: Double
 
+    /// Emoji size scales with Dynamic Type
+    @ScaledMetric(relativeTo: .body) private var emojiSize: CGFloat = 30
+
     @State private var offsetY: CGFloat = -50
     @State private var opacity: Double = 1
     @State private var scale: CGFloat = 0.5
@@ -156,7 +159,7 @@ struct EmojiParticle: View {
 
     var body: some View {
         Text(emoji)
-            .font(.system(size: 30))
+            .font(.system(size: emojiSize))
             .scaleEffect(scale)
             .rotationEffect(.degrees(rotation))
             .offset(x: startX, y: offsetY)

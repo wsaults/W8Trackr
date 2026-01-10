@@ -24,6 +24,9 @@ struct HeroCardView: View {
     let bodyFatPercentage: Decimal?
     let trendDirection: TrendDirection
 
+    /// Hero weight display scales with Dynamic Type
+    @ScaledMetric(relativeTo: .largeTitle) private var heroFontSize: CGFloat = 56
+
     enum TrendDirection {
         case up
         case down
@@ -92,7 +95,7 @@ struct HeroCardView: View {
             // Main weight display
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text(formattedWeight)
-                    .font(.system(size: 56, weight: .bold, design: .rounded))
+                    .font(.system(size: heroFontSize, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
 
                 Text(weightUnit.rawValue)

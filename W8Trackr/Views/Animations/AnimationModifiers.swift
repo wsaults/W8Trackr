@@ -77,6 +77,9 @@ struct BadgeUnlockView: View {
     let color: Color
     let onDismiss: () -> Void
 
+    /// Badge icon size scales with Dynamic Type
+    @ScaledMetric(relativeTo: .title) private var badgeIconSize: CGFloat = 44
+
     @State private var showBadge = false
     @State private var showText = false
     @State private var showButton = false
@@ -108,7 +111,7 @@ struct BadgeUnlockView: View {
 
                     // Icon
                     Image(systemName: icon)
-                        .font(.system(size: 44))
+                        .font(.system(size: badgeIconSize))
                         .foregroundStyle(.white)
                         .rotationEffect(.degrees(rotation))
                 }
@@ -189,6 +192,13 @@ struct StreakCelebrationView: View {
     let streakCount: Int
     let onDismiss: () -> Void
 
+    /// Flame glow effect size scales with Dynamic Type
+    @ScaledMetric(relativeTo: .largeTitle) private var flameGlowSize: CGFloat = 80
+    /// Main flame icon size scales with Dynamic Type
+    @ScaledMetric(relativeTo: .largeTitle) private var flameIconSize: CGFloat = 70
+    /// Streak number font size scales with Dynamic Type
+    @ScaledMetric(relativeTo: .largeTitle) private var streakNumberSize: CGFloat = 60
+
     @State private var showFlame = false
     @State private var showNumber = false
     @State private var showText = false
@@ -207,14 +217,14 @@ struct StreakCelebrationView: View {
                 ZStack {
                     // Glow effect
                     Image(systemName: "flame.fill")
-                        .font(.system(size: 80))
+                        .font(.system(size: flameGlowSize))
                         .foregroundStyle(AppColors.Fallback.warning.opacity(0.5))
                         .blur(radius: 20)
                         .scaleEffect(showFlame ? 1.3 : 0.5)
 
                     // Main flame
                     Image(systemName: "flame.fill")
-                        .font(.system(size: 70))
+                        .font(.system(size: flameIconSize))
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [.red, .orange, .yellow],
@@ -229,7 +239,7 @@ struct StreakCelebrationView: View {
                 // Streak number
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     Text(Int(numberValue), format: .number)
-                        .font(.system(size: 60, weight: .bold, design: .rounded))
+                        .font(.system(size: streakNumberSize, weight: .bold, design: .rounded))
                         .contentTransition(.numericText(value: numberValue))
 
                     Text("days")
