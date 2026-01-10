@@ -1,24 +1,20 @@
 <!--
   SYNC IMPACT REPORT
   ==================
-  Version Change: 0.0.0 → 1.0.0 (MAJOR - initial ratification)
+  Version Change: 1.0.0 → 1.1.0 (MINOR - added UI test prohibition)
 
-  Added Principles:
-  - I. Simplicity-First Architecture
-  - II. Test-Driven Development (NON-NEGOTIABLE)
-  - III. User-Centered Quality
+  Modified Principles:
+  - II. Test-Driven Development: Added "No UI tests" rule
 
-  Added Sections:
-  - Technical Standards (iOS/Swift/SwiftUI constraints)
-  - Development Workflow (TDD cycle, code review, quality gates)
-  - Governance (amendment procedures, versioning, compliance)
+  Added Sections: None
+  Removed Sections: None
 
   Templates Requiring Updates:
-  - .specify/templates/plan-template.md: ✅ No changes needed (Constitution Check section already exists)
-  - .specify/templates/spec-template.md: ✅ No changes needed (user stories align with User-Centered principle)
-  - .specify/templates/tasks-template.md: ✅ No changes needed (test-first guidance already present)
-  - .specify/templates/checklist-template.md: ✅ No changes needed (generic structure)
-  - .specify/templates/agent-file-template.md: ✅ No changes needed (auto-generated content)
+  - .specify/templates/plan-template.md: ✅ No changes needed
+  - .specify/templates/spec-template.md: ✅ No changes needed
+  - .specify/templates/tasks-template.md: ✅ No changes needed
+  - .specify/templates/checklist-template.md: ✅ No changes needed
+  - .specify/templates/agent-file-template.md: ✅ No changes needed
 
   Follow-up TODOs: None
 -->
@@ -48,8 +44,9 @@ All feature implementation MUST follow the TDD cycle. This principle cannot be w
 - **Unit tests required**: All business logic (weight conversions, trend calculations, date handling) MUST have unit test coverage
 - **Integration tests for user flows**: Critical user journeys MUST have integration test validation
 - **No implementation without failing tests**: PRs that add functionality without corresponding tests MUST be rejected
+- **No UI tests**: UI tests (XCUITest) are prohibited. Unit and integration tests provide sufficient coverage; manual device testing validates UI.
 
-**Rationale**: Weight tracking is health-related data. Users trust the app to correctly store, convert, and display their weight. Bugs in weight conversion or trend calculation directly harm user trust and potentially health decisions.
+**Rationale**: Weight tracking is health-related data. Users trust the app to correctly store, convert, and display their weight. Bugs in weight conversion or trend calculation directly harm user trust and potentially health decisions. UI tests are excluded because they are brittle, slow, and high-maintenance for a focused app where manual testing suffices.
 
 ### III. User-Centered Quality
 
@@ -78,6 +75,7 @@ All features MUST prioritize user experience and code quality in equal measure.
 - Combine for UI binding (use `@Published` in `ObservableObject` only for services)
 - Manual `NSPredicate` (use `#Predicate` macro)
 - Force unwrapping without guard (except `fatalError` for programmer errors)
+- UI tests (XCUITest)
 
 ## Development Workflow
 
@@ -125,4 +123,4 @@ All features MUST prioritize user experience and code quality in equal measure.
 - Violations MUST be either fixed or justified in a Complexity Tracking table
 - The Complexity Tracking table is the ONLY mechanism for waiving constitution rules
 
-**Version**: 1.0.0 | **Ratified**: 2025-01-09 | **Last Amended**: 2025-01-09
+**Version**: 1.1.0 | **Ratified**: 2025-01-09 | **Last Amended**: 2025-01-09

@@ -38,3 +38,12 @@ bd sync               # Sync with git
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
 
+
+## Active Technologies
+- Swift 5.9+ + SwiftUI, SwiftData, UserNotifications (002-goal-notifications)
+- SwiftData for milestone achievements; @AppStorage for notification preferences (002-goal-notifications)
+- Swift 5.9+ + SwiftUI, SwiftData, UIKit (for UIActivityViewController), Core Graphics (for image generation) (003-social-sharing)
+- @AppStorage for sharing preferences; relies on MilestoneAchievement model from 002-goal-notifications (003-social-sharing)
+
+## Recent Changes
+- 002-goal-notifications: Added Swift 5.9+ + SwiftUI, SwiftData, UserNotifications
