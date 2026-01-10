@@ -39,4 +39,34 @@ platform :ios do
       skip_waiting_for_build_processing: true
     )
   end
+
+  desc "Submit to App Store (metadata and screenshots only)"
+  desc "Assumes binary already uploaded via beta lane"
+  lane :release do |options|
+    submit_for_review = options[:submit] || false
+
+    deliver(
+      skip_binary_upload: true,
+      skip_screenshots: false,
+      skip_metadata: false,
+      force: true,
+      submit_for_review: submit_for_review,
+      automatic_release: false,
+      phased_release: true,
+      submission_information: {
+        add_id_info_uses_idfa: false
+      }
+    )
+
+    if submit_for_review
+      UI.success("App submitted for review with manual release enabled")
+    else
+      UI.success("Metadata and screenshots uploaded. Run with submit:true to submit for review.")
+    end
+  end
+
+  desc "Submit to App Store and request review"
+  lane :submit do
+    release(submit: true)
+  end
 end
