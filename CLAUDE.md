@@ -93,3 +93,11 @@ brew install swiftlint
 - Relaxed line length (150 warning, 200 error) for SwiftUI modifier chains
 - Disabled rules that conflict with SwiftUI patterns (nesting, function_body_length)
 - Custom rule to warn about print statements in production code
+
+## Additional Guidelines
+
+### SwiftUI Conventions
+See [.claude/rules/swiftui.md](.claude/rules/swiftui.md) for:
+- Preview patterns (iOS 18+ PreviewModifier)
+- Available preview modifiers
+- Creating new preview modifiers
