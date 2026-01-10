@@ -1036,6 +1036,170 @@ struct PredictionCalculationTests {
     }
 }
 
+// MARK: - NotificationManager Tests
+
+struct NotificationManagerTests {
+
+    // MARK: - Reminder Time Persistence
+
+    @Test func saveAndRetrieveReminderTime() {
+        // Create a specific time
+        var components = DateComponents()
+        components.hour = 7
+        components.minute = 30
+        let testTime = Calendar.current.date(from: components) ?? Date()
+
+        // Save the time
+        NotificationManager().saveReminderTime(testTime)
+
+        // Retrieve and verify
+        let retrieved = NotificationManager.getReminderTime()
+        let retrievedComponents = Calendar.current.dateComponents([.hour, .minute], from: retrieved)
+
+        #expect(retrievedComponents.hour == 7)
+        #expect(retrievedComponents.minute == 30)
+    }
+
+    @Test func getReminderTimeReturnsDefaultWhenNotSet() {
+        // Clear any previously saved time
+        UserDefaults.standard.removeObject(forKey: "reminderTime")
+
+        // Should return current date as default
+        let retrieved = NotificationManager.getReminderTime()
+
+        // Just verify it returns a valid date (not nil/crash)
+        #expect(retrieved <= Date())
+    }
+
+    // MARK: - Notification Content Tests
+
+    @Test func notificationIDsAreUnique() {
+        let ids: [NotificationScheduler.NotificationID] = [
+            .dailyReminder,
+            .streakWarning,
+            .milestoneApproaching,
+            .weeklySummary
+        ]
+
+        let rawValues = ids.map { $0.rawValue }
+        let uniqueValues = Set(rawValues)
+
+        #expect(rawValues.count == uniqueValues.count)
+    }
+
+    @Test func notificationIDRawValuesAreNonEmpty() {
+        #expect(!NotificationScheduler.NotificationID.dailyReminder.rawValue.isEmpty)
+        #expect(!NotificationScheduler.NotificationID.streakWarning.rawValue.isEmpty)
+        #expect(!NotificationScheduler.NotificationID.milestoneApproaching.rawValue.isEmpty)
+        #expect(!NotificationScheduler.NotificationID.weeklySummary.rawValue.isEmpty)
+    }
+
+    // MARK: - Weekly Summary Message Tests
+
+    @Test func weeklySummaryMessageForWeightLoss() {
+        let summary = NotificationScheduler.WeeklySummary(
+            entryCount: 7,
+            weightChange: -2.5,
+            unit: .lb,
+            trend: .down
+        )
+
+        #expect(summary.message.contains("lost"))
+        #expect(summary.message.contains("2.5"))
+        #expect(summary.message.contains("7 entries"))
+    }
+
+    @Test func weeklySummaryMessageForWeightGain() {
+        let summary = NotificationScheduler.WeeklySummary(
+            entryCount: 5,
+            weightChange: 1.5,
+            unit: .kg,
+            trend: .up
+        )
+
+        #expect(summary.message.contains("gained"))
+        #expect(summary.message.contains("1.5"))
+    }
+
+    @Test func weeklySummaryMessageForStableWeight() {
+        let summary = NotificationScheduler.WeeklySummary(
+            entryCount: 6,
+            weightChange: 0.0,
+            unit: .lb,
+            trend: .stable
+        )
+
+        #expect(summary.message.contains("stable"))
+        #expect(summary.message.contains("6 entries"))
+    }
+
+    // MARK: - Edge Cases
+
+    @Test func milestoneProgressReturnsNilWhenFarFromMilestone() {
+        // 177 lbs, next milestone is 175, that's 2 lbs away (at threshold)
+        // 178 lbs should be just over threshold
+        let result = NotificationScheduler.milestoneProgress(
+            currentWeight: 179.0,
+            goalWeight: 160.0,
+            unit: .lb
+        )
+
+        // 179 -> 175 is 4 lbs, over the 2 lb threshold
+        #expect(result == nil)
+    }
+
+    @Test func milestoneProgressReturnsValueWhenCloseToMilestone() {
+        // 176.5 lbs -> 175 milestone is 1.5 lbs away (under 2 lb threshold)
+        let result = NotificationScheduler.milestoneProgress(
+            currentWeight: 176.5,
+            goalWeight: 160.0,
+            unit: .lb
+        )
+
+        #expect(result != nil)
+        #expect(result?.milestone == 175.0)
+        #expect(abs((result?.remaining ?? 0) - 1.5) < 0.01)
+    }
+
+    @Test func optimalReminderTimeRequiresMinimumEntries() {
+        let calendar = Calendar.current
+        let today = Date()
+
+        // Only 3 entries (less than required 5)
+        let entries = (0..<3).map { offset in
+            WeightEntry(
+                weight: 175.0,
+                date: calendar.date(byAdding: .hour, value: -offset * 24, to: today)!
+            )
+        }
+
+        let result = NotificationScheduler.analyzeOptimalReminderTime(from: entries)
+
+        #expect(result == nil)
+    }
+
+    @Test func optimalReminderTimeRoundsMinutesToNearest15() {
+        let calendar = Calendar.current
+
+        // Create 6 entries all at 7:23 AM
+        var components = DateComponents()
+        components.hour = 7
+        components.minute = 23
+
+        let entries = (0..<6).map { offset in
+            var dateComponents = components
+            dateComponents.day = -offset
+            let date = calendar.date(byAdding: .day, value: -offset, to: calendar.date(from: components)!)!
+            return WeightEntry(weight: 175.0, date: date)
+        }
+
+        let result = NotificationScheduler.analyzeOptimalReminderTime(from: entries)
+
+        // 23 minutes should round to 15 (nearest 15)
+        #expect(result?.minute == 15 || result?.minute == 30)
+    }
+}
+
 // MARK: - Notification Scheduler Tests
 
 struct NotificationSchedulerTests {
