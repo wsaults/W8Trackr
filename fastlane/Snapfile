@@ -7,11 +7,14 @@
 project "W8Trackr.xcodeproj"
 scheme "W8TrackrUITests"
 
-# Device types for App Store screenshots
+# Device types for App Store screenshots (required sizes)
+# 6.7" display - iPhone 15 Pro Max (required)
+# 6.5" display - iPhone 14 Plus (required for older device support)
+# 12.9" display - iPad Pro 12.9" 6th gen (required for iPad)
 devices([
-  "iPhone 17 Pro Max",
-  "iPhone 17",
-  "iPad Pro 13-inch (M5)"
+  "iPhone 15 Pro Max",
+  "iPhone 14 Plus",
+  "iPad Pro 12.9-inch (6th generation)"
 ])
 
 # Languages to capture (App Store requires at least en-US)
