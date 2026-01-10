@@ -413,28 +413,4 @@ struct SettingsView: View {
         showSmoothing: $showSmoothing
     )
 }
-
-@available(iOS 18, macOS 15, *)
-struct SettingsViewPreview: PreviewModifier {
-    var withSampleData: Bool = false
-
-    static func makeSharedContext() async throws -> ModelContainer {
-        try ModelContainer(
-            for: WeightEntry.self, CompletedMilestone.self,
-            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-        )
-    }
-
-    func body(content: Content, context: ModelContainer) -> some View {
-        if withSampleData {
-            let _ = {
-                WeightEntry.shortSampleData.forEach { entry in
-                    context.mainContext.insert(entry)
-                }
-                try? context.mainContext.save()
-            }()
-        }
-        return content.modelContainer(context)
-    }
-}
 #endif

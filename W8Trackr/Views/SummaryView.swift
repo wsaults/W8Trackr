@@ -166,10 +166,11 @@ struct SummaryView: View {
     }
 }
 
+// MARK: - Previews
+
+#if DEBUG
 @available(iOS 18, macOS 15, *)
 #Preview(traits: .modifier(EntriesPreview())) {
-    @Previewable @Query var entries: [WeightEntry]
-
     SummaryView(
         entries: WeightEntry.shortSampleData,
         completedMilestones: [],
@@ -179,20 +180,14 @@ struct SummaryView: View {
     )
 }
 
-struct EntriesPreview: PreviewModifier {
-    static func makeSharedContext() async throws -> ModelContainer {
-        let container = try ModelContainer(
-            for: WeightEntry.self, CompletedMilestone.self,
-            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-        )
-        let examples = WeightEntry.sampleData
-        examples.forEach { example in
-            container.mainContext.insert(example)
-        }
-        return container
-    }
-
-    func body(content: Content, context: ModelContainer) -> some View {
-        content.modelContainer(context)
-    }
+@available(iOS 18, macOS 15, *)
+#Preview("Empty", traits: .modifier(EmptyEntriesPreview())) {
+    SummaryView(
+        entries: [],
+        completedMilestones: [],
+        preferredWeightUnit: .lb,
+        goalWeight: 160,
+        showSmoothing: true
+    )
 }
+#endif

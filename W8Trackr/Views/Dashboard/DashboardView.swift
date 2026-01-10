@@ -251,7 +251,7 @@ struct DashboardView: View {
 }
 
 @available(iOS 18, macOS 15, *)
-#Preview("Empty", traits: .modifier(DashboardPreview())) {
+#Preview("Empty", traits: .modifier(EmptyEntriesPreview())) {
     DashboardView(
         entries: [],
         completedMilestones: [],
@@ -259,19 +259,5 @@ struct DashboardView: View {
         goalWeight: 160,
         showSmoothing: true
     )
-}
-
-@available(iOS 18, macOS 15, *)
-struct DashboardPreview: PreviewModifier {
-    static func makeSharedContext() async throws -> ModelContainer {
-        try ModelContainer(
-            for: WeightEntry.self, CompletedMilestone.self,
-            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-        )
-    }
-
-    func body(content: Content, context: ModelContainer) -> some View {
-        content.modelContainer(context)
-    }
 }
 #endif

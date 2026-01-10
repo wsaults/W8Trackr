@@ -86,29 +86,4 @@ struct ContentView: View {
 #Preview("Empty", traits: .modifier(ContentViewPreview(isEmpty: true))) {
     ContentView()
 }
-
-@available(iOS 18, macOS 15, *)
-struct ContentViewPreview: PreviewModifier {
-    var isEmpty: Bool = false
-
-    static func makeSharedContext() async throws -> ModelContainer {
-        try ModelContainer(
-            for: WeightEntry.self, CompletedMilestone.self,
-            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-        )
-    }
-
-    func body(content: Content, context: ModelContainer) -> some View {
-        if !isEmpty {
-            // Populate with sample data
-            let _ = {
-                WeightEntry.shortSampleData.forEach { entry in
-                    context.mainContext.insert(entry)
-                }
-                try? context.mainContext.save()
-            }()
-        }
-        return content.modelContainer(context)
-    }
-}
 #endif
