@@ -24,6 +24,10 @@ bd.db
 # Must not be committed as paths would be wrong in other clones
 redirect
 
+# Routes file (contains relative paths for cross-repo bead routing)
+# Must not be committed as paths would be wrong in other clones
+routes.jsonl
+
 # Merge artifacts (temporary files from 3-way merge)
 beads.base.jsonl
 beads.base.meta.json
