@@ -151,6 +151,8 @@ brew install swiftlint
 - @AppStorage for sharing preferences; relies on MilestoneAchievement model from 002-goal-notifications (003-social-sharing)
 - Swift 5.9+ + WidgetKit, SwiftUI, SwiftData (004-ios-widget)
 - SwiftData via App Group shared container (004-ios-widget)
+- Swift 6 (upgrading from Swift 5.9+) + SwiftUI, SwiftData, Swift Charts, WidgetKit, HealthKi (005-ios26-swift6-upgrade)
+- SwiftData via ModelContainer (with App Group for widget) (005-ios26-swift6-upgrade)
 
 ## Recent Changes
 - 001-apple-health-sync: Added Swift 5.9+ + HealthKit framework, SwiftUI, SwiftData
