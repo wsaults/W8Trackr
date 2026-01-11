@@ -185,6 +185,12 @@ final class HealthSyncManager: ObservableObject {
             syncStatus = .success
             lastHealthSyncDate = Date()
         } catch {
+            // Graceful degradation: if auth denied, silently mark for later sync
+            if isAuthorizationDeniedError(error) {
+                entry.pendingHealthSync = true
+                syncStatus = .idle
+                return
+            }
             syncStatus = .failed(error.localizedDescription)
             throw error
         }
@@ -229,6 +235,12 @@ final class HealthSyncManager: ObservableObject {
             syncStatus = .success
             lastHealthSyncDate = Date()
         } catch {
+            // Graceful degradation: if auth denied, silently mark for later sync
+            if isAuthorizationDeniedError(error) {
+                entry.pendingHealthSync = true
+                syncStatus = .idle
+                return
+            }
             syncStatus = .failed(error.localizedDescription)
             throw error
         }
@@ -262,12 +274,29 @@ final class HealthSyncManager: ObservableObject {
             syncStatus = .success
             lastHealthSyncDate = Date()
         } catch {
+            // Graceful degradation: if auth denied, silently clear UUID
+            // The HealthKit sample may remain orphaned, but app continues
+            if isAuthorizationDeniedError(error) {
+                entry.healthKitUUID = nil
+                syncStatus = .idle
+                return
+            }
             syncStatus = .failed(error.localizedDescription)
             throw error
         }
     }
 
     // MARK: - Private Helpers
+
+    /// Checks if an error indicates HealthKit authorization was denied.
+    ///
+    /// Used for graceful degradation: when auth is denied, operations silently
+    /// succeed from the app's perspective while marking entries for later sync.
+    private func isAuthorizationDeniedError(_ error: Error) -> Bool {
+        let nsError = error as NSError
+        return nsError.domain == HKErrorDomain &&
+               nsError.code == HKError.errorAuthorizationDenied.rawValue
+    }
 
     /// Creates an HKQuantitySample from a WeightEntry.
     private func createWeightSample(from entry: WeightEntry, type: HKQuantityType) -> HKQuantitySample {
