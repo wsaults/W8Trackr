@@ -12,9 +12,14 @@ import SwiftUI
 struct W8TrackrApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
+    /// Skip onboarding during UI tests to allow screenshot automation
+    private var isUITesting: Bool {
+        ProcessInfo.processInfo.arguments.contains("-ui_testing")
+    }
+
     var body: some Scene {
         WindowGroup {
-            if hasCompletedOnboarding {
+            if hasCompletedOnboarding || isUITesting {
                 ContentView()
             } else {
                 OnboardingView {
