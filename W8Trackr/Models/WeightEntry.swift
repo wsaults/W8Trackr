@@ -163,6 +163,45 @@ final class WeightEntry {
     /// Timestamp of last edit, `nil` if never modified after creation.
     var modifiedDate: Date?
 
+    // MARK: - HealthKit Sync Fields
+
+    /// UUID of the corresponding HealthKit sample, `nil` if not synced to Health.
+    ///
+    /// This is stored as a String because SwiftData doesn't directly support UUID.
+    /// Used to correlate local entries with HealthKit samples for updates and deletions.
+    var healthKitUUID: String?
+
+    /// The source app or device that created this entry.
+    ///
+    /// Defaults to "W8Trackr" for entries created in this app.
+    /// Set to the external source name (e.g., "Withings Scale") for imported entries.
+    var source: String = "W8Trackr"
+
+    /// Version number for sync conflict resolution.
+    ///
+    /// Incremented each time the entry is modified. Used with HKMetadataKeySyncVersion
+    /// to resolve conflicts when the same entry exists in both W8Trackr and HealthKit.
+    /// Higher version wins during merge.
+    var syncVersion: Int = 1
+
+    /// Whether this entry has changes pending sync to HealthKit.
+    ///
+    /// Set to `true` when an entry is created or modified and Health sync is enabled.
+    /// Cleared to `false` after successful sync to HealthKit.
+    var pendingHealthSync: Bool = true
+
+    // MARK: - Computed Properties for Sync
+
+    /// Returns `true` if this entry was imported from an external source (not W8Trackr).
+    var isImported: Bool {
+        source != "W8Trackr"
+    }
+
+    /// Returns `true` if this entry has pending changes to sync to HealthKit.
+    var needsSync: Bool {
+        pendingHealthSync
+    }
+
     /// Creates a new weight entry.
     /// - Parameters:
     ///   - weight: The numeric weight value
