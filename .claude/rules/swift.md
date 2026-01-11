@@ -1,101 +1,36 @@
-# Swift Language Patterns
+# Swift Rules
 
-## File Headers
+## Platform & Version Requirements
+- Target iOS 26.0+ and Swift 6.2+
+- Use modern Swift concurrency exclusively
 
-Use standard Xcode header format:
-```swift
-//
-//  FileName.swift
-//  W8Trackr
-//
-//  Created by Author on M/D/YY.
-//
-```
+## Concurrency
+- Mark all `@Observable` classes with `@MainActor`
+- Enforce strict Swift concurrency throughout the codebase
+- Never use Grand Central Dispatch patterns like `DispatchQueue.main.async()`
+- Use `async`/`await` for all asynchronous operations
 
-## Enums
+## Error Handling & Safety
+- No force unwraps (`!`) unless the situation is unrecoverable
+- No force `try` unless the failure is unrecoverable
+- Handle errors gracefully with proper `do`/`catch` blocks
 
-Prefer enums for type-safe constants and domain values:
+## String Methods
+- Use `replacing("old", with: "new")` instead of `replacingOccurrences(of:with:)`
+- Use `localizedStandardContains()` for text filtering instead of `contains()`
+- Prefer Swift-native string methods over Foundation equivalents
 
-```swift
-// Good: Enum with computed properties
-enum WeightUnit: String, CaseIterable {
-    case lb, kg
+## Number Formatting
+- Use `Text(value, format: .number.precision(.fractionLength(2)))` instead of C-style formatting
+- Leverage Swift's built-in formatters
 
-    var defaultWeight: Double {
-        switch self {
-        case .lb: return 180.0
-        case .kg: return 80.0
-        }
-    }
-}
-```
+## Foundation APIs
+- Use `URL.documentsDirectory` for the app's documents folder
+- Use `appending(path:)` to construct URL paths
+- Prefer Swift-native alternatives to Foundation methods where available
 
-- Use `CaseIterable` when iterating over all cases (pickers, lists)
-- Use `String` raw values when persisting or displaying
-- Add computed properties for derived values
-
-## Extensions
-
-Use extensions to add functionality to existing types:
-
-```swift
-extension Double {
-    func weightValue(from: WeightUnit, to unit: WeightUnit) -> Double {
-        // Conversion logic
-    }
-}
-```
-
-Keep extensions in the same file as related domain logic.
-
-## Optionals
-
-- Use `guard let` for early returns
-- Prefer `if let` for conditional unwrapping in local scope
-- Use `??` for sensible defaults: `WeightUnit(rawValue: value) ?? .lb`
-
-## MARK Comments
-
-Use `// MARK: -` to organize code sections:
-
-```swift
-// MARK: - Sample Data
-// MARK: - Private Methods
-// MARK: - Computed Properties
-```
-
-## Naming Conventions
-
-- Types: `PascalCase` (WeightEntry, NotificationManager)
-- Properties/Methods: `camelCase` (weightValue, getReminderTime)
-- Constants: `camelCase` in context, or `SCREAMING_SNAKE` for global constants
-- Booleans: Prefix with `is`, `has`, `should` (isReminderEnabled)
-
-## Type Inference
-
-Let Swift infer types when obvious:
-```swift
-// Good
-let entries = [WeightEntry]()
-var showAlert = false
-
-// Avoid unnecessary type annotations
-let entries: [WeightEntry] = [WeightEntry]()  // Redundant
-```
-
-## Access Control
-
-- Default to internal (implicit)
-- Use `private` for implementation details
-- Use `private(set)` for read-only external access
-
-## Error Handling
-
-Use do-catch for recoverable errors:
-```swift
-do {
-    try modelContext.save()
-} catch {
-    print("Failed to save: \(error)")
-}
-```
+## Project Organization
+- Maintain feature-based folder structure
+- Place each type (struct, class, enum) in its own Swift file
+- Write unit tests for core logic; UI tests only when necessary
+- Exclude secrets and API keys from repositories
