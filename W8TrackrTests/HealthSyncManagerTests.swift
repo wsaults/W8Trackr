@@ -194,7 +194,7 @@ struct HealthSyncManagerSaveTests {
         let manager = HealthSyncManager(healthStore: mockStore)
         let entry = WeightEntry(weight: 175.0)
 
-        try await manager.saveWeightToHealth(entry)
+        try await manager.saveWeightToHealth(entry: entry)
 
         #expect(mockStore.saveCalled == true)
     }
@@ -205,7 +205,7 @@ struct HealthSyncManagerSaveTests {
         let entry = WeightEntry(weight: 175.0)
         #expect(entry.healthKitUUID == nil)
 
-        try await manager.saveWeightToHealth(entry)
+        try await manager.saveWeightToHealth(entry: entry)
 
         #expect(entry.healthKitUUID != nil)
     }
@@ -216,7 +216,7 @@ struct HealthSyncManagerSaveTests {
         let entry = WeightEntry(weight: 175.0)
         entry.pendingHealthSync = true
 
-        try await manager.saveWeightToHealth(entry)
+        try await manager.saveWeightToHealth(entry: entry)
 
         #expect(entry.pendingHealthSync == false)
     }
@@ -229,7 +229,7 @@ struct HealthSyncManagerSaveTests {
         let entry = WeightEntry(weight: 175.0)
 
         await #expect(throws: Error.self) {
-            try await manager.saveWeightToHealth(entry)
+            try await manager.saveWeightToHealth(entry: entry)
         }
     }
 
@@ -240,7 +240,7 @@ struct HealthSyncManagerSaveTests {
         let existingUUID = "existing-uuid-12345"
         entry.healthKitUUID = existingUUID
 
-        try await manager.saveWeightToHealth(entry)
+        try await manager.saveWeightToHealth(entry: entry)
 
         // UUID should be updated to the new sample's UUID, not preserved
         // (this is a re-sync scenario)
@@ -259,7 +259,7 @@ struct HealthSyncManagerUpdateTests {
         let entry = WeightEntry(weight: 175.0)
         let originalVersion = entry.syncVersion
 
-        try await manager.updateWeightInHealth(entry)
+        try await manager.updateWeightInHealth(entry: entry)
 
         #expect(entry.syncVersion == originalVersion + 1)
     }
@@ -269,7 +269,7 @@ struct HealthSyncManagerUpdateTests {
         let manager = HealthSyncManager(healthStore: mockStore)
         let entry = WeightEntry(weight: 175.0)
 
-        try await manager.updateWeightInHealth(entry)
+        try await manager.updateWeightInHealth(entry: entry)
 
         #expect(mockStore.saveCalled == true)
     }
@@ -280,7 +280,7 @@ struct HealthSyncManagerUpdateTests {
         let entry = WeightEntry(weight: 175.0)
         entry.pendingHealthSync = true
 
-        try await manager.updateWeightInHealth(entry)
+        try await manager.updateWeightInHealth(entry: entry)
 
         #expect(entry.pendingHealthSync == false)
     }
@@ -294,7 +294,7 @@ struct HealthSyncManagerUpdateTests {
         entry.pendingHealthSync = false
 
         // After successful update, pending should be cleared
-        try await manager.updateWeightInHealth(entry)
+        try await manager.updateWeightInHealth(entry: entry)
         #expect(entry.pendingHealthSync == false)
     }
 }
@@ -310,7 +310,7 @@ struct HealthSyncManagerDeleteTests {
         let entry = WeightEntry(weight: 175.0)
         entry.healthKitUUID = nil
 
-        try await manager.deleteWeightFromHealth(entry)
+        try await manager.deleteWeightFromHealth(entry: entry)
 
         // Should not attempt to delete if no UUID
         #expect(mockStore.deleteCalled == false)
@@ -323,7 +323,7 @@ struct HealthSyncManagerDeleteTests {
         let entry = WeightEntry(weight: 175.0)
         entry.healthKitUUID = "not-a-valid-uuid"
 
-        try await manager.deleteWeightFromHealth(entry)
+        try await manager.deleteWeightFromHealth(entry: entry)
 
         // Should not attempt to delete if UUID is invalid
         #expect(mockStore.deleteCalled == false)
@@ -366,7 +366,7 @@ struct HealthSyncManagerGracefulDegradationTests {
 
         // Save should throw when auth denied
         await #expect(throws: Error.self) {
-            try await manager.saveWeightToHealth(entry)
+            try await manager.saveWeightToHealth(entry: entry)
         }
 
         // But manager is still functional
@@ -381,7 +381,7 @@ struct HealthSyncManagerGracefulDegradationTests {
         entry.pendingHealthSync = true
 
         do {
-            try await manager.saveWeightToHealth(entry)
+            try await manager.saveWeightToHealth(entry: entry)
         } catch {
             // Expected to fail
         }

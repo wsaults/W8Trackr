@@ -23,7 +23,9 @@ final class HealthSyncManager: ObservableObject {
 
     // MARK: - Shared Instance
 
-    /// Shared singleton for use across the app.
+    /// Shared instance for convenient access from views.
+    ///
+    /// Uses the real HKHealthStore. For testing, create instances with mock stores.
     static let shared = HealthSyncManager()
 
     // MARK: - Static Properties
@@ -153,123 +155,172 @@ final class HealthSyncManager: ObservableObject {
         return success
     }
 
-    // MARK: - Sync Operations
+    // MARK: - Export Operations
 
-    /// Saves a weight entry to HealthKit with sync metadata.
+    /// Saves a weight entry to HealthKit.
     ///
-    /// Creates an HKQuantitySample for the weight and saves it to HealthKit.
-    /// On success, updates the entry's `healthKitUUID` and clears `pendingHealthSync`.
+    /// Creates a new HKQuantitySample for the weight and stores the resulting UUID
+    /// in the entry's `healthKitUUID` field for future updates/deletions.
     ///
-    /// - Parameter entry: The weight entry to sync
-    /// - Throws: HealthKit errors if save fails or authorization denied
-    func saveWeightToHealth(_ entry: WeightEntry) async throws {
-        guard Self.isHealthDataAvailable,
+    /// - Parameter entry: The weight entry to save
+    /// - Throws: HealthKit errors if save fails
+    func saveWeightToHealth(entry: WeightEntry) async throws {
+        guard isHealthSyncEnabled,
+              Self.isHealthDataAvailable,
               let weightType = weightType else {
-            throw NSError(
-                domain: "HealthSyncManager",
-                code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "HealthKit not available"]
-            )
+            return
         }
 
-        // Convert weight to kg for HealthKit (standard unit)
-        let weightInKg = entry.weightValue(in: .kg)
+        syncStatus = .syncing
+
+        do {
+            let sample = createWeightSample(from: entry, type: weightType)
+            try await healthStore.save(sample)
+
+            // Store the HealthKit UUID for future updates/deletions
+            entry.healthKitUUID = sample.uuid.uuidString
+            entry.pendingHealthSync = false
+            entry.syncVersion += 1
+
+            syncStatus = .success
+            lastHealthSyncDate = Date()
+        } catch {
+            syncStatus = .failed(error.localizedDescription)
+            throw error
+        }
+    }
+
+    /// Updates an existing weight entry in HealthKit.
+    ///
+    /// HealthKit doesn't support direct updates, so this:
+    /// 1. Deletes the existing sample (if healthKitUUID exists)
+    /// 2. Creates a new sample with updated values
+    /// 3. Updates the entry's healthKitUUID to the new sample
+    ///
+    /// - Parameter entry: The weight entry to update
+    /// - Throws: HealthKit errors if update fails
+    func updateWeightInHealth(entry: WeightEntry) async throws {
+        guard isHealthSyncEnabled,
+              Self.isHealthDataAvailable,
+              let weightType = weightType else {
+            return
+        }
+
+        syncStatus = .syncing
+
+        do {
+            // If we have an existing HealthKit sample, delete it first
+            if let existingUUID = entry.healthKitUUID,
+               let uuid = UUID(uuidString: existingUUID) {
+                // Create a predicate to find and delete the old sample
+                let predicate = HKQuery.predicateForObject(with: uuid)
+                try await deleteHealthSamples(matching: predicate, type: weightType)
+            }
+
+            // Create and save new sample
+            let sample = createWeightSample(from: entry, type: weightType)
+            try await healthStore.save(sample)
+
+            // Update entry with new UUID and sync metadata
+            entry.healthKitUUID = sample.uuid.uuidString
+            entry.pendingHealthSync = false
+            entry.syncVersion += 1
+
+            syncStatus = .success
+            lastHealthSyncDate = Date()
+        } catch {
+            syncStatus = .failed(error.localizedDescription)
+            throw error
+        }
+    }
+
+    /// Deletes a weight entry from HealthKit.
+    ///
+    /// Uses the stored `healthKitUUID` to locate and delete the corresponding sample.
+    /// No-op if the entry hasn't been synced to HealthKit.
+    ///
+    /// - Parameter entry: The weight entry to delete from Health
+    /// - Throws: HealthKit errors if delete fails
+    func deleteWeightFromHealth(entry: WeightEntry) async throws {
+        guard isHealthSyncEnabled,
+              Self.isHealthDataAvailable,
+              let weightType = weightType,
+              let existingUUID = entry.healthKitUUID,
+              let uuid = UUID(uuidString: existingUUID) else {
+            return
+        }
+
+        syncStatus = .syncing
+
+        do {
+            let predicate = HKQuery.predicateForObject(with: uuid)
+            try await deleteHealthSamples(matching: predicate, type: weightType)
+
+            entry.healthKitUUID = nil
+            entry.pendingHealthSync = false
+
+            syncStatus = .success
+            lastHealthSyncDate = Date()
+        } catch {
+            syncStatus = .failed(error.localizedDescription)
+            throw error
+        }
+    }
+
+    // MARK: - Private Helpers
+
+    /// Creates an HKQuantitySample from a WeightEntry.
+    private func createWeightSample(from entry: WeightEntry, type: HKQuantityType) -> HKQuantitySample {
+        let unit = WeightUnit(rawValue: entry.weightUnit) ?? .lb
+        let weightInKg = unit == .kg ? entry.weightValue : entry.weightValue * WeightUnit.lbToKg
+
         let quantity = HKQuantity(unit: .gramUnit(with: .kilo), doubleValue: weightInKg)
 
-        // Create metadata with sync version for conflict resolution
+        // Include sync metadata for conflict resolution
         let metadata: [String: Any] = [
             HKMetadataKeySyncVersion: entry.syncVersion,
-            HKMetadataKeySyncIdentifier: entry.healthKitUUID ?? UUID().uuidString
+            HKMetadataKeySyncIdentifier: entry.id.hashValue
         ]
 
-        let sample = HKQuantitySample(
-            type: weightType,
+        return HKQuantitySample(
+            type: type,
             quantity: quantity,
             start: entry.date,
             end: entry.date,
             metadata: metadata
         )
-
-        try await healthStore.save(sample)
-
-        // Update entry with HealthKit reference
-        entry.healthKitUUID = sample.uuid.uuidString
-        entry.pendingHealthSync = false
     }
 
-    /// Updates a weight entry in HealthKit after local modifications.
-    ///
-    /// Increments the sync version for conflict resolution and saves the updated entry.
-    /// HealthKit uses the syncIdentifier to correlate with the existing sample.
-    ///
-    /// - Parameter entry: The weight entry that was modified
-    /// - Throws: HealthKit errors if save fails
-    func updateWeightInHealth(_ entry: WeightEntry) async throws {
-        entry.syncVersion += 1
-        entry.pendingHealthSync = true
-        try await saveWeightToHealth(entry)
-    }
-
-    /// Deletes a weight entry from HealthKit.
-    ///
-    /// Queries HealthKit for the sample matching the entry's healthKitUUID and deletes it.
-    /// Clears the entry's healthKitUUID on success.
-    ///
-    /// - Parameter entry: The weight entry to delete from Health
-    /// - Throws: HealthKit errors if delete fails or sample not found
-    func deleteWeightFromHealth(_ entry: WeightEntry) async throws {
-        guard Self.isHealthDataAvailable,
-              let weightType = weightType else {
-            throw NSError(
-                domain: "HealthSyncManager",
-                code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "HealthKit not available"]
-            )
-        }
-
-        guard let uuidString = entry.healthKitUUID,
-              let uuid = UUID(uuidString: uuidString) else {
-            // Entry was never synced to HealthKit, nothing to delete
-            return
-        }
-
-        // Query for the sample with matching UUID
-        let predicate = HKQuery.predicateForObject(with: uuid)
-        let samples = try await querySamples(type: weightType, predicate: predicate)
-
-        guard let sample = samples.first else {
-            // Sample not found in HealthKit (may have been deleted externally)
-            entry.healthKitUUID = nil
-            return
-        }
-
-        try await healthStore.delete(sample)
-        entry.healthKitUUID = nil
-    }
-
-    /// Queries HealthKit for samples matching the given type and predicate.
-    ///
-    /// - Parameters:
-    ///   - type: The sample type to query
-    ///   - predicate: Filter criteria for the query
-    /// - Returns: Array of matching samples
-    private func querySamples(
-        type: HKSampleType,
-        predicate: NSPredicate
-    ) async throws -> [HKSample] {
-        try await withCheckedThrowingContinuation { continuation in
+    /// Deletes HealthKit samples matching a predicate.
+    private func deleteHealthSamples(matching predicate: NSPredicate, type: HKSampleType) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             let query = HKSampleQuery(
                 sampleType: type,
                 predicate: predicate,
                 limit: 1,
                 sortDescriptors: nil
-            ) { _, samples, error in
+            ) { [weak self] _, samples, error in
                 if let error = error {
                     continuation.resume(throwing: error)
-                } else {
-                    continuation.resume(returning: samples ?? [])
+                    return
+                }
+
+                guard let sample = samples?.first else {
+                    // No sample found - that's OK, just continue
+                    continuation.resume()
+                    return
+                }
+
+                Task { @MainActor [weak self] in
+                    do {
+                        try await self?.healthStore.delete(sample)
+                        continuation.resume()
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
                 }
             }
+
             healthStore.execute(query)
         }
     }
