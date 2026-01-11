@@ -19,7 +19,7 @@ struct GoalStepView: View {
     @ScaledMetric(relativeTo: .largeTitle) private var weightFontSize: CGFloat = 64
 
     private var isValidGoal: Bool {
-        weightUnit.isValidWeight(goalWeight)
+        weightUnit.isValidGoalWeight(goalWeight)
     }
 
     var body: some View {
@@ -60,12 +60,12 @@ struct GoalStepView: View {
                 HStack(spacing: 40) {
                     AdjustButton(systemName: "minus.circle.fill") {
                         mediumFeedbackGenerator.impactOccurred()
-                        goalWeight = max(weightUnit.minWeight, goalWeight - 1.0)
+                        goalWeight = max(weightUnit.minGoalWeight, goalWeight - 1.0)
                     }
 
                     AdjustButton(systemName: "plus.circle.fill") {
                         mediumFeedbackGenerator.impactOccurred()
-                        goalWeight = min(weightUnit.maxWeight, goalWeight + 1.0)
+                        goalWeight = min(weightUnit.maxGoalWeight, goalWeight + 1.0)
                     }
                 }
             }
