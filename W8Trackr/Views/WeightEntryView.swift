@@ -43,6 +43,7 @@ struct WeightEntryView: View {
     @State private var includeBodyFat: Bool
     @State private var lightFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
     @State private var mediumFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+    @State private var showingSaveError = false
     @ScaledMetric(relativeTo: .largeTitle) private var weightFontSize: CGFloat = 64
     @ScaledMetric(relativeTo: .title) private var bodyFatFontSize: CGFloat = 32
 
@@ -276,6 +277,11 @@ struct WeightEntryView: View {
                     }
                 }
             }
+            .alert("Unable to Save", isPresented: $showingSaveError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Your weight entry couldn't be saved. Please try again.")
+            }
         }
     }
 
@@ -310,9 +316,14 @@ struct WeightEntryView: View {
             UIAccessibility.post(notification: .announcement, argument: announcement)
         }
 
-        try? modelContext.save()
+        do {
+            try modelContext.save()
+        } catch {
+            showingSaveError = true
+            return
+        }
 
-        // Sync to HealthKit
+        // Sync to HealthKit (only after successful save)
         HealthKitManager.shared.saveWeightEntry(
             weightInUnit: weight,
             unit: weightUnit,

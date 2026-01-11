@@ -229,9 +229,14 @@ struct DashboardView: View {
                     startWeight: startWeight
                 )
                 modelContext.insert(completed)
-                try? modelContext.save()
 
-                celebrationMilestone = milestone
+                do {
+                    try modelContext.save()
+                    celebrationMilestone = milestone
+                } catch {
+                    // Remove the unsaved milestone from context
+                    modelContext.delete(completed)
+                }
                 break
             }
         }
