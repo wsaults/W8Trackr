@@ -1,164 +1,100 @@
-# CLAUDE.md
+# W8Trackr Coding Standards
 
-This file provides guidance to Claude Code when working with code in this repository.
+Swift coding standards for this project, based on [twostraws/SwiftAgents](https://github.com/twostraws/SwiftAgents/blob/main/AGENTS.md).
 
-## Rules
+## Platform Requirements
 
-Detailed coding patterns and conventions are in `.claude/rules/`:
+- **iOS**: 26.0+
+- **Swift**: 6.2+
+- **Concurrency**: Strict Swift concurrency only (no GCD)
+- **Third-party frameworks**: Not allowed without explicit approval
 
-| File | Purpose |
-|------|---------|
-| `swift.md` | Swift language patterns, naming, error handling |
-| `swiftui.md` | View architecture, state management, composition |
-| `swiftdata.md` | Model definitions, queries, mutations |
-| `ios.md` | Platform conventions, notifications, lifecycle |
+## Architecture
 
-**Always reference these rules** when writing or modifying code.
+- Mark all `@Observable` classes with `@MainActor`
+- Never use `ObservableObject` - use `@Observable` instead
+- Avoid UIKit unless specifically requested
+- Place view logic in view models for testability
 
-## Build & Run Commands
+## Swift Language
 
-```bash
-# Build from command line
-xcodebuild -project W8Trackr.xcodeproj -scheme W8Trackr -configuration Debug -sdk iphonesimulator build
+### String & Number Handling
+- Prefer `replacing(_:with:)` over Foundation alternatives
+- Use `Text(value, format: .number.precision(.fractionLength(2)))` not `String(format:)`
+- Use `localizedStandardContains()` for user-input text filtering
 
-# Run tests
-xcodebuild -project W8Trackr.xcodeproj -scheme W8Trackr -sdk iphonesimulator test
+### Modern APIs
+- Use `URL.documentsDirectory` and `appending(path:)` for file paths
+- Prefer static member lookup (`.circle`) over struct instances (`Circle()`)
+- Avoid force unwraps and force `try` except for unrecoverable errors
 
-# Run a specific test class
-xcodebuild -project W8Trackr.xcodeproj -scheme W8Trackr -sdk iphonesimulator \
-  -only-testing:W8TrackrTests/W8TrackrTests test
-```
+## SwiftUI
 
-For development, open `W8Trackr.xcodeproj` in Xcode and use Cmd+R to build/run.
+### Deprecated Patterns to Replace
+| Deprecated | Use Instead |
+|------------|-------------|
+| `foregroundColor()` | `foregroundStyle()` |
+| `cornerRadius()` | `clipShape(.rect(cornerRadius:))` |
+| `NavigationView` | `NavigationStack` + `navigationDestination(for:)` |
+| `ObservableObject` | `@Observable` |
+| `onTapGesture()` for buttons | `Button` (unless location/tap count needed) |
+| `tabItem()` | `Tab` API |
+| Single-param `onChange()` | Two-param version |
+| `Task.sleep(nanoseconds:)` | `Task.sleep(for:)` |
+| `GeometryReader` | `containerRelativeFrame()` / `visualEffect()` |
+| `UIGraphicsImageRenderer` | `ImageRenderer` |
 
-## Architecture Overview
+### Layout & Styling
+- Avoid hard-coded padding/spacing values
+- Prefer Dynamic Type over fixed font sizes
+- Use `bold()` instead of `fontWeight(.bold)`
+- Use `.scrollIndicators(.hidden)` for hiding scroll indicators
+- Button images must include text labels
 
-### Core Stack
-- **SwiftUI** + **SwiftData** (iOS 18.0+)
-- **Swift Charts** for weight visualization
+### View Structure
+- Extract computed property views into separate `View` structs
+- Don't convert `enumerated()` sequences to arrays in `ForEach`
+- Avoid `AnyView` unless absolutely necessary
+- Avoid `UIScreen.main.bounds`
 
-### Architectural Approach: Pure SwiftUI
+## SwiftData with CloudKit
 
-This app uses native SwiftUI patterns without external architecture frameworks.
-
-**State Management:**
-- `@State` / `@Binding` for local view state
-- `@Environment(\.modelContext)` for SwiftData access
-- `@Query` for reactive data fetching
-- `@AppStorage` for user preferences (persisted to UserDefaults)
-
-**Service Layer:**
-- `ObservableObject` managers for stateful services (e.g., `NotificationManager`)
-- Instantiated as `@StateObject` where needed
-
-**Design Principles:**
-- **No ViewModels** - views own their state directly
-- **Simple over clever** - avoid abstraction until needed
-- **Direct @Query binding** - let SwiftData drive the UI
-- **Minimal layers** - data flows from model to view without intermediaries
-
-### Project Structure
-
-```
-W8Trackr/
-├── W8TrackrApp.swift           # App entry point, ModelContainer config
-├── Models/
-│   └── WeightEntry.swift       # @Model with unit conversion logic
-├── Views/
-│   ├── ContentView.swift       # Root TabView
-│   ├── SummaryView.swift       # Dashboard with chart
-│   ├── LogbookView.swift       # History list
-│   ├── SettingsView.swift      # User preferences
-│   ├── AddWeightView.swift     # Entry modal
-│   └── ...                     # Supporting views
-└── Managers/
-    └── NotificationManager.swift   # Daily reminders
-```
-
-### Data Flow Pattern
-
-The app uses SwiftData with `@Query` for real-time data binding:
-- Model container configured at app level (`W8TrackrApp.swift`)
-- Views access data via `@Query` (read) and `@Environment(\.modelContext)` (write)
-- User preferences use `@AppStorage` / `UserDefaults` (not SwiftData)
-
-**Simulator vs Device**: `ContentView` uses `#if targetEnvironment(simulator)` to inject sample data for previews.
-
-### Key Architectural Decisions
-
-**Weight Unit Handling**: `WeightEntry` stores values in original units with a `weightUnit` string field. Conversion happens at display time via `weightValue(in:)` method. User preference stored in `@AppStorage("preferredWeightUnit")`.
-
-**Chart Data Pipeline** (`WeightTrendChartView`):
-1. Entries filtered by date range
-2. Grouped by day for trend line (daily averages)
-3. Linear regression for 1-day-ahead prediction
-4. Combined into `[ChartEntry]` with type flags for rendering
-
-**Settings Persistence**: User preferences (`goalWeight`, `preferredWeightUnit`, `reminderTime`) use `@AppStorage` and `UserDefaults` rather than SwiftData.
-
-### View Hierarchy
-
-```
-W8TrackrApp
-└── ContentView (TabView)
-    ├── SummaryView → CurrentWeightView, ChartSectionView → WeightTrendChartView
-    ├── LogbookView → HistorySectionView
-    └── SettingsView
-```
-
-Modal: `WeightEntryView` (sheet from SummaryView/LogbookView for add/edit)
-
-### Notification System
-
-`NotificationManager` is an `ObservableObject` handling daily reminder scheduling via `UNUserNotificationCenter`. Instantiated as `@StateObject` in `SettingsView`.
+**Required for CloudKit compatibility:**
+- Never use `@Attribute(.unique)`
+- All properties require default values OR be optional
+- All relationships must be optional
 
 ## Code Quality
 
-### SwiftLint
-The project uses [SwiftLint](https://github.com/realm/SwiftLint) for code style enforcement and catching common issues.
+- SwiftLint must pass with zero warnings before committing
+- Keep structs/classes/enums in separate files
+- Write unit tests for core logic; UI tests only when necessary
+- Never commit API keys or secrets
 
-**Installation:**
-```bash
-brew install swiftlint
+## Project Structure
+
+Organize by app features with consistent folder layout:
+```
+W8Trackr/
+├── Features/
+│   ├── Onboarding/
+│   ├── Dashboard/
+│   └── Settings/
+├── Models/
+├── Services/
+└── Shared/
 ```
 
-**Usage:**
-- SwiftLint runs automatically during Xcode builds (via Run Script build phase)
-- Run manually: `swiftlint lint --config .swiftlint.yml`
+## Build & Test Commands
 
-**Configuration:** `.swiftlint.yml` is tuned for SwiftUI/SwiftData patterns:
-- Relaxed line length (150 warning, 200 error) for SwiftUI modifier chains
-- Disabled rules that conflict with SwiftUI patterns (nesting, function_body_length)
-- Custom rule to warn about print statements in production code
+```bash
+# Build
+xcodebuild -project W8Trackr.xcodeproj -scheme W8Trackr -configuration Debug -sdk iphonesimulator build
 
-## Additional Guidelines
+# Run all tests
+xcodebuild -project W8Trackr.xcodeproj -scheme W8Trackr -sdk iphonesimulator test
 
-### SwiftUI Conventions
-See [.claude/rules/swiftui.md](.claude/rules/swiftui.md) for:
-- Preview patterns (iOS 18+ PreviewModifier)
-- Available preview modifiers
-- Creating new preview modifiers
-
-### Code Style Quick Reference
-
-- **Navigation**: Use `NavigationStack` (not NavigationView)
-- **State**: `@State` for local, `@Binding` for passed, `@StateObject` for owned ObservableObject
-- **Empty states**: Use `ContentUnavailableView`
-- **Forms**: Structure with `Section` + header/footer
-- **Alerts**: Use modern `.alert(title, isPresented:)` API
-- **Previews**: Use iOS 18 `#Preview(traits:)` with `PreviewModifier`
-
-## Active Technologies
-- Swift 5.9+ + HealthKit framework, SwiftUI, SwiftData (001-apple-health-sync)
-- SwiftData (existing WeightEntry model, extended with sync metadata) (001-apple-health-sync)
-- Swift 5.9+ + SwiftUI, SwiftData, UserNotifications (002-goal-notifications)
-- SwiftData for milestone achievements; @AppStorage for notification preferences (002-goal-notifications)
-- Swift 5.9+ + SwiftUI, SwiftData, UIKit (for UIActivityViewController), Core Graphics (for image generation) (003-social-sharing)
-- @AppStorage for sharing preferences; relies on MilestoneAchievement model from 002-goal-notifications (003-social-sharing)
-- Swift 5.9+ + WidgetKit, SwiftUI, SwiftData (004-ios-widget)
-- SwiftData via App Group shared container (004-ios-widget)
-- Swift 6 (upgrading from Swift 5.9+) + SwiftUI, SwiftData, Swift Charts, WidgetKit, HealthKit (005-ios26-swift6-upgrade)
-- SwiftData via ModelContainer (with App Group for widget) (005-ios26-swift6-upgrade)
-
-## Recent Changes
-- 001-apple-health-sync: Added Swift 5.9+ + HealthKit framework, SwiftUI, SwiftData
+# Run specific test class
+xcodebuild -project W8Trackr.xcodeproj -scheme W8Trackr -sdk iphonesimulator \
+  -only-testing:W8TrackrTests/W8TrackrTests test
+```
