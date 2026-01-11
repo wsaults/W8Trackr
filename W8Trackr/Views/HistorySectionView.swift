@@ -10,6 +10,7 @@ import UIKit
 
 struct HistorySectionView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var healthSyncManager: HealthSyncManager
     let entries: [WeightEntry]
     let weightUnit: WeightUnit
     var onEdit: ((WeightEntry) -> Void)?
@@ -158,7 +159,24 @@ struct HistorySectionView: View {
 
     private func commitDeletes() {
         let count = pendingDeletes.count
-        for entry in pendingDeletes {
+        let entriesToDelete = pendingDeletes
+
+        // Delete from HealthKit first (async, non-blocking)
+        if healthSyncManager.isHealthSyncEnabled {
+            Task {
+                for entry in entriesToDelete {
+                    do {
+                        try await healthSyncManager.deleteWeightFromHealth(entry: entry)
+                    } catch {
+                        // Log error but don't block local delete
+                        print("HealthKit delete failed for entry \(entry.id): \(error)")
+                    }
+                }
+            }
+        }
+
+        // Delete from local storage
+        for entry in entriesToDelete {
             modelContext.delete(entry)
         }
         do {
@@ -189,6 +207,7 @@ struct HistorySectionView: View {
         }
         .navigationTitle("History")
     }
+    .environmentObject(HealthSyncManager())
 }
 
 @available(iOS 18, macOS 15, *)
@@ -200,6 +219,7 @@ struct HistorySectionView: View {
         )
         .navigationTitle("History")
     }
+    .environmentObject(HealthSyncManager())
 }
 
 @available(iOS 18, macOS 15, *)
@@ -213,6 +233,7 @@ struct HistorySectionView: View {
         }
         .navigationTitle("History")
     }
+    .environmentObject(HealthSyncManager())
 }
 
 @available(iOS 18, macOS 15, *)
@@ -224,5 +245,6 @@ struct HistorySectionView: View {
         )
         .navigationTitle("History")
     }
+    .environmentObject(HealthSyncManager())
 }
 #endif

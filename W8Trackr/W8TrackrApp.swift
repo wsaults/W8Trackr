@@ -11,6 +11,7 @@ import SwiftUI
 @main
 struct W8TrackrApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    @StateObject private var healthSyncManager = HealthSyncManager()
 
     /// Skip onboarding during UI tests to allow screenshot automation
     private var isUITesting: Bool {
@@ -27,6 +28,7 @@ struct W8TrackrApp: App {
                 }
             }
         }
+        .environmentObject(healthSyncManager)
         .modelContainer(for: [WeightEntry.self, CompletedMilestone.self, MilestoneAchievement.self])
     }
 }
