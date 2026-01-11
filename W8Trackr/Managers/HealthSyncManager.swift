@@ -21,6 +21,11 @@ import SwiftUI
 @MainActor
 final class HealthSyncManager: ObservableObject {
 
+    // MARK: - Shared Instance
+
+    /// Shared singleton for use across the app.
+    static let shared = HealthSyncManager()
+
     // MARK: - Static Properties
 
     /// Returns whether HealthKit is available on this device.

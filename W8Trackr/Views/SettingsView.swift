@@ -12,7 +12,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @StateObject private var notificationManager = NotificationManager()
-    @ObservedObject private var healthKitManager = HealthKitManager.shared
+    @ObservedObject private var healthSyncManager = HealthSyncManager.shared
     @Binding var weightUnit: WeightUnit
     @Binding var goalWeight: Double
     @Binding var showSmoothing: Bool
@@ -242,26 +242,31 @@ struct SettingsView: View {
 
     @ViewBuilder
     private var healthSection: some View {
-        if HealthKitManager.isHealthKitAvailable {
+        if HealthSyncManager.isHealthDataAvailable {
             Section {
                 Toggle("Sync to Apple Health", isOn: Binding(
-                    get: { healthKitManager.isHealthSyncEnabled },
+                    get: { healthSyncManager.isHealthSyncEnabled },
                     set: { newValue in
                         if newValue {
-                            healthKitManager.requestAuthorization { granted, _ in
-                                if granted {
-                                    healthKitManager.isHealthSyncEnabled = true
-                                } else {
+                            Task {
+                                do {
+                                    let success = try await healthSyncManager.requestAuthorization()
+                                    if success && healthSyncManager.isAuthorized {
+                                        healthSyncManager.isHealthSyncEnabled = true
+                                    } else {
+                                        showingHealthKitPermissionAlert = true
+                                    }
+                                } catch {
                                     showingHealthKitPermissionAlert = true
                                 }
                             }
                         } else {
-                            healthKitManager.isHealthSyncEnabled = false
+                            healthSyncManager.isHealthSyncEnabled = false
                         }
                     }
                 ))
 
-                if healthKitManager.isHealthSyncEnabled {
+                if healthSyncManager.isHealthSyncEnabled {
                     HStack {
                         Text("Sync Status")
                         Spacer()
@@ -271,15 +276,15 @@ struct SettingsView: View {
             } header: {
                 Text("Apple Health")
             } footer: {
-                Text("When enabled, your weight and body fat entries will be automatically saved to Apple Health.")
+                Text("When enabled, your weight entries will be automatically saved to Apple Health.")
             }
         }
     }
 
     @ViewBuilder
     private var syncStatusView: some View {
-        switch healthKitManager.lastSyncStatus {
-        case .none:
+        switch healthSyncManager.syncStatus {
+        case .idle:
             Text("Ready")
                 .foregroundStyle(.secondary)
         case .syncing:
