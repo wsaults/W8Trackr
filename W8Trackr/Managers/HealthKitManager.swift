@@ -82,8 +82,15 @@ class HealthKitManager: ObservableObject {
 
         healthStore.requestAuthorization(toShare: typesToWrite, read: nil) { success, error in
             DispatchQueue.main.async {
-                self.isAuthorized = success
-                completion(success, error)
+                // Check actual authorization status, not just dialog completion
+                // The 'success' parameter only indicates the dialog was presented,
+                // not that the user granted permission
+                if let weightType = self.weightType {
+                    self.isAuthorized = self.healthStore.authorizationStatus(for: weightType) == .sharingAuthorized
+                } else {
+                    self.isAuthorized = false
+                }
+                completion(self.isAuthorized, error)
             }
         }
     }
