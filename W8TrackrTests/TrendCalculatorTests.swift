@@ -484,6 +484,81 @@ struct HoltResultTests {
     }
 }
 
+// MARK: - Unit Handling Tests
+
+struct TrendCalculatorUnitTests {
+
+    @Test func holtNormalizesEntriesWithDifferentUnits() {
+        // Bug fix test: calculateHolt should normalize all entries to lbs internally
+        // Before fix: used raw weightValue which mixed units incorrectly
+        // After fix: uses weightValue(in: .lb) for consistent calculation
+
+        let calendar = Calendar.current
+        let baseDate = Date()
+
+        // Create entries with SAME weight in different units:
+        // 180 lb = 81.6466 kg
+        let entries = [
+            WeightEntry(weight: 180.0, unit: .lb, date: calendar.date(byAdding: .day, value: -2, to: baseDate)!),
+            WeightEntry(weight: 81.6466, unit: .kg, date: calendar.date(byAdding: .day, value: -1, to: baseDate)!),
+            WeightEntry(weight: 180.0, unit: .lb, date: baseDate)
+        ]
+
+        let result = TrendCalculator.calculateHolt(entries: entries)
+
+        #expect(result != nil)
+        // Since all entries represent the same weight (180 lb), trend should be near zero
+        #expect(abs(result!.trend) < 0.1, "Trend should be near zero for constant weight data")
+        // Level should be approximately 180 lb
+        #expect(abs(result!.level - 180.0) < 0.5, "Level should be approximately 180 lbs")
+    }
+
+    @Test func holtWithMixedUnitsProducesCorrectTrend() {
+        // Test that a weight loss trend is correctly calculated across unit changes
+        let calendar = Calendar.current
+        let baseDate = Date()
+
+        // Linear weight loss: 182 lb -> 180 lb -> 178 lb (2 lb per day)
+        // But middle entry is in kg: 180 lb = 81.6466 kg
+        let entries = [
+            WeightEntry(weight: 182.0, unit: .lb, date: calendar.date(byAdding: .day, value: -2, to: baseDate)!),
+            WeightEntry(weight: 81.6466, unit: .kg, date: calendar.date(byAdding: .day, value: -1, to: baseDate)!), // 180 lb
+            WeightEntry(weight: 178.0, unit: .lb, date: baseDate)
+        ]
+
+        let result = TrendCalculator.calculateHolt(entries: entries, alpha: 0.3, beta: 0.1)
+
+        #expect(result != nil)
+        // Should detect a negative trend (losing weight)
+        #expect(result!.trend < 0, "Should detect weight loss trend")
+        // Trend should be approximately -2 lb/day
+        #expect(abs(result!.trend - (-2.0)) < 1.0, "Trend should be approximately -2 lbs/day")
+        // Level should be close to latest weight (178 lb)
+        #expect(abs(result!.level - 178.0) < 2.0, "Level should be close to 178 lbs")
+    }
+
+    @Test func holtWithAllKgEntriesWorkCorrectly() {
+        // Ensure kg-only entries also work correctly
+        let calendar = Calendar.current
+        let baseDate = Date()
+
+        // 80 kg, 81 kg, 82 kg (gaining 1 kg per day)
+        let entries = [
+            WeightEntry(weight: 80.0, unit: .kg, date: calendar.date(byAdding: .day, value: -2, to: baseDate)!),
+            WeightEntry(weight: 81.0, unit: .kg, date: calendar.date(byAdding: .day, value: -1, to: baseDate)!),
+            WeightEntry(weight: 82.0, unit: .kg, date: baseDate)
+        ]
+
+        let result = TrendCalculator.calculateHolt(entries: entries, alpha: 0.3, beta: 0.1)
+
+        #expect(result != nil)
+        // Should detect positive trend (gaining weight)
+        #expect(result!.trend > 0, "Should detect weight gain trend")
+        // 1 kg/day ≈ 2.2 lb/day (internal storage is in lbs)
+        #expect(abs(result!.trend - 2.2) < 0.5, "Trend should be approximately 2.2 lbs/day (1 kg/day)")
+    }
+}
+
 // MARK: - Default Lambda Tests
 
 struct DefaultLambdaTests {

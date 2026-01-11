@@ -225,7 +225,8 @@ enum TrendCalculator {
             Calendar.current.startOfDay(for: entry.date)
         }
         .map { date, dayEntries -> (date: Date, weight: Double) in
-            let avgWeight = dayEntries.reduce(0.0) { $0 + $1.weightValue } / Double(dayEntries.count)
+            // Convert all entries to lbs for internal storage (matching TrendPoint convention)
+            let avgWeight = dayEntries.reduce(0.0) { $0 + $1.weightValue(in: .lb) } / Double(dayEntries.count)
             return (date, avgWeight)
         }
         .sorted { $0.date < $1.date }
