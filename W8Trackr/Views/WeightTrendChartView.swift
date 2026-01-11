@@ -32,13 +32,13 @@ struct WeightTrendChartView: View {
     }
     
     private var minWeight: Double {
-        let dataMin = filteredEntries.map { convertWeight($0.weightValue) }.min() ?? 0
+        let dataMin = filteredEntries.map { $0.weightValue(in: weightUnit) }.min() ?? 0
         let goalMin = goalWeight > 0 ? goalWeight : Double.infinity
         return min(dataMin, goalMin) - yAxisPadding
     }
-    
+
     private var maxWeight: Double {
-        let dataMax = filteredEntries.map { convertWeight($0.weightValue) }.max() ?? 0
+        let dataMax = filteredEntries.map { $0.weightValue(in: weightUnit) }.max() ?? 0
         let goalMax = goalWeight > 0 ? goalWeight : 0
         return max(dataMax, goalMax) + yAxisPadding
     }
@@ -118,14 +118,14 @@ struct WeightTrendChartView: View {
         }
 
         let count = sorted.count
-        let latestWeight = convertWeight(sorted.last!.weightValue)
+        let latestWeight = sorted.last!.weightValue(in: weightUnit)
         let formattedLatest = latestWeight.formatted(.number.precision(.fractionLength(1)))
 
         var summary = "Weight trend chart showing \(count) \(count == 1 ? "entry" : "entries"). "
         summary += "Most recent weight: \(formattedLatest) \(weightUnit.rawValue). "
 
         if sorted.count >= 2 {
-            let firstWeight = convertWeight(sorted.first!.weightValue)
+            let firstWeight = sorted.first!.weightValue(in: weightUnit)
             let change = latestWeight - firstWeight
             let changeFormatted = abs(change).formatted(.number.precision(.fractionLength(1)))
             let direction = change > 0 ? "gained" : (change < 0 ? "lost" : "maintained")
@@ -175,7 +175,7 @@ struct WeightTrendChartView: View {
         data.append(contentsOf: sortedEntries.map { entry in
             ChartEntry(
                 date: entry.date,
-                weight: convertWeight(entry.weightValue),
+                weight: entry.weightValue(in: weightUnit),
                 isPrediction: false,
                 showPoint: true,
                 isIndividualEntry: true,
@@ -318,8 +318,8 @@ extension WeightTrendChartView: AXChartDescriptorRepresentable {
         let dataPoints = sorted.map { entry in
             AXDataPoint(
                 x: entry.date.timeIntervalSince1970,
-                y: convertWeight(entry.weightValue),
-                label: "\(entry.date.formatted(date: .abbreviated, time: .omitted)): \(convertWeight(entry.weightValue).formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue)"
+                y: entry.weightValue(in: weightUnit),
+                label: "\(entry.date.formatted(date: .abbreviated, time: .omitted)): \(entry.weightValue(in: weightUnit).formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue)"
             )
         }
 
