@@ -24,11 +24,11 @@ struct CelebrationConfettiView: View {
 
     /// Colors to use for confetti (defaults to theme celebration colors)
     var colors: [Color] = [
-        AppColors.Fallback.primary,
-        AppColors.Fallback.secondary,
-        AppColors.Fallback.accent,
-        AppColors.Fallback.success,
-        AppColors.Fallback.warning,
+        AppColors.primary,
+        AppColors.secondary,
+        AppColors.accent,
+        AppColors.success,
+        AppColors.warning,
         Color.yellow,
         Color.pink
     ]
@@ -110,7 +110,7 @@ struct CelebrationParticle: View {
             .onAppear {
                 // Falling animation
                 withAnimation(.easeIn(duration: duration).delay(delay)) {
-                    offsetY = UIScreen.main.bounds.height + 100
+                    offsetY = 2000
                     rotation = Double.random(in: 720...1440)
                     offsetX = CGFloat.random(in: -150...150)
                 }
@@ -172,7 +172,7 @@ struct EmojiParticle: View {
 
                 // Fall down
                 withAnimation(.easeIn(duration: duration * 0.8).delay(delay + 0.3)) {
-                    offsetY = UIScreen.main.bounds.height + 50
+                    offsetY = 2000
                     rotation = Double.random(in: -45...45)
                 }
 

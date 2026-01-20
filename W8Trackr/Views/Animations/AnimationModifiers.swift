@@ -219,7 +219,7 @@ struct StreakCelebrationView: View {
                     // Glow effect
                     Image(systemName: "flame.fill")
                         .font(.system(size: flameGlowSize))
-                        .foregroundStyle(AppColors.Fallback.warning.opacity(0.5))
+                        .foregroundStyle(AppColors.warning.opacity(0.5))
                         .blur(radius: 20)
                         .scaleEffect(showFlame ? 1.3 : 0.5)
 
@@ -265,7 +265,7 @@ struct StreakCelebrationView: View {
                         .frame(width: 150)
                         .padding()
                         .background(.white)
-                        .foregroundStyle(AppColors.Fallback.warning)
+                        .foregroundStyle(AppColors.warning)
                         .clipShape(Capsule())
                 }
                 .opacity(showText ? 1 : 0)
@@ -419,7 +419,7 @@ struct EntranceModifier: ViewModifier {
         icon: "star.fill",
         title: "First Milestone!",
         subtitle: "You reached your first weight goal",
-        color: AppColors.Fallback.accent
+        color: AppColors.accent
     ) { }
 }
 

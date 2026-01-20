@@ -156,7 +156,7 @@ struct MilestoneConfettiParticle: View {
             .opacity(opacity)
             .onAppear {
                 withAnimation(.easeIn(duration: 2.5).delay(delay)) {
-                    offsetY = UIScreen.main.bounds.height + 50
+                    offsetY = 2000
                     rotation = Double.random(in: 360...720)
                     offsetX = CGFloat.random(in: -100...100)
                 }

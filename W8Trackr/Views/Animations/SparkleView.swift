@@ -21,7 +21,7 @@ struct SparkleView: View {
     var sparkleCount: Int = 12
 
     /// Color of the sparkles
-    var color: Color = AppColors.Fallback.success
+    var color: Color = AppColors.success
 
     /// Size range for sparkles
     var sizeRange: ClosedRange<CGFloat> = 4...12
@@ -156,7 +156,7 @@ struct ShimmerView: View {
 
 /// A pulsing glow effect behind a view
 struct GlowView: View {
-    var color: Color = AppColors.Fallback.success
+    var color: Color = AppColors.success
     var radius: CGFloat = 20
     var intensity: Double = 0.6
 
@@ -179,7 +179,7 @@ struct GlowView: View {
 
 /// Combined sparkle and glow effect for celebrating a new low weight
 struct NewLowCelebration: View {
-    var color: Color = AppColors.Fallback.success
+    var color: Color = AppColors.success
 
     var body: some View {
         ZStack {
@@ -204,7 +204,7 @@ struct NewLowCelebration: View {
 
 extension View {
     /// Adds a sparkle effect overlay
-    func sparkleEffect(isActive: Bool, color: Color = AppColors.Fallback.success) -> some View {
+    func sparkleEffect(isActive: Bool, color: Color = AppColors.success) -> some View {
         ZStack {
             self
 
@@ -224,7 +224,7 @@ extension View {
     }
 
     /// Adds a glow effect behind the view
-    func glowEffect(color: Color = AppColors.Fallback.success, radius: CGFloat = 15) -> some View {
+    func glowEffect(color: Color = AppColors.success, radius: CGFloat = 15) -> some View {
         background {
             GlowView(color: color, radius: radius)
         }
