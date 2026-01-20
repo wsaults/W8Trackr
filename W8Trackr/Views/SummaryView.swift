@@ -104,7 +104,7 @@ struct SummaryView: View {
                         .foregroundStyle(.white)
                         .fontWeight(.bold)
                         .padding()
-                        .background(.blue)
+                        .background(AppColors.primary)
                         .clipShape(.circle)
                 }
                 .padding(.bottom)
@@ -116,7 +116,7 @@ struct SummaryView: View {
                     }
                 }
             }
-            .background(.gray.opacity(0.1))
+            .background(AppColors.surfaceSecondary)
             .navigationTitle("Summary")
             .navigationBarTitleDisplayMode(.inline)
             .syncStatusToolbar()

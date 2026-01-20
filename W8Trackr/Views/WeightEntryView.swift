@@ -19,7 +19,7 @@ struct WeightAdjustButton: View {
         Button(action: action) {
             Image(systemName: systemName)
                 .font(.system(size: buttonIconSize))
-                .foregroundStyle(.blue)
+                .foregroundStyle(AppColors.primary)
         }
         .accessibilityLabel(accessibilityLabel.isEmpty ? systemName : accessibilityLabel)
         .accessibilityHint(accessibilityHint)
@@ -191,7 +191,7 @@ struct WeightEntryView: View {
                     // Body fat section
                     VStack(spacing: 12) {
                         Toggle("Include Body Fat %", isOn: $includeBodyFat)
-                            .tint(.blue)
+                            .tint(AppColors.primary)
 
                         if includeBodyFat {
                             HStack(alignment: .firstTextBaseline, spacing: 4) {
@@ -259,7 +259,7 @@ struct WeightEntryView: View {
                             .fontWeight(.bold)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(isFormValid ? .blue : .gray)
+                            .background(isFormValid ? AppColors.primary : AppColors.surfaceSecondary)
                             .foregroundStyle(.white)
                             .clipShape(.rect(cornerRadius: 10))
                     }

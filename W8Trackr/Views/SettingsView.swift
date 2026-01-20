@@ -166,7 +166,7 @@ struct SettingsView: View {
             if let warning = goalWeightWarning {
                 HStack(alignment: .top, spacing: 6) {
                     Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(AppColors.warning)
                     Text(warning.message)
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -259,7 +259,7 @@ struct SettingsView: View {
                     } label: {
                         HStack {
                             Image(systemName: "lightbulb.fill")
-                                .foregroundStyle(.yellow)
+                                .foregroundStyle(AppColors.warning)
                             Text("Use suggested time: \(suggestedTime, style: .time)")
                                 .foregroundStyle(.primary)
                         }
@@ -342,7 +342,7 @@ struct SettingsView: View {
             .foregroundStyle(.secondary)
         case .success:
             Label("Synced", systemImage: "checkmark.circle.fill")
-                .foregroundStyle(.green)
+                .foregroundStyle(AppColors.success)
         case .failed(let error):
             Label(error, systemImage: "exclamationmark.triangle.fill")
                 .foregroundStyle(.red)
@@ -374,7 +374,7 @@ struct SettingsView: View {
                         showingDevMenu = true
                     } label: {
                         Image(systemName: "hammer.fill")
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(AppColors.warning)
                     }
                     .accessibilityLabel("Developer Menu")
                 }

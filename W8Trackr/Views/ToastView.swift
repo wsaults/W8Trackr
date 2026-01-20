@@ -17,9 +17,9 @@ enum ToastType {
 
     var iconColor: Color {
         switch self {
-        case .success: return .green
-        case .error: return .red
-        case .info: return .blue
+        case .success: return AppColors.success
+        case .error: return AppColors.error
+        case .info: return AppColors.primary
         }
     }
 
@@ -62,7 +62,7 @@ struct ToastView: View {
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.capsule)
                 .controlSize(.small)
-                .tint(type == .error ? .red : .blue)
+                .tint(type == .error ? AppColors.error : AppColors.primary)
             }
 
             if showDismiss, let onDismiss {
