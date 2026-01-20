@@ -308,7 +308,7 @@ final class HealthSyncManager: ObservableObject {
         // Include sync metadata for conflict resolution
         let metadata: [String: Any] = [
             HKMetadataKeySyncVersion: entry.syncVersion,
-            HKMetadataKeySyncIdentifier: entry.id.hashValue
+            HKMetadataKeySyncIdentifier: String(entry.id.hashValue)
         ]
 
         return HKQuantitySample(
