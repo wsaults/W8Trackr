@@ -13,7 +13,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 1: Critical Bugs** - Fix crash-risk stubs and repeated milestone popup
 - [x] **Phase 2: Chart Animation** - Fix jank during date segment changes
 - [x] **Phase 3: UX Polish** - Banner placement, sync status consolidation, undo capability
-- [ ] **Phase 4: Code Quality** - Migrate GCD to async/await, replace deprecated APIs
+- [x] **Phase 4: Code Quality** - Migrate GCD to async/await, replace deprecated APIs
 
 ## Phase Details
 
@@ -73,8 +73,8 @@ Plans:
 Plans:
 - [x] 04-01-PLAN.md - Replace deprecated SwiftUI APIs and migrate View GCD to Task.sleep
 - [x] 04-02-PLAN.md - Migrate Manager classes from GCD to @MainActor + async/await
-- [ ] 04-03-PLAN.md - Migrate HealthSyncManager to @Observable (gap closure)
-- [ ] 04-04-PLAN.md - Fix SwiftLint violations (gap closure)
+- [x] 04-03-PLAN.md - Migrate HealthSyncManager to @Observable (gap closure)
+- [x] 04-04-PLAN.md - Fix SwiftLint violations (gap closure)
 
 ## Progress
 
@@ -86,7 +86,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Critical Bugs | 2/2 | Complete | 2026-01-20 |
 | 2. Chart Animation | 1/1 | Complete | 2026-01-20 |
 | 3. UX Polish | 2/2 | Complete | 2026-01-20 |
-| 4. Code Quality | 2/4 | Gap Closure | - |
+| 4. Code Quality | 4/4 | Complete | 2026-01-20 |
 
 ---
 *Roadmap created: 2026-01-20*

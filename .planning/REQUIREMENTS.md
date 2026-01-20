@@ -22,8 +22,8 @@ Requirements for pre-launch audit fixes. Each maps to roadmap phases.
 
 ### Code Quality
 
-- [ ] **QUAL-01**: Migrate deprecated GCD usage to async/await (HealthKitManager, NotificationManager, CloudKitSyncManager)
-- [ ] **QUAL-02**: Replace deprecated `.cornerRadius()` with `.clipShape(.rect(cornerRadius:))`
+- [x] **QUAL-01**: Migrate deprecated GCD usage to async/await (HealthKitManager, NotificationManager, CloudKitSyncManager)
+- [x] **QUAL-02**: Replace deprecated `.cornerRadius()` with `.clipShape(.rect(cornerRadius:))`
 
 ## v2 Requirements
 
@@ -59,8 +59,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UX-01 | Phase 3 | Complete |
 | UX-02 | Phase 3 | Complete |
 | UX-03 | Phase 3 | Complete |
-| QUAL-01 | Phase 4 | Pending |
-| QUAL-02 | Phase 4 | Pending |
+| QUAL-01 | Phase 4 | Complete |
+| QUAL-02 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 9 total
