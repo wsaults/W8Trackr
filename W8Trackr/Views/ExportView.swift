@@ -120,7 +120,7 @@ struct ExportView: View {
             } else {
                 HStack {
                     Image(systemName: "exclamationmark.triangle")
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(AppColors.warning)
                     Text("No entries to export")
                         .foregroundStyle(.secondary)
                 }

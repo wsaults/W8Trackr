@@ -83,7 +83,7 @@ struct GoalPredictionView: View {
             // Header
             HStack(spacing: 8) {
                 Image(systemName: prediction.status.iconName)
-                    .foregroundStyle(prediction.status.isPositive ? .green : .secondary)
+                    .foregroundStyle(prediction.status.isPositive ? AppColors.success : .secondary)
                     .font(.title3)
 
                 Text(headerText)
@@ -129,15 +129,15 @@ struct GoalPredictionView: View {
     private var backgroundColor: Color {
         switch prediction.status {
         case .atGoal:
-            return .green.opacity(0.1)
+            return AppColors.success.opacity(0.1)
         case .onTrack:
-            return .blue.opacity(0.1)
+            return AppColors.primary.opacity(0.1)
         case .wrongDirection:
-            return .orange.opacity(0.1)
+            return AppColors.warning.opacity(0.1)
         case .tooSlow:
-            return .gray.opacity(0.1)
+            return AppColors.surfaceSecondary
         case .insufficientData, .noData:
-            return .gray.opacity(0.05)
+            return AppColors.surfaceSecondary.opacity(0.5)
         }
     }
 
@@ -165,7 +165,7 @@ struct GoalPredictionView: View {
             } else if let days = daysUntilGoal {
                 Text("\(days) \(days == 1 ? "day" : "days") to go!")
                     .font(.caption)
-                    .foregroundStyle(.green)
+                    .foregroundStyle(AppColors.success)
             }
 
             // Velocity info
@@ -184,7 +184,7 @@ struct GoalPredictionView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text("Congratulations!")
                 .font(.subheadline)
-                .foregroundStyle(.green)
+                .foregroundStyle(AppColors.success)
 
             Text("You've reached your target weight. Keep up the great work maintaining it!")
                 .font(.caption)
@@ -200,7 +200,7 @@ struct GoalPredictionView: View {
 
             Text("Currently \(direction) weight")
                 .font(.subheadline)
-                .foregroundStyle(.orange)
+                .foregroundStyle(AppColors.warning)
 
             Text("Your goal requires you to \(goal) weight. The prediction will update as your trend changes.")
                 .font(.caption)

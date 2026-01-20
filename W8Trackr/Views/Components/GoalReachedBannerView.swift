@@ -18,7 +18,7 @@ struct GoalReachedBannerView: View {
         HStack(spacing: 12) {
             Image(systemName: "checkmark.circle.fill")
                 .font(.title2)
-                .foregroundStyle(.green)
+                .foregroundStyle(AppColors.success)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text("Goal Reached!")
@@ -31,7 +31,7 @@ struct GoalReachedBannerView: View {
             Spacer()
         }
         .padding()
-        .background(.green.opacity(0.1))
+        .background(AppColors.success.opacity(0.1))
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .padding(.horizontal)
     }

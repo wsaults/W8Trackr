@@ -97,7 +97,7 @@ struct HistorySectionView: View {
                     } label: {
                         Label("Edit", systemImage: "pencil")
                     }
-                    .tint(.blue)
+                    .tint(AppColors.primary)
                 }
             }
             .onDelete { indexSet in
