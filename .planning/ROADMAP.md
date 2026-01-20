@@ -86,11 +86,12 @@ Plans:
   2. All views render correctly in both modes
   3. No hardcoded colors that break in opposite mode
   4. Charts and visualizations adapt to color scheme
-**Plans**: 2 plans
+**Plans**: 3 plans
 
 Plans:
 - [x] 05-01-PLAN.md - Migrate Dashboard, Onboarding, Goals, Analytics views to AppColors
 - [ ] 05-02-PLAN.md - Fix chart colors, deprecated APIs, and Animation view colors
+- [ ] 05-03-PLAN.md - Migrate remaining 10 views to AppColors (gap closure)
 
 ## Progress
 
@@ -103,7 +104,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Chart Animation | 1/1 | Complete | 2026-01-20 |
 | 3. UX Polish | 2/2 | Complete | 2026-01-20 |
 | 4. Code Quality | 4/4 | Complete | 2026-01-20 |
-| 5. Light/Dark Mode | 1/2 | In Progress | — |
+| 5. Light/Dark Mode | 1/3 | In Progress | — |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -113,3 +114,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 *Phase 4 planned: 2026-01-20*
 *Phase 4 gap closure plans: 2026-01-20*
 *Phase 5 planned: 2026-01-20*
+*Phase 5 gap closure plan: 2026-01-20*
