@@ -88,7 +88,7 @@ struct DashboardView: View {
 
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .bottom) {
+            ZStack(alignment: .bottomTrailing) {
                 if entries.isEmpty {
                     emptyState
                 } else {
@@ -97,6 +97,7 @@ struct DashboardView: View {
 
                 // FAB Button
                 fabButton
+                    .padding(.trailing)
                     .padding(.bottom)
 
                 // Celebration overlay
