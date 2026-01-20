@@ -11,7 +11,7 @@ import SwiftData
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
-    @StateObject private var notificationManager = NotificationManager()
+    @State private var notificationManager = NotificationManager()
     @ObservedObject private var healthSyncManager = HealthSyncManager.shared
     @Binding var weightUnit: WeightUnit
     @Binding var goalWeight: Double
@@ -231,7 +231,8 @@ struct SettingsView: View {
             Toggle("Daily Reminder", isOn: $notificationManager.isReminderEnabled)
                 .onChange(of: notificationManager.isReminderEnabled) { _, newValue in
                     if newValue {
-                        notificationManager.requestNotificationPermission { granted in
+                        Task {
+                            let granted = await notificationManager.requestNotificationPermission()
                             if !granted {
                                 showingNotificationPermissionAlert = true
                             }

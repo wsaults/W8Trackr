@@ -16,25 +16,25 @@ import UserNotifications
 ///    milestone alerts, and weekly summaries
 ///
 /// ## Threading
-/// All `@Published` property updates are dispatched to the main thread to ensure
-/// safe UI binding. Notification permission callbacks are also main-thread dispatched.
+/// Annotated with `@MainActor` to ensure all property updates are safe for UI binding.
 ///
 /// ## Usage
 /// ```swift
-/// @StateObject private var notificationManager = NotificationManager()
+/// @State private var notificationManager = NotificationManager()
 /// ```
-class NotificationManager: ObservableObject {
+@Observable @MainActor
+final class NotificationManager {
     /// Whether the user has granted notification permissions and enabled daily reminders.
     /// Updated asynchronously on init and after permission requests.
-    @Published var isReminderEnabled = false
+    var isReminderEnabled = false
 
     /// Whether adaptive smart notifications (streaks, milestones, summaries) are enabled.
     /// Persisted to UserDefaults.
-    @Published var isSmartRemindersEnabled = false
+    var isSmartRemindersEnabled = false
 
     /// AI-suggested optimal reminder time based on user's historical logging patterns.
     /// `nil` if insufficient data or smart reminders disabled.
-    @Published var suggestedReminderTime: Date?
+    var suggestedReminderTime: Date?
 
     private static let reminderTimeKey = "reminderTime"
     private static let smartRemindersKey = "smartRemindersEnabled"
@@ -45,26 +45,26 @@ class NotificationManager: ObservableObject {
     /// the system for notification permission status.
     init() {
         isSmartRemindersEnabled = UserDefaults.standard.bool(forKey: Self.smartRemindersKey)
-        UNUserNotificationCenter.current().getNotificationSettings { settings in
-            DispatchQueue.main.async {
-                self.isReminderEnabled = settings.authorizationStatus == .authorized
-            }
+        Task {
+            let settings = await UNUserNotificationCenter.current().notificationSettings()
+            isReminderEnabled = settings.authorizationStatus == .authorized
         }
     }
 
     /// Requests notification permission from the system.
     ///
-    /// - Parameter completion: Called on main thread with `true` if permission granted.
+    /// - Returns: `true` if permission was granted, `false` otherwise.
     ///
     /// If the user has previously denied permission, this will not show a prompt;
-    /// the completion will be called with `false` and the app should direct
-    /// the user to Settings.
-    func requestNotificationPermission(completion: @escaping (Bool) -> Void) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, _ in
-            DispatchQueue.main.async {
-                self.isReminderEnabled = granted
-                completion(granted)
-            }
+    /// the method will return `false` and the app should direct the user to Settings.
+    func requestNotificationPermission() async -> Bool {
+        do {
+            let granted = try await UNUserNotificationCenter.current()
+                .requestAuthorization(options: [.alert, .sound])
+            isReminderEnabled = granted
+            return granted
+        } catch {
+            return false
         }
     }
 
@@ -160,9 +160,7 @@ class NotificationManager: ObservableObject {
             var calendar = Calendar.current
             calendar.timeZone = .current
             if let date = calendar.date(from: optimalTime) {
-                DispatchQueue.main.async {
-                    self.suggestedReminderTime = date
-                }
+                suggestedReminderTime = date
             }
         }
 
