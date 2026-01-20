@@ -53,7 +53,7 @@ struct MilestoneCelebrationView: View {
                         Text(unit.rawValue)
                             .font(.title2)
                     }
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(AppColors.primary)
 
                     Text("Keep up the great work!")
                         .font(.subheadline)
@@ -69,7 +69,7 @@ struct MilestoneCelebrationView: View {
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(.blue)
+                        .background(AppColors.primary)
                         .foregroundStyle(.white)
                         .clipShape(.rect(cornerRadius: 12))
                 }
@@ -188,7 +188,7 @@ struct MilestoneHistoryView: View {
                 ForEach(milestones.sorted { $0.achievedDate > $1.achievedDate }, id: \.achievedDate) { milestone in
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
+                            .foregroundStyle(AppColors.success)
 
                         VStack(alignment: .leading, spacing: 2) {
                             HStack(spacing: 4) {

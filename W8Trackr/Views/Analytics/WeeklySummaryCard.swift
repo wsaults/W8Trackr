@@ -60,9 +60,9 @@ enum WeeklyTrend {
 
     var color: Color {
         switch self {
-        case .up: return .orange
-        case .down: return .green
-        case .stable: return .blue
+        case .up: return AppColors.warning
+        case .down: return AppColors.success
+        case .stable: return AppColors.primary
         }
     }
 }
