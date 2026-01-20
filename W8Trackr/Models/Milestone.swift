@@ -15,6 +15,7 @@ final class CompletedMilestone {
     var weightUnit: String = WeightUnit.lb.rawValue
     var achievedDate: Date = Date.now
     var startWeight: Double = 0
+    var celebrationShown: Bool = false
 
     init(targetWeight: Double, unit: WeightUnit, achievedDate: Date = .now, startWeight: Double) {
         self.targetWeight = targetWeight
