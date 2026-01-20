@@ -15,7 +15,9 @@ struct WeightTrendChartView: View {
     let weightUnit: WeightUnit
     let selectedRange: DateRange
     let showSmoothing: Bool
-    
+
+    @State private var scrollPosition: Date = Date()
+
     private var filteredEntries: [WeightEntry] {
         guard let days = selectedRange.days else { return entries }
         
@@ -74,7 +76,26 @@ struct WeightTrendChartView: View {
             return .month
         }
     }
-    
+
+    private var visibleDomainSeconds: TimeInterval {
+        let days: Double
+        switch selectedRange {
+        case .oneWeek:
+            days = 10
+        case .oneMonth:
+            days = 35
+        case .threeMonth:
+            days = 45
+        case .sixMonth:
+            days = 60
+        case .oneYear:
+            days = 90
+        case .allTime:
+            days = 120
+        }
+        return days * 86400 // seconds per day
+    }
+
     // Holt's Double Exponential Smoothing prediction
     // Generates prediction points from last data point to 14 days ahead
     private var predictionPoints: [ChartEntry] {
@@ -285,6 +306,9 @@ struct WeightTrendChartView: View {
                     AxisValueLabel(format: dateFormatForRange)
                 }
             }
+            .chartScrollableAxes(.horizontal)
+            .chartXVisibleDomain(length: visibleDomainSeconds)
+            .chartScrollPosition(x: $scrollPosition)
             .animation(.snappy, value: selectedRange)
             .padding(.bottom)
             .accessibilityChartDescriptor(self)
