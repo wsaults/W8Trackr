@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can reliably track weight and see progress without UI bugs undermining the experience
-**Current focus:** Phase 4 - Code Quality (COMPLETE + Gap Closure)
+**Current focus:** Phase 4 - Code Quality (COMPLETE)
 
 ## Current Position
 
 Phase: 4 of 4 (Code Quality)
-Plan: 3 of 3 in current phase (gap closure plan)
-Status: Phase complete (including gap closure)
-Last activity: 2026-01-20 - Completed 04-03-PLAN.md (gap closure)
+Plan: 4 of 4 in current phase
+Status: Phase complete
+Last activity: 2026-01-20 - Completed 04-04-PLAN.md (SwiftLint zero violations)
 
 Progress: [##########] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 5.4 minutes
-- Total execution time: 0.72 hours
+- Total plans completed: 9
+- Average duration: 5.2 minutes
+- Total execution time: 0.78 hours
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [##########] 100%
 | 01-critical-bugs | 2 | 13 min | 6.5 min |
 | 02-chart-animation | 1 | 9 min | 9 min |
 | 03-ux-polish | 2 | 7 min | 3.5 min |
-| 04-code-quality | 3 | 13.5 min | 4.5 min |
+| 04-code-quality | 4 | 18.5 min | 4.6 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (3 min), 04-01 (5 min), 04-02 (6.5 min), 04-03 (2 min)
+- Last 5 plans: 04-01 (5 min), 04-02 (6.5 min), 04-03 (2 min), 04-04 (5 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -56,6 +56,8 @@ Recent decisions affecting current work:
 - [04-02]: Keep monitorQueue for NWPathMonitor (API requirement)
 - [04-02]: Use computed property for @Observable singleton access in views
 - [04-03]: @Environment(Type.self) replaces @EnvironmentObject for @Observable
+- [04-04]: Remove print statements entirely from previews (empty closures are cleaner)
+- [04-04]: Split test files by domain for maintainability
 
 ### Pending Todos
 
@@ -63,28 +65,27 @@ None.
 
 ### Blockers/Concerns
 
-- Unit tests have pre-existing infrastructure issues (0.000s runtime suggests test setup problems)
-- Pre-existing SwiftLint violations in non-Manager files (file length)
+None remaining. All SwiftLint violations resolved.
 
 ## Session Continuity
 
 Last session: 2026-01-20
-Stopped at: Completed 04-03-PLAN.md - All gaps closed
+Stopped at: Completed 04-04-PLAN.md - SwiftLint zero violations
 Resume file: None
 
 ## Project Completion Status
 
-All 4 phases complete (including gap closure):
+All 4 phases complete:
 - Phase 1: Critical Bugs (2 plans)
 - Phase 2: Chart Animation (1 plan)
 - Phase 3: UX Polish (2 plans)
-- Phase 4: Code Quality (3 plans, including gap closure)
+- Phase 4: Code Quality (4 plans)
 
-Total: 8 plans executed successfully
+Total: 9 plans executed successfully
 
-## Gap Closure Summary
+## Final Code Quality Status
 
-04-03-PLAN.md closed remaining gap:
-- HealthSyncManager migrated from ObservableObject to @Observable @MainActor
-- All 4 managers now use consistent @Observable @MainActor pattern
-- All views use @State/@Environment instead of @StateObject/@EnvironmentObject
+- SwiftLint: 0 violations in 60 files
+- All managers using @MainActor + @Observable
+- All deprecated APIs replaced
+- Test files organized by domain (all under 1000 lines)
