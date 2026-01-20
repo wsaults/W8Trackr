@@ -26,10 +26,11 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
   2. App does not contain fatalError stubs that could crash at runtime
   3. MilestoneTracker service either works or is removed
   4. GoalProgressCalculator service either works or is removed
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: TBD
+- [ ] 01-01-PLAN.md - Fix milestone celebration popup showing repeatedly
+- [ ] 01-02-PLAN.md - Remove fatalError stub services and unused code
 
 ### Phase 2: Chart Animation
 **Goal**: Smooth chart transitions when user changes date range
@@ -78,10 +79,11 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Critical Bugs | 0/TBD | Not started | - |
+| 1. Critical Bugs | 0/2 | Planned | - |
 | 2. Chart Animation | 0/TBD | Not started | - |
 | 3. UX Polish | 0/TBD | Not started | - |
 | 4. Code Quality | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-20*
+*Phase 1 planned: 2026-01-20*
