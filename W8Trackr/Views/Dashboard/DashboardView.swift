@@ -113,7 +113,7 @@ struct DashboardView: View {
                     }
                 }
             }
-            .background(AppColors.Fallback.backgroundLight)
+            .background(AppColors.background)
             .navigationTitle("Dashboard")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showAddWeightView) {
@@ -213,7 +213,7 @@ struct DashboardView: View {
                 .padding()
                 .background(AppGradients.primary)
                 .clipShape(Circle())
-                .shadow(color: AppColors.Fallback.primary.opacity(0.3), radius: 8, x: 0, y: 4)
+                .shadow(color: AppColors.primary.opacity(0.3), radius: 8, x: 0, y: 4)
         }
         .accessibilityLabel("Add weight entry")
         .accessibilityHint("Opens form to log a new weight measurement")

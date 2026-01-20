@@ -42,9 +42,9 @@ struct HeroCardView: View {
 
         var color: Color {
             switch self {
-            case .up: return AppColors.Fallback.warning
-            case .down: return AppColors.Fallback.success
-            case .neutral: return AppColors.Fallback.secondary
+            case .up: return AppColors.warning
+            case .down: return AppColors.success
+            case .neutral: return AppColors.secondary
             }
         }
     }
@@ -106,7 +106,7 @@ struct HeroCardView: View {
             Text("Current Weight")
                 .font(.subheadline)
                 .fontWeight(.medium)
-                .foregroundStyle(AppColors.Fallback.textPrimaryLight.opacity(0.8))
+                .foregroundStyle(AppColors.textSecondary)
 
             // Main weight display
             HStack(alignment: .firstTextBaseline, spacing: 4) {
@@ -155,7 +155,7 @@ struct HeroCardView: View {
         .frame(maxWidth: .infinity)
         .background(AppGradients.primary)
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(color: AppColors.Fallback.primary.opacity(0.3), radius: 10, x: 0, y: 5)
+        .shadow(color: AppColors.primary.opacity(0.3), radius: 10, x: 0, y: 5)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityDescription)
     }

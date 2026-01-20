@@ -31,15 +31,15 @@ struct QuickStatsRow: View {
                 value: "\(streak)",
                 subtitle: streak == 1 ? "day" : "days",
                 icon: "flame.fill",
-                iconColor: streak >= 7 ? AppColors.Fallback.warning : AppColors.Fallback.secondary
+                iconColor: streak >= 7 ? AppColors.warning : AppColors.secondary
             )
 
             // This week card
             if let change = weeklyChange {
                 let sign = change > 0 ? "+" : ""
-                let changeColor: Color = change < 0 ? AppColors.Fallback.success :
-                                          change > 0 ? AppColors.Fallback.warning :
-                                          AppColors.Fallback.secondary
+                let changeColor: Color = change < 0 ? AppColors.success :
+                                          change > 0 ? AppColors.warning :
+                                          AppColors.secondary
                 QuickStatCard(
                     title: "This Week",
                     value: "\(sign)\(change.formatted(.number.precision(.fractionLength(1))))",
@@ -53,12 +53,12 @@ struct QuickStatsRow: View {
                     value: "--",
                     subtitle: weightUnit.rawValue,
                     icon: "calendar",
-                    iconColor: AppColors.Fallback.secondary
+                    iconColor: AppColors.secondary
                 )
             }
 
             // To goal card
-            let toGoalColor: Color = abs(toGoal) < 5 ? AppColors.Fallback.success : AppColors.Fallback.secondary
+            let toGoalColor: Color = abs(toGoal) < 5 ? AppColors.success : AppColors.secondary
             QuickStatCard(
                 title: "To Goal",
                 value: toGoal.formatted(.number.precision(.fractionLength(1))),
@@ -89,25 +89,25 @@ struct QuickStatCard: View {
             Text(value)
                 .font(.title3)
                 .fontWeight(.bold)
-                .foregroundStyle(AppColors.Fallback.textPrimaryLight)
+                .foregroundStyle(AppColors.textPrimary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
 
             // Subtitle
             Text(subtitle)
                 .font(.caption2)
-                .foregroundStyle(AppColors.Fallback.textPrimaryLight.opacity(0.6))
+                .foregroundStyle(AppColors.textSecondary)
 
             // Title
             Text(title)
                 .font(.caption2)
                 .fontWeight(.medium)
-                .foregroundStyle(AppColors.Fallback.textPrimaryLight.opacity(0.8))
+                .foregroundStyle(AppColors.textSecondary)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
         .padding(.horizontal, 8)
-        .background(AppColors.Fallback.surfaceLight)
+        .background(AppColors.surface)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
         .accessibilityElement(children: .combine)
