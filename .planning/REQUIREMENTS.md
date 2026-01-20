@@ -26,6 +26,12 @@ Requirements for pre-launch audit fixes. Each maps to roadmap phases.
 - [x] **UX-08**: Chart segmented control should show months (1M, 3M, 6M) not days (30D, 90D, 180D)
 - [x] **UX-09**: Move + FAB button to be right aligned
 
+### Chart Improvements
+
+- [x] **CHART-01**: Extend prediction line to 14 days ahead (not just 1 day)
+- [x] **CHART-02**: Enable horizontal scrolling to explore historical data
+- [x] **CHART-03**: Add tap selection to show exact weight value for date
+
 ### Code Quality
 
 - [x] **QUAL-01**: Migrate deprecated GCD usage to async/await (HealthKitManager, NotificationManager, CloudKitSyncManager)
@@ -73,10 +79,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UX-07 | Phase 6 | Complete |
 | UX-08 | Phase 6 | Complete |
 | UX-09 | Phase 6 | Complete |
+| CHART-01 | Phase 7 | Complete |
+| CHART-02 | Phase 7 | Complete |
+| CHART-03 | Phase 7 | Complete |
 
 **Coverage:**
-- v1 requirements: 15 total
-- Mapped to phases: 15
+- v1 requirements: 18 total
+- Mapped to phases: 18
 - Unmapped: 0
 
 ---
