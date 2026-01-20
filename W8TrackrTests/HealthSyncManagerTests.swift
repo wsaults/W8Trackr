@@ -85,6 +85,15 @@ final class MockHealthStore: HealthStoreProtocol {
     }
 }
 
+// MARK: - Test Helpers
+
+/// Creates an isolated UserDefaults instance for test isolation.
+/// Each call returns a fresh suite that doesn't share state with other tests.
+private func makeTestDefaults() -> UserDefaults {
+    let suiteName = "com.w8trackr.tests.\(UUID().uuidString)"
+    return UserDefaults(suiteName: suiteName)!
+}
+
 // MARK: - HealthSyncManager Initialization Tests
 
 @MainActor
@@ -97,10 +106,9 @@ struct HealthSyncManagerInitializationTests {
     }
 
     @Test func managerDefaultsToHealthSyncDisabled() {
-        // Clear any previous state to ensure default is tested
-        UserDefaults.standard.removeObject(forKey: "healthSyncEnabled")
         let mockStore = MockHealthStore()
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         #expect(manager.isHealthSyncEnabled == false)
     }
 
@@ -118,10 +126,8 @@ struct HealthSyncManagerStateTests {
 
     @Test func healthSyncEnabledPersists() {
         let mockStore = MockHealthStore()
-        let manager = HealthSyncManager(healthStore: mockStore)
-
-        // Clear any previous state
-        UserDefaults.standard.removeObject(forKey: "healthSyncEnabled")
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
 
         manager.isHealthSyncEnabled = true
         #expect(manager.isHealthSyncEnabled == true)
@@ -132,9 +138,8 @@ struct HealthSyncManagerStateTests {
 
     @Test func lastHealthSyncDateInitiallyNil() {
         let mockStore = MockHealthStore()
-        // Clear any previous state
-        UserDefaults.standard.removeObject(forKey: "lastHealthSyncDate")
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         #expect(manager.lastHealthSyncDate == nil)
     }
 }
@@ -193,7 +198,8 @@ struct HealthSyncManagerSaveTests {
 
     @Test func saveWeightToHealthCallsHealthStore() async throws {
         let mockStore = MockHealthStore()
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         manager.isHealthSyncEnabled = true
         let entry = WeightEntry(weight: 175.0)
 
@@ -204,7 +210,8 @@ struct HealthSyncManagerSaveTests {
 
     @Test func saveWeightToHealthSetsHealthKitUUID() async throws {
         let mockStore = MockHealthStore()
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         manager.isHealthSyncEnabled = true
         let entry = WeightEntry(weight: 175.0)
         #expect(entry.healthKitUUID == nil)
@@ -216,7 +223,8 @@ struct HealthSyncManagerSaveTests {
 
     @Test func saveWeightToHealthClearsPendingSync() async throws {
         let mockStore = MockHealthStore()
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         manager.isHealthSyncEnabled = true
         let entry = WeightEntry(weight: 175.0)
         entry.pendingHealthSync = true
@@ -230,7 +238,8 @@ struct HealthSyncManagerSaveTests {
         let mockStore = MockHealthStore()
         let expectedError = NSError(domain: "HealthKit", code: 100, userInfo: nil)
         mockStore.saveError = expectedError
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         manager.isHealthSyncEnabled = true
         let entry = WeightEntry(weight: 175.0)
 
@@ -241,7 +250,8 @@ struct HealthSyncManagerSaveTests {
 
     @Test func saveWeightToHealthPreservesExistingUUID() async throws {
         let mockStore = MockHealthStore()
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         manager.isHealthSyncEnabled = true
         let entry = WeightEntry(weight: 175.0)
         let existingUUID = "existing-uuid-12345"
@@ -262,7 +272,8 @@ struct HealthSyncManagerUpdateTests {
 
     @Test func updateWeightInHealthIncrementsSyncVersion() async throws {
         let mockStore = MockHealthStore()
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         manager.isHealthSyncEnabled = true
         let entry = WeightEntry(weight: 175.0)
         let originalVersion = entry.syncVersion
@@ -274,7 +285,8 @@ struct HealthSyncManagerUpdateTests {
 
     @Test func updateWeightInHealthCallsSave() async throws {
         let mockStore = MockHealthStore()
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         manager.isHealthSyncEnabled = true
         let entry = WeightEntry(weight: 175.0)
 
@@ -285,7 +297,8 @@ struct HealthSyncManagerUpdateTests {
 
     @Test func updateWeightInHealthClearsPendingSync() async throws {
         let mockStore = MockHealthStore()
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         manager.isHealthSyncEnabled = true
         let entry = WeightEntry(weight: 175.0)
         entry.pendingHealthSync = true
@@ -299,7 +312,8 @@ struct HealthSyncManagerUpdateTests {
         // Verify that pendingHealthSync is set to true before save
         // (in case save fails, we still want pending=true)
         let mockStore = MockHealthStore()
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         manager.isHealthSyncEnabled = true
         let entry = WeightEntry(weight: 175.0)
         entry.pendingHealthSync = false
@@ -351,12 +365,11 @@ struct HealthSyncManagerDeleteTests {
 struct HealthSyncManagerGracefulDegradationTests {
 
     @Test func appFunctionsWhenAuthorizationDenied() async throws {
-        // Clear any previous state
-        UserDefaults.standard.removeObject(forKey: "healthSyncEnabled")
         let mockStore = MockHealthStore()
         mockStore.authorizationResult = false
         mockStore.authorizationStatus = .notDetermined
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
 
         // Request authorization (denied)
         let authorized = try await manager.requestAuthorization()
@@ -374,7 +387,8 @@ struct HealthSyncManagerGracefulDegradationTests {
             code: HKError.errorAuthorizationDenied.rawValue,
             userInfo: nil
         )
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         manager.isHealthSyncEnabled = true
         let entry = WeightEntry(weight: 175.0)
         entry.pendingHealthSync = false
@@ -394,7 +408,8 @@ struct HealthSyncManagerGracefulDegradationTests {
             code: HKError.errorAuthorizationDenied.rawValue,
             userInfo: nil
         )
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         manager.isHealthSyncEnabled = true
         let entry = WeightEntry(weight: 175.0)
         entry.pendingHealthSync = false
@@ -410,7 +425,8 @@ struct HealthSyncManagerGracefulDegradationTests {
     @Test func entryStillHasPendingSyncAfterFailedSave() async {
         let mockStore = MockHealthStore()
         mockStore.saveError = NSError(domain: "HealthKit", code: 100, userInfo: nil)
-        let manager = HealthSyncManager(healthStore: mockStore)
+        let testDefaults = makeTestDefaults()
+        let manager = HealthSyncManager(healthStore: mockStore, userDefaults: testDefaults)
         manager.isHealthSyncEnabled = true
         let entry = WeightEntry(weight: 175.0)
         entry.pendingHealthSync = true

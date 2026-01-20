@@ -42,6 +42,9 @@ final class HealthSyncManager: ObservableObject {
     /// The HealthKit store instance (real or mock for testing).
     private let healthStore: any HealthStoreProtocol
 
+    /// The UserDefaults instance for persisting settings (injectable for testing).
+    private let userDefaults: UserDefaults
+
     // MARK: - Published State
 
     /// The current sync status for UI feedback.
@@ -65,18 +68,18 @@ final class HealthSyncManager: ObservableObject {
     ///
     /// Stored in UserDefaults and persists across app launches.
     var isHealthSyncEnabled: Bool {
-        get { UserDefaults.standard.bool(forKey: Self.healthSyncEnabledKey) }
+        get { userDefaults.bool(forKey: Self.healthSyncEnabledKey) }
         set {
-            UserDefaults.standard.set(newValue, forKey: Self.healthSyncEnabledKey)
+            userDefaults.set(newValue, forKey: Self.healthSyncEnabledKey)
             objectWillChange.send()
         }
     }
 
     /// The last successful sync date, or `nil` if never synced.
     var lastHealthSyncDate: Date? {
-        get { UserDefaults.standard.object(forKey: Self.lastHealthSyncDateKey) as? Date }
+        get { userDefaults.object(forKey: Self.lastHealthSyncDateKey) as? Date }
         set {
-            UserDefaults.standard.set(newValue, forKey: Self.lastHealthSyncDateKey)
+            userDefaults.set(newValue, forKey: Self.lastHealthSyncDateKey)
             objectWillChange.send()
         }
     }
@@ -85,8 +88,8 @@ final class HealthSyncManager: ObservableObject {
     ///
     /// Used to fetch only changes since the last sync rather than all data.
     var healthSyncAnchor: Data? {
-        get { UserDefaults.standard.data(forKey: Self.healthSyncAnchorKey) }
-        set { UserDefaults.standard.set(newValue, forKey: Self.healthSyncAnchorKey) }
+        get { userDefaults.data(forKey: Self.healthSyncAnchorKey) }
+        set { userDefaults.set(newValue, forKey: Self.healthSyncAnchorKey) }
     }
 
     // MARK: - Sync Status
@@ -110,10 +113,14 @@ final class HealthSyncManager: ObservableObject {
 
     /// Creates a new HealthSyncManager with the specified health store.
     ///
-    /// - Parameter healthStore: The HealthKit store to use. Defaults to the system HKHealthStore.
-    ///   Pass a mock for testing.
-    init(healthStore: any HealthStoreProtocol = HKHealthStore()) {
+    /// - Parameters:
+    ///   - healthStore: The HealthKit store to use. Defaults to the system HKHealthStore.
+    ///     Pass a mock for testing.
+    ///   - userDefaults: The UserDefaults instance for persisting settings. Defaults to `.standard`.
+    ///     Pass a custom suite for test isolation.
+    init(healthStore: any HealthStoreProtocol = HKHealthStore(), userDefaults: UserDefaults = .standard) {
         self.healthStore = healthStore
+        self.userDefaults = userDefaults
         checkAuthorizationStatus()
     }
 
