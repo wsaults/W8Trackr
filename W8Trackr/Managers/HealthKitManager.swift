@@ -8,13 +8,14 @@
 import Foundation
 import HealthKit
 
-class HealthKitManager: ObservableObject {
+@Observable @MainActor
+final class HealthKitManager {
     static let shared = HealthKitManager()
 
     private let healthStore = HKHealthStore()
 
-    @Published var isAuthorized = false
-    @Published var lastSyncStatus: SyncStatus = .none
+    var isAuthorized = false
+    var lastSyncStatus: SyncStatus = .none
 
     private static let healthSyncEnabledKey = "healthSyncEnabled"
 
@@ -22,7 +23,6 @@ class HealthKitManager: ObservableObject {
         get { UserDefaults.standard.bool(forKey: Self.healthSyncEnabledKey) }
         set {
             UserDefaults.standard.set(newValue, forKey: Self.healthSyncEnabledKey)
-            objectWillChange.send()
         }
     }
 
@@ -56,15 +56,12 @@ class HealthKitManager: ObservableObject {
         }
 
         let status = healthStore.authorizationStatus(for: weightType)
-        DispatchQueue.main.async {
-            self.isAuthorized = status == .sharingAuthorized
-        }
+        isAuthorized = status == .sharingAuthorized
     }
 
-    func requestAuthorization(completion: @escaping (Bool, Error?) -> Void) {
+    func requestAuthorization() async -> (success: Bool, error: (any Error)?) {
         guard Self.isHealthKitAvailable else {
-            completion(false, nil)
-            return
+            return (false, nil)
         }
 
         var typesToWrite: Set<HKSampleType> = []
@@ -76,60 +73,65 @@ class HealthKitManager: ObservableObject {
         }
 
         guard !typesToWrite.isEmpty else {
-            completion(false, nil)
-            return
+            return (false, nil)
         }
 
-        healthStore.requestAuthorization(toShare: typesToWrite, read: nil) { success, error in
-            DispatchQueue.main.async {
-                // Check actual authorization status, not just dialog completion
-                // The 'success' parameter only indicates the dialog was presented,
-                // not that the user granted permission
-                if let weightType = self.weightType {
-                    self.isAuthorized = self.healthStore.authorizationStatus(for: weightType) == .sharingAuthorized
-                } else {
-                    self.isAuthorized = false
+        do {
+            // Use withCheckedThrowingContinuation to call the callback-based API
+            // to avoid conflict with HealthStoreProtocol extension
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                healthStore.requestAuthorization(toShare: typesToWrite, read: nil) { _, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume()
+                    }
                 }
-                completion(self.isAuthorized, error)
             }
+            // Check actual authorization status, not just dialog completion
+            // The 'success' parameter only indicates the dialog was presented,
+            // not that the user granted permission
+            if let weightType = weightType {
+                isAuthorized = healthStore.authorizationStatus(for: weightType) == .sharingAuthorized
+            } else {
+                isAuthorized = false
+            }
+            return (isAuthorized, nil)
+        } catch {
+            isAuthorized = false
+            return (false, error)
         }
     }
 
-    func saveWeight(_ weightInPounds: Double, date: Date, completion: ((Bool, Error?) -> Void)? = nil) {
+    func saveWeight(_ weightInPounds: Double, date: Date) async -> (success: Bool, error: (any Error)?) {
         guard isHealthSyncEnabled,
               Self.isHealthKitAvailable,
               let weightType = weightType else {
-            completion?(false, nil)
-            return
+            return (false, nil)
         }
 
-        DispatchQueue.main.async {
-            self.lastSyncStatus = .syncing
-        }
+        lastSyncStatus = .syncing
 
         // HealthKit uses kilograms internally, convert from pounds
         let weightInKg = weightInPounds * WeightUnit.lbToKg
         let quantity = HKQuantity(unit: .gramUnit(with: .kilo), doubleValue: weightInKg)
         let sample = HKQuantitySample(type: weightType, quantity: quantity, start: date, end: date)
 
-        healthStore.save(sample) { success, error in
-            DispatchQueue.main.async {
-                if success {
-                    self.lastSyncStatus = .success
-                } else {
-                    self.lastSyncStatus = .failed(error?.localizedDescription ?? "Unknown error")
-                }
-                completion?(success, error)
-            }
+        do {
+            try await healthStore.save(sample)
+            lastSyncStatus = .success
+            return (true, nil)
+        } catch {
+            lastSyncStatus = .failed(error.localizedDescription)
+            return (false, error)
         }
     }
 
-    func saveBodyFatPercentage(_ percentage: Double, date: Date, completion: ((Bool, Error?) -> Void)? = nil) {
+    func saveBodyFatPercentage(_ percentage: Double, date: Date) async -> (success: Bool, error: (any Error)?) {
         guard isHealthSyncEnabled,
               Self.isHealthKitAvailable,
               let bodyFatType = bodyFatType else {
-            completion?(false, nil)
-            return
+            return (false, nil)
         }
 
         // HealthKit expects body fat as a ratio (0.0-1.0), not a percentage
@@ -137,36 +139,32 @@ class HealthKitManager: ObservableObject {
         let quantity = HKQuantity(unit: .percent(), doubleValue: ratio)
         let sample = HKQuantitySample(type: bodyFatType, quantity: quantity, start: date, end: date)
 
-        healthStore.save(sample) { success, error in
-            DispatchQueue.main.async {
-                completion?(success, error)
-            }
+        do {
+            try await healthStore.save(sample)
+            return (true, nil)
+        } catch {
+            return (false, error)
         }
     }
 
-    func saveWeightEntry(weightInUnit: Double, unit: WeightUnit, bodyFatPercentage: Decimal?, date: Date, completion: ((Bool) -> Void)? = nil) {
+    func saveWeightEntry(weightInUnit: Double, unit: WeightUnit, bodyFatPercentage: Decimal?, date: Date) async -> Bool {
         guard isHealthSyncEnabled, Self.isHealthKitAvailable else {
-            completion?(false)
-            return
+            return false
         }
 
         // Convert to pounds for internal storage (our standard)
         let weightInPounds = unit == .kg ? weightInUnit * WeightUnit.kgToLb : weightInUnit
 
-        saveWeight(weightInPounds, date: date) { success, _ in
-            guard success else {
-                completion?(false)
-                return
-            }
-
-            // Save body fat if available
-            if let bodyFat = bodyFatPercentage {
-                self.saveBodyFatPercentage(NSDecimalNumber(decimal: bodyFat).doubleValue, date: date) { bfSuccess, _ in
-                    completion?(bfSuccess)
-                }
-            } else {
-                completion?(true)
-            }
+        let (weightSuccess, _) = await saveWeight(weightInPounds, date: date)
+        guard weightSuccess else {
+            return false
         }
+
+        // Save body fat if available
+        if let bodyFat = bodyFatPercentage {
+            let (bfSuccess, _) = await saveBodyFatPercentage(NSDecimalNumber(decimal: bodyFat).doubleValue, date: date)
+            return bfSuccess
+        }
+        return true
     }
 }

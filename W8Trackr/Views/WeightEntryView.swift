@@ -333,12 +333,14 @@ struct WeightEntryView: View {
             // For new entries, find the just-saved entry and sync it
             // Note: The legacy HealthKitManager is still used for new entries until
             // the full migration to HealthSyncManager is complete (T024)
-            HealthKitManager.shared.saveWeightEntry(
-                weightInUnit: weight,
-                unit: weightUnit,
-                bodyFatPercentage: bodyFat,
-                date: Date()
-            )
+            Task {
+                _ = await HealthKitManager.shared.saveWeightEntry(
+                    weightInUnit: weight,
+                    unit: weightUnit,
+                    bodyFatPercentage: bodyFat,
+                    date: Date()
+                )
+            }
         }
 
         dismiss()
