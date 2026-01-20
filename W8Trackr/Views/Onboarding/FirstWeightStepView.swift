@@ -89,7 +89,7 @@ struct FirstWeightStepView: View {
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(isValidWeight ? Color.blue : Color.gray)
+                    .background(isValidWeight ? AppColors.primary : AppColors.surfaceSecondary)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
@@ -127,7 +127,7 @@ private struct WeightStepButton: View {
         Button(action: action) {
             Image(systemName: systemName)
                 .font(.system(size: buttonIconSize))
-                .foregroundStyle(.blue)
+                .foregroundStyle(AppColors.primary)
         }
     }
 }

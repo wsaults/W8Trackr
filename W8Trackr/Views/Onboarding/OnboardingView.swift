@@ -91,8 +91,8 @@ struct OnboardingView: View {
     private var backgroundGradient: some View {
         LinearGradient(
             colors: [
-                Color.blue.opacity(0.1),
-                Color.purple.opacity(0.05),
+                AppColors.primary.opacity(0.1),
+                AppColors.accent.opacity(0.05),
                 Color.clear
             ],
             startPoint: .topLeading,
@@ -117,7 +117,7 @@ struct OnboardingView: View {
         HStack(spacing: 8) {
             ForEach(OnboardingStep.allCases, id: \.rawValue) { step in
                 Circle()
-                    .fill(step == currentStep ? Color.blue : Color.gray.opacity(0.3))
+                    .fill(step == currentStep ? AppColors.primary : AppColors.surfaceSecondary)
                     .frame(width: 8, height: 8)
                     .scaleEffect(step == currentStep ? 1.2 : 1.0)
                     .animation(.spring(response: 0.3), value: currentStep)

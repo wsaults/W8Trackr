@@ -79,7 +79,7 @@ struct GoalStepView: View {
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(isValidGoal ? Color.blue : Color.gray)
+                    .background(isValidGoal ? AppColors.primary : AppColors.surfaceSecondary)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
@@ -117,7 +117,7 @@ private struct AdjustButton: View {
         Button(action: action) {
             Image(systemName: systemName)
                 .font(.system(size: buttonIconSize))
-                .foregroundStyle(.blue)
+                .foregroundStyle(AppColors.primary)
         }
     }
 }

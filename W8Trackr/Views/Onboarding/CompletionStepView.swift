@@ -22,11 +22,11 @@ struct CompletionStepView: View {
             // Success checkmark
             ZStack {
                 Circle()
-                    .fill(Color.green.opacity(0.15))
+                    .fill(AppColors.success.opacity(0.15))
                     .frame(width: 140, height: 140)
 
                 Circle()
-                    .fill(Color.green)
+                    .fill(AppColors.success)
                     .frame(width: 100, height: 100)
 
                 Image(systemName: "checkmark")
@@ -59,7 +59,7 @@ struct CompletionStepView: View {
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(AppColors.primary)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }

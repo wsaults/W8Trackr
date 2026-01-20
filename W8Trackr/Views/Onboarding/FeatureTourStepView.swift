@@ -70,7 +70,7 @@ struct FeatureTourStepView: View {
             HStack(spacing: 8) {
                 ForEach(features.indices, id: \.self) { index in
                     Circle()
-                        .fill(index == currentFeature ? features[index].color : Color.gray.opacity(0.3))
+                        .fill(index == currentFeature ? features[index].color : AppColors.surfaceSecondary)
                         .frame(width: 8, height: 8)
                         .scaleEffect(index == currentFeature ? 1.2 : 1.0)
                         .animation(.spring(response: 0.3), value: currentFeature)
@@ -84,7 +84,7 @@ struct FeatureTourStepView: View {
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(AppColors.primary)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }

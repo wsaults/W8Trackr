@@ -67,7 +67,7 @@ struct UnitPreferenceStepView: View {
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(AppColors.primary)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
@@ -123,11 +123,11 @@ private struct UnitOptionCard: View {
             HStack(spacing: 16) {
                 Image(systemName: unitIcon)
                     .font(.system(size: iconSize))
-                    .foregroundStyle(isSelected ? .white : .blue)
+                    .foregroundStyle(isSelected ? .white : AppColors.primary)
                     .frame(width: 50, height: 50)
                     .background(
                         Circle()
-                            .fill(isSelected ? Color.blue : Color.blue.opacity(0.1))
+                            .fill(isSelected ? AppColors.primary : AppColors.primary.opacity(0.1))
                     )
 
                 VStack(alignment: .leading, spacing: 4) {
@@ -151,7 +151,7 @@ private struct UnitOptionCard: View {
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.title2)
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(AppColors.primary)
                 }
             }
             .padding()
@@ -160,7 +160,7 @@ private struct UnitOptionCard: View {
                     .fill(Color(UIColor.secondarySystemBackground))
                     .overlay(
                         RoundedRectangle(cornerRadius: 14)
-                            .stroke(isSelected ? Color.blue : Color.clear, lineWidth: 2)
+                            .stroke(isSelected ? AppColors.primary : Color.clear, lineWidth: 2)
                     )
             )
         }
