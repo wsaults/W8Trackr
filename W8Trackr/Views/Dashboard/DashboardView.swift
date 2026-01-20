@@ -116,7 +116,6 @@ struct DashboardView: View {
             .background(AppColors.Fallback.backgroundLight)
             .navigationTitle("Dashboard")
             .navigationBarTitleDisplayMode(.inline)
-            .syncStatusToolbar()
             .sheet(isPresented: $showAddWeightView) {
                 WeightEntryView(entries: entries, weightUnit: preferredWeightUnit)
             }
@@ -144,6 +143,11 @@ struct DashboardView: View {
     private var dashboardContent: some View {
         ScrollView {
             VStack(spacing: 16) {
+                // Goal Reached Banner (when at goal - shows at top for visibility)
+                if goalPrediction.status == .atGoal {
+                    GoalReachedBannerView(prediction: goalPrediction)
+                }
+
                 // Hero Card
                 if let entry = entries.first {
                     HeroCardView(
@@ -179,9 +183,11 @@ struct DashboardView: View {
                     showSmoothing: showSmoothing
                 )
 
-                // Goal Prediction
-                GoalPredictionView(prediction: goalPrediction)
-                    .padding(.horizontal)
+                // Goal Prediction (only when NOT at goal - banner shown at top instead)
+                if goalPrediction.status != .atGoal {
+                    GoalPredictionView(prediction: goalPrediction)
+                        .padding(.horizontal)
+                }
 
                 // Milestone History
                 if !completedMilestones.isEmpty {
