@@ -16,9 +16,9 @@ Requirements for pre-launch audit fixes. Each maps to roadmap phases.
 
 ### UX Improvements
 
-- [ ] **UX-01**: Move Goal Reached banner to top of dashboard when active
-- [ ] **UX-02**: Consolidate iCloud sync status to Settings section only (remove from dashboard, logbook, settings header)
-- [ ] **UX-03**: Add undo capability for "Delete All Entries" action
+- [x] **UX-01**: Move Goal Reached banner to top of dashboard when active
+- [x] **UX-02**: Consolidate iCloud sync status to Settings section only (remove from dashboard, logbook, settings header)
+- [x] **UX-03**: Add undo capability for "Delete All Entries" action
 
 ### Code Quality
 
@@ -56,9 +56,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BUG-02 | Phase 2 | Complete |
 | BUG-03 | Phase 1 | Complete |
 | BUG-04 | Phase 1 | Complete |
-| UX-01 | Phase 3 | Pending |
-| UX-02 | Phase 3 | Pending |
-| UX-03 | Phase 3 | Pending |
+| UX-01 | Phase 3 | Complete |
+| UX-02 | Phase 3 | Complete |
+| UX-03 | Phase 3 | Complete |
 | QUAL-01 | Phase 4 | Pending |
 | QUAL-02 | Phase 4 | Pending |
 

@@ -12,7 +12,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 
 - [x] **Phase 1: Critical Bugs** - Fix crash-risk stubs and repeated milestone popup
 - [x] **Phase 2: Chart Animation** - Fix jank during date segment changes
-- [ ] **Phase 3: UX Polish** - Banner placement, sync status consolidation, undo capability
+- [x] **Phase 3: UX Polish** - Banner placement, sync status consolidation, undo capability
 - [ ] **Phase 4: Code Quality** - Migrate GCD to async/await, replace deprecated APIs
 
 ## Phase Details
@@ -56,8 +56,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md - Goal Reached banner at top + remove sync status from Dashboard/Logbook
-- [ ] 03-02-PLAN.md - Add undo capability for Delete All Entries
+- [x] 03-01-PLAN.md - Goal Reached banner at top + remove sync status from Dashboard/Logbook
+- [x] 03-02-PLAN.md - Add undo capability for Delete All Entries
 
 ### Phase 4: Code Quality
 **Goal**: Clean up deprecated patterns and concurrency violations
@@ -82,8 +82,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Critical Bugs | 2/2 | Complete | 2026-01-20 |
 | 2. Chart Animation | 1/1 | Complete | 2026-01-20 |
-| 3. UX Polish | 0/2 | Ready | - |
-| 4. Code Quality | 0/TBD | Not started | - |
+| 3. UX Polish | 2/2 | Complete | 2026-01-20 |
+| 4. Code Quality | 0/TBD | Ready | - |
 
 ---
 *Roadmap created: 2026-01-20*
