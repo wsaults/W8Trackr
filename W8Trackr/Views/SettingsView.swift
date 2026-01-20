@@ -23,8 +23,10 @@ struct SettingsView: View {
     @State private var showingHealthKitPermissionAlert = false
     @State private var showingSmoothingInfo = false
     @State private var showingExportView = false
-    @State private var showingDeleteSuccessToast = false
     @State private var showingDeleteErrorToast = false
+    @State private var pendingDeletionEntries: [WeightEntry] = []
+    @State private var deletionTask: Task<Void, Never>?
+    @State private var showingUndoToast = false
 
     init(weightUnit: Binding<WeightUnit>, goalWeight: Binding<Double>, showSmoothing: Binding<Bool>) {
         _weightUnit = weightUnit
@@ -55,17 +57,60 @@ struct SettingsView: View {
     private func deleteAllEntries() {
         do {
             let entries = try modelContext.fetch(FetchDescriptor<WeightEntry>())
+            guard !entries.isEmpty else { return }
+
+            // Cancel any existing deletion task
+            deletionTask?.cancel()
+
+            // Cache entries for potential undo (copy the array)
+            pendingDeletionEntries = entries
+
+            // Delete from context
             for entry in entries {
                 modelContext.delete(entry)
             }
             try modelContext.save()
-            showingDeleteSuccessToast = true
-            dismiss()
+
+            // Show undo toast
+            showingUndoToast = true
+
+            // Schedule cleanup after undo window expires
+            deletionTask = Task {
+                try? await Task.sleep(for: .seconds(5))
+                guard !Task.isCancelled else { return }
+                await MainActor.run {
+                    // Clear cache - entries are now permanently gone
+                    pendingDeletionEntries = []
+                    showingUndoToast = false
+                }
+            }
+
+            // Don't dismiss - stay in Settings so user can undo
         } catch {
             showingDeleteErrorToast = true
         }
     }
-    
+
+    private func undoDelete() {
+        // Cancel the cleanup task
+        deletionTask?.cancel()
+        deletionTask = nil
+
+        // Re-insert cached entries
+        for entry in pendingDeletionEntries {
+            modelContext.insert(entry)
+        }
+
+        do {
+            try modelContext.save()
+            pendingDeletionEntries = []
+            showingUndoToast = false
+        } catch {
+            // If undo fails, show error toast
+            showingDeleteErrorToast = true
+        }
+    }
+
     private var weightSettingsSection: some View {
         Section {
             Picker("Weight Unit", selection: $weightUnit) {
@@ -98,7 +143,7 @@ struct SettingsView: View {
                     goalWeight = clampedWeight
                 }
             }
-            
+
             HStack {
                 Text("Goal Weight")
                 Spacer()
@@ -133,7 +178,7 @@ struct SettingsView: View {
             Text("Your goal weight will be automatically converted when changing units.")
         }
     }
-    
+
     private var dataManagementSection: some View {
         Section {
             Button {
@@ -156,13 +201,12 @@ struct SettingsView: View {
             } label: {
                 Text("Delete All Weight Entries")
             }
-            .accessibilityHint("This will permanently delete all your weight tracking data. This action cannot be undone.")
+            .accessibilityHint("This will delete all your weight tracking data. You can undo within 5 seconds.")
         } header: {
             Text("Danger Zone")
         }
     }
 
-    
     private var chartSettingsSection: some View {
         Section {
             HStack {
@@ -304,7 +348,7 @@ struct SettingsView: View {
                 .font(.caption)
         }
     }
-    
+
     #if DEBUG
     @State private var showingDevMenu = false
     #endif
@@ -344,7 +388,7 @@ struct SettingsView: View {
                     deleteAllEntries()
                 }
             } message: {
-                Text("Are you sure you want to delete all weight entries? This action cannot be undone.")
+                Text("Are you sure you want to delete all weight entries? You'll have 5 seconds to undo.")
             }
             .alert("Notifications Disabled", isPresented: $showingNotificationPermissionAlert) {
                 Button("OK", role: .cancel) {
@@ -387,10 +431,14 @@ struct SettingsView: View {
             }
             #endif
             .toast(
-                isPresented: $showingDeleteSuccessToast,
-                message: "All weight entries deleted",
-                systemImage: "checkmark.circle.fill"
-            )
+                isPresented: $showingUndoToast,
+                message: "All entries deleted",
+                systemImage: "trash",
+                actionLabel: "Undo",
+                duration: 5
+            ) {
+                undoDelete()
+            }
             .toast(
                 isPresented: $showingDeleteErrorToast,
                 message: "Failed to delete entries",
