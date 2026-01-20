@@ -41,7 +41,7 @@ struct EmptyStateView: View {
                         .fontWeight(.semibold)
                         .padding(.horizontal, 24)
                         .padding(.vertical, 12)
-                        .background(.blue)
+                        .background(AppColors.primary)
                         .foregroundStyle(.white)
                         .clipShape(Capsule())
                 }
@@ -67,16 +67,16 @@ struct EmptyStateView: View {
     private var startTrackingIllustration: some View {
         ZStack {
             Circle()
-                .fill(.blue.opacity(0.1))
+                .fill(AppColors.primary.opacity(0.1))
                 .frame(width: 120, height: 120)
 
             Image(systemName: "figure.walk")
                 .font(.system(size: mainIconSize))
-                .foregroundStyle(.blue.gradient)
+                .foregroundStyle(AppColors.primary.gradient)
 
             Image(systemName: "plus.circle.fill")
                 .font(.system(size: accentIconSize))
-                .foregroundStyle(.green)
+                .foregroundStyle(AppColors.success)
                 .offset(x: 30, y: -30)
         }
     }
@@ -84,16 +84,16 @@ struct EmptyStateView: View {
     private var emptyLogbookIllustration: some View {
         ZStack {
             Circle()
-                .fill(.orange.opacity(0.1))
+                .fill(AppColors.warning.opacity(0.1))
                 .frame(width: 120, height: 120)
 
             Image(systemName: "book.pages")
                 .font(.system(size: mainIconSize))
-                .foregroundStyle(.orange.gradient)
+                .foregroundStyle(AppColors.warning.gradient)
 
             Image(systemName: "pencil.circle.fill")
                 .font(.system(size: accentIconSize))
-                .foregroundStyle(.blue)
+                .foregroundStyle(AppColors.primary)
                 .offset(x: 30, y: 30)
         }
     }
@@ -101,12 +101,12 @@ struct EmptyStateView: View {
     private var noChartDataIllustration: some View {
         ZStack {
             Circle()
-                .fill(.purple.opacity(0.1))
+                .fill(AppColors.accent.opacity(0.1))
                 .frame(width: 120, height: 120)
 
             Image(systemName: "chart.line.uptrend.xyaxis")
                 .font(.system(size: mainIconSize))
-                .foregroundStyle(.purple.gradient)
+                .foregroundStyle(AppColors.accent.gradient)
 
             Image(systemName: "questionmark.circle.fill")
                 .font(.system(size: accentIconSize))

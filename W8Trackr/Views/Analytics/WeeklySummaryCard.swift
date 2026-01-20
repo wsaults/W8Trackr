@@ -219,5 +219,5 @@ private struct StatView: View {
 
     return WeeklySummaryCard(summary: summary)
         .padding()
-        .background(Color.gray.opacity(0.1))
+        .background(AppColors.surfaceSecondary)
 }

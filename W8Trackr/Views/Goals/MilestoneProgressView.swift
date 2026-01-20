@@ -24,7 +24,7 @@ struct MilestoneProgressView: View {
             ZStack {
                 // Background track
                 Circle()
-                    .stroke(Color.gray.opacity(0.2), lineWidth: 12)
+                    .stroke(AppColors.surfaceSecondary, lineWidth: 12)
 
                 // Progress arc
                 Circle()
@@ -101,10 +101,10 @@ struct MilestoneProgressCompactView: View {
             // Mini progress ring
             ZStack {
                 Circle()
-                    .stroke(Color.gray.opacity(0.2), lineWidth: 4)
+                    .stroke(AppColors.surfaceSecondary, lineWidth: 4)
                 Circle()
                     .trim(from: 0, to: progress.progressToNextMilestone)
-                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                    .stroke(AppColors.primary, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                     .rotationEffect(.degrees(-90))
             }
             .frame(width: 36, height: 36)

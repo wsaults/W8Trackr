@@ -146,5 +146,5 @@ private struct PageIndicator: View {
             weightUnit: .lb
         )
     }
-    .background(Color.gray.opacity(0.1))
+    .background(AppColors.surfaceSecondary)
 }
