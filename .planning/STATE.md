@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can reliably track weight and see progress without UI bugs undermining the experience
-**Current focus:** Phase 3 - UX Polish
+**Current focus:** Phase 4 - Code Quality
 
 ## Current Position
 
-Phase: 3 of 4 (UX Polish)
-Plan: 2 of TBD in current phase
+Phase: 4 of 4 (Code Quality)
+Plan: 1 of 2 in current phase
 Status: In progress
-Last activity: 2026-01-20 - Completed 03-02-PLAN.md
+Last activity: 2026-01-20 - Completed 04-01-PLAN.md
 
-Progress: [#######---] 70%
+Progress: [########--] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 5.8 minutes
-- Total execution time: 0.48 hours
+- Total plans completed: 6
+- Average duration: 5.7 minutes
+- Total execution time: 0.57 hours
 
 **By Phase:**
 
@@ -30,10 +30,11 @@ Progress: [#######---] 70%
 | 01-critical-bugs | 2 | 13 min | 6.5 min |
 | 02-chart-animation | 1 | 9 min | 9 min |
 | 03-ux-polish | 2 | 7 min | 3.5 min |
+| 04-code-quality | 1 | 5 min | 5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (10 min), 02-01 (9 min), 03-01 (4 min), 03-02 (3 min)
-- Trend: Improving
+- Last 5 plans: 02-01 (9 min), 03-01 (4 min), 03-02 (3 min), 04-01 (5 min)
+- Trend: Stable
 
 *Updated after each plan completion*
 
@@ -49,6 +50,8 @@ Recent decisions affecting current work:
 - [01-01]: Check uncelebrated milestones first before new achievements (handles crash recovery)
 - [03-01]: Banner placement at top of VStack before Hero Card for immediate visibility
 - [03-02]: Use in-memory cache for undo (SwiftData UndoManager has bugs with bulk delete)
+- [04-01]: Task.sleep(for:) with try? await for fire-and-forget delays in Views
+- [04-01]: Task<Void, Never>? with isCancelled guard for cancellable timers
 
 ### Pending Todos
 
@@ -56,11 +59,11 @@ None yet.
 
 ### Blockers/Concerns
 
-- Duplicate HealthKit managers (HealthKitManager vs HealthSyncManager) may complicate QUAL-01
+- Duplicate HealthKit managers (HealthKitManager vs HealthSyncManager) still need migration in 04-02
 - Unit tests have pre-existing infrastructure issues (0.000s runtime suggests test setup problems, not assertion failures)
 
 ## Session Continuity
 
 Last session: 2026-01-20
-Stopped at: Completed 03-02-PLAN.md
+Stopped at: Completed 04-01-PLAN.md
 Resume file: None
