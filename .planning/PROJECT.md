@@ -23,12 +23,18 @@ Users can reliably track their weight and see progress toward their goals withou
 
 ### Active
 
-- [ ] Fix milestone popup appearing repeatedly
-- [ ] Fix chart animation jank on date segment change
-- [ ] Move Goal Reached banner to top of dashboard
-- [ ] Consolidate iCloud sync status to Settings section only
-- [ ] Remove/implement fatalError stub services
-- [ ] Add undo capability for Delete All Entries
+- [x] Fix milestone popup appearing repeatedly
+- [x] Fix chart animation jank on date segment change
+- [x] Move Goal Reached banner to top of dashboard
+- [x] Consolidate iCloud sync status to Settings section only
+- [x] Remove/implement fatalError stub services
+- [x] Add undo capability for Delete All Entries
+- [x] Add light/dark mode support
+- [x] Goal prediction card full width and better design
+- [x] Current Weight card text readable on colored background
+- [x] Current Weight card red/green based on trend direction
+- [x] Chart segmented control shows months (1M, 3M, 6M) not days
+- [x] FAB button right-aligned
 
 ### Out of Scope
 

@@ -59,6 +59,13 @@ enum AppGradients {
         endPoint: .bottomTrailing
     )
 
+    /// Blue gradient - FAB buttons, action elements
+    static let blue = LinearGradient(
+        colors: [Color(hex: "#4A90D9"), Color(hex: "#357ABD")],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+
     // MARK: - Background Gradients
 
     /// Subtle warm background gradient (light mode)

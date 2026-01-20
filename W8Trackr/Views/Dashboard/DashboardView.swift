@@ -212,9 +212,9 @@ struct DashboardView: View {
                 .foregroundStyle(.white)
                 .fontWeight(.bold)
                 .padding()
-                .background(AppGradients.primary)
+                .background(AppGradients.blue)
                 .clipShape(Circle())
-                .shadow(color: AppColors.primary.opacity(0.3), radius: 8, x: 0, y: 4)
+                .shadow(color: Color(hex: "#4A90D9").opacity(0.4), radius: 8, x: 0, y: 4)
         }
         .accessibilityLabel("Add weight entry")
         .accessibilityHint("Opens form to log a new weight measurement")

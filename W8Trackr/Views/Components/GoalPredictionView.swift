@@ -106,10 +106,10 @@ struct GoalPredictionView: View {
                 noDataContent
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(backgroundColor)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var headerText: String {
