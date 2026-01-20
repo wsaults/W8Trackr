@@ -14,7 +14,20 @@ struct LogbookView: View {
     var goalWeight: Double
     @State private var showingAddWeight = false
     @State private var entryToEdit: WeightEntry?
-    
+
+    // Filter state - persists during session via @State
+    @State private var showOnlyNotes = false
+    @State private var showMilestones = false
+    @State private var selectedDays: Set<Int> = []  // 1=Sunday, 2=Monday, ..., 7=Saturday
+
+    private var hasActiveFilters: Bool {
+        showOnlyNotes || showMilestones || !selectedDays.isEmpty
+    }
+
+    private var weekdayNames: [String] {
+        Calendar.current.weekdaySymbols
+    }
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -27,7 +40,13 @@ struct LogbookView: View {
                         action: { showingAddWeight = true }
                     )
                 } else {
-                    HistorySectionView(entries: entries, weightUnit: preferredWeightUnit) { entry in
+                    HistorySectionView(
+                        entries: entries,
+                        weightUnit: preferredWeightUnit,
+                        showOnlyNotes: showOnlyNotes,
+                        showMilestones: showMilestones,
+                        selectedDays: selectedDays
+                    ) { entry in
                         entryToEdit = entry
                     }
                 }
@@ -35,10 +54,54 @@ struct LogbookView: View {
             .navigationTitle("Logbook")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        showingAddWeight = true
-                    } label: {
-                        Image(systemName: "plus")
+                    HStack(spacing: 16) {
+                        // Filter menu
+                        Menu {
+                            Toggle("With Notes", isOn: $showOnlyNotes)
+                            Toggle("Milestones", isOn: $showMilestones)
+
+                            Divider()
+
+                            Menu("Day of Week") {
+                                ForEach(1...7, id: \.self) { day in
+                                    Toggle(weekdayNames[day - 1], isOn: Binding(
+                                        get: { selectedDays.contains(day) },
+                                        set: { isOn in
+                                            if isOn {
+                                                selectedDays.insert(day)
+                                            } else {
+                                                selectedDays.remove(day)
+                                            }
+                                        }
+                                    ))
+                                }
+
+                                if !selectedDays.isEmpty {
+                                    Divider()
+                                    Button("Clear Days") {
+                                        selectedDays.removeAll()
+                                    }
+                                }
+                            }
+
+                            if hasActiveFilters {
+                                Divider()
+                                Button("Clear All Filters", role: .destructive) {
+                                    showOnlyNotes = false
+                                    showMilestones = false
+                                    selectedDays.removeAll()
+                                }
+                            }
+                        } label: {
+                            Image(systemName: hasActiveFilters ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                        }
+
+                        // Add entry button
+                        Button {
+                            showingAddWeight = true
+                        } label: {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
             }
