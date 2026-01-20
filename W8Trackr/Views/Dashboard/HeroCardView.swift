@@ -111,6 +111,17 @@ struct HeroCardView: View {
         }
     }
 
+    private var trendShadowColor: Color {
+        switch trendDirection {
+        case .down:
+            return AppColors.success
+        case .up:
+            return AppColors.warning
+        case .neutral:
+            return AppColors.primary
+        }
+    }
+
     var body: some View {
         VStack(spacing: 12) {
             // Label
@@ -166,7 +177,7 @@ struct HeroCardView: View {
         .frame(maxWidth: .infinity)
         .background(trendGradient)
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(color: (trendDirection == .down ? AppColors.success : trendDirection == .up ? AppColors.warning : AppColors.primary).opacity(0.3), radius: 10, x: 0, y: 5)
+        .shadow(color: trendShadowColor.opacity(0.3), radius: 10, x: 0, y: 5)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityDescription)
     }
