@@ -11,7 +11,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - Decimal phases (e.g., 2.1): Urgent insertions if needed
 
 - [x] **Phase 1: Critical Bugs** - Fix crash-risk stubs and repeated milestone popup
-- [ ] **Phase 2: Chart Animation** - Fix jank during date segment changes
+- [x] **Phase 2: Chart Animation** - Fix jank during date segment changes
 - [ ] **Phase 3: UX Polish** - Banner placement, sync status consolidation, undo capability
 - [ ] **Phase 4: Code Quality** - Migrate GCD to async/await, replace deprecated APIs
 
@@ -43,7 +43,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 02-01-PLAN.md - Fix ChartEntry identity for smooth animations
+- [x] 02-01-PLAN.md - Fix ChartEntry identity for smooth animations
 
 ### Phase 3: UX Polish
 **Goal**: Improve dashboard layout and data safety for better user experience
@@ -80,7 +80,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Critical Bugs | 2/2 | Complete | 2026-01-20 |
-| 2. Chart Animation | 0/1 | Not started | - |
+| 2. Chart Animation | 1/1 | Complete | 2026-01-20 |
 | 3. UX Polish | 0/TBD | Not started | - |
 | 4. Code Quality | 0/TBD | Not started | - |
 
