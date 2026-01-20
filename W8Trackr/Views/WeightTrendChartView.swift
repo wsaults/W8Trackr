@@ -55,9 +55,7 @@ struct WeightTrendChartView: View {
         switch selectedRange {
         case .sevenDay:
             return .dateTime.day()
-        case .thirtyDay, .ninetyDay:
-            return .dateTime.day().month(.abbreviated)
-        case .oneEightyDay, .oneYear:
+        case .thirtyDay, .ninetyDay, .oneEightyDay, .oneYear:
             return .dateTime.month(.abbreviated)
         case .allTime:
             return .dateTime.month(.abbreviated).year()
@@ -100,7 +98,17 @@ struct WeightTrendChartView: View {
     }
     
     private struct ChartEntry: Identifiable {
-        let id = UUID()
+        var id: String {
+            let timestamp = Int(date.timeIntervalSince1970)
+            if isSmoothed {
+                return "smoothed-\(timestamp)"
+            } else if isPrediction {
+                return "prediction-\(timestamp)"
+            } else {
+                return "entry-\(timestamp)"
+            }
+        }
+
         let date: Date
         let weight: Double
         let isPrediction: Bool
@@ -231,7 +239,7 @@ struct WeightTrendChartView: View {
                         y: .value("Weight", entry.weight)
                     )
                     .foregroundStyle(by: .value("Type", "Trend"))
-                    .interpolationMethod(.catmullRom)
+                    .interpolationMethod(.monotone)
                     .lineStyle(StrokeStyle(lineWidth: 3))
                 }
 
@@ -242,7 +250,7 @@ struct WeightTrendChartView: View {
                         y: .value("Weight", entry.weight)
                     )
                     .foregroundStyle(by: .value("Type", "Predicted"))
-                    .interpolationMethod(.catmullRom)
+                    .interpolationMethod(.monotone)
                 }
                 
                 // Draw all points last
@@ -278,7 +286,7 @@ struct WeightTrendChartView: View {
                     AxisValueLabel(format: dateFormatForRange)
                 }
             }
-            .animation(.easeInOut, value: selectedRange)
+            .animation(.snappy, value: selectedRange)
             .padding(.bottom)
             .accessibilityChartDescriptor(self)
         }
