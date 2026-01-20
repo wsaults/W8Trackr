@@ -53,10 +53,11 @@ Plans:
   1. Goal Reached banner appears at top of dashboard (visible without scrolling)
   2. iCloud sync status appears only in Settings section (not in dashboard or logbook)
   3. Delete All Entries action can be undone within a reasonable time window
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: TBD
+- [ ] 03-01-PLAN.md - Goal Reached banner at top + remove sync status from Dashboard/Logbook
+- [ ] 03-02-PLAN.md - Add undo capability for Delete All Entries
 
 ### Phase 4: Code Quality
 **Goal**: Clean up deprecated patterns and concurrency violations
@@ -81,10 +82,11 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Critical Bugs | 2/2 | Complete | 2026-01-20 |
 | 2. Chart Animation | 1/1 | Complete | 2026-01-20 |
-| 3. UX Polish | 0/TBD | Not started | - |
+| 3. UX Polish | 0/2 | Ready | - |
 | 4. Code Quality | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-20*
 *Phase 1 planned: 2026-01-20*
 *Phase 2 planned: 2026-01-20*
+*Phase 3 planned: 2026-01-20*
