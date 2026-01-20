@@ -16,6 +16,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 4: Code Quality** - Migrate GCD to async/await, replace deprecated APIs
 - [x] **Phase 5: Light/Dark Mode** - Add proper light/dark mode support
 - [x] **Phase 6: Dashboard Polish** - Improve card layouts, hero card styling, chart labels, FAB alignment
+- [ ] **Phase 7: Chart Improvements** - Extended prediction line, horizontal scrolling, tap selection
 
 ## Phase Details
 
@@ -109,10 +110,24 @@ Plans:
 Plans:
 - [x] 06-01-PLAN.md - Dashboard styling: chart labels, hero card trends, FAB alignment, full-width prediction
 
+### Phase 7: Chart Improvements
+**Goal**: Make chart more interactive with scrolling, extended prediction, and tap selection
+**Depends on**: Phase 6
+**Requirements**: CHART-01, CHART-02, CHART-03
+**Success Criteria** (what must be TRUE):
+  1. Prediction line extends 14 days ahead (not just 1 day)
+  2. Chart can be scrolled horizontally to explore historical data
+  3. Tapping on chart shows exact weight value for that date
+  4. Chart feels responsive and confidence-inspiring
+**Plans**: 1 plan
+
+Plans:
+- [ ] 07-01-PLAN.md - Extended prediction, horizontal scrolling, tap selection
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -122,6 +137,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 4. Code Quality | 4/4 | Complete | 2026-01-20 |
 | 5. Light/Dark Mode | 3/3 | Complete | 2026-01-20 |
 | 6. Dashboard Polish | 1/1 | Complete | 2026-01-20 |
+| 7. Chart Improvements | 0/1 | Not Started | — |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -133,3 +149,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 *Phase 5 planned: 2026-01-20*
 *Phase 5 gap closure plan: 2026-01-20*
 *Phase 6 planned: 2026-01-20*
+*Phase 7 planned: 2026-01-20*
