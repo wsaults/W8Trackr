@@ -18,7 +18,7 @@ struct HistorySectionView: View {
     @State private var pendingDeletes: [WeightEntry] = []
     @State private var showingUndoToast = false
     @State private var showDeleteError = false
-    @State private var deleteWorkItem: DispatchWorkItem?
+    @State private var deleteTask: Task<Void, Never>?
 
     private static let undoTimeout: TimeInterval = 5
 
@@ -131,25 +131,25 @@ struct HistorySectionView: View {
     }
 
     private func queueDelete(_ entry: WeightEntry) {
-        deleteWorkItem?.cancel()
+        deleteTask?.cancel()
 
         withAnimation {
             pendingDeletes.append(entry)
             showingUndoToast = true
         }
 
-        let workItem = DispatchWorkItem { [self] in
+        deleteTask = Task {
+            try? await Task.sleep(for: .seconds(Self.undoTimeout))
+            guard !Task.isCancelled else { return }
             withAnimation {
                 showingUndoToast = false
             }
         }
-        deleteWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + Self.undoTimeout, execute: workItem)
     }
 
     private func undoDelete() {
-        deleteWorkItem?.cancel()
-        deleteWorkItem = nil
+        deleteTask?.cancel()
+        deleteTask = nil
 
         withAnimation {
             pendingDeletes.removeAll()
@@ -189,7 +189,7 @@ struct HistorySectionView: View {
         }
 
         pendingDeletes.removeAll()
-        deleteWorkItem = nil
+        deleteTask = nil
     }
 }
 
