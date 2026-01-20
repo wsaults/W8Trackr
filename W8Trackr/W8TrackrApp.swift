@@ -29,6 +29,6 @@ struct W8TrackrApp: App {
             }
         }
         .environmentObject(healthSyncManager)
-        .modelContainer(for: [WeightEntry.self, CompletedMilestone.self, MilestoneAchievement.self])
+        .modelContainer(for: [WeightEntry.self, CompletedMilestone.self])
     }
 }
