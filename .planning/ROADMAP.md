@@ -15,6 +15,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 3: UX Polish** - Banner placement, sync status consolidation, undo capability
 - [x] **Phase 4: Code Quality** - Migrate GCD to async/await, replace deprecated APIs
 - [x] **Phase 5: Light/Dark Mode** - Add proper light/dark mode support
+- [ ] **Phase 6: Dashboard Polish** - Improve card layouts, hero card styling, chart labels, FAB alignment
 
 ## Phase Details
 
@@ -93,10 +94,25 @@ Plans:
 - [x] 05-02-PLAN.md - Fix chart colors, deprecated APIs, and Animation view colors
 - [x] 05-03-PLAN.md - Migrate remaining 10 views to AppColors (gap closure)
 
+### Phase 6: Dashboard Polish
+**Goal**: Polish dashboard card layouts and styling for better visual consistency
+**Depends on**: Phase 5
+**Requirements**: UX-05, UX-06, UX-07, UX-08, UX-09
+**Success Criteria** (what must be TRUE):
+  1. Goal prediction card takes full width and has improved visual design
+  2. Current Weight "Current Weight" text is clearly readable on gradient background
+  3. Current Weight card background is green when losing weight (down trend), red/orange when gaining (up trend)
+  4. Chart segmented control shows 1W, 1M, 3M, 6M, 1Y, All (months not days)
+  5. FAB button is right-aligned at bottom of dashboard
+**Plans**: 1 plan
+
+Plans:
+- [ ] 06-01-PLAN.md - Dashboard styling: chart labels, hero card trends, FAB alignment, full-width prediction
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -105,6 +121,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 3. UX Polish | 2/2 | Complete | 2026-01-20 |
 | 4. Code Quality | 4/4 | Complete | 2026-01-20 |
 | 5. Light/Dark Mode | 3/3 | Complete | 2026-01-20 |
+| 6. Dashboard Polish | 0/1 | Pending | — |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -115,3 +132,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 *Phase 4 gap closure plans: 2026-01-20*
 *Phase 5 planned: 2026-01-20*
 *Phase 5 gap closure plan: 2026-01-20*
+*Phase 6 planned: 2026-01-20*
