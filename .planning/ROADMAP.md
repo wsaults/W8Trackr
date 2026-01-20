@@ -15,7 +15,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 3: UX Polish** - Banner placement, sync status consolidation, undo capability
 - [x] **Phase 4: Code Quality** - Migrate GCD to async/await, replace deprecated APIs
 - [x] **Phase 5: Light/Dark Mode** - Add proper light/dark mode support
-- [ ] **Phase 6: Dashboard Polish** - Improve card layouts, hero card styling, chart labels, FAB alignment
+- [x] **Phase 6: Dashboard Polish** - Improve card layouts, hero card styling, chart labels, FAB alignment
 
 ## Phase Details
 
@@ -107,7 +107,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 06-01-PLAN.md - Dashboard styling: chart labels, hero card trends, FAB alignment, full-width prediction
+- [x] 06-01-PLAN.md - Dashboard styling: chart labels, hero card trends, FAB alignment, full-width prediction
 
 ## Progress
 
@@ -121,7 +121,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. UX Polish | 2/2 | Complete | 2026-01-20 |
 | 4. Code Quality | 4/4 | Complete | 2026-01-20 |
 | 5. Light/Dark Mode | 3/3 | Complete | 2026-01-20 |
-| 6. Dashboard Polish | 0/1 | Pending | — |
+| 6. Dashboard Polish | 1/1 | Complete | 2026-01-20 |
 
 ---
 *Roadmap created: 2026-01-20*

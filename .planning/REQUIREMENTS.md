@@ -20,6 +20,11 @@ Requirements for pre-launch audit fixes. Each maps to roadmap phases.
 - [x] **UX-02**: Consolidate iCloud sync status to Settings section only (remove from dashboard, logbook, settings header)
 - [x] **UX-03**: Add undo capability for "Delete All Entries" action
 - [x] **UX-04**: Add proper light/dark mode support across all views
+- [x] **UX-05**: Goal prediction card should take full width and look better
+- [x] **UX-06**: Current Weight card "Current Weight" text should be readable on colored background
+- [x] **UX-07**: Current Weight card background should be red/green based on up/down trend
+- [x] **UX-08**: Chart segmented control should show months (1M, 3M, 6M) not days (30D, 90D, 180D)
+- [x] **UX-09**: Move + FAB button to be right aligned
 
 ### Code Quality
 
@@ -63,10 +68,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | QUAL-01 | Phase 4 | Complete |
 | QUAL-02 | Phase 4 | Complete |
 | UX-04 | Phase 5 | Complete |
+| UX-05 | Phase 6 | Complete |
+| UX-06 | Phase 6 | Complete |
+| UX-07 | Phase 6 | Complete |
+| UX-08 | Phase 6 | Complete |
+| UX-09 | Phase 6 | Complete |
 
 **Coverage:**
-- v1 requirements: 10 total
-- Mapped to phases: 10
+- v1 requirements: 15 total
+- Mapped to phases: 15
 - Unmapped: 0
 
 ---
