@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can reliably track weight and see progress without UI bugs undermining the experience
-**Current focus:** Phase 4 - Code Quality (COMPLETE)
+**Current focus:** Phase 5 - Light/Dark Mode (In Progress)
 
 ## Current Position
 
-Phase: 4 of 4 (Code Quality)
-Plan: 4 of 4 in current phase
-Status: Phase complete
-Last activity: 2026-01-20 - Completed 04-04-PLAN.md (SwiftLint zero violations)
+Phase: 5 of 5 (Light/Dark Mode)
+Plan: 2 of ? in current phase
+Status: In progress
+Last activity: 2026-01-20 - Completed 05-02-PLAN.md (Charts and Animations)
 
-Progress: [##########] 100%
+Progress: [##########] 92%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 5.2 minutes
-- Total execution time: 0.78 hours
+- Total plans completed: 11
+- Average duration: 4.9 minutes
+- Total execution time: 0.9 hours
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [##########] 100%
 | 02-chart-animation | 1 | 9 min | 9 min |
 | 03-ux-polish | 2 | 7 min | 3.5 min |
 | 04-code-quality | 4 | 18.5 min | 4.6 min |
+| 05-light-dark-mode | 2 | 7 min | 3.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-01 (5 min), 04-02 (6.5 min), 04-03 (2 min), 04-04 (5 min)
-- Trend: Stable
+- Last 5 plans: 04-02 (6.5 min), 04-03 (2 min), 04-04 (5 min), 05-01 (3 min), 05-02 (4 min)
+- Trend: Stable, fast execution
 
 *Updated after each plan completion*
 
@@ -58,6 +59,8 @@ Recent decisions affecting current work:
 - [04-03]: @Environment(Type.self) replaces @EnvironmentObject for @Observable
 - [04-04]: Remove print statements entirely from previews (empty closures are cleaner)
 - [04-04]: Split test files by domain for maintainability
+- [05-02]: Use constant 2000 for offscreen confetti instead of UIScreen.main.bounds
+- [05-02]: Keep Color.yellow/pink in ConfettiView for vibrant celebrations
 
 ### Pending Todos
 
@@ -65,27 +68,34 @@ None.
 
 ### Blockers/Concerns
 
-None remaining. All SwiftLint violations resolved.
+None remaining. All foregroundColor() and UIScreen.main.bounds eliminated from Views.
 
 ## Session Continuity
 
 Last session: 2026-01-20
-Stopped at: Completed 04-04-PLAN.md - SwiftLint zero violations
+Stopped at: Completed 05-02-PLAN.md - Charts and Animations
 Resume file: None
 
 ## Project Completion Status
 
-All 4 phases complete:
-- Phase 1: Critical Bugs (2 plans)
-- Phase 2: Chart Animation (1 plan)
-- Phase 3: UX Polish (2 plans)
-- Phase 4: Code Quality (4 plans)
+4 of 5 phases complete (Phase 5 in progress):
+- Phase 1: Critical Bugs (2 plans) ✓
+- Phase 2: Chart Animation (1 plan) ✓
+- Phase 3: UX Polish (2 plans) ✓
+- Phase 4: Code Quality (4 plans) ✓
+- Phase 5: Light/Dark Mode (2 plans complete) - In progress
 
-Total: 9 plans executed successfully
+Total: 11 plans executed, Phase 5 in progress
 
-## Final Code Quality Status
+### Roadmap Evolution
 
-- SwiftLint: 0 violations in 60 files
+- Phase 5 added: Light/dark mode support
+
+## Code Quality Status
+
+- SwiftLint: 0 violations
 - All managers using @MainActor + @Observable
-- All deprecated APIs replaced
-- Test files organized by domain (all under 1000 lines)
+- All deprecated APIs replaced (foregroundColor -> foregroundStyle)
+- Test files organized by domain
+- No UIScreen.main.bounds usage in Views
+- Charts using adaptive AppColors
