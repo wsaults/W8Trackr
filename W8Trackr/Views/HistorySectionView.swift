@@ -10,7 +10,7 @@ import UIKit
 
 struct HistorySectionView: View {
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject private var healthSyncManager: HealthSyncManager
+    @Environment(HealthSyncManager.self) private var healthSyncManager
     let entries: [WeightEntry]
     let weightUnit: WeightUnit
     var onEdit: ((WeightEntry) -> Void)?
@@ -204,7 +204,7 @@ struct HistorySectionView: View {
         ) { _ in }
         .navigationTitle("History")
     }
-    .environmentObject(HealthSyncManager())
+    .environment(HealthSyncManager())
 }
 
 @available(iOS 18, macOS 15, *)
@@ -216,7 +216,7 @@ struct HistorySectionView: View {
         )
         .navigationTitle("History")
     }
-    .environmentObject(HealthSyncManager())
+    .environment(HealthSyncManager())
 }
 
 @available(iOS 18, macOS 15, *)
@@ -228,7 +228,7 @@ struct HistorySectionView: View {
         ) { _ in }
         .navigationTitle("History")
     }
-    .environmentObject(HealthSyncManager())
+    .environment(HealthSyncManager())
 }
 
 @available(iOS 18, macOS 15, *)
@@ -240,6 +240,6 @@ struct HistorySectionView: View {
         )
         .navigationTitle("History")
     }
-    .environmentObject(HealthSyncManager())
+    .environment(HealthSyncManager())
 }
 #endif

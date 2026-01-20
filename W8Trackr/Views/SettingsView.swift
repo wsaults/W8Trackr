@@ -12,7 +12,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @State private var notificationManager = NotificationManager()
-    @ObservedObject private var healthSyncManager = HealthSyncManager.shared
+    private var healthSyncManager: HealthSyncManager { HealthSyncManager.shared }
     @Binding var weightUnit: WeightUnit
     @Binding var goalWeight: Double
     @Binding var showSmoothing: Bool
