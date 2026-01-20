@@ -10,7 +10,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - Integer phases (1, 2, 3, 4): Planned milestone work
 - Decimal phases (e.g., 2.1): Urgent insertions if needed
 
-- [ ] **Phase 1: Critical Bugs** - Fix crash-risk stubs and repeated milestone popup
+- [x] **Phase 1: Critical Bugs** - Fix crash-risk stubs and repeated milestone popup
 - [ ] **Phase 2: Chart Animation** - Fix jank during date segment changes
 - [ ] **Phase 3: UX Polish** - Banner placement, sync status consolidation, undo capability
 - [ ] **Phase 4: Code Quality** - Migrate GCD to async/await, replace deprecated APIs
@@ -29,8 +29,8 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md - Fix milestone celebration popup showing repeatedly
-- [ ] 01-02-PLAN.md - Remove fatalError stub services and unused code
+- [x] 01-01-PLAN.md - Fix milestone celebration popup showing repeatedly
+- [x] 01-02-PLAN.md - Remove fatalError stub services and unused code
 
 ### Phase 2: Chart Animation
 **Goal**: Smooth chart transitions when user changes date range
@@ -79,7 +79,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Critical Bugs | 0/2 | Planned | - |
+| 1. Critical Bugs | 2/2 | Complete | 2026-01-20 |
 | 2. Chart Animation | 0/TBD | Not started | - |
 | 3. UX Polish | 0/TBD | Not started | - |
 | 4. Code Quality | 0/TBD | Not started | - |

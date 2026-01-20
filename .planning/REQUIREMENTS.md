@@ -9,10 +9,10 @@ Requirements for pre-launch audit fixes. Each maps to roadmap phases.
 
 ### Bug Fixes
 
-- [ ] **BUG-01**: Fix milestone popup appearing repeatedly on every dashboard visit
+- [x] **BUG-01**: Fix milestone popup appearing repeatedly on every dashboard visit
 - [ ] **BUG-02**: Fix chart animation jank when changing date segments
-- [ ] **BUG-03**: Remove fatalError stubs from MilestoneTracker service
-- [ ] **BUG-04**: Remove fatalError stubs from GoalProgressCalculator service
+- [x] **BUG-03**: Remove fatalError stubs from MilestoneTracker service
+- [x] **BUG-04**: Remove fatalError stubs from GoalProgressCalculator service
 
 ### UX Improvements
 
@@ -52,10 +52,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BUG-01 | Phase 1 | Pending |
+| BUG-01 | Phase 1 | Complete |
 | BUG-02 | Phase 2 | Pending |
-| BUG-03 | Phase 1 | Pending |
-| BUG-04 | Phase 1 | Pending |
+| BUG-03 | Phase 1 | Complete |
+| BUG-04 | Phase 1 | Complete |
 | UX-01 | Phase 3 | Pending |
 | UX-02 | Phase 3 | Pending |
 | UX-03 | Phase 3 | Pending |
