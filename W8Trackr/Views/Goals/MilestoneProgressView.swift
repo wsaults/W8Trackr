@@ -63,7 +63,7 @@ struct MilestoneProgressView: View {
         .padding()
         .frame(maxWidth: .infinity)
         .background(Color(UIColor.systemBackground))
-        .cornerRadius(10)
+        .clipShape(.rect(cornerRadius: 10))
         .padding(.horizontal)
         .onAppear {
             withAnimation(.easeOut(duration: 0.8)) {
@@ -122,7 +122,7 @@ struct MilestoneProgressCompactView: View {
         }
         .padding()
         .background(Color(UIColor.systemBackground))
-        .cornerRadius(10)
+        .clipShape(.rect(cornerRadius: 10))
         .padding(.horizontal)
     }
 }

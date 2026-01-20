@@ -245,7 +245,7 @@ struct WeightEntryView: View {
                         .padding(.horizontal)
                         .padding(.vertical, 12)
                         .background(Color(.systemGray6))
-                        .cornerRadius(8)
+                        .clipShape(.rect(cornerRadius: 8))
                         .padding(.horizontal)
                     }
 
@@ -261,7 +261,7 @@ struct WeightEntryView: View {
                             .padding()
                             .background(isFormValid ? .blue : .gray)
                             .foregroundStyle(.white)
-                            .cornerRadius(10)
+                            .clipShape(.rect(cornerRadius: 10))
                     }
                     .disabled(!isFormValid)
                     .padding(.horizontal)

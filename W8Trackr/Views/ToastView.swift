@@ -79,7 +79,7 @@ struct ToastView: View {
         }
         .padding()
         .background(.ultraThinMaterial)
-        .cornerRadius(10)
+        .clipShape(.rect(cornerRadius: 10))
         .shadow(color: .black.opacity(0.15), radius: 5, x: 0, y: 2)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(.isStaticText)

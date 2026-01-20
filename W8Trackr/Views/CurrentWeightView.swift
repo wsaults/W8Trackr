@@ -51,7 +51,7 @@ struct CurrentWeightView: View {
         .padding()
         .frame(maxWidth: .infinity)
         .background(Color(UIColor.systemBackground))
-        .cornerRadius(10)
+        .clipShape(.rect(cornerRadius: 10))
         .padding()
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityDescription)

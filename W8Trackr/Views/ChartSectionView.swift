@@ -46,7 +46,7 @@ struct ChartSectionView: View {
                     .frame(height: 300)
                     .padding()
                     .background(Color(UIColor.systemBackground))
-                    .cornerRadius(10)
+                    .clipShape(.rect(cornerRadius: 10))
                 
                 Picker("Date Range", selection: $selectedRange) {
                     ForEach(DateRange.allCases, id: \.self) { range in

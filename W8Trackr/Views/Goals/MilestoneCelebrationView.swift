@@ -71,7 +71,7 @@ struct MilestoneCelebrationView: View {
                         .padding()
                         .background(.blue)
                         .foregroundStyle(.white)
-                        .cornerRadius(12)
+                        .clipShape(.rect(cornerRadius: 12))
                 }
                 .accessibilityLabel("Continue")
                 .accessibilityHint("Dismiss celebration and return to dashboard")
@@ -80,7 +80,7 @@ struct MilestoneCelebrationView: View {
             }
             .padding(24)
             .background(Color(UIColor.systemBackground))
-            .cornerRadius(20)
+            .clipShape(.rect(cornerRadius: 20))
             .shadow(radius: 20)
             .padding(40)
             .scaleEffect(showContent ? 1.0 : 0.8)
@@ -210,7 +210,7 @@ struct MilestoneHistoryView: View {
         }
         .padding(.vertical)
         .background(Color(UIColor.systemBackground))
-        .cornerRadius(10)
+        .clipShape(.rect(cornerRadius: 10))
         .padding(.horizontal)
     }
 }
