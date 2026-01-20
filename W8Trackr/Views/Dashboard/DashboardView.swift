@@ -102,6 +102,13 @@ struct DashboardView: View {
                 // Celebration overlay
                 if let milestone = celebrationMilestone {
                     MilestoneCelebrationView(milestoneWeight: milestone, unit: preferredWeightUnit) {
+                        // Mark milestone as shown so popup doesn't reappear
+                        if let completedMilestone = completedMilestones.first(where: {
+                            $0.targetWeight(in: preferredWeightUnit) == milestone
+                        }) {
+                            completedMilestone.celebrationShown = true
+                            try? modelContext.save()
+                        }
                         celebrationMilestone = nil
                     }
                 }
@@ -211,6 +218,12 @@ struct DashboardView: View {
     private func checkForNewMilestone() {
         guard milestoneProgress != nil else { return }
 
+        // First, check for any uncelebrated existing milestones
+        if let uncelebrated = completedMilestones.first(where: { !$0.celebrationShown }) {
+            celebrationMilestone = uncelebrated.targetWeight(in: preferredWeightUnit)
+            return
+        }
+
         let allMilestones = MilestoneCalculator.generateMilestones(
             startWeight: startWeight,
             goalWeight: goalWeight,
@@ -232,6 +245,7 @@ struct DashboardView: View {
 
                 do {
                     try modelContext.save()
+                    // New milestones have celebrationShown = false, so show popup
                     celebrationMilestone = milestone
                 } catch {
                     // Remove the unsaved milestone from context
