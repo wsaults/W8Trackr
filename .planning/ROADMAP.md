@@ -17,6 +17,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 5: Light/Dark Mode** - Add proper light/dark mode support
 - [x] **Phase 6: Dashboard Polish** - Improve card layouts, hero card styling, chart labels, FAB alignment
 - [x] **Phase 7: Chart Improvements** - Extended prediction line, horizontal scrolling, tap selection
+- [ ] **Phase 8: Logbook Improvements** - Month-segmented dates, enhanced row data, filter menu
 
 ## Phase Details
 
@@ -124,10 +125,35 @@ Plans:
 Plans:
 - [x] 07-01-PLAN.md - Extended prediction, horizontal scrolling, tap selection
 
+### Phase 8: Logbook Improvements
+**Goal**: Enhance logbook with better organization, richer data display, and filtering
+**Depends on**: Phase 7
+**Requirements**: LOG-01, LOG-02, LOG-03
+**Success Criteria** (what must be TRUE):
+  1. Logbook entries are segmented by month with clear section headers
+  2. Each row displays: Date (day+weekday), Entry weight, Moving Average, Weekly Rate (with arrow), Notes indicator
+  3. Nav bar has filter button with menu: Notes, Milestones, Day of Week submenu
+  4. Filtering works correctly and persists during session
+**Plans**: 2 plans
+
+Plans:
+- [ ] 08-01-PLAN.md - Month sections, row data model, enhanced row view
+- [ ] 08-02-PLAN.md - Filter menu and filtering logic
+
+**Details:**
+Row layout example:
+```
+16      170.0     171.1          down-arrow 0.2     note-icon
+Tue
+```
+Filter menu options: Notes, Milestones, Day of Week (submenu)
+
+Note: "Heights" filter omitted - WeightEntry has no height property. "Weights" filter removed as it would show all entries (default behavior).
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -138,6 +164,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 5. Light/Dark Mode | 3/3 | Complete | 2026-01-20 |
 | 6. Dashboard Polish | 1/1 | Complete | 2026-01-20 |
 | 7. Chart Improvements | 1/1 | Complete | 2026-01-20 |
+| 8. Logbook Improvements | 0/2 | Planned | - |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -151,3 +178,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 *Phase 6 planned: 2026-01-20*
 *Phase 7 planned: 2026-01-20*
 *Phase 7 complete: 2026-01-20*
+*Phase 8 added: 2026-01-20*
+*Phase 8 planned: 2026-01-20*
