@@ -263,9 +263,9 @@ struct WeightTrendChartView: View {
                 }
             }
             .chartForegroundStyleScale([
-                "Entry": Color.blue,
-                "Trend": Color.blue,
-                "Predicted": Color.orange
+                "Entry": AppColors.chartEntry,
+                "Trend": AppColors.chartEntry,
+                "Predicted": AppColors.chartPredicted
             ])
             .chartYScale(domain: minWeight...maxWeight)
             .chartYAxis {

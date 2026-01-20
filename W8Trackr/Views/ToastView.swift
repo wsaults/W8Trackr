@@ -50,7 +50,7 @@ struct ToastView: View {
                     .multilineTextAlignment(.leading)
             } icon: {
                 Image(systemName: systemImage)
-                    .foregroundColor(type.iconColor)
+                    .foregroundStyle(type.iconColor)
             }
 
             Spacer(minLength: 0)

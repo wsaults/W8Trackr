@@ -49,7 +49,7 @@ struct GoalStepView: View {
                         .keyboardType(.decimalPad)
                         .fixedSize()
                         .multilineTextAlignment(.trailing)
-                        .foregroundColor(isValidGoal ? Color.primary : Color.red)
+                        .foregroundStyle(isValidGoal ? Color.primary : Color.red)
 
                     Text(weightUnit.rawValue)
                         .font(.title)

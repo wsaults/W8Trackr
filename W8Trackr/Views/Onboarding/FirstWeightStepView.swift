@@ -49,7 +49,7 @@ struct FirstWeightStepView: View {
                         .keyboardType(.decimalPad)
                         .fixedSize()
                         .multilineTextAlignment(.trailing)
-                        .foregroundColor(isValidWeight ? Color.primary : Color.red)
+                        .foregroundStyle(isValidWeight ? Color.primary : Color.red)
 
                     Text(weightUnit.rawValue)
                         .font(.title)
