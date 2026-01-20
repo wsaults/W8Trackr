@@ -9,19 +9,19 @@ import Charts
 import SwiftUI
 
 enum DateRange: String, CaseIterable {
-    case sevenDay = "7D"
-    case thirtyDay = "30D"
-    case ninetyDay = "90D"
-    case oneEightyDay = "180D"
+    case oneWeek = "1W"
+    case oneMonth = "1M"
+    case threeMonth = "3M"
+    case sixMonth = "6M"
     case oneYear = "1Y"
     case allTime = "All"
 
     var days: Int? {
         switch self {
-        case .sevenDay: return 7
-        case .thirtyDay: return 30
-        case .ninetyDay: return 90
-        case .oneEightyDay: return 180
+        case .oneWeek: return 7
+        case .oneMonth: return 30
+        case .threeMonth: return 90
+        case .sixMonth: return 180
         case .oneYear: return 365
         case .allTime: return nil
         }
@@ -33,7 +33,7 @@ struct ChartSectionView: View {
     let goalWeight: Double
     let weightUnit: WeightUnit
     let showSmoothing: Bool
-    @State private var selectedRange: DateRange = .sevenDay
+    @State private var selectedRange: DateRange = .oneWeek
 
     var body: some View {
         Section {

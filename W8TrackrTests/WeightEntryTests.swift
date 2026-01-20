@@ -71,8 +71,8 @@ struct WeightEntryTests {
 
 struct DateRangeTests {
 
-    @Test func sevenDayRangeReturnsSeven() {
-        #expect(DateRange.sevenDay.days == 7)
+    @Test func oneWeekRangeReturnsSeven() {
+        #expect(DateRange.oneWeek.days == 7)
     }
 
     @Test func allTimeRangeReturnsNil() {
@@ -80,10 +80,10 @@ struct DateRangeTests {
     }
 
     @Test func dateRangeRawValues() {
-        #expect(DateRange.sevenDay.rawValue == "7D")
-        #expect(DateRange.thirtyDay.rawValue == "30D")
-        #expect(DateRange.ninetyDay.rawValue == "90D")
-        #expect(DateRange.oneEightyDay.rawValue == "180D")
+        #expect(DateRange.oneWeek.rawValue == "1W")
+        #expect(DateRange.oneMonth.rawValue == "1M")
+        #expect(DateRange.threeMonth.rawValue == "3M")
+        #expect(DateRange.sixMonth.rawValue == "6M")
         #expect(DateRange.oneYear.rawValue == "1Y")
         #expect(DateRange.allTime.rawValue == "All")
     }
@@ -91,10 +91,10 @@ struct DateRangeTests {
     @Test func dateRangeAllCases() {
         let allCases = DateRange.allCases
         #expect(allCases.count == 6)
-        #expect(allCases.contains(.sevenDay))
-        #expect(allCases.contains(.thirtyDay))
-        #expect(allCases.contains(.ninetyDay))
-        #expect(allCases.contains(.oneEightyDay))
+        #expect(allCases.contains(.oneWeek))
+        #expect(allCases.contains(.oneMonth))
+        #expect(allCases.contains(.threeMonth))
+        #expect(allCases.contains(.sixMonth))
         #expect(allCases.contains(.oneYear))
         #expect(allCases.contains(.allTime))
     }

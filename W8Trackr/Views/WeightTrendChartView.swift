@@ -53,9 +53,9 @@ struct WeightTrendChartView: View {
     
     private var dateFormatForRange: Date.FormatStyle {
         switch selectedRange {
-        case .sevenDay:
+        case .oneWeek:
             return .dateTime.day()
-        case .thirtyDay, .ninetyDay, .oneEightyDay, .oneYear:
+        case .oneMonth, .threeMonth, .sixMonth, .oneYear:
             return .dateTime.month(.abbreviated)
         case .allTime:
             return .dateTime.month(.abbreviated).year()
@@ -64,11 +64,11 @@ struct WeightTrendChartView: View {
 
     private var xAxisStride: Calendar.Component {
         switch selectedRange {
-        case .sevenDay:
+        case .oneWeek:
             return .day
-        case .thirtyDay:
+        case .oneMonth:
             return .weekOfYear
-        case .ninetyDay, .oneEightyDay:
+        case .threeMonth, .sixMonth:
             return .month
         case .oneYear, .allTime:
             return .month
@@ -349,11 +349,11 @@ extension WeightTrendChartView: AXChartDescriptorRepresentable {
 }
 
 #Preview("Without Smoothing") {
-    WeightTrendChartView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb, selectedRange: .sevenDay, showSmoothing: false)
+    WeightTrendChartView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb, selectedRange: .oneWeek, showSmoothing: false)
         .padding()
 }
 
 #Preview("With Smoothing") {
-    WeightTrendChartView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb, selectedRange: .sevenDay, showSmoothing: true)
+    WeightTrendChartView(entries: WeightEntry.sortedSampleData, goalWeight: 160.0, weightUnit: .lb, selectedRange: .oneWeek, showSmoothing: true)
         .padding()
 }
