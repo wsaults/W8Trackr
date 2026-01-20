@@ -89,7 +89,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 05-01-PLAN.md - Migrate Dashboard, Onboarding, Goals, Analytics views to AppColors
+- [x] 05-01-PLAN.md - Migrate Dashboard, Onboarding, Goals, Analytics views to AppColors
 - [ ] 05-02-PLAN.md - Fix chart colors, deprecated APIs, and Animation view colors
 
 ## Progress
@@ -103,7 +103,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Chart Animation | 1/1 | Complete | 2026-01-20 |
 | 3. UX Polish | 2/2 | Complete | 2026-01-20 |
 | 4. Code Quality | 4/4 | Complete | 2026-01-20 |
-| 5. Light/Dark Mode | 0/2 | Planned | — |
+| 5. Light/Dark Mode | 1/2 | In Progress | — |
 
 ---
 *Roadmap created: 2026-01-20*

@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 5 of 5 (Light/Dark Mode)
-Plan: 2 of ? in current phase
+Plan: 1 of 2 in current phase
 Status: In progress
-Last activity: 2026-01-20 - Completed 05-02-PLAN.md (Charts and Animations)
+Last activity: 2026-01-20 - Completed 05-01-PLAN.md (View Color Migration)
 
 Progress: [##########] 92%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: 4.9 minutes
-- Total execution time: 0.9 hours
+- Total plans completed: 10
+- Average duration: 5.5 minutes
+- Total execution time: 0.92 hours
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [##########] 92%
 | 02-chart-animation | 1 | 9 min | 9 min |
 | 03-ux-polish | 2 | 7 min | 3.5 min |
 | 04-code-quality | 4 | 18.5 min | 4.6 min |
-| 05-light-dark-mode | 2 | 7 min | 3.5 min |
+| 05-light-dark-mode | 1 | 8 min | 8 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-02 (6.5 min), 04-03 (2 min), 04-04 (5 min), 05-01 (3 min), 05-02 (4 min)
-- Trend: Stable, fast execution
+- Last 5 plans: 04-02 (6.5 min), 04-03 (2 min), 04-04 (5 min), 05-01 (8 min)
+- Trend: Stable
 
 *Updated after each plan completion*
 
@@ -59,8 +59,9 @@ Recent decisions affecting current work:
 - [04-03]: @Environment(Type.self) replaces @EnvironmentObject for @Observable
 - [04-04]: Remove print statements entirely from previews (empty closures are cleaner)
 - [04-04]: Split test files by domain for maintainability
-- [05-02]: Use constant 2000 for offscreen confetti instead of UIScreen.main.bounds
-- [05-02]: Keep Color.yellow/pink in ConfettiView for vibrant celebrations
+- [05-01]: Keep Color.primary/red for form validation (standard SwiftUI semantics)
+- [05-01]: Keep Color.black.opacity(0.4) for modal dimming (intentionally dark in both modes)
+- [05-01]: Use AppColors.surfaceSecondary for disabled button backgrounds
 
 ### Pending Todos
 
@@ -68,12 +69,12 @@ None.
 
 ### Blockers/Concerns
 
-None remaining. All foregroundColor() and UIScreen.main.bounds eliminated from Views.
+None remaining. Animation files (AnimationModifiers, ConfettiView, SparkleView) still have Fallback colors - handled in Plan 02.
 
 ## Session Continuity
 
 Last session: 2026-01-20
-Stopped at: Completed 05-02-PLAN.md - Charts and Animations
+Stopped at: Completed 05-01-PLAN.md - View Color Migration
 Resume file: None
 
 ## Project Completion Status
@@ -83,9 +84,9 @@ Resume file: None
 - Phase 2: Chart Animation (1 plan) ✓
 - Phase 3: UX Polish (2 plans) ✓
 - Phase 4: Code Quality (4 plans) ✓
-- Phase 5: Light/Dark Mode (2 plans complete) - In progress
+- Phase 5: Light/Dark Mode (1/2 plans complete) - In progress
 
-Total: 11 plans executed, Phase 5 in progress
+Total: 10 plans executed, Phase 5 in progress
 
 ### Roadmap Evolution
 
@@ -97,5 +98,5 @@ Total: 11 plans executed, Phase 5 in progress
 - All managers using @MainActor + @Observable
 - All deprecated APIs replaced (foregroundColor -> foregroundStyle)
 - Test files organized by domain
-- No UIScreen.main.bounds usage in Views
-- Charts using adaptive AppColors
+- Dashboard, Onboarding, Goals, Analytics views using adaptive AppColors
+- Animation files pending migration (Plan 05-02)
