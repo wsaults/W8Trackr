@@ -261,7 +261,8 @@ extension View {
                 CelebrationConfettiView(particleCount: particleCount)
                     .onAppear {
                         // Auto-dismiss after animation completes
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
+                        Task {
+                            try? await Task.sleep(for: .seconds(3.5))
                             isActive.wrappedValue = false
                         }
                     }

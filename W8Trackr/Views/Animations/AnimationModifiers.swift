@@ -179,7 +179,8 @@ struct BadgeUnlockView: View {
             showText = false
             showButton = false
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        Task {
+            try? await Task.sleep(for: .milliseconds(200))
             onDismiss()
         }
     }
@@ -328,7 +329,8 @@ struct StreakCelebrationView: View {
             showNumber = false
             showText = false
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        Task {
+            try? await Task.sleep(for: .milliseconds(200))
             onDismiss()
         }
     }

@@ -149,7 +149,8 @@ struct OnboardingView: View {
         withAnimation {
             showConfetti = true
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+        Task {
+            try? await Task.sleep(for: .seconds(2.5))
             withAnimation {
                 showConfetti = false
             }

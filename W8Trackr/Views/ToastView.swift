@@ -132,7 +132,8 @@ struct ToastModifier: ViewModifier {
 
                 // Only auto-dismiss if not persistent
                 if !persistent {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                    Task {
+                        try? await Task.sleep(for: .seconds(duration))
                         dismiss()
                     }
                 }
