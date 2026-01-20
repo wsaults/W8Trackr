@@ -100,13 +100,24 @@ struct HeroCardView: View {
         return description
     }
 
+    private var trendGradient: LinearGradient {
+        switch trendDirection {
+        case .down:
+            return AppGradients.success  // Green - losing weight
+        case .up:
+            return AppGradients.warning  // Amber - gaining weight
+        case .neutral:
+            return AppGradients.primary  // Coral - maintaining
+        }
+    }
+
     var body: some View {
         VStack(spacing: 12) {
             // Label
             Text("Current Weight")
                 .font(.subheadline)
                 .fontWeight(.medium)
-                .foregroundStyle(AppColors.textSecondary)
+                .foregroundStyle(.white.opacity(0.9))
 
             // Main weight display
             HStack(alignment: .firstTextBaseline, spacing: 4) {
@@ -153,9 +164,9 @@ struct HeroCardView: View {
         .padding(.vertical, 24)
         .padding(.horizontal, 20)
         .frame(maxWidth: .infinity)
-        .background(AppGradients.primary)
+        .background(trendGradient)
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(color: AppColors.primary.opacity(0.3), radius: 10, x: 0, y: 5)
+        .shadow(color: (trendDirection == .down ? AppColors.success : trendDirection == .up ? AppColors.warning : AppColors.primary).opacity(0.3), radius: 10, x: 0, y: 5)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityDescription)
     }

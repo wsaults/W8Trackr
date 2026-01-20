@@ -52,6 +52,13 @@ enum AppGradients {
         endPoint: .bottomTrailing
     )
 
+    /// Warning gradient - weight gain, needs attention states
+    static let warning = LinearGradient(
+        colors: [Color(hex: "#F39C12"), Color(hex: "#E67E22")],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+
     // MARK: - Background Gradients
 
     /// Subtle warm background gradient (light mode)
