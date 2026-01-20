@@ -11,20 +11,18 @@ import SwiftUI
 /// Root view containing the main tab navigation.
 ///
 /// ## Data Strategy
-/// ContentView uses three different data sources depending on context:
+/// ContentView uses SwiftData queries for all data:
 ///
-/// 1. **Simulator builds** (`#if targetEnvironment(simulator)`):
-///    Uses `WeightEntry.shortSampleData` - 14 entries over 2 weeks.
-///    Provides consistent preview data without database dependencies.
-///
-/// 2. **Device builds** (`@Query`):
-///    Uses live SwiftData queries for real user data.
+/// 1. **Live data** (`@Query`):
+///    Uses SwiftData queries for real user data.
 ///    Sorted by date descending (newest first).
 ///
-/// 3. **First launch seeding** (`WeightEntry.initialData`):
-///    When entries are empty on device, seeds 5 sample entries.
+/// 2. **First launch seeding** (`WeightEntry.initialData`):
+///    When entries are empty, seeds 5 sample entries.
 ///    Gives new users immediate data to explore the app.
 ///    A toast informs users they can delete and add their own entries.
+///
+/// 3. **Dev testing**: Use Settings > Developer Menu to load test datasets.
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("preferredWeightUnit") var preferredWeightUnit: WeightUnit = Locale.current.measurementSystem == .metric ? .kg : .lb
@@ -34,19 +32,13 @@ struct ContentView: View {
     @State private var showingSaveError = false
 
     // MARK: - Data Sources
-    // Simulator: Static sample data for consistent previews
-    // Device: Live SwiftData queries for real user data
-    #if targetEnvironment(simulator)
-    private var entries: [WeightEntry] = WeightEntry.shortSampleData
-    private var completedMilestones: [CompletedMilestone] = []
-    #else
+    // Always use live SwiftData queries - use Developer Menu to load test data
     @Query(
         sort: [SortDescriptor(\WeightEntry.date, order: .reverse)]
     ) private var entries: [WeightEntry]
     @Query(
         sort: [SortDescriptor(\CompletedMilestone.achievedDate, order: .reverse)]
     ) private var completedMilestones: [CompletedMilestone]
-    #endif
 
     var body: some View {
         TabView {

@@ -14,9 +14,6 @@ struct DevMenuView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
-    @State private var showingDatasetConfirmation = false
-    @State private var selectedDataset: DatasetOption?
-    @State private var showingAddEntry = false
     @State private var customWeight: Double = 175.0
     @State private var customDate: Date = .now
     @State private var showingSuccessToast = false
@@ -58,22 +55,6 @@ struct DevMenuView: View {
                     Button("Done") { dismiss() }
                 }
             }
-            .confirmationDialog(
-                "Replace All Data?",
-                isPresented: $showingDatasetConfirmation,
-                titleVisibility: .visible
-            ) {
-                if let dataset = selectedDataset {
-                    Button("Replace with \(dataset.rawValue)", role: .destructive) {
-                        replaceWithDataset(dataset)
-                    }
-                }
-                Button("Cancel", role: .cancel) {
-                    selectedDataset = nil
-                }
-            } message: {
-                Text("This will delete all existing weight entries and replace them with sample data.")
-            }
             .toast(isPresented: $showingSuccessToast, message: toastMessage, systemImage: "checkmark.circle.fill")
         }
     }
@@ -82,8 +63,7 @@ struct DevMenuView: View {
         Section {
             ForEach(DatasetOption.allCases) { option in
                 Button {
-                    selectedDataset = option
-                    showingDatasetConfirmation = true
+                    replaceWithDataset(option)
                 } label: {
                     HStack {
                         Text(option.rawValue)
@@ -97,7 +77,7 @@ struct DevMenuView: View {
         } header: {
             Text("Replace Dataset")
         } footer: {
-            Text("Replaces all existing data with sample entries for testing different scenarios.")
+            Text("Instantly replaces all data with sample entries.")
         }
     }
 
@@ -122,16 +102,22 @@ struct DevMenuView: View {
         } header: {
             Text("Add Custom Entry")
         } footer: {
-            Text("Quickly add a weight entry for any date without going through the normal flow.")
+            Text("Quickly add a weight entry for any date.")
         }
     }
 
     private func replaceWithDataset(_ option: DatasetOption) {
-        // Delete all existing entries
         do {
-            let entries = try modelContext.fetch(FetchDescriptor<WeightEntry>())
-            for entry in entries {
+            // Clear all existing entries first
+            let existingEntries = try modelContext.fetch(FetchDescriptor<WeightEntry>())
+            for entry in existingEntries {
                 modelContext.delete(entry)
+            }
+
+            // Also clear completed milestones for clean testing
+            let existingMilestones = try modelContext.fetch(FetchDescriptor<CompletedMilestone>())
+            for milestone in existingMilestones {
+                modelContext.delete(milestone)
             }
 
             // Generate and insert new entries
@@ -145,11 +131,9 @@ struct DevMenuView: View {
             toastMessage = "Loaded \(newEntries.count) entries"
             showingSuccessToast = true
         } catch {
-            toastMessage = "Failed to replace data"
+            toastMessage = "Failed: \(error.localizedDescription)"
             showingSuccessToast = true
         }
-
-        selectedDataset = nil
     }
 
     private func addCustomEntry() {
@@ -158,9 +142,9 @@ struct DevMenuView: View {
 
         do {
             try modelContext.save()
-            toastMessage = "Entry added for \(customDate.formatted(date: .abbreviated, time: .omitted))"
+            toastMessage = "Added \(customWeight.formatted(.number.precision(.fractionLength(1)))) lb on \(customDate.formatted(date: .abbreviated, time: .omitted))"
             showingSuccessToast = true
-            customDate = .now
+            // Don't reset customDate - user may want to add more entries for same/nearby dates
         } catch {
             toastMessage = "Failed to add entry"
             showingSuccessToast = true

@@ -162,26 +162,6 @@ struct SettingsView: View {
         }
     }
 
-    #if DEBUG
-    private var devSection: some View {
-        Section {
-            Button {
-                showingDevMenu = true
-            } label: {
-                HStack {
-                    Image(systemName: "hammer.fill")
-                        .foregroundStyle(.orange)
-                    Text("Developer Menu")
-                        .foregroundStyle(.primary)
-                }
-            }
-        } header: {
-            Text("Developer Tools")
-        } footer: {
-            Text("Debug builds only. Replace data or add entries for testing.")
-        }
-    }
-    #endif
     
     private var chartSettingsSection: some View {
         Section {
@@ -339,12 +319,22 @@ struct SettingsView: View {
                 healthSection
                 dataManagementSection
                 dangerZoneSection
-                #if DEBUG
-                devSection
-                #endif
             }
             .navigationTitle("Settings")
             .syncStatusToolbar()
+            #if DEBUG
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        showingDevMenu = true
+                    } label: {
+                        Image(systemName: "hammer.fill")
+                            .foregroundStyle(.orange)
+                    }
+                    .accessibilityLabel("Developer Menu")
+                }
+            }
+            #endif
             .onAppear {
                 localGoalWeight = goalWeight
             }
