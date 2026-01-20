@@ -14,6 +14,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 2: Chart Animation** - Fix jank during date segment changes
 - [x] **Phase 3: UX Polish** - Banner placement, sync status consolidation, undo capability
 - [x] **Phase 4: Code Quality** - Migrate GCD to async/await, replace deprecated APIs
+- [ ] **Phase 5: Light/Dark Mode** - Add proper light/dark mode support
 
 ## Phase Details
 
@@ -76,10 +77,25 @@ Plans:
 - [x] 04-03-PLAN.md - Migrate HealthSyncManager to @Observable (gap closure)
 - [x] 04-04-PLAN.md - Fix SwiftLint violations (gap closure)
 
+### Phase 5: Light/Dark Mode
+**Goal**: Ensure app looks correct in both light and dark appearance modes
+**Depends on**: Phase 4
+**Requirements**: UX-04
+**Success Criteria** (what must be TRUE):
+  1. App respects system appearance setting (light/dark)
+  2. All views render correctly in both modes
+  3. No hardcoded colors that break in opposite mode
+  4. Charts and visualizations adapt to color scheme
+**Plans**: 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md - Migrate Dashboard, Onboarding, Goals, Analytics views to AppColors
+- [ ] 05-02-PLAN.md - Fix chart colors, deprecated APIs, and Animation view colors
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -87,6 +103,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 2. Chart Animation | 1/1 | Complete | 2026-01-20 |
 | 3. UX Polish | 2/2 | Complete | 2026-01-20 |
 | 4. Code Quality | 4/4 | Complete | 2026-01-20 |
+| 5. Light/Dark Mode | 0/2 | Planned | — |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -95,3 +112,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 *Phase 3 planned: 2026-01-20*
 *Phase 4 planned: 2026-01-20*
 *Phase 4 gap closure plans: 2026-01-20*
+*Phase 5 planned: 2026-01-20*
