@@ -14,7 +14,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 2: Chart Animation** - Fix jank during date segment changes
 - [x] **Phase 3: UX Polish** - Banner placement, sync status consolidation, undo capability
 - [x] **Phase 4: Code Quality** - Migrate GCD to async/await, replace deprecated APIs
-- [ ] **Phase 5: Light/Dark Mode** - Add proper light/dark mode support
+- [x] **Phase 5: Light/Dark Mode** - Add proper light/dark mode support
 
 ## Phase Details
 
@@ -90,8 +90,8 @@ Plans:
 
 Plans:
 - [x] 05-01-PLAN.md - Migrate Dashboard, Onboarding, Goals, Analytics views to AppColors
-- [ ] 05-02-PLAN.md - Fix chart colors, deprecated APIs, and Animation view colors
-- [ ] 05-03-PLAN.md - Migrate remaining 10 views to AppColors (gap closure)
+- [x] 05-02-PLAN.md - Fix chart colors, deprecated APIs, and Animation view colors
+- [x] 05-03-PLAN.md - Migrate remaining 10 views to AppColors (gap closure)
 
 ## Progress
 
@@ -104,7 +104,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Chart Animation | 1/1 | Complete | 2026-01-20 |
 | 3. UX Polish | 2/2 | Complete | 2026-01-20 |
 | 4. Code Quality | 4/4 | Complete | 2026-01-20 |
-| 5. Light/Dark Mode | 1/3 | In Progress | — |
+| 5. Light/Dark Mode | 3/3 | Complete | 2026-01-20 |
 
 ---
 *Roadmap created: 2026-01-20*
