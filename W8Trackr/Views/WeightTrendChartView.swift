@@ -76,25 +76,43 @@ struct WeightTrendChartView: View {
     }
     
     // Holt's Double Exponential Smoothing prediction
-    // Returns start point (last smoothed value) and end point (forecast)
-    private var prediction: (startDate: Date, startWeight: Double, endDate: Date, endWeight: Double)? {
+    // Generates prediction points from last data point to 14 days ahead
+    private var predictionPoints: [ChartEntry] {
         guard let holtResult = TrendCalculator.calculateHolt(entries: filteredEntries) else {
-            return nil
+            return []
         }
 
-        let daysAhead = 1
-        let predictedWeight = holtResult.forecast(daysAhead: daysAhead)
+        var points: [ChartEntry] = []
 
-        guard let predictedDate = Calendar.current.date(
-            byAdding: .day, value: daysAhead, to: holtResult.lastDate
-        ) else { return nil }
+        // Add starting point at last actual data point
+        points.append(ChartEntry(
+            date: holtResult.lastDate,
+            weight: convertWeight(holtResult.level),
+            isPrediction: true,
+            showPoint: false,
+            isIndividualEntry: false,
+            isSmoothed: false
+        ))
 
-        return (
-            startDate: holtResult.lastDate,
-            startWeight: convertWeight(holtResult.level),
-            endDate: predictedDate,
-            endWeight: convertWeight(predictedWeight)
-        )
+        // Add intermediate and end points for smooth curve
+        for daysAhead in [7, 14] {
+            guard let futureDate = Calendar.current.date(
+                byAdding: .day, value: daysAhead, to: holtResult.lastDate
+            ) else { continue }
+
+            let futureWeight = convertWeight(holtResult.forecast(daysAhead: daysAhead))
+
+            points.append(ChartEntry(
+                date: futureDate,
+                weight: futureWeight,
+                isPrediction: true,
+                showPoint: false,
+                isIndividualEntry: false,
+                isSmoothed: false
+            ))
+        }
+
+        return points
     }
     
     private struct ChartEntry: Identifiable {
@@ -191,27 +209,8 @@ struct WeightTrendChartView: View {
             )
         })
 
-        // Add prediction line if available (starts from last smoothed value)
-        if let prediction = prediction {
-            // Add the last smoothed point as start of prediction line
-            data.append(ChartEntry(
-                date: prediction.startDate,
-                weight: prediction.startWeight,
-                isPrediction: true,
-                showPoint: false,
-                isIndividualEntry: false,
-                isSmoothed: false
-            ))
-            // Add the predicted point
-            data.append(ChartEntry(
-                date: prediction.endDate,
-                weight: prediction.endWeight,
-                isPrediction: true,
-                showPoint: false,
-                isIndividualEntry: false,
-                isSmoothed: false
-            ))
-        }
+        // Add prediction points (14-day forecast)
+        data.append(contentsOf: predictionPoints)
 
         return data
     }
