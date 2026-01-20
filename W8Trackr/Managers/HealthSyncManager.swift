@@ -18,8 +18,8 @@ import SwiftUI
 /// - Ongoing bidirectional sync (P3 - future)
 ///
 /// Uses dependency injection via `HealthStoreProtocol` for testability.
-@MainActor
-final class HealthSyncManager: ObservableObject {
+@Observable @MainActor
+final class HealthSyncManager {
 
     // MARK: - Shared Instance
 
@@ -45,13 +45,13 @@ final class HealthSyncManager: ObservableObject {
     /// The UserDefaults instance for persisting settings (injectable for testing).
     private let userDefaults: UserDefaults
 
-    // MARK: - Published State
+    // MARK: - Observable State
 
     /// The current sync status for UI feedback.
-    @Published var syncStatus: SyncStatus = .idle
+    var syncStatus: SyncStatus = .idle
 
     /// Whether the user has granted authorization to access Health data.
-    @Published var isAuthorized = false
+    var isAuthorized = false
 
     // MARK: - Persisted State
 
@@ -71,7 +71,6 @@ final class HealthSyncManager: ObservableObject {
         get { userDefaults.bool(forKey: Self.healthSyncEnabledKey) }
         set {
             userDefaults.set(newValue, forKey: Self.healthSyncEnabledKey)
-            objectWillChange.send()
         }
     }
 
@@ -80,7 +79,6 @@ final class HealthSyncManager: ObservableObject {
         get { userDefaults.object(forKey: Self.lastHealthSyncDateKey) as? Date }
         set {
             userDefaults.set(newValue, forKey: Self.lastHealthSyncDateKey)
-            objectWillChange.send()
         }
     }
 
