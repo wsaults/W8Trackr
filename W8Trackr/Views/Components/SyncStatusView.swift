@@ -16,7 +16,7 @@ import SwiftUI
 /// - Error: red warning cloud (tappable for details)
 /// - No account: orange person icon (tappable for details)
 struct SyncStatusView: View {
-    @ObservedObject private var syncManager = CloudKitSyncManager.shared
+    private var syncManager: CloudKitSyncManager { CloudKitSyncManager.shared }
     @State private var showingDetails = false
 
     var body: some View {

@@ -16,19 +16,21 @@ import SwiftUI
 /// - Network connectivity (via NWPathMonitor)
 /// - iCloud account status (via CKContainer)
 /// - CloudKit sync events (via NSPersistentCloudKitContainer notifications)
-final class CloudKitSyncManager: ObservableObject {
+@Observable @MainActor
+final class CloudKitSyncManager {
     static let shared = CloudKitSyncManager()
 
     /// Current sync status
-    @Published private(set) var status: CloudSyncStatus = .checking
+    private(set) var status: CloudSyncStatus = .checking
 
     /// Last sync timestamp (nil if never synced)
-    @Published private(set) var lastSyncDate: Date?
+    private(set) var lastSyncDate: Date?
 
     /// Error message for failed state
-    @Published private(set) var errorMessage: String?
+    private(set) var errorMessage: String?
 
     private let networkMonitor = NWPathMonitor()
+    // Keep monitorQueue - required by NWPathMonitor
     private let monitorQueue = DispatchQueue(label: "com.w8trackr.networkMonitor")
     private var cancellables = Set<AnyCancellable>()
     private var isNetworkAvailable = true
@@ -43,7 +45,7 @@ final class CloudKitSyncManager: ObservableObject {
 
     private func setupNetworkMonitoring() {
         networkMonitor.pathUpdateHandler = { [weak self] path in
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 self?.isNetworkAvailable = path.status == .satisfied
                 self?.updateStatus()
             }
@@ -58,17 +60,19 @@ final class CloudKitSyncManager: ObservableObject {
         NotificationCenter.default.publisher(
             for: NSNotification.Name("NSPersistentCloudKitContainer.eventChangedNotification")
         )
-        .receive(on: DispatchQueue.main)
         .sink { [weak self] notification in
-            self?.handleCloudKitEvent(notification)
+            Task { @MainActor in
+                self?.handleCloudKitEvent(notification)
+            }
         }
         .store(in: &cancellables)
 
         // Also listen for iCloud account changes
         NotificationCenter.default.publisher(for: .CKAccountChanged)
-        .receive(on: DispatchQueue.main)
         .sink { [weak self] _ in
-            self?.checkiCloudStatus()
+            Task { @MainActor in
+                self?.checkiCloudStatus()
+            }
         }
         .store(in: &cancellables)
     }
@@ -91,10 +95,11 @@ final class CloudKitSyncManager: ObservableObject {
         } else {
             // Generic sync activity detected
             status = .syncing
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-                if self?.status == .syncing {
-                    self?.lastSyncDate = Date()
-                    self?.status = .synced
+            Task {
+                try? await Task.sleep(for: .seconds(2))
+                if status == .syncing {
+                    lastSyncDate = Date()
+                    status = .synced
                 }
             }
         }
@@ -107,31 +112,29 @@ final class CloudKitSyncManager: ObservableObject {
     }
 
     private func checkiCloudStatus() {
-        CKContainer.default().accountStatus { [weak self] status, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    self?.errorMessage = error.localizedDescription
-                    self?.status = .error
-                    return
-                }
-
-                switch status {
+        Task {
+            do {
+                let accountStatus = try await CKContainer.default().accountStatus()
+                switch accountStatus {
                 case .available:
-                    self?.updateStatus()
+                    updateStatus()
                 case .noAccount:
-                    self?.errorMessage = "Sign in to iCloud to sync data across devices"
-                    self?.status = .noAccount
+                    errorMessage = "Sign in to iCloud to sync data across devices"
+                    status = .noAccount
                 case .restricted:
-                    self?.errorMessage = "iCloud access is restricted"
-                    self?.status = .error
+                    errorMessage = "iCloud access is restricted"
+                    status = .error
                 case .couldNotDetermine:
-                    self?.status = .checking
+                    status = .checking
                 case .temporarilyUnavailable:
-                    self?.errorMessage = "iCloud is temporarily unavailable"
-                    self?.status = .offline
+                    errorMessage = "iCloud is temporarily unavailable"
+                    status = .offline
                 @unknown default:
-                    self?.status = .checking
+                    status = .checking
                 }
+            } catch {
+                errorMessage = error.localizedDescription
+                status = .error
             }
         }
     }
@@ -145,10 +148,11 @@ final class CloudKitSyncManager: ObservableObject {
         } else if status == .offline {
             // Network restored, check if we can sync
             status = .syncing
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-                if self?.status == .syncing {
-                    self?.lastSyncDate = Date()
-                    self?.status = .synced
+            Task {
+                try? await Task.sleep(for: .seconds(1))
+                if status == .syncing {
+                    lastSyncDate = Date()
+                    status = .synced
                 }
             }
         } else if status == .checking {
