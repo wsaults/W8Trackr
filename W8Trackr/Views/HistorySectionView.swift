@@ -22,13 +22,7 @@ struct HistorySectionView: View {
 
     private static let undoTimeout: TimeInterval = 5
 
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        formatter.locale = .current
-        return formatter
-    }()
+    // MARK: - Computed Properties for Month Grouping
 
     private var visibleEntries: [WeightEntry] {
         entries.filter { entry in
@@ -36,73 +30,52 @@ struct HistorySectionView: View {
         }
     }
 
+    private var rowDataList: [LogbookRowData] {
+        LogbookRowData.buildRowData(entries: visibleEntries, unit: weightUnit)
+    }
+
+    private var entriesByMonth: [Date: [LogbookRowData]] {
+        Dictionary(grouping: rowDataList) { rowData in
+            let components = Calendar.current.dateComponents([.year, .month], from: rowData.entry.date)
+            return Calendar.current.date(from: components) ?? rowData.entry.date
+        }
+    }
+
+    private var sortedMonths: [Date] {
+        entriesByMonth.keys.sorted(by: >) // Newest first
+    }
+
     private var undoMessage: String {
         let count = pendingDeletes.count
         return count == 1 ? "Entry deleted" : "\(count) entries deleted"
     }
 
-    private func accessibilityLabel(for entry: WeightEntry) -> String {
-        let dateStr = Self.dateFormatter.string(from: entry.date)
-        let weightStr = entry.weightValue(in: weightUnit).formatted(.number.precision(.fractionLength(1)))
-        var label = "\(dateStr), \(weightStr) \(weightUnit.rawValue)"
-        if let bodyFat = entry.bodyFatPercentage {
-            let bodyFatValue = NSDecimalNumber(decimal: bodyFat).doubleValue
-            label += ", \(bodyFatValue.formatted(.number.precision(.fractionLength(1)))) percent body fat"
-        }
-        return label
-    }
-
     var body: some View {
         List {
-            ForEach(visibleEntries) { entry in
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(entry.date, formatter: Self.dateFormatter)
-                        if let bodyFat = entry.bodyFatPercentage {
-                            Text("\(NSDecimalNumber(decimal: bodyFat).doubleValue, specifier: "%.1f")% body fat")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+            ForEach(sortedMonths, id: \.self) { month in
+                Section {
+                    ForEach(entriesByMonth[month] ?? []) { rowData in
+                        LogbookRowView(rowData: rowData, weightUnit: weightUnit) {
+                            onEdit?(rowData.entry)
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                queueDelete(rowData.entry)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
+                        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                            Button {
+                                onEdit?(rowData.entry)
+                            } label: {
+                                Label("Edit", systemImage: "pencil")
+                            }
+                            .tint(AppColors.primary)
                         }
                     }
-                    Spacer()
-                    HStack(spacing: 4) {
-                        Text(
-                            entry.weightValue(in: weightUnit),
-                            format: .number.precision(.fractionLength(1))
-                        )
-                        .fontWeight(.bold)
-
-                        Text(weightUnit.rawValue)
-                    }
-                }
-                .padding(.vertical, 8)
-                .contentShape(Rectangle())
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(accessibilityLabel(for: entry))
-                .accessibilityHint("Swipe right to edit, swipe left to delete")
-                .accessibilityAddTraits(.isButton)
-                .onTapGesture {
-                    onEdit?(entry)
-                }
-                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                    Button(role: .destructive) {
-                        queueDelete(entry)
-                    } label: {
-                        Label("Delete", systemImage: "trash")
-                    }
-                }
-                .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                    Button {
-                        onEdit?(entry)
-                    } label: {
-                        Label("Edit", systemImage: "pencil")
-                    }
-                    .tint(AppColors.primary)
-                }
-            }
-            .onDelete { indexSet in
-                indexSet.forEach { index in
-                    queueDelete(visibleEntries[index])
+                } header: {
+                    Text(month, format: .dateTime.month(.wide).year())
                 }
             }
         }
