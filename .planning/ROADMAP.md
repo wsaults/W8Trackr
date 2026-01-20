@@ -68,11 +68,13 @@ Plans:
   2. All async operations use Swift concurrency (async/await, @MainActor)
   3. No deprecated .cornerRadius() calls remain in views
   4. SwiftLint passes with zero warnings
-**Plans**: 2 plans
+**Plans**: 4 plans
 
 Plans:
-- [ ] 04-01-PLAN.md - Replace deprecated SwiftUI APIs and migrate View GCD to Task.sleep
-- [ ] 04-02-PLAN.md - Migrate Manager classes from GCD to @MainActor + async/await
+- [x] 04-01-PLAN.md - Replace deprecated SwiftUI APIs and migrate View GCD to Task.sleep
+- [x] 04-02-PLAN.md - Migrate Manager classes from GCD to @MainActor + async/await
+- [ ] 04-03-PLAN.md - Migrate HealthSyncManager to @Observable (gap closure)
+- [ ] 04-04-PLAN.md - Fix SwiftLint violations (gap closure)
 
 ## Progress
 
@@ -84,7 +86,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Critical Bugs | 2/2 | Complete | 2026-01-20 |
 | 2. Chart Animation | 1/1 | Complete | 2026-01-20 |
 | 3. UX Polish | 2/2 | Complete | 2026-01-20 |
-| 4. Code Quality | 0/2 | Ready | - |
+| 4. Code Quality | 2/4 | Gap Closure | - |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -92,3 +94,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 *Phase 2 planned: 2026-01-20*
 *Phase 3 planned: 2026-01-20*
 *Phase 4 planned: 2026-01-20*
+*Phase 4 gap closure plans: 2026-01-20*
