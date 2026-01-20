@@ -17,6 +17,7 @@ struct WeightTrendChartView: View {
     let showSmoothing: Bool
 
     @State private var scrollPosition: Date = Date()
+    @State private var selectedDate: Date?
 
     private var filteredEntries: [WeightEntry] {
         guard let days = selectedRange.days else { return entries }
@@ -94,6 +95,13 @@ struct WeightTrendChartView: View {
             days = 120
         }
         return days * 86400 // seconds per day
+    }
+
+    private var selectedEntry: ChartEntry? {
+        guard let selected = selectedDate else { return nil }
+        return chartData
+            .filter { !$0.isPrediction && $0.showPoint }
+            .min(by: { abs($0.date.timeIntervalSince(selected)) < abs($1.date.timeIntervalSince(selected)) })
     }
 
     // Holt's Double Exponential Smoothing prediction
@@ -235,9 +243,25 @@ struct WeightTrendChartView: View {
 
         return data
     }
-    
+
+    @ViewBuilder
+    private var selectionDisplay: some View {
+        if let entry = selectedEntry {
+            HStack {
+                Text(entry.date, format: .dateTime.month().day())
+                Spacer()
+                Text("\(entry.weight, format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
+                    .bold()
+            }
+            .font(.caption)
+            .foregroundStyle(AppColors.textSecondary)
+            .padding(.horizontal)
+        }
+    }
+
     var body: some View {
         VStack {
+            selectionDisplay
             Chart {
                 // Goal weight line remains the same
                 if goalWeight > 0 {
@@ -281,6 +305,21 @@ struct WeightTrendChartView: View {
                     )
                     .foregroundStyle(by: .value("Type", entry.isPrediction ? "Predicted" : (entry.isIndividualEntry ? "Entry" : "Average")))
                 }
+
+                // Selection indicator
+                if let entry = selectedEntry {
+                    RuleMark(x: .value("Selected", entry.date))
+                        .foregroundStyle(AppColors.textSecondary.opacity(0.3))
+                        .lineStyle(StrokeStyle(lineWidth: 1))
+
+                    PointMark(
+                        x: .value("Date", entry.date),
+                        y: .value("Weight", entry.weight)
+                    )
+                    .symbol(.circle)
+                    .symbolSize(100)
+                    .foregroundStyle(AppColors.accent)
+                }
             }
             .chartForegroundStyleScale([
                 "Entry": AppColors.chartEntry,
@@ -309,6 +348,7 @@ struct WeightTrendChartView: View {
             .chartScrollableAxes(.horizontal)
             .chartXVisibleDomain(length: visibleDomainSeconds)
             .chartScrollPosition(x: $scrollPosition)
+            .chartXSelection(value: $selectedDate)
             .animation(.snappy, value: selectedRange)
             .padding(.bottom)
             .accessibilityChartDescriptor(self)
