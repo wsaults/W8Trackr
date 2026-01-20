@@ -161,6 +161,27 @@ struct SettingsView: View {
             Text("Danger Zone")
         }
     }
+
+    #if DEBUG
+    private var devSection: some View {
+        Section {
+            Button {
+                showingDevMenu = true
+            } label: {
+                HStack {
+                    Image(systemName: "hammer.fill")
+                        .foregroundStyle(.orange)
+                    Text("Developer Menu")
+                        .foregroundStyle(.primary)
+                }
+            }
+        } header: {
+            Text("Developer Tools")
+        } footer: {
+            Text("Debug builds only. Replace data or add entries for testing.")
+        }
+    }
+    #endif
     
     private var chartSettingsSection: some View {
         Section {
@@ -304,6 +325,10 @@ struct SettingsView: View {
         }
     }
     
+    #if DEBUG
+    @State private var showingDevMenu = false
+    #endif
+
     var body: some View {
         NavigationStack {
             Form {
@@ -314,6 +339,9 @@ struct SettingsView: View {
                 healthSection
                 dataManagementSection
                 dangerZoneSection
+                #if DEBUG
+                devSection
+                #endif
             }
             .navigationTitle("Settings")
             .syncStatusToolbar()
@@ -363,6 +391,11 @@ struct SettingsView: View {
             .sheet(isPresented: $showingExportView) {
                 ExportView()
             }
+            #if DEBUG
+            .sheet(isPresented: $showingDevMenu) {
+                DevMenuView()
+            }
+            #endif
             .toast(
                 isPresented: $showingDeleteSuccessToast,
                 message: "All weight entries deleted",
