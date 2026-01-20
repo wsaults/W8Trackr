@@ -9,22 +9,22 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 
 ## Current Position
 
-Phase: 7 of 7 (Chart Improvements)
-Plan: 1 of 1 in current phase
-Status: Phase Complete
-Last activity: 2026-01-20 - Completed 07-01-PLAN.md
+Phase: 8 of 8 (Logbook Improvements)
+Plan: 1 of 3 in current phase
+Status: In Progress
+Last activity: 2026-01-20 - Completed 08-01-PLAN.md
 
-Progress: [##########] 100%
+Progress: [########--] 88.2% (15 of 17 plans)
 
-**Phase 7 Complete:**
-- All chart interaction improvements implemented (prediction, scrolling, selection)
+**Current Phase:**
+- Phase 8: Logbook Improvements (1 of 3 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
-- Average duration: 4.7 minutes
-- Total execution time: 1.1 hours
+- Total plans completed: 15
+- Average duration: 4.5 minutes
+- Total execution time: 1.15 hours
 
 **By Phase:**
 
@@ -37,9 +37,10 @@ Progress: [##########] 100%
 | 05-light-dark-mode | 3 | 13 min | 4.3 min |
 | 06-dashboard-polish | 1 | 3 min | 3 min |
 | 07-chart-improvements | 1 | 2 min | 2 min |
+| 08-logbook-improvements | 1 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-02 (2 min), 05-03 (3 min), 06-01 (3 min), 07-01 (2 min)
+- Last 5 plans: 05-03 (3 min), 06-01 (3 min), 07-01 (2 min), 08-01 (3 min)
 - Trend: Highly efficient execution, sub-5 minute average
 
 *Updated after each plan completion*
@@ -77,6 +78,9 @@ Recent decisions affecting current work:
 - [07-01]: Visible domain varies by date range (10-120 days) for optimal data density
 - [07-01]: Selection only shows actual data points, filters out predictions
 - [07-01]: AppColors.accent for selection highlight (consistent with app theming)
+- [08-01]: Use entry date as Identifiable ID for LogbookRowData (stable across app lifecycle)
+- [08-01]: 7-day span for moving average matches chart trend calculation
+- [08-01]: TrendDirection threshold of 0.1 for stable classification
 
 ### Pending Todos
 
@@ -84,17 +88,17 @@ None.
 
 ### Blockers/Concerns
 
-None remaining. All phases complete and verified.
+None remaining.
 
 ## Session Continuity
 
 Last session: 2026-01-20
-Stopped at: Completed 07-01-PLAN.md - Phase 7 complete
+Stopped at: Completed 08-01-PLAN.md
 Resume file: None
 
 ## Project Completion Status
 
-7 of 7 phases complete:
+7 of 8 phases complete:
 - Phase 1: Critical Bugs (2 plans) ✓
 - Phase 2: Chart Animation (1 plan) ✓
 - Phase 3: UX Polish (2 plans) ✓
@@ -102,14 +106,16 @@ Resume file: None
 - Phase 5: Light/Dark Mode (3 plans) ✓
 - Phase 6: Dashboard Polish (1 plan) ✓
 - Phase 7: Chart Improvements (1 plan) ✓
+- Phase 8: Logbook Improvements (1/3 plans) - In Progress
 
-Total: 14 plans executed, all phases verified
+Total: 15 plans executed
 
 ### Roadmap Evolution
 
 - Phase 5 added: Light/dark mode support
 - Phase 6 added: Dashboard polish (trend-based colors, month labels)
 - Phase 7 added: Chart improvements (extended prediction line, horizontal scrolling, tap selection)
+- Phase 8 added: Logbook improvements (month-segmented dates, enhanced row data, filter menu)
 
 ## Code Quality Status
 
