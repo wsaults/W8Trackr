@@ -253,9 +253,7 @@ extension View {
         .errorToast(
             isPresented: $isPresented,
             message: "Failed to sync. Check your connection."
-        ) {
-            print("Retry tapped")
-        }
+        ) {}
 }
 
 @available(iOS 18, macOS 15, *)
@@ -280,8 +278,6 @@ extension View {
             message: "Entry deleted",
             systemImage: "trash",
             actionLabel: "Undo"
-        ) {
-            print("Undo tapped")
-        }
+        ) {}
 }
 #endif

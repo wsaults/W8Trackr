@@ -160,7 +160,7 @@ struct SettingsViewPreview: PreviewModifier {
 
     func body(content: Content, context: ModelContainer) -> some View {
         if withSampleData {
-            let _ = {
+            _ = {
                 WeightEntry.shortSampleData.forEach { entry in
                     context.mainContext.insert(entry)
                 }
@@ -225,7 +225,7 @@ struct ContentViewPreview: PreviewModifier {
 
     func body(content: Content, context: ModelContainer) -> some View {
         if !isEmpty {
-            let _ = {
+            _ = {
                 WeightEntry.shortSampleData.forEach { entry in
                     context.mainContext.insert(entry)
                 }

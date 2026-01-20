@@ -168,8 +168,7 @@ struct HistorySectionView: View {
                     do {
                         try await healthSyncManager.deleteWeightFromHealth(entry: entry)
                     } catch {
-                        // Log error but don't block local delete
-                        print("HealthKit delete failed for entry \(entry.id): \(error)")
+                        // HealthKit delete error is non-blocking - local delete proceeds
                     }
                 }
             }
@@ -202,9 +201,7 @@ struct HistorySectionView: View {
         HistorySectionView(
             entries: WeightEntry.sortedSampleData,
             weightUnit: .lb
-        ) { entry in
-            print("Edit: \(entry.id)")
-        }
+        ) { _ in }
         .navigationTitle("History")
     }
     .environmentObject(HealthSyncManager())
@@ -228,9 +225,7 @@ struct HistorySectionView: View {
         HistorySectionView(
             entries: [WeightEntry(weight: 175.5)],
             weightUnit: .lb
-        ) { entry in
-            print("Edit: \(entry.id)")
-        }
+        ) { _ in }
         .navigationTitle("History")
     }
     .environmentObject(HealthSyncManager())
