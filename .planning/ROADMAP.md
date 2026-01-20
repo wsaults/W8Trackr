@@ -40,10 +40,10 @@ Plans:
   1. Chart line animates smoothly when switching between date segments (1W, 1M, 3M, etc.)
   2. No visual jank, squiggling, or jittering during animation
   3. Chart maintains correct data accuracy after animation completes
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 02-01: TBD
+- [ ] 02-01-PLAN.md - Fix ChartEntry identity for smooth animations
 
 ### Phase 3: UX Polish
 **Goal**: Improve dashboard layout and data safety for better user experience
@@ -80,10 +80,11 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Critical Bugs | 2/2 | Complete | 2026-01-20 |
-| 2. Chart Animation | 0/TBD | Not started | - |
+| 2. Chart Animation | 0/1 | Not started | - |
 | 3. UX Polish | 0/TBD | Not started | - |
 | 4. Code Quality | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-20*
 *Phase 1 planned: 2026-01-20*
+*Phase 2 planned: 2026-01-20*
