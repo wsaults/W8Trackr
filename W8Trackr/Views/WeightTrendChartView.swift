@@ -222,12 +222,12 @@ struct WeightTrendChartView: View {
                 // Goal weight line remains the same
                 if goalWeight > 0 {
                     RuleMark(y: .value("Goal Weight", goalWeight))
-                        .foregroundStyle(.green.opacity(0.5))
+                        .foregroundStyle(AppColors.chartGoal.opacity(0.5))
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [10, 5]))
                         .annotation(position: .overlay) {
                             Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
                                 .font(.caption)
-                                .foregroundStyle(.green)
+                                .foregroundStyle(AppColors.chartGoal)
                                 .background(Color(UIColor.systemBackground))
                         }
                 }
