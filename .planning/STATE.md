@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can reliably track weight and see progress without UI bugs undermining the experience
-**Current focus:** Phase 11 - Logbook Header & Cell Height (Complete)
+**Current focus:** MILESTONE COMPLETE
 
 ## Current Position
 
-Phase: 11 of 11 (Logbook Header & Cell Height)
+Phase: 12 of 12 (Logbook Column Alignment)
 Plan: 1 of 1 in current phase
-Status: Phase Complete
-Last activity: 2026-01-21 - Completed 11-01-PLAN.md
+Status: Complete
+Last activity: 2026-01-21 - Completed 12-01-PLAN.md
 
-Progress: [###########] 100% (11 of 11 phases complete)
+Progress: [############] 100% (12 of 12 phases complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 19
+- Total plans completed: 20
 - Average duration: 4.5 minutes
-- Total execution time: 1.42 hours
+- Total execution time: 1.50 hours
 
 **By Phase:**
 
@@ -38,10 +38,11 @@ Progress: [###########] 100% (11 of 11 phases complete)
 | 09-milestone-intervals | 1 | 4 min | 4 min |
 | 10-weight-entry-ui-redesign | 1 | 3 min | 3 min |
 | 11-logbook-header-cell-height | 1 | 12 min | 12 min |
+| 12-logbook-column-alignment | 1 | 5 min | 5 min |
 
 **Recent Trend:**
-- Last 5 plans: 08-02 (2 min), 09-01 (4 min), 10-01 (3 min), 11-01 (12 min)
-- Trend: Highly efficient execution, sub-5 minute average (11-01 longer due to test runtime)
+- Last 5 plans: 09-01 (4 min), 10-01 (3 min), 11-01 (12 min), 12-01 (5 min)
+- Trend: Highly efficient execution, sub-5 minute average
 
 *Updated after each plan completion*
 
@@ -96,6 +97,9 @@ Recent decisions affecting current work:
 - [11-01]: Row padding reduced from 8pt to 4pt with minHeight: 44 for accessibility
 - [11-01]: List wrapped in VStack(spacing: 0) to place header above
 - [11-01]: .listStyle(.plain) enables sticky month section headers
+- [12-01]: Fixed column widths over flexible frames for consistent alignment
+- [12-01]: Always render all columns (empty if nil) to prevent visual shift
+- [12-01]: Centralized LogbookLayout enum for single source of truth
 
 ### Pending Todos
 
@@ -110,12 +114,12 @@ None remaining. All phases complete and verified.
 ## Session Continuity
 
 Last session: 2026-01-21
-Stopped at: Completed 11-01-PLAN.md
+Stopped at: Completed 12-01-PLAN.md (MILESTONE COMPLETE)
 Resume file: None
 
 ## Project Completion Status
 
-11 of 11 phases complete:
+12 of 12 phases complete:
 - Phase 1: Critical Bugs (2 plans) DONE
 - Phase 2: Chart Animation (1 plan) DONE
 - Phase 3: UX Polish (2 plans) DONE
@@ -127,8 +131,9 @@ Resume file: None
 - Phase 9: Milestone Intervals (1 plan) DONE
 - Phase 10: Weight Entry UI Redesign (1 plan) DONE
 - Phase 11: Logbook Header & Cell Height (1 plan) DONE
+- Phase 12: Logbook Column Alignment (1 plan) DONE
 
-Total: 19 plans executed
+Total: 20 plans executed
 
 ### Roadmap Evolution
 
@@ -139,6 +144,7 @@ Total: 19 plans executed
 - Phase 9 added: Milestone intervals (customizable celebration thresholds)
 - Phase 10 added: Weight entry UI redesign (better controls, improved UX)
 - Phase 11 added: Logbook header & cell height (column headers, reduced row height)
+- Phase 12 added: Logbook column alignment (fix spacing between header and row columns)
 
 ## Code Quality Status
 
@@ -148,3 +154,4 @@ Total: 19 plans executed
 - Test files organized by domain
 - All views using adaptive AppColors
 - No hardcoded colors that break in light/dark mode
+- Logbook layout centralized in LogbookLayout enum
