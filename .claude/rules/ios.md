@@ -2,12 +2,14 @@
 
 ## Minimum Deployment Target
 
-**iOS 18.0+** - This app uses iOS 18 features:
+**iOS 26.0+** - This app uses iOS 26 features:
 - SwiftData
 - Modern Preview traits (@Previewable, PreviewModifier)
 - ContentUnavailableView
+- Liquid Glass tab bar accessories
+- Tab bar minimize behavior
 
-Do not use deprecated APIs or iOS 17-and-below patterns.
+Do not use deprecated APIs or iOS 25-and-below patterns.
 
 ## Project Structure
 

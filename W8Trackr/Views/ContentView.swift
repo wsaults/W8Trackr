@@ -31,6 +31,7 @@ struct ContentView: View {
     @AppStorage("milestoneInterval") var milestoneInterval: MilestoneInterval = .five
     @State private var showingInitialDataToast = false
     @State private var showingSaveError = false
+    @State private var showAddWeightView = false
 
     // MARK: - Data Sources
     // Always use live SwiftData queries - use Developer Menu to load test data
@@ -44,6 +45,7 @@ struct ContentView: View {
     var body: some View {
         TabView {
             DashboardView(
+                showAddWeightView: $showAddWeightView,
                 entries: entries,
                 completedMilestones: completedMilestones,
                 preferredWeightUnit: preferredWeightUnit,
@@ -54,12 +56,12 @@ struct ContentView: View {
                 .tabItem {
                     Label("Dashboard", systemImage: "gauge.with.dots.needle.bottom.50percent")
                 }
-            
+
             LogbookView(entries: entries, preferredWeightUnit: preferredWeightUnit, goalWeight: goalWeight)
                 .tabItem {
                     Label("Logbook", systemImage: "book")
                 }
-            
+
             SettingsView(
                 weightUnit: $preferredWeightUnit,
                 goalWeight: $goalWeight,
@@ -69,6 +71,21 @@ struct ContentView: View {
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
+        }
+        .tabViewBottomAccessory {
+            Button {
+                showAddWeightView = true
+            } label: {
+                Image(systemName: "plus")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+            }
+            .accessibilityLabel("Add weight entry")
+            .accessibilityHint("Opens form to log a new weight measurement")
+        }
+        .tabBarMinimizeBehavior(.onScrollDown)
+        .sheet(isPresented: $showAddWeightView) {
+            WeightEntryView(entries: entries, weightUnit: preferredWeightUnit)
         }
         .onAppear {
             // Validate goal weight on first launch or after unit change
