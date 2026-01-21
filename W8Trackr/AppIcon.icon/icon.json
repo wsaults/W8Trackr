@@ -1,0 +1,70 @@
+{
+  "fill" : {
+    "linear-gradient" : [
+      "display-p3:0.72661,0.53934,1.00000,1.00000",
+      "extended-srgb:0.00000,0.53333,1.00000,1.00000"
+    ],
+    "orientation" : {
+      "start" : {
+        "x" : 0.5,
+        "y" : 0
+      },
+      "stop" : {
+        "x" : 0.5,
+        "y" : 0.7
+      }
+    }
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "blend-mode" : "normal",
+          "fill" : {
+            "solid" : "display-p3:0.69971,0.53955,0.99561,1.00000"
+          },
+          "glass" : false,
+          "image-name" : "w8.png",
+          "name" : "w8",
+          "position" : {
+            "scale" : 0.55,
+            "translation-in-points" : [
+              -30.2421875,
+              158.5
+            ]
+          }
+        },
+        {
+          "fill" : {
+            "solid" : "display-p3:0.99316,0.99316,0.99316,1.00000"
+          },
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "w8track-icon2.png",
+          "name" : "w8track-icon2",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
