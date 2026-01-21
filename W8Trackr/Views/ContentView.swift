@@ -28,6 +28,7 @@ struct ContentView: View {
     @AppStorage("preferredWeightUnit") var preferredWeightUnit: WeightUnit = Locale.current.measurementSystem == .metric ? .kg : .lb
     @AppStorage("goalWeight") var goalWeight: Double = 170.0
     @AppStorage("showSmoothing") var showSmoothing: Bool = true
+    @AppStorage("milestoneInterval") var milestoneInterval: MilestoneInterval = .five
     @State private var showingInitialDataToast = false
     @State private var showingSaveError = false
 
@@ -47,7 +48,8 @@ struct ContentView: View {
                 completedMilestones: completedMilestones,
                 preferredWeightUnit: preferredWeightUnit,
                 goalWeight: goalWeight,
-                showSmoothing: showSmoothing
+                showSmoothing: showSmoothing,
+                milestoneInterval: milestoneInterval
             )
                 .tabItem {
                     Label("Dashboard", systemImage: "gauge.with.dots.needle.bottom.50percent")

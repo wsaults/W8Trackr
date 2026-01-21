@@ -39,6 +39,7 @@ struct DashboardView: View {
     var preferredWeightUnit: WeightUnit
     var goalWeight: Double
     var showSmoothing: Bool
+    var milestoneInterval: MilestoneInterval
 
     // MARK: - Computed Properties
 
@@ -72,7 +73,8 @@ struct DashboardView: View {
             startWeight: startWeight,
             goalWeight: goalWeight,
             unit: preferredWeightUnit,
-            completedMilestones: completedMilestones
+            completedMilestones: completedMilestones,
+            intervalPreference: milestoneInterval
         )
     }
 
@@ -234,7 +236,8 @@ struct DashboardView: View {
         let allMilestones = MilestoneCalculator.generateMilestones(
             startWeight: startWeight,
             goalWeight: goalWeight,
-            unit: preferredWeightUnit
+            unit: preferredWeightUnit,
+            intervalPreference: milestoneInterval
         )
 
         let completedWeights = Set(completedMilestones.map { $0.targetWeight(in: preferredWeightUnit) })
@@ -274,7 +277,8 @@ struct DashboardView: View {
         completedMilestones: [],
         preferredWeightUnit: .lb,
         goalWeight: 160,
-        showSmoothing: true
+        showSmoothing: true,
+        milestoneInterval: .five
     )
 }
 
@@ -285,7 +289,8 @@ struct DashboardView: View {
         completedMilestones: [],
         preferredWeightUnit: .lb,
         goalWeight: 160,
-        showSmoothing: true
+        showSmoothing: true,
+        milestoneInterval: .five
     )
 }
 #endif

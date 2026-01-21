@@ -19,6 +19,7 @@ struct SummaryView: View {
     var preferredWeightUnit: WeightUnit
     var goalWeight: Double
     var showSmoothing: Bool
+    var milestoneInterval: MilestoneInterval
 
     // Derive start weight from oldest entry
     private var startWeight: Double {
@@ -39,7 +40,8 @@ struct SummaryView: View {
             startWeight: startWeight,
             goalWeight: goalWeight,
             unit: preferredWeightUnit,
-            completedMilestones: completedMilestones
+            completedMilestones: completedMilestones,
+            intervalPreference: milestoneInterval
         )
     }
 
@@ -139,7 +141,8 @@ struct SummaryView: View {
         let allMilestones = MilestoneCalculator.generateMilestones(
             startWeight: startWeight,
             goalWeight: goalWeight,
-            unit: preferredWeightUnit
+            unit: preferredWeightUnit,
+            intervalPreference: milestoneInterval
         )
 
         // Find milestones that are crossed but not yet recorded
@@ -176,7 +179,8 @@ struct SummaryView: View {
         completedMilestones: [],
         preferredWeightUnit: .lb,
         goalWeight: 160,
-        showSmoothing: true
+        showSmoothing: true,
+        milestoneInterval: .five
     )
 }
 
@@ -187,7 +191,8 @@ struct SummaryView: View {
         completedMilestones: [],
         preferredWeightUnit: .lb,
         goalWeight: 160,
-        showSmoothing: true
+        showSmoothing: true,
+        milestoneInterval: .five
     )
 }
 #endif
