@@ -57,23 +57,23 @@ struct FirstWeightStepView: View {
                 }
 
                 // Adjustment buttons
-                HStack(spacing: 40) {
-                    WeightStepButton(systemName: "backward.circle.fill") {
+                HStack(spacing: 24) {
+                    WeightAdjustmentButton(amount: 1.0, unitLabel: weightUnit.rawValue, isIncrease: false) {
                         mediumFeedbackGenerator.impactOccurred()
                         enteredWeight = max(weightUnit.minWeight, enteredWeight - 1.0)
                     }
 
-                    WeightStepButton(systemName: "backward.end.circle.fill") {
+                    WeightAdjustmentButton(amount: 0.1, unitLabel: weightUnit.rawValue, isIncrease: false) {
                         lightFeedbackGenerator.impactOccurred()
                         enteredWeight = max(weightUnit.minWeight, enteredWeight - 0.1)
                     }
 
-                    WeightStepButton(systemName: "forward.end.circle.fill") {
+                    WeightAdjustmentButton(amount: 0.1, unitLabel: weightUnit.rawValue, isIncrease: true) {
                         lightFeedbackGenerator.impactOccurred()
                         enteredWeight = min(weightUnit.maxWeight, enteredWeight + 0.1)
                     }
 
-                    WeightStepButton(systemName: "forward.circle.fill") {
+                    WeightAdjustmentButton(amount: 1.0, unitLabel: weightUnit.rawValue, isIncrease: true) {
                         mediumFeedbackGenerator.impactOccurred()
                         enteredWeight = min(weightUnit.maxWeight, enteredWeight + 1.0)
                     }
@@ -112,22 +112,6 @@ struct FirstWeightStepView: View {
     private func animateEntrance() {
         withAnimation(.spring(response: 0.5, dampingFraction: 0.8).delay(0.2)) {
             showContent = true
-        }
-    }
-}
-
-// MARK: - Weight Step Button
-
-private struct WeightStepButton: View {
-    let systemName: String
-    let action: () -> Void
-    @ScaledMetric(relativeTo: .title) private var buttonIconSize: CGFloat = 44
-
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: buttonIconSize))
-                .foregroundStyle(AppColors.primary)
         }
     }
 }
