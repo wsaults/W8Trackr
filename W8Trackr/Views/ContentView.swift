@@ -43,77 +43,88 @@ struct ContentView: View {
     ) private var completedMilestones: [CompletedMilestone]
 
     var body: some View {
-        TabView {
-            DashboardView(
-                showAddWeightView: $showAddWeightView,
-                entries: entries,
-                completedMilestones: completedMilestones,
-                preferredWeightUnit: preferredWeightUnit,
-                goalWeight: goalWeight,
-                showSmoothing: showSmoothing,
-                milestoneInterval: milestoneInterval
-            )
-                .tabItem {
-                    Label("Dashboard", systemImage: "gauge.with.dots.needle.bottom.50percent")
-                }
-
-            LogbookView(entries: entries, preferredWeightUnit: preferredWeightUnit, goalWeight: goalWeight)
-                .tabItem {
-                    Label("Logbook", systemImage: "book")
-                }
-
-            SettingsView(
-                weightUnit: $preferredWeightUnit,
-                goalWeight: $goalWeight,
-                showSmoothing: $showSmoothing,
-                milestoneInterval: $milestoneInterval
-            )
-                .tabItem {
-                    Label("Settings", systemImage: "gear")
-                }
-        }
-        .tabViewBottomAccessory {
-            Button {
-                showAddWeightView = true
-            } label: {
-                Image(systemName: "plus")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-            }
-            .accessibilityLabel("Add weight entry")
-            .accessibilityHint("Opens form to log a new weight measurement")
-        }
-        .tabBarMinimizeBehavior(.onScrollDown)
-        .sheet(isPresented: $showAddWeightView) {
-            WeightEntryView(entries: entries, weightUnit: preferredWeightUnit)
-        }
-        .onAppear {
-            // Validate goal weight on first launch or after unit change
-            // Handles the case where default 170.0 is invalid for metric users
-            if !preferredWeightUnit.isValidGoalWeight(goalWeight) {
-                goalWeight = preferredWeightUnit.defaultWeight
-            }
-
-            if entries.isEmpty {
-                WeightEntry.initialData.forEach { entry in
-                    modelContext.insert(entry)
-                }
-                do {
-                    try modelContext.save()
-                    withAnimation {
-                        showingInitialDataToast = true
+        ZStack(alignment: .bottomTrailing) {
+            TabView {
+                DashboardView(
+                    showAddWeightView: $showAddWeightView,
+                    entries: entries,
+                    completedMilestones: completedMilestones,
+                    preferredWeightUnit: preferredWeightUnit,
+                    goalWeight: goalWeight,
+                    showSmoothing: showSmoothing,
+                    milestoneInterval: milestoneInterval
+                )
+                    .tabItem {
+                        Label("Dashboard", systemImage: "gauge.with.dots.needle.bottom.50percent")
                     }
-                } catch {
-                    showingSaveError = true
+
+                LogbookView(entries: entries, preferredWeightUnit: preferredWeightUnit, goalWeight: goalWeight)
+                    .tabItem {
+                        Label("Logbook", systemImage: "book")
+                    }
+
+                SettingsView(
+                    weightUnit: $preferredWeightUnit,
+                    goalWeight: $goalWeight,
+                    showSmoothing: $showSmoothing,
+                    milestoneInterval: $milestoneInterval
+                )
+                    .tabItem {
+                        Label("Settings", systemImage: "gear")
+                    }
+            }
+            .tabBarMinimizeBehavior(.onScrollDown)
+            .sheet(isPresented: $showAddWeightView) {
+                WeightEntryView(entries: entries, weightUnit: preferredWeightUnit)
+            }
+            .onAppear {
+                // Validate goal weight on first launch or after unit change
+                // Handles the case where default 170.0 is invalid for metric users
+                if !preferredWeightUnit.isValidGoalWeight(goalWeight) {
+                    goalWeight = preferredWeightUnit.defaultWeight
+                }
+
+                if entries.isEmpty {
+                    WeightEntry.initialData.forEach { entry in
+                        modelContext.insert(entry)
+                    }
+                    do {
+                        try modelContext.save()
+                        withAnimation {
+                            showingInitialDataToast = true
+                        }
+                    } catch {
+                        showingSaveError = true
+                    }
                 }
             }
+            .toast(
+                isPresented: $showingInitialDataToast,
+                message: "Sample data added. Feel free to delete and add your own entries!",
+                systemImage: "info.circle"
+            )
+            .toast(isPresented: $showingSaveError, message: "Failed to save initial data", systemImage: "exclamationmark.triangle.fill")
+
+            addButton
+                .padding([.bottom, .trailing], 12)
         }
-        .toast(
-            isPresented: $showingInitialDataToast,
-            message: "Sample data added. Feel free to delete and add your own entries!",
-            systemImage: "info.circle"
-        )
-        .toast(isPresented: $showingSaveError, message: "Failed to save initial data", systemImage: "exclamationmark.triangle.fill")
+    }
+
+    // MARK: - Add Button
+
+    private var addButton: some View {
+        Button {
+            showAddWeightView = true
+        } label: {
+            Image(systemName: "plus")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundStyle(.white)
+                .frame(width: 50, height: 50)
+        }
+        .glassEffect(.regular.interactive())
+        .accessibilityLabel("Add weight entry")
+        .accessibilityHint("Opens form to log a new weight measurement")
     }
 }
 
