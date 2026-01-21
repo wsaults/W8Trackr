@@ -8,6 +8,45 @@
 import Foundation
 import SwiftData
 
+/// Configurable interval for milestone celebrations
+enum MilestoneInterval: String, CaseIterable {
+    case five = "5"
+    case ten = "10"
+    case fifteen = "15"
+
+    /// Interval value in pounds
+    var pounds: Double {
+        switch self {
+        case .five: return 5.0
+        case .ten: return 10.0
+        case .fifteen: return 15.0
+        }
+    }
+
+    /// Interval value in kilograms (rounded for clean UX)
+    var kilograms: Double {
+        switch self {
+        case .five: return 2.0    // ~2.27 kg
+        case .ten: return 5.0     // ~4.54 kg
+        case .fifteen: return 7.0 // ~6.80 kg
+        }
+    }
+
+    /// Get interval value for the specified unit
+    func value(for unit: WeightUnit) -> Double {
+        switch unit {
+        case .lb: return pounds
+        case .kg: return kilograms
+        }
+    }
+
+    /// Display label showing value and unit
+    func displayLabel(for unit: WeightUnit) -> String {
+        let value = Int(self.value(for: unit))
+        return "\(value) \(unit.rawValue)"
+    }
+}
+
 /// Persisted record of a completed milestone
 @Model
 final class CompletedMilestone {
@@ -66,17 +105,19 @@ struct MilestoneProgress {
 
 /// Utility for computing milestones
 enum MilestoneCalculator {
-    /// Milestone interval by unit (5 lbs or 2 kg)
-    static func interval(for unit: WeightUnit) -> Double {
-        switch unit {
-        case .lb: return 5.0
-        case .kg: return 2.0
-        }
+    /// Milestone interval by unit, using user preference
+    static func interval(for unit: WeightUnit, preference: MilestoneInterval = .five) -> Double {
+        preference.value(for: unit)
     }
 
     /// Generate all milestone targets between start and goal weights
-    static func generateMilestones(startWeight: Double, goalWeight: Double, unit: WeightUnit) -> [Double] {
-        let interval = interval(for: unit)
+    static func generateMilestones(
+        startWeight: Double,
+        goalWeight: Double,
+        unit: WeightUnit,
+        intervalPreference: MilestoneInterval = .five
+    ) -> [Double] {
+        let interval = interval(for: unit, preference: intervalPreference)
         let isLosingWeight = goalWeight < startWeight
 
         var milestones: [Double] = []
@@ -114,9 +155,15 @@ enum MilestoneCalculator {
         startWeight: Double,
         goalWeight: Double,
         unit: WeightUnit,
-        completedMilestones: [CompletedMilestone]
+        completedMilestones: [CompletedMilestone],
+        intervalPreference: MilestoneInterval = .five
     ) -> MilestoneProgress {
-        let allMilestones = generateMilestones(startWeight: startWeight, goalWeight: goalWeight, unit: unit)
+        let allMilestones = generateMilestones(
+            startWeight: startWeight,
+            goalWeight: goalWeight,
+            unit: unit,
+            intervalPreference: intervalPreference
+        )
         let completedWeights = Set(completedMilestones.map { $0.targetWeight(in: unit) })
         let isLosingWeight = goalWeight < startWeight
 
