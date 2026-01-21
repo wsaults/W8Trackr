@@ -117,33 +117,38 @@ struct HistorySectionView: View {
                     description: Text("Try adjusting your filters")
                 )
             } else {
-                List {
-                    ForEach(sortedMonths, id: \.self) { month in
-                        Section {
-                            ForEach(entriesByMonth[month] ?? []) { rowData in
-                                LogbookRowView(rowData: rowData, weightUnit: weightUnit) {
-                                    onEdit?(rowData.entry)
-                                }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                    Button(role: .destructive) {
-                                        queueDelete(rowData.entry)
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
-                                }
-                                .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                                    Button {
+                VStack(spacing: 0) {
+                    LogbookHeaderView()
+
+                    List {
+                        ForEach(sortedMonths, id: \.self) { month in
+                            Section {
+                                ForEach(entriesByMonth[month] ?? []) { rowData in
+                                    LogbookRowView(rowData: rowData, weightUnit: weightUnit) {
                                         onEdit?(rowData.entry)
-                                    } label: {
-                                        Label("Edit", systemImage: "pencil")
                                     }
-                                    .tint(AppColors.primary)
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                        Button(role: .destructive) {
+                                            queueDelete(rowData.entry)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    }
+                                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                        Button {
+                                            onEdit?(rowData.entry)
+                                        } label: {
+                                            Label("Edit", systemImage: "pencil")
+                                        }
+                                        .tint(AppColors.primary)
+                                    }
                                 }
+                            } header: {
+                                Text(month, format: .dateTime.month(.wide).year())
                             }
-                        } header: {
-                            Text(month, format: .dateTime.month(.wide).year())
                         }
                     }
+                    .listStyle(.plain)
                 }
             }
         }

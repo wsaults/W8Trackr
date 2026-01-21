@@ -50,7 +50,8 @@ struct LogbookRowView: View {
                 notesIndicator
             }
         }
-        .padding(.vertical, 8)
+        .padding(.vertical, 4)
+        .frame(minHeight: 44)
         .contentShape(Rectangle())
         .onTapGesture {
             onEdit?()
