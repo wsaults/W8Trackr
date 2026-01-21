@@ -25,7 +25,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 13: App Store Automation** - Fastlane setup, GitHub Actions CI, screenshots, metadata management
 - [x] **Phase 14: Add Entry UI** - Replace FAB with Liquid Glass tab bar bottom accessory button
 - [x] **Phase 15: Weight Entry Screen** - Simplify to focused text input with number keyboard and notes field
-- [ ] **Phase 16: Trailing FAB Button** - Move add button to right of tab bar using ZStack overlay
+- [x] **Phase 16: Trailing FAB Button** - Move add button to right of tab bar using Tab(role: .search) pattern
 - [ ] **Phase 17: Next Milestone UI** - Improve progress bar direction (left-to-right) and overall design/informativeness
 
 ## Phase Details
@@ -324,14 +324,13 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 16-01-PLAN.md - Replace tabViewBottomAccessory with ZStack overlay and trailing FAB
+- [x] 16-01-PLAN.md - Replace tabViewBottomAccessory with Tab(role: .search) and sheet popup
 
 **Details:**
-- Replace `.tabViewBottomAccessory` with `ZStack(alignment: .bottomTrailing)` approach
-- Apply `.glassEffect(.regular.interactive())` to the floating button
-- Position button with 12pt padding from bottom and trailing edges
+- Use Tab(role: .search) for native trailing button positioning
+- onChange intercept + sheet for popup instead of full tab content
+- TabDestination enum for type-safe programmatic navigation
 - Maintain accessibility labels and hints
-- Tab bar minimize behavior remains unchanged
 
 **Reference:**
 - [Donny Wals - Liquid Glass Tab Bars](https://www.donnywals.com/exploring-tab-bars-on-ios-26-with-liquid-glass/)
@@ -345,16 +344,18 @@ Plans:
   2. Visual design is polished and informative
   3. Shows clear information about progress toward next milestone
   4. Integrates well with overall app design language
-**Plans**: 0 plans
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 17 to break down)
+- [ ] 17-01-PLAN.md - Replace circular progress ring with linear horizontal progress bar
 
 **Details:**
-- Fix progress bar direction to fill left-to-right as weight decreases toward goal
-- Improve overall visual design (colors, typography, spacing)
-- Consider adding more contextual information (days to goal, rate needed, etc.)
-- Ensure consistency with dashboard and other app components
+- Replace Circle().trim() with Capsule()-based horizontal progress bar
+- Use GeometryReader for width-based progress fill
+- Apply AppGradients.progressPositive for gradient fill
+- Update both MilestoneProgressView and MilestoneProgressCompactView
+- Add VoiceOver accessibility labels for progress information
+- Use AppColors.surface background with cardShadow() styling
 
 ## Progress
 
@@ -378,8 +379,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 13. App Store Automation | 1/1 | Complete | 2026-01-21 |
 | 14. Add Entry UI | 1/1 | Complete | 2026-01-21 |
 | 15. Weight Entry Screen | 1/2 | In Progress | - |
-| 16. Trailing FAB Button | 0/1 | Planned | - |
-| 17. Next Milestone UI | 0/? | Not Started | - |
+| 16. Trailing FAB Button | 1/1 | Complete | 2026-01-21 |
+| 17. Next Milestone UI | 0/1 | Planned | - |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -418,4 +419,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 15 planned: 2026-01-21*
 *Phase 16 added: 2026-01-21*
 *Phase 16 planned: 2026-01-21*
+*Phase 16 complete: 2026-01-21*
 *Phase 17 added: 2026-01-21*
+*Phase 17 planned: 2026-01-21*
