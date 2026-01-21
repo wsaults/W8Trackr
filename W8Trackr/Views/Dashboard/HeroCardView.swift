@@ -85,11 +85,11 @@ struct HeroCardView: View {
     }
 
     private var accessibilityDescription: String {
-        var description = "Current weight: \(formattedWeight) \(weightUnit.rawValue)"
+        var description = "Current weight: \(formattedWeight) \(weightUnit.displayName)"
 
         if let changeText = formattedChange {
             let direction = trendDirection == .down ? "down" : trendDirection == .up ? "up" : "stable"
-            description += ". \(direction) \(changeText) \(weightUnit.rawValue) this week"
+            description += ". \(direction) \(changeText) \(weightUnit.displayName) this week"
         }
 
         if let bodyFat = bodyFatPercentage {
@@ -136,7 +136,7 @@ struct HeroCardView: View {
                     .font(.system(size: heroFontSize, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
 
-                Text(weightUnit.rawValue)
+                Text(weightUnit.displayName)
                     .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundStyle(.white.opacity(0.8))
@@ -150,7 +150,7 @@ struct HeroCardView: View {
                         .font(.caption)
                         .fontWeight(.bold)
 
-                    Text("\(changeText) \(weightUnit.rawValue) this week")
+                    Text("\(changeText) \(weightUnit.displayName) this week")
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .lineLimit(1)

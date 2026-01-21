@@ -12,10 +12,10 @@ enum AppColors {
 
     // MARK: - Primary Colors
 
-    /// Warm coral - main interactive elements, FAB buttons
+    /// Friendly sky blue - main interactive elements, FAB buttons
     static let primary = Color("AppPrimary")
 
-    /// Darker coral for pressed/focused states
+    /// Darker blue for pressed/focused states
     static let primaryDark = Color("PrimaryDark")
 
     // MARK: - Secondary Colors
@@ -118,9 +118,9 @@ extension Color {
 extension AppColors {
     /// Fallback colors using hex values directly - use when color assets aren't available
     enum Fallback {
-        // Primary: Warm coral/orange
-        static let primary = Color(hex: "#FF6B6B")
-        static let primaryDark = Color(hex: "#E85555")
+        // Primary: Friendly sky blue
+        static let primary = Color(hex: "#5DADE2")
+        static let primaryDark = Color(hex: "#4A9ACF")
 
         // Secondary: Soft teal
         static let secondary = Color(hex: "#4ECDC4")

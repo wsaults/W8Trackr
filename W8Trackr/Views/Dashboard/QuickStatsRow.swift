@@ -43,7 +43,7 @@ struct QuickStatsRow: View {
                 QuickStatCard(
                     title: "This Week",
                     value: "\(sign)\(change.formatted(.number.precision(.fractionLength(1))))",
-                    subtitle: weightUnit.rawValue,
+                    subtitle: weightUnit.displayName,
                     icon: change < 0 ? "arrow.down" : change > 0 ? "arrow.up" : "minus",
                     iconColor: changeColor
                 )
@@ -51,7 +51,7 @@ struct QuickStatsRow: View {
                 QuickStatCard(
                     title: "This Week",
                     value: "--",
-                    subtitle: weightUnit.rawValue,
+                    subtitle: weightUnit.displayName,
                     icon: "calendar",
                     iconColor: AppColors.secondary
                 )
@@ -62,7 +62,7 @@ struct QuickStatsRow: View {
             QuickStatCard(
                 title: "To Goal",
                 value: toGoal.formatted(.number.precision(.fractionLength(1))),
-                subtitle: weightUnit.rawValue,
+                subtitle: weightUnit.displayName,
                 icon: "flag.fill",
                 iconColor: toGoalColor
             )

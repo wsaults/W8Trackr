@@ -24,7 +24,7 @@ struct FeatureTourStepView: View {
         TourFeature(
             icon: "trophy.fill",
             title: "Celebrate Milestones",
-            description: "Get rewarded when you hit weight milestones. Every 5 pounds is a victory!",
+            description: "See predictions for your next milestones and celebrate each achievement.",
             color: .yellow
         ),
         TourFeature(
@@ -89,10 +89,8 @@ struct FeatureTourStepView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .padding(.horizontal, 30)
+            .padding(.bottom, 20)
             .opacity(showContent ? 1.0 : 0.0)
-
-            Spacer()
-                .frame(height: 60)
         }
         .onAppear {
             animateEntrance()

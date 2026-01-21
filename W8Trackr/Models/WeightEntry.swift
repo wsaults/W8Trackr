@@ -11,6 +11,16 @@ import SwiftData
 enum WeightUnit: String, CaseIterable {
     case lb, kg
 
+    /// Display name for UI (e.g., "lbs" instead of "lb")
+    var displayName: String {
+        switch self {
+        case .lb:
+            return "lbs"
+        case .kg:
+            return "kg"
+        }
+    }
+
     /// Conversion factor: 1 lb = 0.453592 kg
     static let lbToKg = 0.453592
     /// Conversion factor: 1 kg = 2.20462 lb

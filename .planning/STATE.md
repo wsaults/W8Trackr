@@ -158,6 +158,8 @@ Total: 22 plans executed
 - Phase 12 added: Logbook column alignment (fix spacing between header and row columns)
 - Phase 13 added: App Store automation (fastlane, GitHub Actions, screenshots, metadata)
 - Phase 14 added: Add entry UI (iOS 26 tab bar accessory replaces FAB)
+- Phase 16 added: Trailing FAB button (move add button to right of tab bar)
+- Phase 17 added: Next milestone UI (progress bar direction, improved design)
 
 ## Code Quality Status
 

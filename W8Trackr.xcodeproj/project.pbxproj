@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		BE23C51E2F215F030013ED97 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = BE23C51D2F215F030013ED97 /* ConfettiSwiftUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		BE502EBC2DBFBF7900299FBF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE23C51E2F215F030013ED97 /* ConfettiSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +131,7 @@
 			);
 			name = W8Trackr;
 			packageProductDependencies = (
+				BE23C51D2F215F030013ED97 /* ConfettiSwiftUI */,
 			);
 			productName = W8Trackr;
 			productReference = BE502EAE2DBFBF7700299FBF /* W8Trackr.app */;
@@ -210,6 +216,7 @@
 			mainGroup = BE502EA52DBFBF7700299FBF;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				BE23C51C2F215F030013ED97 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BE502EAF2DBFBF7700299FBF /* Products */;
@@ -611,6 +618,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BE23C51C2F215F030013ED97 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BE23C51D2F215F030013ED97 /* ConfettiSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE23C51C2F215F030013ED97 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			productName = ConfettiSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BE502EA62DBFBF7700299FBF /* Project object */;
 }

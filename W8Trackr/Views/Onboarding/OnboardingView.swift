@@ -5,14 +5,15 @@
 //  Onboarding flow container with step navigation
 //
 
+import ConfettiSwiftUI
 import SwiftUI
 import SwiftData
 
 enum OnboardingStep: Int, CaseIterable {
     case welcome
     case unitPreference
-    case goal
     case tour
+    case goal
     case firstWeight
     case complete
 }
@@ -24,8 +25,11 @@ struct OnboardingView: View {
     @AppStorage("goalWeight") private var goalWeight: Double = 170.0
 
     @State private var currentStep: OnboardingStep = .welcome
+    @State private var previousStep: OnboardingStep = .welcome
     @State private var enteredWeight: Double = 0
-    @State private var showConfetti = false
+    @State private var confettiTrigger: Int = 0
+    @State private var isGoalValid = false
+    @State private var isWeightValid = false
 
     var onComplete: () -> Void
 
@@ -48,19 +52,21 @@ struct OnboardingView: View {
                     )
                     .tag(OnboardingStep.unitPreference)
 
+                    FeatureTourStepView(onContinue: { advanceStep() })
+                        .tag(OnboardingStep.tour)
+
                     GoalStepView(
                         weightUnit: preferredWeightUnit,
                         goalWeight: $goalWeight,
+                        isValid: $isGoalValid,
                         onContinue: { advanceStep() }
                     )
                     .tag(OnboardingStep.goal)
 
-                    FeatureTourStepView(onContinue: { advanceStep() })
-                        .tag(OnboardingStep.tour)
-
                     FirstWeightStepView(
                         weightUnit: preferredWeightUnit,
                         enteredWeight: $enteredWeight,
+                        isValid: $isWeightValid,
                         onContinue: {
                             saveFirstEntry()
                             advanceStep()
@@ -68,24 +74,37 @@ struct OnboardingView: View {
                     )
                     .tag(OnboardingStep.firstWeight)
 
-                    CompletionStepView(
-                        showConfetti: $showConfetti,
-                        onFinish: { completeOnboarding() }
-                    )
-                    .tag(OnboardingStep.complete)
+                    CompletionStepView(onFinish: { completeOnboarding() })
+                        .tag(OnboardingStep.complete)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.spring(response: 0.5, dampingFraction: 0.8), value: currentStep)
+                .onChange(of: currentStep) { oldStep, newStep in
+                    // Revert invalid forward navigation
+                    if newStep.rawValue > oldStep.rawValue {
+                        if oldStep == .goal && !isGoalValid {
+                            currentStep = oldStep
+                            return
+                        }
+                        if oldStep == .firstWeight && !isWeightValid {
+                            currentStep = oldStep
+                            return
+                        }
+                    }
+                    // Track valid step for future reference
+                    previousStep = newStep
+                    // Trigger confetti when reaching complete
+                    if newStep == .complete {
+                        triggerConfetti()
+                    }
+                }
 
                 stepIndicator
                     .padding(.bottom, 30)
             }
-
-            if showConfetti {
-                ConfettiView()
-                    .allowsHitTesting(false)
-            }
+            .confettiCannon(trigger: $confettiTrigger, num: 50, radius: 400)
         }
+        .ignoresSafeArea(.keyboard)
     }
 
     private var backgroundGradient: some View {
@@ -130,9 +149,7 @@ struct OnboardingView: View {
         withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
             currentStep = nextStep
         }
-        if nextStep == .complete {
-            triggerConfetti()
-        }
+        // Note: confetti is triggered in onChange when reaching complete
     }
 
     private func saveFirstEntry() {
@@ -146,81 +163,13 @@ struct OnboardingView: View {
     }
 
     private func triggerConfetti() {
-        withAnimation {
-            showConfetti = true
-        }
-        Task {
-            try? await Task.sleep(for: .seconds(2.5))
-            withAnimation {
-                showConfetti = false
-            }
-        }
+        confettiTrigger += 1
     }
 
     private func completeOnboarding() {
         hasCompletedOnboarding = true
         onComplete()
     }
-}
-
-// MARK: - Confetti View
-
-struct ConfettiView: View {
-    @State private var particles: [ConfettiParticle] = []
-
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                ForEach(particles) { particle in
-                    Circle()
-                        .fill(particle.color)
-                        .frame(width: particle.size, height: particle.size)
-                        .position(particle.position)
-                        .opacity(particle.opacity)
-                }
-            }
-            .onAppear {
-                createParticles(in: geometry.size)
-            }
-        }
-    }
-
-    private func createParticles(in size: CGSize) {
-        let colors: [Color] = [.blue, .purple, .pink, .orange, .yellow, .green]
-
-        for _ in 0..<50 {
-            let startX = CGFloat.random(in: 0...size.width)
-            let particle = ConfettiParticle(
-                position: CGPoint(x: startX, y: -20),
-                color: colors.randomElement() ?? .blue,
-                size: CGFloat.random(in: 6...12)
-            )
-            particles.append(particle)
-        }
-
-        // Animate particles falling
-        for i in particles.indices {
-            let delay = Double.random(in: 0...0.5)
-            let duration = Double.random(in: 1.5...2.5)
-
-            withAnimation(.easeIn(duration: duration).delay(delay)) {
-                particles[i].position.y = size.height + 50
-                particles[i].position.x += CGFloat.random(in: -100...100)
-            }
-
-            withAnimation(.easeIn(duration: duration * 0.8).delay(delay + duration * 0.5)) {
-                particles[i].opacity = 0
-            }
-        }
-    }
-}
-
-struct ConfettiParticle: Identifiable {
-    let id = UUID()
-    var position: CGPoint
-    let color: Color
-    let size: CGFloat
-    var opacity: Double = 1.0
 }
 
 #Preview {

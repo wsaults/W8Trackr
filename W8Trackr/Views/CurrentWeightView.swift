@@ -19,7 +19,7 @@ struct CurrentWeightView: View {
     }
 
     private var accessibilityDescription: String {
-        var description = "Current weight: \(weight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue)"
+        var description = "Current weight: \(weight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.displayName)"
         if let bodyFat = bodyFatPercentage {
             let bodyFatValue = NSDecimalNumber(decimal: bodyFat).doubleValue
             description += ", \(bodyFatValue.formatted(.number.precision(.fractionLength(1)))) percent body fat"
@@ -33,7 +33,7 @@ struct CurrentWeightView: View {
                 Text(weight, format: .number.precision(.fractionLength(1)))
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                Text(weightUnit.rawValue)
+                Text(weightUnit.displayName)
             }
             Text("Current Weight")
                 .font(.footnote)

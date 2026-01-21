@@ -235,7 +235,7 @@ struct WeightTrendChartView: View {
         let formattedLatest = latestWeight.formatted(.number.precision(.fractionLength(1)))
 
         var summary = "Weight trend chart showing \(count) \(count == 1 ? "entry" : "entries"). "
-        summary += "Most recent weight: \(formattedLatest) \(weightUnit.rawValue). "
+        summary += "Most recent weight: \(formattedLatest) \(weightUnit.displayName). "
 
         if sorted.count >= 2 {
             let firstWeight = sorted.first!.weightValue(in: weightUnit)
@@ -244,7 +244,7 @@ struct WeightTrendChartView: View {
             let direction = change > 0 ? "gained" : (change < 0 ? "lost" : "maintained")
 
             if change != 0 {
-                summary += "You have \(direction) \(changeFormatted) \(weightUnit.rawValue) over this period. "
+                summary += "You have \(direction) \(changeFormatted) \(weightUnit.displayName) over this period. "
             }
         }
 
@@ -252,9 +252,9 @@ struct WeightTrendChartView: View {
             let remaining = latestWeight - goalWeight
             let remainingFormatted = abs(remaining).formatted(.number.precision(.fractionLength(1)))
             if remaining > 0 {
-                summary += "Goal weight: \(goalWeight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue), \(remainingFormatted) \(weightUnit.rawValue) to go."
+                summary += "Goal weight: \(goalWeight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.displayName), \(remainingFormatted) \(weightUnit.displayName) to go."
             } else if remaining < 0 {
-                summary += "You are \(remainingFormatted) \(weightUnit.rawValue) below your goal of \(goalWeight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue)."
+                summary += "You are \(remainingFormatted) \(weightUnit.displayName) below your goal of \(goalWeight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.displayName)."
             } else {
                 summary += "You have reached your goal weight!"
             }
@@ -308,7 +308,7 @@ struct WeightTrendChartView: View {
             HStack {
                 Text(entry.date, format: .dateTime.month().day())
                 Spacer()
-                Text("\(entry.weight, format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
+                Text("\(entry.weight, format: .number.precision(.fractionLength(1))) \(weightUnit.displayName)")
                     .bold()
             }
             .font(.caption)
@@ -327,7 +327,7 @@ struct WeightTrendChartView: View {
                         .foregroundStyle(AppColors.chartGoal.opacity(0.5))
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [10, 5]))
                         .annotation(position: .overlay) {
-                            Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
+                            Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) \(weightUnit.displayName)")
                                 .font(.caption)
                                 .foregroundStyle(AppColors.chartGoal)
                                 .lineLimit(1)
@@ -392,7 +392,7 @@ struct WeightTrendChartView: View {
                 AxisMarks(preset: .extended, position: .leading) { value in
                     AxisValueLabel {
                         if let weight = value.as(Double.self) {
-                            Text("\(weight, format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
+                            Text("\(weight, format: .number.precision(.fractionLength(1))) \(weightUnit.displayName)")
                                 .lineLimit(1)
                                 .fixedSize(horizontal: true, vertical: false)
                         }
@@ -445,11 +445,11 @@ extension WeightTrendChartView: AXChartDescriptorRepresentable {
 
         // Create weight axis
         let weightAxis = AXNumericDataAxisDescriptor(
-            title: "Weight (\(weightUnit.rawValue))",
+            title: "Weight (\(weightUnit.displayName))",
             range: minWeight...maxWeight,
             gridlinePositions: []
         ) { value in
-            "\(value.formatted(.number.precision(.fractionLength(1)))) \(self.weightUnit.rawValue)"
+            "\(value.formatted(.number.precision(.fractionLength(1)))) \(self.weightUnit.displayName)"
         }
 
         // Create data points
@@ -457,7 +457,7 @@ extension WeightTrendChartView: AXChartDescriptorRepresentable {
             AXDataPoint(
                 x: entry.date.timeIntervalSince1970,
                 y: entry.weightValue(in: weightUnit),
-                label: "\(entry.date.formatted(date: .abbreviated, time: .omitted)): \(entry.weightValue(in: weightUnit).formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue)"
+                label: "\(entry.date.formatted(date: .abbreviated, time: .omitted)): \(entry.weightValue(in: weightUnit).formatted(.number.precision(.fractionLength(1)))) \(weightUnit.displayName)"
             )
         }
 

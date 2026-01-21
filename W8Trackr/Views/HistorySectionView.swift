@@ -127,6 +127,7 @@ struct HistorySectionView: View {
                                     LogbookRowView(rowData: rowData, weightUnit: weightUnit) {
                                         onEdit?(rowData.entry)
                                     }
+                                    .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                         Button(role: .destructive) {
                                             queueDelete(rowData.entry)

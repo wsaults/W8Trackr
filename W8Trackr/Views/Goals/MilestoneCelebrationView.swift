@@ -5,6 +5,7 @@
 //  Created by Claude on 1/8/26.
 //
 
+import ConfettiSwiftUI
 import SwiftUI
 import UIKit
 
@@ -14,7 +15,7 @@ struct MilestoneCelebrationView: View {
     let onDismiss: () -> Void
 
     @State private var showContent = false
-    @State private var showConfetti = false
+    @State private var confettiTrigger: Int = 0
     @ScaledMetric(relativeTo: .largeTitle) private var trophySize: CGFloat = 60
 
     var body: some View {
@@ -25,12 +26,6 @@ struct MilestoneCelebrationView: View {
                 .onTapGesture {
                     dismiss()
                 }
-
-            // Confetti layer
-            if showConfetti {
-                MilestoneConfettiView()
-                    .ignoresSafeArea()
-            }
 
             // Celebration card
             VStack(spacing: 20) {
@@ -87,6 +82,7 @@ struct MilestoneCelebrationView: View {
             .accessibilityElement(children: .contain)
             .accessibilityLabel("Milestone reached! You've hit \(Int(milestoneWeight)) \(unit.rawValue). Keep up the great work!")
         }
+        .confettiCannon(trigger: $confettiTrigger, num: 50, radius: 400)
         .onAppear {
             // Announce milestone to VoiceOver
             UIAccessibility.post(
@@ -96,8 +92,10 @@ struct MilestoneCelebrationView: View {
             withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
                 showContent = true
             }
-            withAnimation(.easeOut(duration: 0.3).delay(0.2)) {
-                showConfetti = true
+            // Trigger confetti after animation starts
+            Task {
+                try? await Task.sleep(for: .milliseconds(300))
+                confettiTrigger += 1
             }
         }
     }
@@ -105,65 +103,11 @@ struct MilestoneCelebrationView: View {
     private func dismiss() {
         withAnimation(.easeIn(duration: 0.2)) {
             showContent = false
-            showConfetti = false
         }
         Task {
             try? await Task.sleep(for: .milliseconds(200))
             onDismiss()
         }
-    }
-}
-
-// MARK: - Confetti Animation
-
-struct MilestoneConfettiView: View {
-    let colors: [Color] = [.red, .blue, .green, .yellow, .orange, .purple, .pink]
-    let particleCount = 50
-
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                ForEach(0..<particleCount, id: \.self) { index in
-                    MilestoneConfettiParticle(
-                        color: colors[index % colors.count],
-                        size: CGFloat.random(in: 8...14),
-                        startX: CGFloat.random(in: 0...geometry.size.width),
-                        delay: Double.random(in: 0...0.5)
-                    )
-                }
-            }
-        }
-    }
-}
-
-struct MilestoneConfettiParticle: View {
-    let color: Color
-    let size: CGFloat
-    let startX: CGFloat
-    let delay: Double
-
-    @State private var offsetY: CGFloat = -50
-    @State private var opacity: Double = 1
-    @State private var rotation: Double = 0
-    @State private var offsetX: CGFloat = 0
-
-    var body: some View {
-        Rectangle()
-            .fill(color)
-            .frame(width: size, height: size * 0.6)
-            .rotationEffect(.degrees(rotation))
-            .offset(x: startX + offsetX, y: offsetY)
-            .opacity(opacity)
-            .onAppear {
-                withAnimation(.easeIn(duration: 2.5).delay(delay)) {
-                    offsetY = 2000
-                    rotation = Double.random(in: 360...720)
-                    offsetX = CGFloat.random(in: -100...100)
-                }
-                withAnimation(.easeIn(duration: 1.5).delay(delay + 1.0)) {
-                    opacity = 0
-                }
-            }
     }
 }
 

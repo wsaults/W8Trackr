@@ -58,7 +58,7 @@ struct WeightUnitTests {
     }
 
     @Test func invalidWeightBelowMinimum() {
-        #expect(WeightUnit.lb.isValidWeight(0.5) == false)
+        #expect(WeightUnit.lb.isValidWeight(0.9) == false)
         #expect(WeightUnit.lb.isValidWeight(0.0) == false)
         #expect(WeightUnit.kg.isValidWeight(0.4) == false)
         #expect(WeightUnit.kg.isValidWeight(0.0) == false)

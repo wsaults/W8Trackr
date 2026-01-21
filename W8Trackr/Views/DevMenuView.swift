@@ -43,9 +43,12 @@ struct DevMenuView: View {
         }
     }
 
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+
     var body: some View {
         NavigationStack {
             Form {
+                onboardingSection
                 datasetSection
                 addEntrySection
             }
@@ -56,6 +59,20 @@ struct DevMenuView: View {
                 }
             }
             .toast(isPresented: $showingSuccessToast, message: toastMessage, systemImage: "checkmark.circle.fill")
+        }
+    }
+
+    private var onboardingSection: some View {
+        Section {
+            Button("Reset Onboarding") {
+                hasCompletedOnboarding = false
+                toastMessage = "Onboarding reset. Relaunch app."
+                showingSuccessToast = true
+            }
+        } header: {
+            Text("Onboarding")
+        } footer: {
+            Text("Resets onboarding state. Relaunch or dismiss to see onboarding flow.")
         }
     }
 

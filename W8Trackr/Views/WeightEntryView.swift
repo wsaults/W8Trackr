@@ -156,14 +156,12 @@ struct WeightEntryView: View {
                         timestampsSection(for: entry)
                     }
 
-                    Spacer(minLength: 20)
-
                     // Save button
                     saveButton
                 }
                 .padding(.top, 20)
             }
-            .navigationTitle(isEditing ? "Edit Entry" : "Add Weight")
+            .navigationTitle(isEditing ? "Edit Entry" : "Add Entry")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -257,10 +255,11 @@ struct WeightEntryView: View {
                     .multilineTextAlignment(.trailing)
                     .focused($focusedField, equals: .weight)
 
-                Text(weightUnit.rawValue)
+                Text(weightUnit.displayName)
                     .font(.title)
                     .foregroundStyle(.secondary)
             }
+            .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(.horizontal)
     }
@@ -302,12 +301,9 @@ struct WeightEntryView: View {
                     }
                 }
             } label: {
-                HStack {
-                    Text(showMoreFields ? "Less..." : "More...")
-                    Image(systemName: showMoreFields ? "chevron.up" : "chevron.down")
-                }
-                .font(.subheadline)
-                .foregroundStyle(AppColors.primary)
+                Text(showMoreFields ? "Less..." : "More...")
+                    .font(.subheadline)
+                    .foregroundStyle(AppColors.primary)
             }
 
             if showMoreFields {
@@ -392,14 +388,14 @@ struct WeightEntryView: View {
         if let entry = existingEntry {
             // Update existing entry
             entry.weightValue = weight
-            entry.weightUnit = weightUnit.rawValue
+            entry.weightUnit = weightUnit.displayName
             entry.date = date
             entry.note = note.isEmpty ? nil : note
             entry.bodyFatPercentage = bodyFat
             entry.modifiedDate = Date()
 
             // Announce to VoiceOver
-            let announcement = "Entry updated: \(weight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue)"
+            let announcement = "Entry updated: \(weight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.displayName)"
             UIAccessibility.post(notification: .announcement, argument: announcement)
         } else {
             // Create new entry
@@ -413,7 +409,7 @@ struct WeightEntryView: View {
             modelContext.insert(entry)
 
             // Announce to VoiceOver
-            let announcement = "Entry saved: \(weight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue)"
+            let announcement = "Entry saved: \(weight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.displayName)"
             UIAccessibility.post(notification: .announcement, argument: announcement)
         }
 

@@ -26,6 +26,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 14: Add Entry UI** - Replace FAB with Liquid Glass tab bar bottom accessory button
 - [ ] **Phase 15: Weight Entry Screen** - Simplify to focused text input with number keyboard and notes field
 - [ ] **Phase 16: Trailing FAB Button** - Move add button to right of tab bar using GlassEffectContainer
+- [ ] **Phase 17: Next Milestone UI** - Improve progress bar direction (left-to-right) and overall design/informativeness
 
 ## Phase Details
 
@@ -339,10 +340,30 @@ Plans:
 - [GlassEffectContainer Guide](https://dev.to/arshtechpro/understanding-glasseffectcontainer-in-ios-26-2n8p)
 - [Building Side-Floating FAB](https://iifx.dev/en/articles/457706754/building-the-new-ios-26-tab-bar-ui-liquid-glass-side-floating-fab)
 
+### Phase 17: Next Milestone UI
+**Goal**: Improve the next milestone view with better visual design and more informative display
+**Depends on**: Phase 16
+**Requirements**: UX-14 (next milestone UI improvement)
+**Success Criteria** (what must be TRUE):
+  1. Progress bar fills left-to-right (not right-to-left)
+  2. Visual design is polished and informative
+  3. Shows clear information about progress toward next milestone
+  4. Integrates well with overall app design language
+**Plans**: 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 17 to break down)
+
+**Details:**
+- Fix progress bar direction to fill left-to-right as weight decreases toward goal
+- Improve overall visual design (colors, typography, spacing)
+- Consider adding more contextual information (days to goal, rate needed, etc.)
+- Ensure consistency with dashboard and other app components
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -362,6 +383,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 14. Add Entry UI | 1/1 | Complete | 2026-01-21 |
 | 15. Weight Entry Screen | 0/2 | Not Started | - |
 | 16. Trailing FAB Button | 0/? | Not Started | - |
+| 17. Next Milestone UI | 0/? | Not Started | - |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -399,3 +421,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 15 added: 2026-01-21*
 *Phase 15 planned: 2026-01-21*
 *Phase 16 added: 2026-01-21*
+*Phase 17 added: 2026-01-21*

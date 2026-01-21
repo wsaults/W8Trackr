@@ -26,11 +26,9 @@ struct LogbookRowView: View {
     }()
 
     var body: some View {
-        HStack(spacing: LogbookLayout.columnSpacing) {
+        HStack(spacing: 8) {
             // Date column: Day number and weekday abbreviation
             dateColumn
-
-            Spacer()
 
             // Weight value
             weightColumn
@@ -59,21 +57,21 @@ struct LogbookRowView: View {
     // MARK: - Column Views
 
     private var dateColumn: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .center, spacing: 2) {
             Text(Self.dayFormatter.string(from: rowData.entry.date))
                 .font(.headline)
             Text(Self.weekdayFormatter.string(from: rowData.entry.date))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
-        .frame(width: LogbookLayout.dateColumnWidth, alignment: .leading)
+        .frame(width: 32, alignment: .center)
     }
 
     private var weightColumn: some View {
         Text(rowData.entry.weightValue(in: weightUnit), format: .number.precision(.fractionLength(1)))
             .font(.body.monospacedDigit())
             .bold()
-            .frame(width: LogbookLayout.weightColumnWidth, alignment: .trailing)
+            .frame(maxWidth: .infinity, alignment: .trailing)
     }
 
     private var movingAverageColumn: some View {
@@ -82,7 +80,7 @@ struct LogbookRowView: View {
         } ?? "")
         .font(.body.monospacedDigit())
         .foregroundStyle(.secondary)
-        .frame(width: LogbookLayout.avgColumnWidth, alignment: .trailing)
+        .frame(maxWidth: .infinity, alignment: .trailing)
     }
 
     private var weeklyRateColumn: some View {
@@ -98,18 +96,18 @@ struct LogbookRowView: View {
                 Text("")
             }
         }
-        .frame(width: LogbookLayout.rateColumnWidth, alignment: .trailing)
+        .frame(maxWidth: .infinity, alignment: .trailing)
     }
 
     private var notesIndicator: some View {
-        Group {
+        ZStack {
             if rowData.hasNote {
                 Image(systemName: "note.text")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
         }
-        .frame(width: LogbookLayout.notesColumnWidth, alignment: .center)
+        .frame(width: 40, alignment: .trailing)
     }
 
     // MARK: - Accessibility
@@ -124,7 +122,7 @@ struct LogbookRowView: View {
 
         // Weight
         let weight = rowData.entry.weightValue(in: weightUnit)
-        components.append("\(weight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue)")
+        components.append("\(weight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.displayName)")
 
         // Moving average
         if let avg = rowData.movingAverage {
@@ -134,7 +132,7 @@ struct LogbookRowView: View {
         // Weekly rate
         if let rate = rowData.weeklyRate {
             let direction = rate < 0 ? "down" : rate > 0 ? "up" : "stable"
-            components.append("\(abs(rate).formatted(.number.precision(.fractionLength(1)))) \(weightUnit.rawValue) \(direction) this week")
+            components.append("\(abs(rate).formatted(.number.precision(.fractionLength(1)))) \(weightUnit.displayName) \(direction) this week")
         }
 
         // Note

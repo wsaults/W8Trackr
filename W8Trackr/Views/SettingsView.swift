@@ -49,7 +49,7 @@ struct SettingsView: View {
 
     private var goalWeightValidationMessage: String? {
         guard !isValidGoalWeight else { return nil }
-        return "Goal weight must be between \(weightUnit.minGoalWeight.formatted()) and \(weightUnit.maxGoalWeight.formatted()) \(weightUnit.rawValue)"
+        return "Goal weight must be between \(weightUnit.minGoalWeight.formatted()) and \(weightUnit.maxGoalWeight.formatted()) \(weightUnit.displayName)"
     }
 
     private var goalWeightWarning: GoalWeightWarning? {
@@ -162,7 +162,7 @@ struct SettingsView: View {
                     .onChange(of: localGoalWeight) { _, newValue in
                         updateGoalWeight(newValue)
                     }
-                Text(weightUnit.rawValue)
+                Text(weightUnit.displayName)
             }
 
             if let message = goalWeightValidationMessage {

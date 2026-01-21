@@ -134,13 +134,13 @@ struct WeeklySummaryCard: View {
                 StatView(
                     title: "Average",
                     value: summary.averageWeight.map { String(format: "%.1f", $0) } ?? "--",
-                    unit: summary.weightUnit.rawValue
+                    unit: summary.weightUnit.displayName
                 )
 
                 StatView(
                     title: "Change",
                     value: summary.changeFromLastWeek.map { formatChange($0) } ?? "--",
-                    unit: summary.weightUnit.rawValue,
+                    unit: summary.weightUnit.displayName,
                     valueColor: summary.trend.color
                 )
 

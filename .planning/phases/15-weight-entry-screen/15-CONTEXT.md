@@ -6,9 +6,11 @@
 <domain>
 ## Phase Boundary
 
-Redesign weight entry as a full-screen form with text input, date selection, notes, and optional body fat/height fields. Replaces the current plus/minus button controls with a focused text input experience.
+Redesign weight entry as a full-screen form with text input, date selection, notes, and optional body fat field. Replaces the current plus/minus button controls with a focused text input experience.
 
-**Scope expanded from original:** Now includes date picker, body fat, and height fields beyond the original weight + notes simplification.
+**Scope expanded from original:** Now includes date picker and body fat field beyond the original weight + notes simplification.
+
+**Technical constraint (from research):** Height field deferred - WeightEntry model has no height property. Adding height would require a SwiftData schema migration.
 
 </domain>
 
@@ -28,7 +30,7 @@ Redesign weight entry as a full-screen form with text input, date selection, not
   1. Date with left/right arrows (right arrow disabled for future dates)
   2. Weight label + text input with unit suffix
   3. Notes label + text area
-  4. "More..." button to expand body fat and height fields
+  4. "More..." button to expand body fat field
 - "More..." expands fields inline (slides in, form grows taller)
 - Date picker uses left/right arrows only — no calendar popup
 
@@ -58,14 +60,14 @@ Redesign weight entry as a full-screen form with text input, date selection, not
 
 - Date arrows should feel responsive — tap to move one day at a time
 - Weight field should be the primary focus — largest/most prominent element
-- "More..." should feel optional — body fat and height are secondary data points
+- "More..." should feel optional — body fat is a secondary data point
 
 </specifics>
 
 <deferred>
 ## Deferred Ideas
 
-None — discussion stayed within expanded phase scope
+- **Height field:** WeightEntry model has no height property. Would require SwiftData schema migration. Deferred to future phase if needed.
 
 </deferred>
 

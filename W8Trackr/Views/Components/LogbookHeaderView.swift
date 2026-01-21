@@ -11,28 +11,26 @@ import SwiftUI
 struct LogbookHeaderView: View {
     var body: some View {
         VStack(spacing: 0) {
-            HStack(spacing: LogbookLayout.columnSpacing) {
-                // Date column - matches dateColumn frame in LogbookRowView
+            HStack(spacing: 8) {
+                // Date column - compact, centered
                 Text("Date")
-                    .frame(width: LogbookLayout.dateColumnWidth, alignment: .leading)
-
-                Spacer()
+                    .frame(width: 32, alignment: .center)
 
                 // Weight column
                 Text("Weight")
-                    .frame(width: LogbookLayout.weightColumnWidth, alignment: .trailing)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
 
                 // Moving average column
                 Text("Avg")
-                    .frame(width: LogbookLayout.avgColumnWidth, alignment: .trailing)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
 
                 // Weekly rate column
                 Text("Rate")
-                    .frame(width: LogbookLayout.rateColumnWidth, alignment: .trailing)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
 
-                // Notes indicator column - matches approximate width of note icon
+                // Notes indicator column - fixed width
                 Text("Notes")
-                    .frame(width: LogbookLayout.notesColumnWidth, alignment: .center)
+                    .frame(width: 40, alignment: .trailing)
             }
             .font(.caption)
             .foregroundStyle(.secondary)

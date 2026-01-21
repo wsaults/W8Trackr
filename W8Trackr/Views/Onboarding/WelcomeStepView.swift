@@ -68,11 +68,9 @@ struct WelcomeStepView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .padding(.horizontal, 30)
+            .padding(.bottom, 20)
             .scaleEffect(showButton ? 1.0 : 0.95)
             .opacity(showButton ? 1.0 : 0.0)
-
-            Spacer()
-                .frame(height: 60)
         }
         .onAppear {
             animateEntrance()

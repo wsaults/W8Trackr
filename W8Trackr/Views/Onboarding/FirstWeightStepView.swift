@@ -10,102 +10,155 @@ import SwiftUI
 struct FirstWeightStepView: View {
     var weightUnit: WeightUnit
     @Binding var enteredWeight: Double
+    @Binding var isValid: Bool
 
     var onContinue: () -> Void
 
     @State private var showContent = false
-    @State private var lightFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-    @State private var mediumFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+    @State private var localWeightText: String = ""
+    @FocusState private var isWeightFieldFocused: Bool
     @ScaledMetric(relativeTo: .largeTitle) private var weightFontSize: CGFloat = 64
 
+    private var enteredValue: Double? {
+        Double(localWeightText)
+    }
+
     private var isValidWeight: Bool {
-        weightUnit.isValidWeight(enteredWeight)
+        guard let value = enteredValue else { return false }
+        return weightUnit.isValidWeight(value)
     }
 
     var body: some View {
-        VStack(spacing: 30) {
-            Spacer()
+        ZStack(alignment: .bottom) {
+            ScrollView {
+                VStack(spacing: 30) {
+                    Spacer()
+                        .frame(height: 40)
 
-            VStack(spacing: 12) {
-                Text("Your Current Weight")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+                    // Header
+                    VStack(spacing: 12) {
+                        Text("Your Current Weight")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
 
-                Text("Let's log your starting point")
-                    .font(.title3)
-                    .foregroundStyle(.secondary)
-            }
-            .offset(y: showContent ? 0 : 20)
-            .opacity(showContent ? 1.0 : 0.0)
+                        Text("Let's log your starting point")
+                            .font(.title3)
+                            .foregroundStyle(.secondary)
+                    }
+                    .offset(y: showContent ? 0 : 20)
+                    .opacity(showContent ? 1.0 : 0.0)
 
-            Spacer()
-                .frame(height: 20)
+                    Spacer()
+                        .frame(height: 20)
 
-            // Weight input
-            VStack(spacing: 20) {
-                HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    TextField("Weight", value: $enteredWeight, format: .number.precision(.fractionLength(1)))
-                        .font(.system(size: weightFontSize, weight: .medium))
-                        .keyboardType(.decimalPad)
-                        .fixedSize()
-                        .multilineTextAlignment(.trailing)
-                        .foregroundStyle(isValidWeight ? Color.primary : Color.red)
+                    // Weight input
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Weight")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .center)
 
-                    Text(weightUnit.rawValue)
-                        .font(.title)
-                        .foregroundStyle(.secondary)
+                        VStack(spacing: 4) {
+                            HStack(alignment: .firstTextBaseline, spacing: 12) {
+                                TextField("", text: $localWeightText)
+                                    .font(.system(size: weightFontSize, weight: .medium))
+                                    .keyboardType(.decimalPad)
+                                    .fixedSize()
+                                    .multilineTextAlignment(.trailing)
+                                    .foregroundStyle(localWeightText.isEmpty || isValidWeight ? AppColors.primaryDark : AppColors.primaryDark.opacity(0.5))
+                                    .focused($isWeightFieldFocused)
+                                    .frame(minWidth: 80)
+                                    .padding(.trailing, 4)
+                                    .toolbar {
+                                        ToolbarItemGroup(placement: .keyboard) {
+                                            Spacer()
+                                            Button("Done") {
+                                                isWeightFieldFocused = false
+                                            }
+                                        }
+                                    }
+                                    .onChange(of: localWeightText) { _, newValue in
+                                        // Filter to only allow numbers and decimal point
+                                        var filtered = newValue.filter { $0.isNumber || $0 == "." }
+                                        // Only allow one decimal point
+                                        let parts = filtered.split(separator: ".", omittingEmptySubsequences: false)
+                                        if parts.count > 2 {
+                                            filtered = String(parts[0]) + "." + String(parts[1])
+                                        }
+                                        // Limit to 4 digits (not counting decimal point)
+                                        let digitCount = filtered.filter { $0.isNumber }.count
+                                        if digitCount > 4 {
+                                            var digits = 0
+                                            filtered = String(filtered.prefix { char in
+                                                if char.isNumber {
+                                                    digits += 1
+                                                    return digits <= 4
+                                                }
+                                                return true
+                                            })
+                                        }
+                                        if filtered != newValue {
+                                            localWeightText = filtered
+                                        }
+                                    }
+
+                                Text(weightUnit.displayName)
+                                    .font(.title)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            // Underline to indicate tappable area
+                            Rectangle()
+                                .fill(AppColors.primary.opacity(0.4))
+                                .frame(height: 2)
+                        }
+                        .fixedSize(horizontal: true, vertical: false)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                    .padding(.horizontal)
+                    .scaleEffect(showContent ? 1.0 : 0.95)
+                    .opacity(showContent ? 1.0 : 0.0)
+
+                    // Bottom padding to account for button
+                    Spacer()
+                        .frame(height: 100)
                 }
-
-                // Adjustment buttons
-                HStack(spacing: 24) {
-                    WeightAdjustmentButton(amount: 1.0, unitLabel: weightUnit.rawValue, isIncrease: false) {
-                        mediumFeedbackGenerator.impactOccurred()
-                        enteredWeight = max(weightUnit.minWeight, enteredWeight - 1.0)
-                    }
-
-                    WeightAdjustmentButton(amount: 0.1, unitLabel: weightUnit.rawValue, isIncrease: false) {
-                        lightFeedbackGenerator.impactOccurred()
-                        enteredWeight = max(weightUnit.minWeight, enteredWeight - 0.1)
-                    }
-
-                    WeightAdjustmentButton(amount: 0.1, unitLabel: weightUnit.rawValue, isIncrease: true) {
-                        lightFeedbackGenerator.impactOccurred()
-                        enteredWeight = min(weightUnit.maxWeight, enteredWeight + 0.1)
-                    }
-
-                    WeightAdjustmentButton(amount: 1.0, unitLabel: weightUnit.rawValue, isIncrease: true) {
-                        mediumFeedbackGenerator.impactOccurred()
-                        enteredWeight = min(weightUnit.maxWeight, enteredWeight + 1.0)
-                    }
-                }
             }
-            .scaleEffect(showContent ? 1.0 : 0.95)
-            .opacity(showContent ? 1.0 : 0.0)
+            .scrollDismissesKeyboard(.interactively)
 
-            Spacer()
-
-            Button(action: onContinue) {
+            // Continue button - fixed at bottom, ignores keyboard
+            Button {
+                if let value = enteredValue {
+                    enteredWeight = value
+                }
+                onContinue()
+            } label: {
                 Text("Continue")
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(isValidWeight ? AppColors.primary : AppColors.surfaceSecondary)
+                    .background(isValidWeight ? AppColors.primary : AppColors.primary.opacity(0.3))
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .disabled(!isValidWeight)
             .padding(.horizontal, 30)
+            .padding(.bottom, 20)
             .opacity(showContent ? 1.0 : 0.0)
-
-            Spacer()
-                .frame(height: 60)
         }
+        .ignoresSafeArea(.keyboard)
         .onAppear {
-            // Set default starting weight based on unit
-            if enteredWeight == 0 {
-                enteredWeight = weightUnit.defaultWeight
-            }
+            // Set initial validation state (onChange only fires on changes)
+            isValid = isValidWeight
             animateEntrance()
+            // Auto-focus after view appears (delay for TabView transition)
+            Task {
+                try? await Task.sleep(for: .milliseconds(600))
+                isWeightFieldFocused = true
+            }
+        }
+        .onChange(of: localWeightText) {
+            isValid = isValidWeight
         }
     }
 
@@ -117,5 +170,5 @@ struct FirstWeightStepView: View {
 }
 
 #Preview {
-    FirstWeightStepView(weightUnit: .lb, enteredWeight: .constant(180.0), onContinue: {})
+    FirstWeightStepView(weightUnit: .lb, enteredWeight: .constant(180.0), isValid: .constant(false), onContinue: {})
 }

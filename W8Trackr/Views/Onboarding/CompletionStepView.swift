@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CompletionStepView: View {
-    @Binding var showConfetti: Bool
     var onFinish: () -> Void
 
     @State private var showContent = false
@@ -64,11 +63,9 @@ struct CompletionStepView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .padding(.horizontal, 30)
+            .padding(.bottom, 20)
             .scaleEffect(showContent ? 1.0 : 0.95)
             .opacity(showContent ? 1.0 : 0.0)
-
-            Spacer()
-                .frame(height: 60)
         }
         .onAppear {
             animateEntrance()
@@ -86,5 +83,5 @@ struct CompletionStepView: View {
 }
 
 #Preview {
-    CompletionStepView(showConfetti: .constant(false), onFinish: {})
+    CompletionStepView(onFinish: {})
 }

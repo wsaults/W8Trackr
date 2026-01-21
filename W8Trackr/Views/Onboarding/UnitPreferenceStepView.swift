@@ -72,10 +72,8 @@ struct UnitPreferenceStepView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .padding(.horizontal, 30)
+            .padding(.bottom, 20)
             .opacity(showContent ? 1.0 : 0.0)
-
-            Spacer()
-                .frame(height: 60)
         }
         .onAppear {
             animateEntrance()
@@ -104,13 +102,6 @@ private struct UnitOptionCard: View {
         }
     }
 
-    private var unitDescription: String {
-        switch unit {
-        case .lb: return "Common in US, UK, and Canada"
-        case .kg: return "Used by most of the world"
-        }
-    }
-
     private var unitIcon: String {
         switch unit {
         case .lb: return "scalemass"
@@ -130,19 +121,13 @@ private struct UnitOptionCard: View {
                             .fill(isSelected ? AppColors.primary : AppColors.primary.opacity(0.1))
                     )
 
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text(unitTitle)
-                            .font(.headline)
-                            .foregroundStyle(.primary)
+                HStack {
+                    Text(unitTitle)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
 
-                        Text("(\(unit.rawValue))")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    Text(unitDescription)
-                        .font(.caption)
+                    Text("(\(unit.rawValue))")
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
 
