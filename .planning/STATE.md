@@ -90,7 +90,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None.
+1. **Add localization support** (ui) - 2026-01-20
 
 ### Blockers/Concerns
 
