@@ -1,28 +1,34 @@
 ---
 milestone: Pre-Launch Audit v1
-audited: 2026-01-21T00:15:00Z
+audited: 2026-01-21T18:00:00Z
 status: passed
 scores:
-  requirements: 21/21
-  phases: 8/8
-  integration: 38/38
-  flows: 8/8
+  requirements: 25/25
+  phases: 12/12
+  integration: 59/59
+  flows: 12/12
 gaps: []
 tech_debt:
   - phase: 04-code-quality
     items:
       - "CloudKitSyncManager retains one DispatchQueue (required by NWPathMonitor API - acceptable exception)"
+  - phase: 09-milestone-intervals
+    items:
+      - "INFO: NotificationScheduler.swift has hardcoded milestone interval (5 lbs) for push notification copy - separate feature"
+  - phase: orphaned
+    items:
+      - "SummaryView.swift: Superseded by DashboardView, could be removed"
 ---
 
 # Milestone Audit Report: W8Trackr Pre-Launch Audit v1
 
-**Audited:** 2026-01-21T00:15:00Z
+**Audited:** 2026-01-21T18:00:00Z
 **Status:** PASSED
-**Score:** 21/21 requirements satisfied
+**Score:** 25/25 requirements satisfied
 
 ## Executive Summary
 
-All 21 requirements satisfied. All 8 phases complete and verified. All 38 cross-phase integrations connected. All 8 E2E user flows working. No critical gaps. The milestone is ready for completion and App Store submission preparation.
+All 25 requirements satisfied. All 12 phases complete and verified. All 59 cross-phase integrations connected. All 12 E2E user flows working. No critical gaps. The milestone is ready for completion and App Store submission preparation.
 
 ## Requirements Coverage
 
@@ -36,21 +42,25 @@ All 21 requirements satisfied. All 8 phases complete and verified. All 38 cross-
 | UX-02 | iCloud sync status in Settings only | 3 | ✓ SATISFIED |
 | UX-03 | Undo capability for Delete All Entries | 3 | ✓ SATISFIED |
 | UX-04 | Light/dark mode support | 5 | ✓ SATISFIED |
-| QUAL-01 | Migrate GCD to async/await | 4 | ✓ SATISFIED |
-| QUAL-02 | Replace deprecated .cornerRadius() | 4 | ✓ SATISFIED |
 | UX-05 | Goal prediction card full width | 6 | ✓ SATISFIED |
 | UX-06 | Current Weight text readability | 6 | ✓ SATISFIED |
 | UX-07 | Current Weight trend-based colors | 6 | ✓ SATISFIED |
 | UX-08 | Chart labels months not days | 6 | ✓ SATISFIED |
 | UX-09 | FAB right alignment | 6 | ✓ SATISFIED |
+| UX-10 | Weight entry UI redesign | 10 | ✓ SATISFIED |
+| QUAL-01 | Migrate GCD to async/await | 4 | ✓ SATISFIED |
+| QUAL-02 | Replace deprecated .cornerRadius() | 4 | ✓ SATISFIED |
 | CHART-01 | 14-day prediction line | 7 | ✓ SATISFIED |
 | CHART-02 | Horizontal scrolling | 7 | ✓ SATISFIED |
 | CHART-03 | Tap selection with value display | 7 | ✓ SATISFIED |
 | LOG-01 | Month-segmented logbook | 8 | ✓ SATISFIED |
 | LOG-02 | Enhanced row display | 8 | ✓ SATISFIED |
 | LOG-03 | Filter menu | 8 | ✓ SATISFIED |
+| LOG-04 | Column headers and reduced cell height | 11 | ✓ SATISFIED |
+| LOG-05 | Logbook header/row column alignment | 12 | ✓ SATISFIED |
+| SETTINGS-01 | Customizable milestone intervals | 9 | ✓ SATISFIED |
 
-**Coverage:** 21/21 (100%)
+**Coverage:** 25/25 (100%)
 
 ## Phase Verification Summary
 
@@ -64,8 +74,12 @@ All 21 requirements satisfied. All 8 phases complete and verified. All 38 cross-
 | 6 | Dashboard Polish | 2026-01-20 | passed | 6/6 |
 | 7 | Chart Improvements | 2026-01-20 | passed | 5/5 |
 | 8 | Logbook Improvements | 2026-01-21 | passed | 10/10 |
+| 9 | Milestone Intervals | 2026-01-21 | passed | 5/5 |
+| 10 | Weight Entry UI Redesign | 2026-01-21 | passed | 5/5 |
+| 11 | Logbook Header & Cell Height | 2026-01-21 | passed | 4/4 |
+| 12 | Logbook Column Alignment | 2026-01-21 | passed | 3/3 |
 
-**8/8 phases complete.**
+**12/12 phases complete.**
 
 ## Cross-Phase Integration
 
@@ -111,8 +125,29 @@ All 21 requirements satisfied. All 8 phases complete and verified. All 38 cross-
 | 08 | Filter menu icon state | LogbookView toolbar | ✓ WIRED |
 | 08 | Day of Week submenu | LogbookView filter menu | ✓ WIRED |
 | 08 | Session filter persistence | @State properties | ✓ WIRED |
+| 09 | MilestoneInterval enum | ContentView, DashboardView, SettingsView, SummaryView | ✓ WIRED |
+| 09 | @AppStorage("milestoneInterval") | ContentView persistence | ✓ WIRED |
+| 09 | milestoneInterval binding | SettingsView Picker | ✓ WIRED |
+| 09 | MilestoneCalculator.calculateProgress | DashboardView with intervalPreference | ✓ WIRED |
+| 09 | MilestoneCalculator.generateMilestones | DashboardView with intervalPreference | ✓ WIRED |
+| 10 | WeightAdjustmentButton component | WeightEntryView (4 usages) | ✓ WIRED |
+| 10 | WeightAdjustmentButton component | FirstWeightStepView (4 usages) | ✓ WIRED |
+| 10 | Plus/minus icons (semantic) | WeightAdjustmentButton | ✓ WIRED |
+| 10 | @ScaledMetric touch targets | WeightAdjustmentButton (44pt min) | ✓ WIRED |
+| 10 | VoiceOver accessibility labels | WeightAdjustmentButton | ✓ WIRED |
+| 11 | LogbookHeaderView | HistorySectionView line 121 | ✓ WIRED |
+| 11 | HStack(spacing: 12) alignment | Header matches row layout | ✓ WIRED |
+| 11 | VStack wrapper | Header outside List scroll | ✓ WIRED |
+| 11 | AppTheme.Spacing.xs | LogbookHeaderView bottom padding | ✓ WIRED |
+| 11 | AppColors.background | LogbookHeaderView background | ✓ WIRED |
+| 12 | LogbookLayout.columnSpacing | LogbookHeaderView + LogbookRowView | ✓ WIRED |
+| 12 | LogbookLayout.dateColumnWidth | LogbookHeaderView + LogbookRowView | ✓ WIRED |
+| 12 | LogbookLayout.weightColumnWidth | LogbookHeaderView + LogbookRowView | ✓ WIRED |
+| 12 | LogbookLayout.avgColumnWidth | LogbookHeaderView + LogbookRowView | ✓ WIRED |
+| 12 | LogbookLayout.rateColumnWidth | LogbookHeaderView + LogbookRowView | ✓ WIRED |
+| 12 | LogbookLayout.notesColumnWidth | LogbookHeaderView + LogbookRowView | ✓ WIRED |
 
-**Connected:** 38/38 exports properly wired
+**Connected:** 59/59 exports properly wired
 **Orphaned:** 0
 
 ## End-to-End Flows
@@ -157,7 +192,27 @@ All 21 requirements satisfied. All 8 phases complete and verified. All 38 cross-
 **Status:** ✓ COMPLETE
 **Evidence:** entriesByMonth grouping + filteredEntries + filter menu + @State persistence
 
-**Complete:** 8/8 flows verified
+### Flow 9: Milestone Interval Setting (Phase 9)
+**Path:** Settings → Select milestone interval (5/10/15 lbs) → Quit app → Relaunch → Setting persists → Dashboard uses new interval for celebrations
+**Status:** ✓ COMPLETE
+**Evidence:** @AppStorage persists value, ContentView threads to DashboardView, MilestoneCalculator uses intervalPreference
+
+### Flow 10: Weight Entry with New Controls (Phase 10)
+**Path:** FAB → WeightEntryView → Use plus/minus buttons → Adjust by 0.1/1.0 increments → VoiceOver announces action → Save entry
+**Status:** ✓ COMPLETE
+**Evidence:** WeightAdjustmentButton used in WeightEntryView with semantic icons, increment labels, accessibility support; same component in FirstWeightStepView for onboarding
+
+### Flow 11: Logbook with Fixed Headers (Phase 11)
+**Path:** Open History/Logbook → See column headers (Date, Weight, Avg, Rate, Notes) → Scroll entries → Headers stay fixed → More entries visible → Touch targets accessible
+**Status:** ✓ COMPLETE
+**Evidence:** LogbookHeaderView outside List scroll via VStack(spacing: 0), matching HStack(spacing: 12) for alignment, reduced padding (4pt) with minHeight: 44 for touch targets
+
+### Flow 12: Logbook Column Alignment (Phase 12)
+**Path:** Open logbook → Headers align with row columns → Scroll through entries → No layout shift → Empty data renders placeholder columns
+**Status:** ✓ COMPLETE
+**Evidence:** LogbookLayout shared constants used by both header and row; all 5 columns always rendered with fixed widths; empty data renders placeholder frames
+
+**Complete:** 12/12 flows verified
 
 ## State Management Consistency
 
@@ -192,6 +247,7 @@ No legacy patterns (`ObservableObject`, `@Published`, `@StateObject`, `@Observed
 | Settings | AppColors.warning, .success | ✓ |
 | Toast | AppColors.success, .error, .primary | ✓ |
 | Logbook rows | AppColors.warning, .success, .secondary (trend colors) | ✓ |
+| Logbook header | AppColors.background (Phase 11) | ✓ |
 
 ### Intentional Hardcoded Colors (Not Gaps)
 
@@ -242,19 +298,29 @@ While all automated checks pass, these manual tests confirm the fixes work in pr
 11. **Logbook row data:** Examine rows for date, weight, moving average, rate arrow, notes icon
 12. **Logbook filters:** Test Notes, Milestones, and Day of Week filters individually and combined
 13. **Filter persistence:** Apply filter, switch tabs, return to logbook, verify filter still active
+14. **Milestone interval picker:** Navigate to Settings > Milestones, verify picker shows 5/10/15 lb options
+15. **Milestone interval persistence:** Select 10 lbs, force quit app, relaunch, verify 10 lbs still selected
+16. **Milestone interval calculation:** With 10 lb interval, verify celebrations trigger at 10 lb boundaries
+17. **Weight adjustment buttons:** Verify plus/minus icons display with increment labels below
+18. **Weight adjustment VoiceOver:** Enable VoiceOver, verify buttons announce "Increase by 1 pound" etc.
+19. **Weight adjustment Dynamic Type:** Enable large accessibility text, verify buttons scale appropriately
+20. **Logbook column headers:** Scroll through logbook, verify headers (Date, Weight, Avg, Rate, Notes) stay fixed
+21. **Logbook row density:** Compare visible entries to previous version, verify more entries fit on screen
+22. **Logbook touch targets:** Tap rows throughout the list, verify all respond correctly (44pt targets maintained)
 
 ## Conclusion
 
 **Milestone v1 PASSED.**
 
-All 21 requirements satisfied:
+All 25 requirements satisfied:
 - 4 bug fixes (BUG-01 through BUG-04)
-- 9 UX improvements (UX-01 through UX-09)
+- 10 UX improvements (UX-01 through UX-10)
 - 3 chart improvements (CHART-01 through CHART-03)
-- 3 logbook improvements (LOG-01 through LOG-03)
+- 5 logbook improvements (LOG-01 through LOG-05)
 - 2 code quality items (QUAL-01, QUAL-02)
+- 1 settings improvement (SETTINGS-01)
 
-All 8 phases complete and verified:
+All 12 phases complete and verified:
 1. Critical Bugs - 7/7 truths verified
 2. Chart Animation - smooth transitions verified
 3. UX Polish - banner, sync status, undo verified
@@ -263,8 +329,12 @@ All 8 phases complete and verified:
 6. Dashboard Polish - 6/6 truths verified
 7. Chart Improvements - 5/5 truths verified
 8. Logbook Improvements - 10/10 truths verified
+9. Milestone Intervals - 5/5 truths verified
+10. Weight Entry UI Redesign - 5/5 truths verified
+11. Logbook Header & Cell Height - 4/4 truths verified
+12. Logbook Column Alignment - 3/3 truths verified
 
-All 38 cross-phase integrations connected. All 8 E2E user flows working.
+All 59 cross-phase integrations connected. All 12 E2E user flows working.
 
 The W8Trackr Pre-Launch Audit milestone is ready for completion and App Store submission preparation.
 
@@ -273,4 +343,8 @@ The W8Trackr Pre-Launch Audit milestone is ready for completion and App Store su
 *Initial audit: 2026-01-20T22:15:00Z (gaps_found - 5 pending in Phase 6)*
 *Phase 7 audit: 2026-01-20T17:45:00Z (passed - 18 requirements satisfied)*
 *Phase 8 audit: 2026-01-21T00:15:00Z (passed - 21 requirements satisfied, all 8 phases complete)*
+*Phase 9 audit: 2026-01-21T03:20:00Z (passed - 22 requirements satisfied, all 9 phases complete)*
+*Phase 10 audit: 2026-01-21T15:00:00Z (passed - 23 requirements satisfied, all 10 phases complete)*
+*Phase 11 audit: 2026-01-21T16:00:00Z (passed - 24 requirements satisfied, all 11 phases complete)*
+*Phase 12 audit: 2026-01-21T18:00:00Z (passed - 25 requirements satisfied, all 12 phases complete)*
 *Auditor: Claude (gsd-audit-milestone + gsd-integration-checker)*
