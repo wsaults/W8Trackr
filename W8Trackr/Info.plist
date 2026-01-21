@@ -14,5 +14,7 @@
 	<string>W8Trackr reads your weight data from Apple Health to help you track your progress.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>W8Trackr saves your weight and body fat entries to Apple Health so all your health data stays in one place.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
