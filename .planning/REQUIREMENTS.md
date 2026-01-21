@@ -25,12 +25,20 @@ Requirements for pre-launch audit fixes. Each maps to roadmap phases.
 - [x] **UX-07**: Current Weight card background should be red/green based on up/down trend
 - [x] **UX-08**: Chart segmented control should show months (1M, 3M, 6M) not days (30D, 90D, 180D)
 - [x] **UX-09**: Move + FAB button to be right aligned
+- [x] **UX-10**: Redesign weight entry controls with plus/minus icons, increment labels, and accessibility support
 
 ### Chart Improvements
 
 - [x] **CHART-01**: Extend prediction line to 14 days ahead (not just 1 day)
 - [x] **CHART-02**: Enable horizontal scrolling to explore historical data
 - [x] **CHART-03**: Add tap selection to show exact weight value for date
+
+### Logbook Improvements
+
+- [x] **LOG-01**: Segment logbook entries by month with clear section headers
+- [x] **LOG-02**: Enhanced row display with date, weight, moving average, weekly rate arrow, notes indicator
+- [x] **LOG-03**: Add filter menu in nav bar with Notes, Milestones, Day of Week filters
+- [ ] **LOG-04**: Add column headers above logbook rows with reduced row height for data density
 
 ### Settings
 
@@ -86,13 +94,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CHART-01 | Phase 7 | Complete |
 | CHART-02 | Phase 7 | Complete |
 | CHART-03 | Phase 7 | Complete |
+| LOG-01 | Phase 8 | Complete |
+| LOG-02 | Phase 8 | Complete |
+| LOG-03 | Phase 8 | Complete |
 | SETTINGS-01 | Phase 9 | Complete |
+| UX-10 | Phase 10 | Complete |
+| LOG-04 | Phase 11 | Planned |
 
 **Coverage:**
-- v1 requirements: 19 total
-- Mapped to phases: 19
+- v1 requirements: 24 total
+- Mapped to phases: 24
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-20*
-*Traceability updated: 2026-01-20*
+*Traceability updated: 2026-01-21*
