@@ -21,6 +21,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 9: Milestone Intervals** - Customizable milestone celebration intervals
 - [x] **Phase 10: Weight Entry UI Redesign** - Better weight entry controls with improved UX
 - [x] **Phase 11: Logbook Header & Cell Height** - Add column headers and reduce row height
+- [ ] **Phase 12: Logbook Column Alignment** - Fix header/row column spacing alignment
 
 ## Phase Details
 
@@ -214,10 +215,28 @@ Plans:
 - Reduce vertical padding in cells to fit more entries on screen
 - Maintain touch target accessibility requirements
 
+### Phase 12: Logbook Column Alignment
+**Goal**: Fix spacing alignment between logbook header and row columns
+**Depends on**: Phase 11
+**Requirements**: LOG-05 (logbook column alignment)
+**Success Criteria** (what must be TRUE):
+  1. Header columns and row columns are perfectly aligned
+  2. Equal spacing between all columns in both header and rows
+  3. Visual consistency when scrolling through entries
+**Plans**: 1 plan
+
+Plans:
+- [ ] 12-01-PLAN.md - Extract LogbookLayout constants, apply fixed widths, always render all columns
+
+**Details:**
+- Create LogbookLayout enum with shared spacing and width constants
+- Ensure LogbookHeaderView and LogbookRowView use identical column widths and spacing
+- Always render all columns (show placeholder for missing data) to prevent layout shift
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -232,6 +251,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 9. Milestone Intervals | 1/1 | Complete | 2026-01-21 |
 | 10. Weight Entry UI Redesign | 1/1 | Complete | 2026-01-21 |
 | 11. Logbook Header & Cell Height | 1/1 | Complete | 2026-01-21 |
+| 12. Logbook Column Alignment | 0/1 | Not Started | - |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -257,3 +277,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 11 added: 2026-01-21*
 *Phase 11 planned: 2026-01-21*
 *Phase 11 complete: 2026-01-21*
+*Phase 12 added: 2026-01-21*
+*Phase 12 planned: 2026-01-21*
