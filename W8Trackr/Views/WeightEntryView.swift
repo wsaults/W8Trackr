@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import UIKit
 
 /// Unified view for adding new weight entries and editing existing ones.
 /// Pass `existingEntry` to edit, or leave nil to add a new entry.
@@ -18,17 +17,33 @@ struct WeightEntryView: View {
     var entries: [WeightEntry]
     var existingEntry: WeightEntry?
 
+    // MARK: - Focus State
+    enum EntryField: Hashable { case weight, notes, bodyFat }
+    @FocusState private var focusedField: EntryField?
+
+    // MARK: - Form State
     @State private var weight: Double
     @State private var date: Date
     @State private var note: String
     @State private var bodyFatPercentage: Double?
-    @State private var includeBodyFat: Bool
-    @State private var lightFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-    @State private var mediumFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+    @State private var showMoreFields = false
+    @State private var showDiscardAlert = false
     @State private var showingSaveError = false
+
+    // MARK: - Scaled Metrics
     @ScaledMetric(relativeTo: .largeTitle) private var weightFontSize: CGFloat = 64
     @ScaledMetric(relativeTo: .title) private var bodyFatFontSize: CGFloat = 32
 
+    // MARK: - Initial Values for Change Detection
+    private let initialWeight: Double
+    private let initialNote: String
+    private let initialDate: Date
+    private let initialBodyFat: Double?
+
+    // MARK: - Constants
+    private let noteCharacterLimit = 500
+
+    // MARK: - Computed Properties
     private var isEditing: Bool { existingEntry != nil }
 
     private var isValidWeight: Bool {
@@ -36,22 +51,36 @@ struct WeightEntryView: View {
     }
 
     private var isValidBodyFat: Bool {
-        guard includeBodyFat, let bf = bodyFatPercentage else { return true }
+        guard showMoreFields, let bf = bodyFatPercentage else { return true }
         return bf >= 1.0 && bf <= 60.0
-    }
-
-    private var validationMessage: String? {
-        if !isValidWeight {
-            return "Weight must be between \(weightUnit.minWeight.formatted()) and \(weightUnit.maxWeight.formatted()) \(weightUnit.rawValue)"
-        }
-        if !isValidBodyFat {
-            return "Body fat must be between 1% and 60%"
-        }
-        return nil
     }
 
     private var isFormValid: Bool {
         isValidWeight && isValidBodyFat
+    }
+
+    private var charactersRemaining: Int {
+        noteCharacterLimit - note.count
+    }
+
+    private var canNavigateForward: Bool {
+        !Calendar.current.isDateInToday(date)
+    }
+
+    private var hasUnsavedChanges: Bool {
+        // Round to 1 decimal place to avoid floating point comparison issues
+        let weightChanged = (weight * 10).rounded() != (initialWeight * 10).rounded()
+        let noteChanged = note != initialNote
+        let dateChanged = !Calendar.current.isDate(date, inSameDayAs: initialDate)
+        let bodyFatChanged: Bool = {
+            switch (bodyFatPercentage, initialBodyFat) {
+            case (.none, .none): return false
+            case (.some, .none), (.none, .some): return true
+            case let (.some(currentValue), .some(initialValue)):
+                return (currentValue * 10).rounded() != (initialValue * 10).rounded()
+            }
+        }()
+        return weightChanged || noteChanged || dateChanged || bodyFatChanged
     }
 
     private static let timestampFormatter: DateFormatter = {
@@ -61,6 +90,7 @@ struct WeightEntryView: View {
         return formatter
     }()
 
+    // MARK: - Initialization
     init(
         entries: [WeightEntry],
         weightUnit: WeightUnit,
@@ -72,165 +102,64 @@ struct WeightEntryView: View {
 
         if let entry = existingEntry {
             // Editing: initialize from existing entry
-            _weight = State(initialValue: entry.weightValue(in: weightUnit))
+            let entryWeight = entry.weightValue(in: weightUnit)
+            let entryNote = entry.note ?? ""
+            let entryBodyFat = entry.bodyFatPercentage.map { NSDecimalNumber(decimal: $0).doubleValue }
+
+            _weight = State(initialValue: entryWeight)
             _date = State(initialValue: entry.date)
-            _note = State(initialValue: entry.note ?? "")
-            let hasBodyFat = entry.bodyFatPercentage != nil
-            _includeBodyFat = State(initialValue: hasBodyFat)
-            _bodyFatPercentage = State(initialValue: entry.bodyFatPercentage.map { NSDecimalNumber(decimal: $0).doubleValue })
+            _note = State(initialValue: entryNote)
+            _bodyFatPercentage = State(initialValue: entryBodyFat)
+            _showMoreFields = State(initialValue: entryBodyFat != nil)
+
+            self.initialWeight = entryWeight
+            self.initialNote = entryNote
+            self.initialDate = entry.date
+            self.initialBodyFat = entryBodyFat
         } else {
             // Adding: use most recent entry's weight as starting point
-            let initialWeight = entries.first?.weightValue(in: weightUnit) ?? weightUnit.defaultWeight
-            _weight = State(initialValue: initialWeight)
-            _date = State(initialValue: Date())
+            let startWeight = entries.first?.weightValue(in: weightUnit) ?? weightUnit.defaultWeight
+            let currentDate = Date()
+
+            _weight = State(initialValue: startWeight)
+            _date = State(initialValue: currentDate)
             _note = State(initialValue: "")
-            _includeBodyFat = State(initialValue: false)
             _bodyFatPercentage = State(initialValue: nil)
+            _showMoreFields = State(initialValue: false)
+
+            self.initialWeight = startWeight
+            self.initialNote = ""
+            self.initialDate = currentDate
+            self.initialBodyFat = nil
         }
     }
 
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
-                    // Date section (picker when editing, static when adding)
-                    if isEditing {
-                        DatePicker(
-                            "Date",
-                            selection: $date,
-                            in: ...Date(),
-                            displayedComponents: [.date, .hourAndMinute]
-                        )
-                        .datePickerStyle(.compact)
-                        .padding(.horizontal)
-                    } else {
-                        Text(date.formatted(date: .abbreviated, time: .omitted))
-                            .foregroundStyle(.secondary)
-                    }
+                    // Date section
+                    dateSection
 
                     // Weight input section
-                    VStack(spacing: .zero) {
-                        HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            TextField("Weight", value: $weight, format: .number.precision(.fractionLength(1)))
-                                .font(.system(size: weightFontSize, weight: .medium))
-                                .keyboardType(.decimalPad)
-                                .fixedSize()
-                                .multilineTextAlignment(.trailing)
+                    weightSection
 
-                            Text(weightUnit.rawValue)
-                                .font(.title)
-                                .foregroundStyle(.secondary)
-                                .padding(.trailing, 40)
-                        }
+                    // Notes section (always visible)
+                    notesSection
 
-                        HStack(spacing: 24) {
-                            WeightAdjustmentButton(amount: 1.0, unitLabel: weightUnit.rawValue, isIncrease: false) {
-                                mediumFeedbackGenerator.impactOccurred()
-                                weight = max(weightUnit.minWeight, weight - 1.0)
-                            }
-
-                            WeightAdjustmentButton(amount: 0.1, unitLabel: weightUnit.rawValue, isIncrease: false) {
-                                lightFeedbackGenerator.impactOccurred()
-                                weight = max(weightUnit.minWeight, weight - 0.1)
-                            }
-
-                            WeightAdjustmentButton(amount: 0.1, unitLabel: weightUnit.rawValue, isIncrease: true) {
-                                lightFeedbackGenerator.impactOccurred()
-                                weight = min(weightUnit.maxWeight, weight + 0.1)
-                            }
-
-                            WeightAdjustmentButton(amount: 1.0, unitLabel: weightUnit.rawValue, isIncrease: true) {
-                                mediumFeedbackGenerator.impactOccurred()
-                                weight = min(weightUnit.maxWeight, weight + 1.0)
-                            }
-                        }
-                        .padding(.top, 20)
-
-                        if let message = validationMessage {
-                            Text(message)
-                                .font(.caption)
-                                .foregroundStyle(.red)
-                                .padding(.top, 8)
-                        }
-                    }
-
-                    // Body fat section
-                    VStack(spacing: 12) {
-                        Toggle("Include Body Fat %", isOn: $includeBodyFat)
-                            .tint(AppColors.primary)
-
-                        if includeBodyFat {
-                            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                                TextField("Body Fat", value: $bodyFatPercentage, format: .number.precision(.fractionLength(1)))
-                                    .font(.system(size: bodyFatFontSize, weight: .medium))
-                                    .keyboardType(.decimalPad)
-                                    .fixedSize()
-                                    .multilineTextAlignment(.trailing)
-
-                                Text("%")
-                                    .font(.title2)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 40)
-
-                    // Note section (always shown when editing, optional for add)
-                    if isEditing {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Note")
-                                .font(.headline)
-                                .foregroundStyle(.secondary)
-
-                            TextField("Add a note (optional)", text: $note, axis: .vertical)
-                                .textFieldStyle(.roundedBorder)
-                                .lineLimit(3...6)
-                        }
-                        .padding(.horizontal)
-                    }
+                    // More... expandable section for body fat
+                    moreFieldsSection
 
                     // Timestamps section (only when editing)
                     if isEditing, let entry = existingEntry {
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text("Created")
-                                    .foregroundStyle(.secondary)
-                                Spacer()
-                                Text(Self.timestampFormatter.string(from: entry.date))
-                            }
-                            if let modifiedDate = entry.modifiedDate {
-                                HStack {
-                                    Text("Last Modified")
-                                        .foregroundStyle(.secondary)
-                                    Spacer()
-                                    Text(Self.timestampFormatter.string(from: modifiedDate))
-                                }
-                            }
-                        }
-                        .font(.footnote)
-                        .padding(.horizontal)
-                        .padding(.vertical, 12)
-                        .background(Color(.systemGray6))
-                        .clipShape(.rect(cornerRadius: 8))
-                        .padding(.horizontal)
+                        timestampsSection(for: entry)
                     }
 
                     Spacer(minLength: 20)
 
                     // Save button
-                    Button {
-                        saveEntry()
-                    } label: {
-                        Text(isEditing ? "Save Changes" : "Save")
-                            .fontWeight(.bold)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(isFormValid ? AppColors.primary : AppColors.surfaceSecondary)
-                            .foregroundStyle(.white)
-                            .clipShape(.rect(cornerRadius: 10))
-                    }
-                    .disabled(!isFormValid)
-                    .padding(.horizontal)
+                    saveButton
                 }
                 .padding(.top, 20)
             }
@@ -239,7 +168,11 @@ struct WeightEntryView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        dismiss()
+                        if hasUnsavedChanges {
+                            showDiscardAlert = true
+                        } else {
+                            dismiss()
+                        }
                     }
                 }
             }
@@ -248,11 +181,211 @@ struct WeightEntryView: View {
             } message: {
                 Text("Your weight entry couldn't be saved. Please try again.")
             }
+            .alert("Discard Changes?", isPresented: $showDiscardAlert) {
+                Button("Discard", role: .destructive) {
+                    dismiss()
+                }
+                Button("Keep Editing", role: .cancel) { }
+            } message: {
+                Text("You have unsaved changes that will be lost.")
+            }
+            .interactiveDismissDisabled(hasUnsavedChanges)
+            .task {
+                // Only auto-focus weight for new entries
+                if !isEditing {
+                    focusedField = .weight
+                }
+            }
         }
     }
 
+    // MARK: - View Components
+
+    @ViewBuilder
+    private var dateSection: some View {
+        if isEditing {
+            DatePicker(
+                "Date",
+                selection: $date,
+                in: ...Date(),
+                displayedComponents: [.date, .hourAndMinute]
+            )
+            .datePickerStyle(.compact)
+            .padding(.horizontal)
+        } else {
+            HStack {
+                Button {
+                    if let newDate = Calendar.current.date(byAdding: .day, value: -1, to: date) {
+                        date = newDate
+                    }
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.title2)
+                }
+
+                Text(date, format: .dateTime.weekday(.wide).month(.abbreviated).day())
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+
+                Button {
+                    if canNavigateForward,
+                       let newDate = Calendar.current.date(byAdding: .day, value: 1, to: date) {
+                        date = newDate
+                    }
+                } label: {
+                    Image(systemName: "chevron.right")
+                        .font(.title2)
+                }
+                .disabled(!canNavigateForward)
+            }
+            .padding(.horizontal)
+        }
+    }
+
+    @ViewBuilder
+    private var weightSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Weight")
+                .font(.headline)
+                .foregroundStyle(.secondary)
+
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                TextField("Weight", value: $weight, format: .number.precision(.fractionLength(1)))
+                    .font(.system(size: weightFontSize, weight: .medium))
+                    .keyboardType(.decimalPad)
+                    .fixedSize()
+                    .multilineTextAlignment(.trailing)
+                    .focused($focusedField, equals: .weight)
+
+                Text(weightUnit.rawValue)
+                    .font(.title)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    @ViewBuilder
+    private var notesSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Notes")
+                .font(.headline)
+                .foregroundStyle(.secondary)
+
+            TextField("Add a note (optional)", text: $note, axis: .vertical)
+                .textFieldStyle(.roundedBorder)
+                .lineLimit(3...6)
+                .focused($focusedField, equals: .notes)
+                .onChange(of: note) { _, newValue in
+                    if newValue.count > noteCharacterLimit {
+                        note = String(newValue.prefix(noteCharacterLimit))
+                    }
+                }
+
+            if charactersRemaining < 50 {
+                Text("\(charactersRemaining) characters remaining")
+                    .font(.caption)
+                    .foregroundStyle(charactersRemaining < 10 ? .red : .secondary)
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    @ViewBuilder
+    private var moreFieldsSection: some View {
+        VStack(spacing: 12) {
+            Button {
+                withAnimation(.spring(duration: 0.3)) {
+                    showMoreFields.toggle()
+                    if showMoreFields && bodyFatPercentage == nil {
+                        bodyFatPercentage = 20.0  // Default when expanding
+                    }
+                }
+            } label: {
+                HStack {
+                    Text(showMoreFields ? "Less..." : "More...")
+                    Image(systemName: showMoreFields ? "chevron.up" : "chevron.down")
+                }
+                .font(.subheadline)
+                .foregroundStyle(AppColors.primary)
+            }
+
+            if showMoreFields {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Body Fat %")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        TextField(
+                            "Body Fat",
+                            value: $bodyFatPercentage,
+                            format: .number.precision(.fractionLength(1))
+                        )
+                        .font(.system(size: bodyFatFontSize, weight: .medium))
+                        .keyboardType(.decimalPad)
+                        .fixedSize()
+                        .multilineTextAlignment(.trailing)
+                        .focused($focusedField, equals: .bodyFat)
+
+                        Text("%")
+                            .font(.title2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .transition(.opacity.combined(with: .move(edge: .top)))
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    @ViewBuilder
+    private func timestampsSection(for entry: WeightEntry) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Created")
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text(Self.timestampFormatter.string(from: entry.date))
+            }
+            if let modifiedDate = entry.modifiedDate {
+                HStack {
+                    Text("Last Modified")
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text(Self.timestampFormatter.string(from: modifiedDate))
+                }
+            }
+        }
+        .font(.footnote)
+        .padding(.horizontal)
+        .padding(.vertical, 12)
+        .background(Color(.systemGray6))
+        .clipShape(.rect(cornerRadius: 8))
+        .padding(.horizontal)
+    }
+
+    @ViewBuilder
+    private var saveButton: some View {
+        Button {
+            saveEntry()
+        } label: {
+            Text(isEditing ? "Save Changes" : "Save")
+                .bold()
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(isFormValid ? AppColors.primary : AppColors.surfaceSecondary)
+                .foregroundStyle(.white)
+                .clipShape(.rect(cornerRadius: 10))
+        }
+        .disabled(!isFormValid)
+        .padding(.horizontal)
+    }
+
+    // MARK: - Actions
+
     private func saveEntry() {
-        let bodyFat: Decimal? = includeBodyFat && bodyFatPercentage != nil
+        let bodyFat: Decimal? = showMoreFields && bodyFatPercentage != nil
             ? Decimal(bodyFatPercentage!)
             : nil
 
@@ -273,8 +406,10 @@ struct WeightEntryView: View {
             let entry = WeightEntry(
                 weight: weight,
                 unit: weightUnit,
+                date: date,
                 bodyFatPercentage: bodyFat
             )
+            entry.note = note.isEmpty ? nil : note
             modelContext.insert(entry)
 
             // Announce to VoiceOver
@@ -304,7 +439,7 @@ struct WeightEntryView: View {
                     weightInUnit: weight,
                     unit: weightUnit,
                     bodyFatPercentage: bodyFat,
-                    date: Date()
+                    date: date
                 )
             }
         }
