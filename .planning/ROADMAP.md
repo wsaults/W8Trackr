@@ -25,6 +25,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 13: App Store Automation** - Fastlane setup, GitHub Actions CI, screenshots, metadata management
 - [x] **Phase 14: Add Entry UI** - Replace FAB with Liquid Glass tab bar bottom accessory button
 - [ ] **Phase 15: Weight Entry Screen** - Simplify to focused text input with number keyboard and notes field
+- [ ] **Phase 16: Trailing FAB Button** - Move add button to right of tab bar using GlassEffectContainer
 
 ## Phase Details
 
@@ -282,33 +283,66 @@ Plans:
 **Reference:** [Hacking with Swift - TabView Bottom Accessory](https://www.hackingwithswift.com/quick-start/swiftui/how-to-add-a-tabview-accessory)
 
 ### Phase 15: Weight Entry Screen
-**Goal**: Simplify weight entry to a clean, focused text input experience
+**Goal**: Redesign weight entry as a focused text input form with date navigation, notes, and expandable body fat section
 **Depends on**: Phase 14
 **Requirements**: UX-12 (weight entry screen simplification)
 **Success Criteria** (what must be TRUE):
   1. Weight input is a text field with "Weight" label above it
-  2. Weight text field is auto-focused when screen appears
+  2. Weight text field is auto-focused when screen appears (new entries only)
   3. Keyboard is decimal pad style (number keyboard)
-  4. Notes field appears below weight with "Notes" label
-  5. Notes field has no default/placeholder text
-  6. Existing plus/minus button controls removed
-**Plans**: 0 plans
+  4. Date navigation uses left/right arrows for new entries (DatePicker kept for edit mode)
+  5. Notes field always visible with 500-char limit and character counter
+  6. Body fat in expandable "More..." section
+  7. Unsaved changes detection with discard confirmation
+  8. Existing plus/minus button controls removed
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 15 to break down)
+- [ ] 15-01-PLAN.md - Redesign WeightEntryView with text input, date arrows, notes, expandable body fat, unsaved changes protection
+- [ ] 15-02-PLAN.md - Update FirstWeightStepView to text-only input and delete WeightAdjustmentButton component
 
 **Details:**
 - Replace WeightAdjustmentButton-based UI with simple TextField
-- Use @FocusState to auto-focus weight input on appear
+- Use @FocusState with .task {} to auto-focus weight input on appear
 - Set .keyboardType(.decimalPad) for number entry
-- Add labeled notes TextField below weight
-- Remove increment/decrement button controls
-- Keep save/cancel functionality
+- Date arrows for new entries (right arrow disabled on today), DatePicker for edit mode
+- Notes always visible with character limit and countdown when <50 remaining
+- "More..." button expands body fat field with animation
+- interactiveDismissDisabled(hasUnsavedChanges) with confirmation dialog
+- Delete WeightAdjustmentButton.swift after migration complete
+
+### Phase 16: Trailing FAB Button
+**Goal**: Reposition add entry button to appear to the right of the tab bar (trailing side) like Reminders app
+**Depends on**: Phase 15
+**Requirements**: UX-13 (trailing FAB positioning)
+**Success Criteria** (what must be TRUE):
+  1. Add button appears to the right of the tab bar, not above it
+  2. Button uses Liquid Glass styling via `.glassEffect()`
+  3. Button and tab bar visually blend when close together using `GlassEffectContainer`
+  4. Button remains accessible during tab bar minimize on scroll
+  5. Remove `.tabViewBottomAccessory` usage (replaced by custom layout)
+**Plans**: 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 16 to break down)
+
+**Details:**
+- Replace `.tabViewBottomAccessory` with `ZStack(alignment: .bottomTrailing)` approach
+- Wrap tab bar and FAB in `GlassEffectContainer` for visual blending
+- Apply `.glassEffect()` to the floating button
+- Position button using `.safeAreaInset` or `.offset` to align with tab bar
+- Maintain accessibility labels and hints
+- Handle tab bar minimize behavior (button should remain visible/accessible)
+
+**Reference:**
+- [Donny Wals - Liquid Glass Tab Bars](https://www.donnywals.com/exploring-tab-bars-on-ios-26-with-liquid-glass/)
+- [GlassEffectContainer Guide](https://dev.to/arshtechpro/understanding-glasseffectcontainer-in-ios-26-2n8p)
+- [Building Side-Floating FAB](https://iifx.dev/en/articles/457706754/building-the-new-ios-26-tab-bar-ui-liquid-glass-side-floating-fab)
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -326,7 +360,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 12. Logbook Column Alignment | 1/1 | Complete | 2026-01-21 |
 | 13. App Store Automation | 1/1 | Complete | 2026-01-21 |
 | 14. Add Entry UI | 1/1 | Complete | 2026-01-21 |
-| 15. Weight Entry Screen | 0/? | Not Started | - |
+| 15. Weight Entry Screen | 0/2 | Not Started | - |
+| 16. Trailing FAB Button | 0/? | Not Started | - |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -362,3 +397,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 14 planned: 2026-01-21*
 *Phase 14 complete: 2026-01-21*
 *Phase 15 added: 2026-01-21*
+*Phase 15 planned: 2026-01-21*
+*Phase 16 added: 2026-01-21*
