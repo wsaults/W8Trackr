@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can reliably track weight and see progress without UI bugs undermining the experience
-**Current focus:** MILESTONE COMPLETE
+**Current focus:** Phase 14 - Add Entry UI
 
 ## Current Position
 
-Phase: 13 of 13 (App Store Automation)
+Phase: 14 of 15 (Add Entry UI)
 Plan: 1 of 1 in current phase
 Status: Complete
-Last activity: 2026-01-21 - Completed 13-01-PLAN.md
+Last activity: 2026-01-21 - Completed 14-01-PLAN.md
 
-Progress: [#############] 100% (13 of 13 phases complete)
+Progress: [##############-] 93% (14 of 15 phases complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 21
-- Average duration: 4.4 minutes
-- Total execution time: 1.57 hours
+- Total plans completed: 22
+- Average duration: 4.5 minutes
+- Total execution time: 1.65 hours
 
 **By Phase:**
 
@@ -40,10 +40,11 @@ Progress: [#############] 100% (13 of 13 phases complete)
 | 11-logbook-header-cell-height | 1 | 12 min | 12 min |
 | 12-logbook-column-alignment | 1 | 5 min | 5 min |
 | 13-app-store-automation | 1 | 4 min | 4 min |
+| 14-add-entry-ui | 1 | 6 min | 6 min |
 
 **Recent Trend:**
-- Last 5 plans: 10-01 (3 min), 11-01 (12 min), 12-01 (5 min), 13-01 (4 min)
-- Trend: Highly efficient execution, sub-5 minute average
+- Last 5 plans: 11-01 (12 min), 12-01 (5 min), 13-01 (4 min), 14-01 (6 min)
+- Trend: Highly efficient execution, sub-10 minute average
 
 *Updated after each plan completion*
 
@@ -104,6 +105,10 @@ Recent decisions affecting current work:
 - [13-01]: ITSAppUsesNonExemptEncryption=false for HTTPS-only encryption
 - [13-01]: iPhone 16 Pro Max as primary 6.9-inch screenshot device
 - [13-01]: SwiftLint --strict mode in CI for warnings-as-errors
+- [14-01]: Let Liquid Glass provide capsule background automatically (no custom styling)
+- [14-01]: Sheet modifier at TabView level for proper presentation
+- [14-01]: Pass showAddWeightView binding to DashboardView for EmptyStateView action
+- [14-01]: Updated deployment target to iOS 26.0 for new TabView APIs
 
 ### Pending Todos
 
@@ -113,17 +118,17 @@ Recent decisions affecting current work:
 
 ### Blockers/Concerns
 
-None remaining. All phases complete and verified.
+None remaining. Phase 14 complete.
 
 ## Session Continuity
 
 Last session: 2026-01-21
-Stopped at: Completed 13-01-PLAN.md (MILESTONE COMPLETE)
+Stopped at: Completed 14-01-PLAN.md
 Resume file: None
 
 ## Project Completion Status
 
-13 of 13 phases complete:
+14 of 15 phases complete:
 - Phase 1: Critical Bugs (2 plans) DONE
 - Phase 2: Chart Animation (1 plan) DONE
 - Phase 3: UX Polish (2 plans) DONE
@@ -137,8 +142,9 @@ Resume file: None
 - Phase 11: Logbook Header & Cell Height (1 plan) DONE
 - Phase 12: Logbook Column Alignment (1 plan) DONE
 - Phase 13: App Store Automation (1 plan) DONE
+- Phase 14: Add Entry UI (1 plan) DONE
 
-Total: 21 plans executed
+Total: 22 plans executed
 
 ### Roadmap Evolution
 
@@ -151,6 +157,7 @@ Total: 21 plans executed
 - Phase 11 added: Logbook header & cell height (column headers, reduced row height)
 - Phase 12 added: Logbook column alignment (fix spacing between header and row columns)
 - Phase 13 added: App Store automation (fastlane, GitHub Actions, screenshots, metadata)
+- Phase 14 added: Add entry UI (iOS 26 tab bar accessory replaces FAB)
 
 ## Code Quality Status
 
@@ -163,3 +170,4 @@ Total: 21 plans executed
 - No hardcoded colors that break in light/dark mode
 - Logbook layout centralized in LogbookLayout enum
 - Export compliance declared for App Store
+- iOS 26 Liquid Glass tab bar accessory for add entry
