@@ -32,6 +32,10 @@ Requirements for pre-launch audit fixes. Each maps to roadmap phases.
 - [x] **CHART-02**: Enable horizontal scrolling to explore historical data
 - [x] **CHART-03**: Add tap selection to show exact weight value for date
 
+### Settings
+
+- [x] **SETTINGS-01**: Allow users to customize milestone celebration interval (every 5, 10, or 15 lbs)
+
 ### Code Quality
 
 - [x] **QUAL-01**: Migrate deprecated GCD usage to async/await (HealthKitManager, NotificationManager, CloudKitSyncManager)
@@ -82,10 +86,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CHART-01 | Phase 7 | Complete |
 | CHART-02 | Phase 7 | Complete |
 | CHART-03 | Phase 7 | Complete |
+| SETTINGS-01 | Phase 9 | Complete |
 
 **Coverage:**
-- v1 requirements: 18 total
-- Mapped to phases: 18
+- v1 requirements: 19 total
+- Mapped to phases: 19
 - Unmapped: 0
 
 ---

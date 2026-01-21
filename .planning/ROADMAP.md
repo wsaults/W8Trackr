@@ -18,7 +18,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 6: Dashboard Polish** - Improve card layouts, hero card styling, chart labels, FAB alignment
 - [x] **Phase 7: Chart Improvements** - Extended prediction line, horizontal scrolling, tap selection
 - [x] **Phase 8: Logbook Improvements** - Month-segmented dates, enhanced row data, filter menu
-- [ ] **Phase 9: Milestone Intervals** - Customizable milestone celebration intervals
+- [x] **Phase 9: Milestone Intervals** - Customizable milestone celebration intervals
 
 ## Phase Details
 
@@ -163,7 +163,7 @@ Note: "Heights" filter omitted - WeightEntry has no height property. "Weights" f
 **Plans**: 1 plan
 
 Plans:
-- [ ] 09-01-PLAN.md - Add MilestoneInterval enum, Settings UI, and thread preference through views
+- [x] 09-01-PLAN.md - Add MilestoneInterval enum, Settings UI, and thread preference through views
 
 **Details:**
 - MilestoneInterval enum with three presets: 5 lb (2 kg), 10 lb (5 kg), 15 lb (7 kg)
@@ -186,7 +186,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 6. Dashboard Polish | 1/1 | Complete | 2026-01-20 |
 | 7. Chart Improvements | 1/1 | Complete | 2026-01-20 |
 | 8. Logbook Improvements | 2/2 | Complete | 2026-01-20 |
-| 9. Milestone Intervals | 0/1 | Planned | - |
+| 9. Milestone Intervals | 1/1 | Complete | 2026-01-21 |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -205,3 +205,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 *Phase 8 complete: 2026-01-20*
 *Phase 9 added: 2026-01-21*
 *Phase 9 planned: 2026-01-21*
+*Phase 9 complete: 2026-01-21*
