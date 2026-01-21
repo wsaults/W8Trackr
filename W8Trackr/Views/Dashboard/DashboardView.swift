@@ -31,7 +31,7 @@ import SwiftUI
 /// ```
 struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
-    @State private var showAddWeightView = false
+    @Binding var showAddWeightView: Bool
     @State private var celebrationMilestone: Double?
 
     var entries: [WeightEntry]
@@ -90,17 +90,12 @@ struct DashboardView: View {
 
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .bottomTrailing) {
+            ZStack {
                 if entries.isEmpty {
                     emptyState
                 } else {
                     dashboardContent
                 }
-
-                // FAB Button
-                fabButton
-                    .padding(.trailing)
-                    .padding(.bottom)
 
                 // Celebration overlay
                 if let milestone = celebrationMilestone {
@@ -119,9 +114,6 @@ struct DashboardView: View {
             .background(AppColors.background)
             .navigationTitle("Dashboard")
             .navigationBarTitleDisplayMode(.inline)
-            .sheet(isPresented: $showAddWeightView) {
-                WeightEntryView(entries: entries, weightUnit: preferredWeightUnit)
-            }
             .onAppear {
                 checkForNewMilestone()
             }
@@ -195,31 +187,10 @@ struct DashboardView: View {
                 // Milestone History
                 if !completedMilestones.isEmpty {
                     MilestoneHistoryView(milestones: completedMilestones, unit: preferredWeightUnit)
-                        .padding(.bottom, 80)
-                } else {
-                    Spacer()
-                        .frame(height: 80)
                 }
             }
             .padding(.top, 8)
         }
-    }
-
-    private var fabButton: some View {
-        Button {
-            showAddWeightView.toggle()
-        } label: {
-            Image(systemName: "plus")
-                .font(.title3)
-                .foregroundStyle(.white)
-                .fontWeight(.bold)
-                .padding()
-                .background(AppGradients.blue)
-                .clipShape(Circle())
-                .shadow(color: Color(hex: "#4A90D9").opacity(0.4), radius: 8, x: 0, y: 4)
-        }
-        .accessibilityLabel("Add weight entry")
-        .accessibilityHint("Opens form to log a new weight measurement")
     }
 
     // MARK: - Milestone Logic
@@ -272,7 +243,9 @@ struct DashboardView: View {
 #if DEBUG
 @available(iOS 18, macOS 15, *)
 #Preview("With Data", traits: .modifier(DashboardPreview())) {
+    @Previewable @State var showAddWeightView = false
     DashboardView(
+        showAddWeightView: $showAddWeightView,
         entries: WeightEntry.shortSampleData,
         completedMilestones: [],
         preferredWeightUnit: .lb,
@@ -284,7 +257,9 @@ struct DashboardView: View {
 
 @available(iOS 18, macOS 15, *)
 #Preview("Empty", traits: .modifier(EmptyEntriesPreview())) {
+    @Previewable @State var showAddWeightView = false
     DashboardView(
+        showAddWeightView: $showAddWeightView,
         entries: [],
         completedMilestones: [],
         preferredWeightUnit: .lb,

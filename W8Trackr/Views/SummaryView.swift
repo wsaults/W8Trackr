@@ -11,7 +11,6 @@ import SwiftUI
 
 struct SummaryView: View {
     @Environment(\.modelContext) private var modelContext
-    @State private var showAddWeightView = false
     @State private var celebrationMilestone: Double?
 
     var entries: [WeightEntry]
@@ -55,15 +54,15 @@ struct SummaryView: View {
 
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .bottom) {
+            ZStack {
                 VStack {
                     if entries.isEmpty {
                         EmptyStateView(
                             illustration: .startTracking,
                             title: "Begin Your Journey",
                             description: "Track your weight to see trends and progress toward your goals.",
-                            actionTitle: "Log Your First Weight",
-                            action: { showAddWeightView = true }
+                            actionTitle: nil,
+                            action: nil
                         )
                     } else {
                         if let entry = entries.first {
@@ -92,24 +91,10 @@ struct SummaryView: View {
 
                             if !completedMilestones.isEmpty {
                                 MilestoneHistoryView(milestones: completedMilestones, unit: preferredWeightUnit)
-                                    .padding(.bottom, 80)
                             }
                         }
                     }
                 }
-
-                Button {
-                    showAddWeightView.toggle()
-                } label: {
-                    Image(systemName: "plus")
-                        .font(.title3)
-                        .foregroundStyle(.white)
-                        .fontWeight(.bold)
-                        .padding()
-                        .background(AppColors.primary)
-                        .clipShape(.circle)
-                }
-                .padding(.bottom)
 
                 // Celebration overlay
                 if let milestone = celebrationMilestone {
@@ -122,9 +107,6 @@ struct SummaryView: View {
             .navigationTitle("Summary")
             .navigationBarTitleDisplayMode(.inline)
             .syncStatusToolbar()
-            .sheet(isPresented: $showAddWeightView) {
-                WeightEntryView(entries: entries, weightUnit: preferredWeightUnit)
-            }
             .onAppear {
                 checkForNewMilestone()
             }
