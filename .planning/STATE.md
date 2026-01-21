@@ -10,21 +10,21 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 8 of 8 (Logbook Improvements)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In Progress
-Last activity: 2026-01-20 - Completed 08-01-PLAN.md
+Last activity: 2026-01-20 - Completed 08-02-PLAN.md
 
-Progress: [########--] 88.2% (15 of 17 plans)
+Progress: [#########-] 94.1% (16 of 17 plans)
 
 **Current Phase:**
-- Phase 8: Logbook Improvements (1 of 3 plans complete)
+- Phase 8: Logbook Improvements (2 of 3 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 15
-- Average duration: 4.5 minutes
-- Total execution time: 1.15 hours
+- Total plans completed: 16
+- Average duration: 4.3 minutes
+- Total execution time: 1.18 hours
 
 **By Phase:**
 
@@ -37,10 +37,10 @@ Progress: [########--] 88.2% (15 of 17 plans)
 | 05-light-dark-mode | 3 | 13 min | 4.3 min |
 | 06-dashboard-polish | 1 | 3 min | 3 min |
 | 07-chart-improvements | 1 | 2 min | 2 min |
-| 08-logbook-improvements | 1 | 3 min | 3 min |
+| 08-logbook-improvements | 2 | 5 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-03 (3 min), 06-01 (3 min), 07-01 (2 min), 08-01 (3 min)
+- Last 5 plans: 06-01 (3 min), 07-01 (2 min), 08-01 (3 min), 08-02 (2 min)
 - Trend: Highly efficient execution, sub-5 minute average
 
 *Updated after each plan completion*
@@ -81,6 +81,10 @@ Recent decisions affecting current work:
 - [08-01]: Use entry date as Identifiable ID for LogbookRowData (stable across app lifecycle)
 - [08-01]: 7-day span for moving average matches chart trend calculation
 - [08-01]: TrendDirection threshold of 0.1 for stable classification
+- [08-02]: Milestone weights: 5-lb increments from 150-250 (covers common range)
+- [08-02]: Near-milestone tolerance: 0.5 lbs for detection
+- [08-02]: Filter icon: line.3.horizontal.decrease.circle (filled when active)
+- [08-02]: Day of week uses Calendar.weekday (1=Sunday per iOS standard)
 
 ### Pending Todos
 
@@ -93,7 +97,7 @@ None remaining.
 ## Session Continuity
 
 Last session: 2026-01-20
-Stopped at: Completed 08-01-PLAN.md
+Stopped at: Completed 08-02-PLAN.md
 Resume file: None
 
 ## Project Completion Status
@@ -106,9 +110,9 @@ Resume file: None
 - Phase 5: Light/Dark Mode (3 plans) ✓
 - Phase 6: Dashboard Polish (1 plan) ✓
 - Phase 7: Chart Improvements (1 plan) ✓
-- Phase 8: Logbook Improvements (1/3 plans) - In Progress
+- Phase 8: Logbook Improvements (2/3 plans) - In Progress
 
-Total: 15 plans executed
+Total: 16 plans executed
 
 ### Roadmap Evolution
 
