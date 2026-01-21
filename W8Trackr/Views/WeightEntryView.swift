@@ -8,24 +8,6 @@
 import SwiftUI
 import UIKit
 
-struct WeightAdjustButton: View {
-    let systemName: String
-    var accessibilityLabel: String = ""
-    var accessibilityHint: String = ""
-    let action: () -> Void
-    @ScaledMetric(relativeTo: .title) private var buttonIconSize: CGFloat = 44
-
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: buttonIconSize))
-                .foregroundStyle(AppColors.primary)
-        }
-        .accessibilityLabel(accessibilityLabel.isEmpty ? systemName : accessibilityLabel)
-        .accessibilityHint(accessibilityHint)
-    }
-}
-
 /// Unified view for adding new weight entries and editing existing ones.
 /// Pass `existingEntry` to edit, or leave nil to add a new entry.
 struct WeightEntryView: View {
@@ -141,39 +123,23 @@ struct WeightEntryView: View {
                                 .padding(.trailing, 40)
                         }
 
-                        HStack(spacing: 40) {
-                            WeightAdjustButton(
-                                systemName: "backward.circle.fill",
-                                accessibilityLabel: "Decrease by 1",
-                                accessibilityHint: "Decreases weight by 1 \(weightUnit.rawValue)"
-                            ) {
+                        HStack(spacing: 24) {
+                            WeightAdjustmentButton(amount: 1.0, unitLabel: weightUnit.rawValue, isIncrease: false) {
                                 mediumFeedbackGenerator.impactOccurred()
                                 weight = max(weightUnit.minWeight, weight - 1.0)
                             }
 
-                            WeightAdjustButton(
-                                systemName: "backward.end.circle.fill",
-                                accessibilityLabel: "Decrease by 0.1",
-                                accessibilityHint: "Decreases weight by 0.1 \(weightUnit.rawValue)"
-                            ) {
+                            WeightAdjustmentButton(amount: 0.1, unitLabel: weightUnit.rawValue, isIncrease: false) {
                                 lightFeedbackGenerator.impactOccurred()
                                 weight = max(weightUnit.minWeight, weight - 0.1)
                             }
 
-                            WeightAdjustButton(
-                                systemName: "forward.end.circle.fill",
-                                accessibilityLabel: "Increase by 0.1",
-                                accessibilityHint: "Increases weight by 0.1 \(weightUnit.rawValue)"
-                            ) {
+                            WeightAdjustmentButton(amount: 0.1, unitLabel: weightUnit.rawValue, isIncrease: true) {
                                 lightFeedbackGenerator.impactOccurred()
                                 weight = min(weightUnit.maxWeight, weight + 0.1)
                             }
 
-                            WeightAdjustButton(
-                                systemName: "forward.circle.fill",
-                                accessibilityLabel: "Increase by 1",
-                                accessibilityHint: "Increases weight by 1 \(weightUnit.rawValue)"
-                            ) {
+                            WeightAdjustmentButton(amount: 1.0, unitLabel: weightUnit.rawValue, isIncrease: true) {
                                 mediumFeedbackGenerator.impactOccurred()
                                 weight = min(weightUnit.maxWeight, weight + 1.0)
                             }
