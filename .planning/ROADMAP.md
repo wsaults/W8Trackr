@@ -19,6 +19,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 7: Chart Improvements** - Extended prediction line, horizontal scrolling, tap selection
 - [x] **Phase 8: Logbook Improvements** - Month-segmented dates, enhanced row data, filter menu
 - [x] **Phase 9: Milestone Intervals** - Customizable milestone celebration intervals
+- [ ] **Phase 10: Weight Entry UI Redesign** - Better weight entry controls with improved UX
 
 ## Phase Details
 
@@ -171,10 +172,31 @@ Plans:
 - @AppStorage for persistence
 - Default .five maintains backward compatibility
 
+### Phase 10: Weight Entry UI Redesign
+**Goal**: Replace current weight entry control with a more intuitive and visually appealing UI
+**Depends on**: Phase 9
+**Requirements**: UX-10 (weight entry redesign)
+**Success Criteria** (what must be TRUE):
+  1. Weight entry control is visually appealing and consistent with app design
+  2. Entry method is intuitive and easy to use
+  3. Supports both lb and kg units seamlessly
+  4. Works well with accessibility features (VoiceOver, Dynamic Type)
+**Plans**: 1 plan
+
+Plans:
+- [ ] 10-01-PLAN.md - Create unified WeightAdjustmentButton with plus/minus icons and increment labels
+
+**Details:**
+- Replace media transport icons (backward/forward) with semantic plus/minus icons
+- Add visible increment labels (+1, +0.1, -1, -0.1) below each button
+- Visual hierarchy: filled icons for large increments, outline for small
+- Unified component shared between WeightEntryView and FirstWeightStepView
+- Full accessibility support with descriptive VoiceOver labels
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -187,6 +209,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 | 7. Chart Improvements | 1/1 | Complete | 2026-01-20 |
 | 8. Logbook Improvements | 2/2 | Complete | 2026-01-20 |
 | 9. Milestone Intervals | 1/1 | Complete | 2026-01-21 |
+| 10. Weight Entry UI Redesign | 0/1 | Not Started | -- |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -206,3 +229,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 *Phase 9 added: 2026-01-21*
 *Phase 9 planned: 2026-01-21*
 *Phase 9 complete: 2026-01-21*
+*Phase 10 added: 2026-01-21*
+*Phase 10 planned: 2026-01-21*
