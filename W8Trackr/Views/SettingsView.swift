@@ -27,6 +27,7 @@ struct SettingsView: View {
     @State private var pendingDeletionEntries: [WeightEntry] = []
     @State private var deletionTask: Task<Void, Never>?
     @State private var showingUndoToast = false
+    @State private var showingAbout = false
 
     init(weightUnit: Binding<WeightUnit>, goalWeight: Binding<Double>, showSmoothing: Binding<Bool>) {
         _weightUnit = weightUnit
@@ -191,6 +192,23 @@ struct SettingsView: View {
             }
         } header: {
             Text("Data Management")
+        }
+    }
+
+    private var aboutSection: some View {
+        Section {
+            Button {
+                showingAbout = true
+            } label: {
+                HStack {
+                    Label("About W8Trackr", systemImage: "info.circle")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+            }
+            .foregroundStyle(.primary)
         }
     }
 
@@ -363,6 +381,7 @@ struct SettingsView: View {
                 smartRemindersSection
                 healthSection
                 dataManagementSection
+                aboutSection
                 dangerZoneSection
             }
             .navigationTitle("Settings")
@@ -425,6 +444,9 @@ struct SettingsView: View {
             }
             .sheet(isPresented: $showingExportView) {
                 ExportView()
+            }
+            .sheet(isPresented: $showingAbout) {
+                AboutView()
             }
             #if DEBUG
             .sheet(isPresented: $showingDevMenu) {
