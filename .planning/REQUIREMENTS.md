@@ -26,6 +26,8 @@ Requirements for pre-launch audit fixes. Each maps to roadmap phases.
 - [x] **UX-08**: Chart segmented control should show months (1M, 3M, 6M) not days (30D, 90D, 180D)
 - [x] **UX-09**: Move + FAB button to be right aligned
 - [x] **UX-10**: Redesign weight entry controls with plus/minus icons, increment labels, and accessibility support
+- [ ] **UX-11**: Replace FAB with iOS 26 Liquid Glass tab bar bottom accessory for adding entries
+- [ ] **UX-12**: Simplify weight entry screen to focused text input with number keyboard and labeled notes field
 
 ### Chart Improvements
 
@@ -49,6 +51,10 @@ Requirements for pre-launch audit fixes. Each maps to roadmap phases.
 
 - [x] **QUAL-01**: Migrate deprecated GCD usage to async/await (HealthKitManager, NotificationManager, CloudKitSyncManager)
 - [x] **QUAL-02**: Replace deprecated `.cornerRadius()` with `.clipShape(.rect(cornerRadius:))`
+
+### CI/CD
+
+- [x] **CICD-01**: App Store automation (export compliance, screenshot devices, CI linting)
 
 ## v2 Requirements
 
@@ -102,10 +108,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UX-10 | Phase 10 | Complete |
 | LOG-04 | Phase 11 | Complete |
 | LOG-05 | Phase 12 | Complete |
+| CICD-01 | Phase 13 | Complete |
+| UX-11 | Phase 14 | Pending |
+| UX-12 | Phase 15 | Pending |
 
 **Coverage:**
-- v1 requirements: 25 total
-- Mapped to phases: 25
+- v1 requirements: 28 total
+- Mapped to phases: 28
 - Unmapped: 0
 
 ---

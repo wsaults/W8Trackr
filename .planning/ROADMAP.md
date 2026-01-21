@@ -22,8 +22,9 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 10: Weight Entry UI Redesign** - Better weight entry controls with improved UX
 - [x] **Phase 11: Logbook Header & Cell Height** - Add column headers and reduce row height
 - [x] **Phase 12: Logbook Column Alignment** - Fix header/row column spacing alignment
-- [ ] **Phase 13: App Store Automation** - Fastlane setup, GitHub Actions CI, screenshots, metadata management
+- [x] **Phase 13: App Store Automation** - Fastlane setup, GitHub Actions CI, screenshots, metadata management
 - [ ] **Phase 14: Add Entry UI** - Replace FAB with Liquid Glass tab bar bottom accessory button
+- [ ] **Phase 15: Weight Entry Screen** - Simplify to focused text input with number keyboard and notes field
 
 ## Phase Details
 
@@ -248,7 +249,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 13-01-PLAN.md - Add export compliance key, update device targets, add SwiftLint to CI
+- [x] 13-01-PLAN.md - Add export compliance key, update device targets, add SwiftLint to CI
 
 **Details:**
 - Add ITSAppUsesNonExemptEncryption = NO to Info.plist (bypass export compliance questionnaire)
@@ -280,10 +281,34 @@ Plans:
 
 **Reference:** [Hacking with Swift - TabView Bottom Accessory](https://www.hackingwithswift.com/quick-start/swiftui/how-to-add-a-tabview-accessory)
 
+### Phase 15: Weight Entry Screen
+**Goal**: Simplify weight entry to a clean, focused text input experience
+**Depends on**: Phase 14
+**Requirements**: UX-12 (weight entry screen simplification)
+**Success Criteria** (what must be TRUE):
+  1. Weight input is a text field with "Weight" label above it
+  2. Weight text field is auto-focused when screen appears
+  3. Keyboard is decimal pad style (number keyboard)
+  4. Notes field appears below weight with "Notes" label
+  5. Notes field has no default/placeholder text
+  6. Existing plus/minus button controls removed
+**Plans**: 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 15 to break down)
+
+**Details:**
+- Replace WeightAdjustmentButton-based UI with simple TextField
+- Use @FocusState to auto-focus weight input on appear
+- Set .keyboardType(.decimalPad) for number entry
+- Add labeled notes TextField below weight
+- Remove increment/decrement button controls
+- Keep save/cancel functionality
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -299,8 +324,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 10. Weight Entry UI Redesign | 1/1 | Complete | 2026-01-21 |
 | 11. Logbook Header & Cell Height | 1/1 | Complete | 2026-01-21 |
 | 12. Logbook Column Alignment | 1/1 | Complete | 2026-01-21 |
-| 13. App Store Automation | 0/1 | Planned | - |
+| 13. App Store Automation | 1/1 | Complete | 2026-01-21 |
 | 14. Add Entry UI | 0/? | Not Started | - |
+| 15. Weight Entry Screen | 0/? | Not Started | - |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -331,4 +357,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 12 complete: 2026-01-21*
 *Phase 13 added: 2026-01-21*
 *Phase 13 planned: 2026-01-21*
+*Phase 13 complete: 2026-01-21*
 *Phase 14 added: 2026-01-21*
+*Phase 15 added: 2026-01-21*
