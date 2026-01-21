@@ -64,6 +64,8 @@ struct MilestoneProgressView: View {
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.CornerRadius.md))
         .cardShadow()
         .padding(.horizontal)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Next milestone \(Int(progress.nextMilestone)) \(progress.unit.rawValue). \(Int(animatedProgress * 100)) percent complete. \(progress.weightToNextMilestone.formatted(.number.precision(.fractionLength(1)))) \(progress.unit.rawValue) remaining.")
         .onAppear {
             withAnimation(.easeOut(duration: 0.8)) {
                 animatedProgress = progress.progressToNextMilestone
@@ -103,36 +105,40 @@ struct MilestoneProgressCompactView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            // Mini progress ring
-            ZStack {
-                Circle()
-                    .stroke(AppColors.surfaceSecondary, lineWidth: 4)
-                Circle()
-                    .trim(from: 0, to: progress.progressToNextMilestone)
-                    .stroke(AppColors.primary, style: StrokeStyle(lineWidth: 4, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
-            }
-            .frame(width: 36, height: 36)
-
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 8) {
                 Text("\(progress.weightToNextMilestone, specifier: "%.1f") \(progress.unit.rawValue) to next milestone")
                     .font(.subheadline)
                     .fontWeight(.medium)
                 Text("Goal: \(progress.nextMilestone, specifier: "%.0f") \(progress.unit.rawValue)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+
+                // Compact progress bar
+                GeometryReader { geometry in
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(AppColors.surfaceSecondary)
+                        Capsule()
+                            .fill(AppColors.primary)
+                            .frame(width: geometry.size.width * progress.progressToNextMilestone)
+                    }
+                }
+                .frame(height: 6)
             }
 
             Spacer()
         }
         .padding()
-        .background(Color(UIColor.systemBackground))
-        .clipShape(.rect(cornerRadius: 10))
+        .background(AppColors.surface)
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.CornerRadius.md))
+        .cardShadow()
         .padding(.horizontal)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Next milestone \(Int(progress.nextMilestone)) \(progress.unit.rawValue). \(Int(progress.progressToNextMilestone * 100)) percent complete. \(progress.weightToNextMilestone.formatted(.number.precision(.fractionLength(1)))) \(progress.unit.rawValue) remaining.")
     }
 }
 
-#Preview("Progress Ring") {
+#Preview("Linear Progress") {
     let progress = MilestoneProgress(
         currentWeight: 178,
         nextMilestone: 175,
