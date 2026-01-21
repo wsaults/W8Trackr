@@ -23,6 +23,14 @@ import SwiftUI
 ///    A toast informs users they can delete and add their own entries.
 ///
 /// 3. **Dev testing**: Use Settings > Developer Menu to load test datasets.
+/// Tab destinations for programmatic navigation
+enum TabDestination: Hashable {
+    case dashboard
+    case logbook
+    case settings
+    case addEntry
+}
+
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @AppStorage("preferredWeightUnit") var preferredWeightUnit: WeightUnit = Locale.current.measurementSystem == .metric ? .kg : .lb
@@ -31,6 +39,8 @@ struct ContentView: View {
     @AppStorage("milestoneInterval") var milestoneInterval: MilestoneInterval = .five
     @State private var showingInitialDataToast = false
     @State private var showingSaveError = false
+    @State private var selectedTab: TabDestination = .dashboard
+    @State private var previousTab: TabDestination = .dashboard
     @State private var showAddWeightView = false
 
     // MARK: - Data Sources
@@ -43,10 +53,10 @@ struct ContentView: View {
     ) private var completedMilestones: [CompletedMilestone]
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            TabView {
+        TabView(selection: $selectedTab) {
+            Tab("Dashboard", systemImage: "gauge.with.dots.needle.bottom.50percent", value: .dashboard) {
                 DashboardView(
-                    showAddWeightView: $showAddWeightView,
+                    selectedTab: $selectedTab,
                     entries: entries,
                     completedMilestones: completedMilestones,
                     preferredWeightUnit: preferredWeightUnit,
@@ -54,77 +64,67 @@ struct ContentView: View {
                     showSmoothing: showSmoothing,
                     milestoneInterval: milestoneInterval
                 )
-                    .tabItem {
-                        Label("Dashboard", systemImage: "gauge.with.dots.needle.bottom.50percent")
-                    }
+            }
 
+            Tab("Logbook", systemImage: "book", value: .logbook) {
                 LogbookView(entries: entries, preferredWeightUnit: preferredWeightUnit, goalWeight: goalWeight)
-                    .tabItem {
-                        Label("Logbook", systemImage: "book")
-                    }
+            }
 
+            Tab("Settings", systemImage: "gear", value: .settings) {
                 SettingsView(
                     weightUnit: $preferredWeightUnit,
                     goalWeight: $goalWeight,
                     showSmoothing: $showSmoothing,
                     milestoneInterval: $milestoneInterval
                 )
-                    .tabItem {
-                        Label("Settings", systemImage: "gear")
-                    }
             }
-            .tabBarMinimizeBehavior(.onScrollDown)
-            .sheet(isPresented: $showAddWeightView) {
-                WeightEntryView(entries: entries, weightUnit: preferredWeightUnit)
-            }
-            .onAppear {
-                // Validate goal weight on first launch or after unit change
-                // Handles the case where default 170.0 is invalid for metric users
-                if !preferredWeightUnit.isValidGoalWeight(goalWeight) {
-                    goalWeight = preferredWeightUnit.defaultWeight
-                }
 
-                if entries.isEmpty {
-                    WeightEntry.initialData.forEach { entry in
-                        modelContext.insert(entry)
-                    }
-                    do {
-                        try modelContext.save()
-                        withAnimation {
-                            showingInitialDataToast = true
-                        }
-                    } catch {
-                        showingSaveError = true
-                    }
-                }
+            // Trailing "+" button using search role for inline positioning
+            // Content is empty - we intercept selection and show a sheet instead
+            Tab("Add", systemImage: "plus", value: .addEntry, role: .search) {
+                Color.clear
             }
-            .toast(
-                isPresented: $showingInitialDataToast,
-                message: "Sample data added. Feel free to delete and add your own entries!",
-                systemImage: "info.circle"
-            )
-            .toast(isPresented: $showingSaveError, message: "Failed to save initial data", systemImage: "exclamationmark.triangle.fill")
-
-            addButton
-                .padding([.bottom, .trailing], 12)
         }
-    }
-
-    // MARK: - Add Button
-
-    private var addButton: some View {
-        Button {
-            showAddWeightView = true
-        } label: {
-            Image(systemName: "plus")
-                .font(.title2)
-                .fontWeight(.semibold)
-                .foregroundStyle(.white)
-                .frame(width: 50, height: 50)
+        .tabBarMinimizeBehavior(.onScrollDown)
+        .onChange(of: selectedTab) { oldValue, newValue in
+            if newValue == .addEntry {
+                // Store the previous tab and show the sheet
+                previousTab = oldValue
+                showAddWeightView = true
+                // Reset to previous tab so the + button doesn't stay selected
+                selectedTab = oldValue
+            }
         }
-        .glassEffect(.regular.interactive())
-        .accessibilityLabel("Add weight entry")
-        .accessibilityHint("Opens form to log a new weight measurement")
+        .sheet(isPresented: $showAddWeightView) {
+            WeightEntryView(entries: entries, weightUnit: preferredWeightUnit)
+        }
+        .onAppear {
+            // Validate goal weight on first launch or after unit change
+            // Handles the case where default 170.0 is invalid for metric users
+            if !preferredWeightUnit.isValidGoalWeight(goalWeight) {
+                goalWeight = preferredWeightUnit.defaultWeight
+            }
+
+            if entries.isEmpty {
+                WeightEntry.initialData.forEach { entry in
+                    modelContext.insert(entry)
+                }
+                do {
+                    try modelContext.save()
+                    withAnimation {
+                        showingInitialDataToast = true
+                    }
+                } catch {
+                    showingSaveError = true
+                }
+            }
+        }
+        .toast(
+            isPresented: $showingInitialDataToast,
+            message: "Sample data added. Feel free to delete and add your own entries!",
+            systemImage: "info.circle"
+        )
+        .toast(isPresented: $showingSaveError, message: "Failed to save initial data", systemImage: "exclamationmark.triangle.fill")
     }
 }
 

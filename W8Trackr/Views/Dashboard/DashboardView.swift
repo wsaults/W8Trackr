@@ -31,7 +31,7 @@ import SwiftUI
 /// ```
 struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
-    @Binding var showAddWeightView: Bool
+    @Binding var selectedTab: TabDestination
     @State private var celebrationMilestone: Double?
 
     var entries: [WeightEntry]
@@ -131,7 +131,7 @@ struct DashboardView: View {
             title: "Begin Your Journey",
             description: "Track your weight to see trends and progress toward your goals.",
             actionTitle: "Log Your First Weight",
-            action: { showAddWeightView = true }
+            action: { selectedTab = .addEntry }
         )
     }
 
@@ -243,9 +243,9 @@ struct DashboardView: View {
 #if DEBUG
 @available(iOS 18, macOS 15, *)
 #Preview("With Data", traits: .modifier(DashboardPreview())) {
-    @Previewable @State var showAddWeightView = false
+    @Previewable @State var selectedTab: TabDestination = .dashboard
     DashboardView(
-        showAddWeightView: $showAddWeightView,
+        selectedTab: $selectedTab,
         entries: WeightEntry.shortSampleData,
         completedMilestones: [],
         preferredWeightUnit: .lb,
@@ -257,9 +257,9 @@ struct DashboardView: View {
 
 @available(iOS 18, macOS 15, *)
 #Preview("Empty", traits: .modifier(EmptyEntriesPreview())) {
-    @Previewable @State var showAddWeightView = false
+    @Previewable @State var selectedTab: TabDestination = .dashboard
     DashboardView(
-        showAddWeightView: $showAddWeightView,
+        selectedTab: $selectedTab,
         entries: [],
         completedMilestones: [],
         preferredWeightUnit: .lb,
