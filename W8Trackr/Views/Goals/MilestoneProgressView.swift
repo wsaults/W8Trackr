@@ -13,6 +13,7 @@ struct MilestoneProgressView: View {
     let onMilestoneReached: (() -> Void)?
 
     @State private var animatedProgress: Double = 0
+    @ScaledMetric(relativeTo: .body) private var barHeight: CGFloat = 12
 
     init(progress: MilestoneProgress, onMilestoneReached: (() -> Void)? = nil) {
         self.progress = progress
@@ -21,37 +22,12 @@ struct MilestoneProgressView: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            ZStack {
-                // Background track
-                Circle()
-                    .stroke(AppColors.surfaceSecondary, lineWidth: 12)
-
-                // Progress arc
-                Circle()
-                    .trim(from: 0, to: animatedProgress)
-                    .stroke(
-                        progressGradient,
-                        style: StrokeStyle(lineWidth: 12, lineCap: .round)
-                    )
-                    .rotationEffect(.degrees(-90))
-
-                // Center content
-                VStack(spacing: 4) {
-                    Text(progress.weightToNextMilestone, format: .number.precision(.fractionLength(1)))
-                        .font(.title)
-                        .fontWeight(.bold)
-                    Text("\(progress.unit.rawValue) to go")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            .frame(width: 120, height: 120)
-
-            // Milestone label
-            VStack(spacing: 2) {
+            // Header row: "Next Milestone" label left, milestone weight + unit right
+            HStack {
                 Text("Next Milestone")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                Spacer()
                 HStack(spacing: 4) {
                     Text(progress.nextMilestone, format: .number.precision(.fractionLength(0)))
                         .fontWeight(.semibold)
@@ -59,11 +35,34 @@ struct MilestoneProgressView: View {
                 }
                 .font(.subheadline)
             }
+
+            // Linear progress bar
+            progressBar
+
+            // Labels row: previous milestone left, "X.X to go" center, next milestone right
+            HStack {
+                Text(progress.previousMilestone, format: .number.precision(.fractionLength(0)))
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                HStack(spacing: 4) {
+                    Text(progress.weightToNextMilestone, format: .number.precision(.fractionLength(1)))
+                        .fontWeight(.semibold)
+                    Text("\(progress.unit.rawValue) to go")
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                Spacer()
+                Text(progress.nextMilestone, format: .number.precision(.fractionLength(0)))
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(Color(UIColor.systemBackground))
-        .clipShape(.rect(cornerRadius: 10))
+        .background(AppColors.surface)
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.CornerRadius.md))
+        .cardShadow()
         .padding(.horizontal)
         .onAppear {
             withAnimation(.easeOut(duration: 0.8)) {
@@ -81,13 +80,19 @@ struct MilestoneProgressView: View {
         }
     }
 
-    private var progressGradient: AngularGradient {
-        AngularGradient(
-            gradient: Gradient(colors: [.blue, .cyan, .blue]),
-            center: .center,
-            startAngle: .degrees(-90),
-            endAngle: .degrees(270)
-        )
+    private var progressBar: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                // Background track
+                Capsule()
+                    .fill(AppColors.surfaceSecondary)
+                // Filled progress
+                Capsule()
+                    .fill(AppGradients.progressPositive)
+                    .frame(width: max(0, geometry.size.width * animatedProgress))
+            }
+        }
+        .frame(height: barHeight)
     }
 }
 
