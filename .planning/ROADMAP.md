@@ -26,7 +26,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 14: Add Entry UI** - Replace FAB with Liquid Glass tab bar bottom accessory button
 - [x] **Phase 15: Weight Entry Screen** - Simplify to focused text input with number keyboard and notes field
 - [x] **Phase 16: Trailing FAB Button** - Move add button to right of tab bar using Tab(role: .search) pattern
-- [ ] **Phase 17: Next Milestone UI** - Improve progress bar direction (left-to-right) and overall design/informativeness
+- [x] **Phase 17: Next Milestone UI** - Improve progress bar direction (left-to-right) and overall design/informativeness
 
 ## Phase Details
 
@@ -347,7 +347,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 17-01-PLAN.md - Replace circular progress ring with linear horizontal progress bar
+- [x] 17-01-PLAN.md - Replace circular progress ring with linear horizontal progress bar
 
 **Details:**
 - Replace Circle().trim() with Capsule()-based horizontal progress bar
@@ -380,7 +380,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 14. Add Entry UI | 1/1 | Complete | 2026-01-21 |
 | 15. Weight Entry Screen | 1/2 | In Progress | - |
 | 16. Trailing FAB Button | 1/1 | Complete | 2026-01-21 |
-| 17. Next Milestone UI | 0/1 | Planned | - |
+| 17. Next Milestone UI | 1/1 | Complete | 2026-01-21 |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -422,3 +422,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 16 complete: 2026-01-21*
 *Phase 17 added: 2026-01-21*
 *Phase 17 planned: 2026-01-21*
+*Phase 17 complete: 2026-01-21*
