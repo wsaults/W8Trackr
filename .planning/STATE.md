@@ -92,6 +92,7 @@ Recent decisions affecting current work:
 
 1. **Add localization support** (ui) - 2026-01-20
 2. **Add full accessibility support** (ui) - 2026-01-20
+3. **Add full test coverage** (testing) - 2026-01-20
 
 ### Blockers/Concerns
 
