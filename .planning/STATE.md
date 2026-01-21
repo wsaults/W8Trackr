@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 
 ## Current Position
 
-Phase: 12 of 12 (Logbook Column Alignment)
+Phase: 13 of 13 (App Store Automation)
 Plan: 1 of 1 in current phase
 Status: Complete
-Last activity: 2026-01-21 - Completed 12-01-PLAN.md
+Last activity: 2026-01-21 - Completed 13-01-PLAN.md
 
-Progress: [############] 100% (12 of 12 phases complete)
+Progress: [#############] 100% (13 of 13 phases complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 20
-- Average duration: 4.5 minutes
-- Total execution time: 1.50 hours
+- Total plans completed: 21
+- Average duration: 4.4 minutes
+- Total execution time: 1.57 hours
 
 **By Phase:**
 
@@ -39,9 +39,10 @@ Progress: [############] 100% (12 of 12 phases complete)
 | 10-weight-entry-ui-redesign | 1 | 3 min | 3 min |
 | 11-logbook-header-cell-height | 1 | 12 min | 12 min |
 | 12-logbook-column-alignment | 1 | 5 min | 5 min |
+| 13-app-store-automation | 1 | 4 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 09-01 (4 min), 10-01 (3 min), 11-01 (12 min), 12-01 (5 min)
+- Last 5 plans: 10-01 (3 min), 11-01 (12 min), 12-01 (5 min), 13-01 (4 min)
 - Trend: Highly efficient execution, sub-5 minute average
 
 *Updated after each plan completion*
@@ -100,6 +101,9 @@ Recent decisions affecting current work:
 - [12-01]: Fixed column widths over flexible frames for consistent alignment
 - [12-01]: Always render all columns (empty if nil) to prevent visual shift
 - [12-01]: Centralized LogbookLayout enum for single source of truth
+- [13-01]: ITSAppUsesNonExemptEncryption=false for HTTPS-only encryption
+- [13-01]: iPhone 16 Pro Max as primary 6.9-inch screenshot device
+- [13-01]: SwiftLint --strict mode in CI for warnings-as-errors
 
 ### Pending Todos
 
@@ -114,12 +118,12 @@ None remaining. All phases complete and verified.
 ## Session Continuity
 
 Last session: 2026-01-21
-Stopped at: Completed 12-01-PLAN.md (MILESTONE COMPLETE)
+Stopped at: Completed 13-01-PLAN.md (MILESTONE COMPLETE)
 Resume file: None
 
 ## Project Completion Status
 
-12 of 12 phases complete:
+13 of 13 phases complete:
 - Phase 1: Critical Bugs (2 plans) DONE
 - Phase 2: Chart Animation (1 plan) DONE
 - Phase 3: UX Polish (2 plans) DONE
@@ -132,8 +136,9 @@ Resume file: None
 - Phase 10: Weight Entry UI Redesign (1 plan) DONE
 - Phase 11: Logbook Header & Cell Height (1 plan) DONE
 - Phase 12: Logbook Column Alignment (1 plan) DONE
+- Phase 13: App Store Automation (1 plan) DONE
 
-Total: 20 plans executed
+Total: 21 plans executed
 
 ### Roadmap Evolution
 
@@ -145,13 +150,16 @@ Total: 20 plans executed
 - Phase 10 added: Weight entry UI redesign (better controls, improved UX)
 - Phase 11 added: Logbook header & cell height (column headers, reduced row height)
 - Phase 12 added: Logbook column alignment (fix spacing between header and row columns)
+- Phase 13 added: App Store automation (fastlane, GitHub Actions, screenshots, metadata)
 
 ## Code Quality Status
 
 - SwiftLint: 0 violations (1 pre-existing warning about SettingsView body length)
+- SwiftLint CI: Enforced on every PR with --strict mode
 - All managers using @MainActor + @Observable
 - All deprecated APIs replaced (foregroundColor -> foregroundStyle)
 - Test files organized by domain
 - All views using adaptive AppColors
 - No hardcoded colors that break in light/dark mode
 - Logbook layout centralized in LogbookLayout enum
+- Export compliance declared for App Store
