@@ -16,6 +16,7 @@ struct SettingsView: View {
     @Binding var weightUnit: WeightUnit
     @Binding var goalWeight: Double
     @Binding var showSmoothing: Bool
+    @Binding var milestoneInterval: MilestoneInterval
     @State private var localGoalWeight: Double = 0.0
     @State private var showingDeleteAlert = false
     @State private var reminderTime: Date
@@ -29,10 +30,16 @@ struct SettingsView: View {
     @State private var showingUndoToast = false
     @State private var showingAbout = false
 
-    init(weightUnit: Binding<WeightUnit>, goalWeight: Binding<Double>, showSmoothing: Binding<Bool>) {
+    init(
+        weightUnit: Binding<WeightUnit>,
+        goalWeight: Binding<Double>,
+        showSmoothing: Binding<Bool>,
+        milestoneInterval: Binding<MilestoneInterval>
+    ) {
         _weightUnit = weightUnit
         _goalWeight = goalWeight
         _showSmoothing = showSmoothing
+        _milestoneInterval = milestoneInterval
         _reminderTime = State(initialValue: NotificationManager.getReminderTime())
     }
 
@@ -244,6 +251,21 @@ struct SettingsView: View {
         }
     }
 
+    private var milestoneSection: some View {
+        Section {
+            Picker("Celebration Interval", selection: $milestoneInterval) {
+                ForEach(MilestoneInterval.allCases, id: \.self) { interval in
+                    Text(interval.displayLabel(for: weightUnit))
+                }
+            }
+            .pickerStyle(.segmented)
+        } header: {
+            Text("Milestones")
+        } footer: {
+            Text("Celebrate every \(milestoneInterval.displayLabel(for: weightUnit)) of progress toward your goal.")
+        }
+    }
+
     private var reminderSection: some View {
         Section {
             Toggle("Daily Reminder", isOn: $notificationManager.isReminderEnabled)
@@ -377,6 +399,7 @@ struct SettingsView: View {
             Form {
                 weightSettingsSection
                 chartSettingsSection
+                milestoneSection
                 reminderSection
                 smartRemindersSection
                 healthSection
@@ -481,11 +504,13 @@ struct SettingsView: View {
     @Previewable @State var weightUnit: WeightUnit = .lb
     @Previewable @State var goalWeight: Double = 160.0
     @Previewable @State var showSmoothing: Bool = true
+    @Previewable @State var milestoneInterval: MilestoneInterval = .five
 
     SettingsView(
         weightUnit: $weightUnit,
         goalWeight: $goalWeight,
-        showSmoothing: $showSmoothing
+        showSmoothing: $showSmoothing,
+        milestoneInterval: $milestoneInterval
     )
 }
 
@@ -494,11 +519,13 @@ struct SettingsView: View {
     @Previewable @State var weightUnit: WeightUnit = .kg
     @Previewable @State var goalWeight: Double = 72.5
     @Previewable @State var showSmoothing: Bool = true
+    @Previewable @State var milestoneInterval: MilestoneInterval = .ten
 
     SettingsView(
         weightUnit: $weightUnit,
         goalWeight: $goalWeight,
-        showSmoothing: $showSmoothing
+        showSmoothing: $showSmoothing,
+        milestoneInterval: $milestoneInterval
     )
 }
 
@@ -507,11 +534,13 @@ struct SettingsView: View {
     @Previewable @State var weightUnit: WeightUnit = .lb
     @Previewable @State var goalWeight: Double = 165.0
     @Previewable @State var showSmoothing: Bool = false
+    @Previewable @State var milestoneInterval: MilestoneInterval = .fifteen
 
     SettingsView(
         weightUnit: $weightUnit,
         goalWeight: $goalWeight,
-        showSmoothing: $showSmoothing
+        showSmoothing: $showSmoothing,
+        milestoneInterval: $milestoneInterval
     )
 }
 #endif

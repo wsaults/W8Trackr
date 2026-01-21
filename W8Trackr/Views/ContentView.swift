@@ -60,7 +60,12 @@ struct ContentView: View {
                     Label("Logbook", systemImage: "book")
                 }
             
-            SettingsView(weightUnit: $preferredWeightUnit, goalWeight: $goalWeight, showSmoothing: $showSmoothing)
+            SettingsView(
+                weightUnit: $preferredWeightUnit,
+                goalWeight: $goalWeight,
+                showSmoothing: $showSmoothing,
+                milestoneInterval: $milestoneInterval
+            )
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
