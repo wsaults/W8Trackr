@@ -24,8 +24,8 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 12: Logbook Column Alignment** - Fix header/row column spacing alignment
 - [x] **Phase 13: App Store Automation** - Fastlane setup, GitHub Actions CI, screenshots, metadata management
 - [x] **Phase 14: Add Entry UI** - Replace FAB with Liquid Glass tab bar bottom accessory button
-- [ ] **Phase 15: Weight Entry Screen** - Simplify to focused text input with number keyboard and notes field
-- [ ] **Phase 16: Trailing FAB Button** - Move add button to right of tab bar using GlassEffectContainer
+- [x] **Phase 15: Weight Entry Screen** - Simplify to focused text input with number keyboard and notes field
+- [ ] **Phase 16: Trailing FAB Button** - Move add button to right of tab bar using ZStack overlay
 - [ ] **Phase 17: Next Milestone UI** - Improve progress bar direction (left-to-right) and overall design/informativeness
 
 ## Phase Details
@@ -299,7 +299,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 15-01-PLAN.md - Redesign WeightEntryView with text input, date arrows, notes, expandable body fat, unsaved changes protection
+- [x] 15-01-PLAN.md - Redesign WeightEntryView with text input, date arrows, notes, expandable body fat, unsaved changes protection
 - [ ] 15-02-PLAN.md - Update FirstWeightStepView to text-only input and delete WeightAdjustmentButton component
 
 **Details:**
@@ -318,27 +318,23 @@ Plans:
 **Requirements**: UX-13 (trailing FAB positioning)
 **Success Criteria** (what must be TRUE):
   1. Add button appears to the right of the tab bar, not above it
-  2. Button uses Liquid Glass styling via `.glassEffect()`
-  3. Button and tab bar visually blend when close together using `GlassEffectContainer`
-  4. Button remains accessible during tab bar minimize on scroll
-  5. Remove `.tabViewBottomAccessory` usage (replaced by custom layout)
-**Plans**: 0 plans
+  2. Button uses Liquid Glass styling via `.glassEffect(.regular.interactive())`
+  3. Button remains accessible during tab bar minimize on scroll
+  4. Remove `.tabViewBottomAccessory` usage (replaced by ZStack overlay)
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 16 to break down)
+- [ ] 16-01-PLAN.md - Replace tabViewBottomAccessory with ZStack overlay and trailing FAB
 
 **Details:**
 - Replace `.tabViewBottomAccessory` with `ZStack(alignment: .bottomTrailing)` approach
-- Wrap tab bar and FAB in `GlassEffectContainer` for visual blending
-- Apply `.glassEffect()` to the floating button
-- Position button using `.safeAreaInset` or `.offset` to align with tab bar
+- Apply `.glassEffect(.regular.interactive())` to the floating button
+- Position button with 12pt padding from bottom and trailing edges
 - Maintain accessibility labels and hints
-- Handle tab bar minimize behavior (button should remain visible/accessible)
+- Tab bar minimize behavior remains unchanged
 
 **Reference:**
 - [Donny Wals - Liquid Glass Tab Bars](https://www.donnywals.com/exploring-tab-bars-on-ios-26-with-liquid-glass/)
-- [GlassEffectContainer Guide](https://dev.to/arshtechpro/understanding-glasseffectcontainer-in-ios-26-2n8p)
-- [Building Side-Floating FAB](https://iifx.dev/en/articles/457706754/building-the-new-ios-26-tab-bar-ui-liquid-glass-side-floating-fab)
 
 ### Phase 17: Next Milestone UI
 **Goal**: Improve the next milestone view with better visual design and more informative display
@@ -381,8 +377,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 12. Logbook Column Alignment | 1/1 | Complete | 2026-01-21 |
 | 13. App Store Automation | 1/1 | Complete | 2026-01-21 |
 | 14. Add Entry UI | 1/1 | Complete | 2026-01-21 |
-| 15. Weight Entry Screen | 0/2 | Not Started | - |
-| 16. Trailing FAB Button | 0/? | Not Started | - |
+| 15. Weight Entry Screen | 1/2 | In Progress | - |
+| 16. Trailing FAB Button | 0/1 | Planned | - |
 | 17. Next Milestone UI | 0/? | Not Started | - |
 
 ---
@@ -421,4 +417,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 15 added: 2026-01-21*
 *Phase 15 planned: 2026-01-21*
 *Phase 16 added: 2026-01-21*
+*Phase 16 planned: 2026-01-21*
 *Phase 17 added: 2026-01-21*
