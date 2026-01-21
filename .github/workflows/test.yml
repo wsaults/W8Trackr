@@ -25,6 +25,12 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
+      - name: Run SwiftLint
+        run: swiftlint lint --strict --reporter github-actions-logging
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
