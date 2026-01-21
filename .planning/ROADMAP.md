@@ -21,7 +21,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 9: Milestone Intervals** - Customizable milestone celebration intervals
 - [x] **Phase 10: Weight Entry UI Redesign** - Better weight entry controls with improved UX
 - [x] **Phase 11: Logbook Header & Cell Height** - Add column headers and reduce row height
-- [ ] **Phase 12: Logbook Column Alignment** - Fix header/row column spacing alignment
+- [x] **Phase 12: Logbook Column Alignment** - Fix header/row column spacing alignment
 
 ## Phase Details
 
@@ -226,7 +226,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 12-01-PLAN.md - Extract LogbookLayout constants, apply fixed widths, always render all columns
+- [x] 12-01-PLAN.md - Extract LogbookLayout constants, apply fixed widths, always render all columns
 
 **Details:**
 - Create LogbookLayout enum with shared spacing and width constants
@@ -251,7 +251,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 9. Milestone Intervals | 1/1 | Complete | 2026-01-21 |
 | 10. Weight Entry UI Redesign | 1/1 | Complete | 2026-01-21 |
 | 11. Logbook Header & Cell Height | 1/1 | Complete | 2026-01-21 |
-| 12. Logbook Column Alignment | 0/1 | Not Started | - |
+| 12. Logbook Column Alignment | 1/1 | Complete | 2026-01-21 |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -279,3 +279,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 11 complete: 2026-01-21*
 *Phase 12 added: 2026-01-21*
 *Phase 12 planned: 2026-01-21*
+*Phase 12 complete: 2026-01-21*

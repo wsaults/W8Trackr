@@ -38,7 +38,8 @@ Requirements for pre-launch audit fixes. Each maps to roadmap phases.
 - [x] **LOG-01**: Segment logbook entries by month with clear section headers
 - [x] **LOG-02**: Enhanced row display with date, weight, moving average, weekly rate arrow, notes indicator
 - [x] **LOG-03**: Add filter menu in nav bar with Notes, Milestones, Day of Week filters
-- [ ] **LOG-04**: Add column headers above logbook rows with reduced row height for data density
+- [x] **LOG-04**: Add column headers above logbook rows with reduced row height for data density
+- [x] **LOG-05**: Fix spacing alignment between logbook header and row columns
 
 ### Settings
 
@@ -99,11 +100,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LOG-03 | Phase 8 | Complete |
 | SETTINGS-01 | Phase 9 | Complete |
 | UX-10 | Phase 10 | Complete |
-| LOG-04 | Phase 11 | Planned |
+| LOG-04 | Phase 11 | Complete |
+| LOG-05 | Phase 12 | Complete |
 
 **Coverage:**
-- v1 requirements: 24 total
-- Mapped to phases: 24
+- v1 requirements: 25 total
+- Mapped to phases: 25
 - Unmapped: 0
 
 ---
