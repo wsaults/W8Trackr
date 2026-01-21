@@ -22,6 +22,8 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 10: Weight Entry UI Redesign** - Better weight entry controls with improved UX
 - [x] **Phase 11: Logbook Header & Cell Height** - Add column headers and reduce row height
 - [x] **Phase 12: Logbook Column Alignment** - Fix header/row column spacing alignment
+- [ ] **Phase 13: App Store Automation** - Fastlane setup, GitHub Actions CI, screenshots, metadata management
+- [ ] **Phase 14: Add Entry UI** - Replace FAB with Liquid Glass tab bar bottom accessory button
 
 ## Phase Details
 
@@ -233,10 +235,55 @@ Plans:
 - Ensure LogbookHeaderView and LogbookRowView use identical column widths and spacing
 - Always render all columns (show placeholder for missing data) to prevent layout shift
 
+### Phase 13: App Store Automation
+**Goal**: Complete App Store automation setup with export compliance, updated device targets, and CI linting
+**Depends on**: Phase 12
+**Requirements**: CICD-01 (App Store automation)
+**Success Criteria** (what must be TRUE):
+  1. Fastlane configured for App Store submission workflows
+  2. GitHub Actions CI pipeline runs tests on push/PR
+  3. Fastlane can update App Store description/metadata
+  4. Automated screenshot capture configured for all required device sizes
+  5. App declares ITSAppUsesNonExemptEncryption = NO to bypass export compliance
+**Plans**: 1 plan
+
+Plans:
+- [ ] 13-01-PLAN.md - Add export compliance key, update device targets, add SwiftLint to CI
+
+**Details:**
+- Add ITSAppUsesNonExemptEncryption = NO to Info.plist (bypass export compliance questionnaire)
+- Update Snapfile and Fastfile device lists for 2026 requirements (6.9" iPhone, 13" iPad)
+- Add SwiftLint step to GitHub Actions test.yml workflow
+- Most infrastructure already exists (Fastfile, Appfile, Snapfile, metadata, screenshot tests)
+
+### Phase 14: Add Entry UI
+**Goal**: Replace floating action button (FAB) with iOS 26 Liquid Glass tab bar bottom accessory for adding weight entries
+**Depends on**: Phase 13
+**Requirements**: UX-11 (add entry UI improvement)
+**Success Criteria** (what must be TRUE):
+  1. Add entry button appears as tab bar bottom accessory (inline with tab bar)
+  2. Button uses `.tabViewBottomAccessory()` modifier with Liquid Glass styling
+  3. Tab bar minimizes on scroll with `.tabBarMinimizeBehavior(.onScrollDown)`
+  4. Accessory slides inline when tab bar minimizes
+  5. Existing FAB removed from dashboard
+**Plans**: 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 14 to break down)
+
+**Details:**
+- Use `.tabViewBottomAccessory { }` modifier on TabView in ContentView
+- Button gets automatic Liquid Glass capsule background
+- Add `.tabBarMinimizeBehavior(.onScrollDown)` for scroll-to-minimize
+- Remove current FAB overlay from SummaryView/Dashboard
+- Wire button to show WeightEntrySheet
+
+**Reference:** [Hacking with Swift - TabView Bottom Accessory](https://www.hackingwithswift.com/quick-start/swiftui/how-to-add-a-tabview-accessory)
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -252,6 +299,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 10. Weight Entry UI Redesign | 1/1 | Complete | 2026-01-21 |
 | 11. Logbook Header & Cell Height | 1/1 | Complete | 2026-01-21 |
 | 12. Logbook Column Alignment | 1/1 | Complete | 2026-01-21 |
+| 13. App Store Automation | 0/1 | Planned | - |
+| 14. Add Entry UI | 0/? | Not Started | - |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -280,3 +329,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 12 added: 2026-01-21*
 *Phase 12 planned: 2026-01-21*
 *Phase 12 complete: 2026-01-21*
+*Phase 13 added: 2026-01-21*
+*Phase 13 planned: 2026-01-21*
+*Phase 14 added: 2026-01-21*
