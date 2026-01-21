@@ -141,6 +141,7 @@ struct HeroCardView: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(.white.opacity(0.8))
             }
+            .fixedSize(horizontal: true, vertical: false)
 
             // Trend indicator
             if let changeText = formattedChange {
@@ -152,6 +153,8 @@ struct HeroCardView: View {
                     Text("\(changeText) \(weightUnit.rawValue) this week")
                         .font(.subheadline)
                         .fontWeight(.medium)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
                 .foregroundStyle(.white.opacity(0.9))
                 .padding(.horizontal, 12)

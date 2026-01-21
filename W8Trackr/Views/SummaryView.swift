@@ -133,7 +133,7 @@ struct SummaryView: View {
     }
 
     private func checkForNewMilestone() {
-        guard let progress = milestoneProgress else { return }
+        guard milestoneProgress != nil else { return }
 
         // Generate all milestones between start and goal
         let allMilestones = MilestoneCalculator.generateMilestones(

@@ -97,6 +97,7 @@ struct QuickStatCard: View {
             Text(subtitle)
                 .font(.caption2)
                 .foregroundStyle(AppColors.textSecondary)
+                .lineLimit(1)
 
             // Title
             Text(title)

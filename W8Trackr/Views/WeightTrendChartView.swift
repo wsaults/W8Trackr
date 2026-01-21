@@ -19,6 +19,20 @@ struct WeightTrendChartView: View {
     @State private var scrollPosition: Date = Date()
     @State private var selectedDate: Date?
 
+    private var initialScrollPosition: Date {
+        entries.max(by: { $0.date < $1.date })?.date ?? Date()
+    }
+
+    private var chartDateDomain: ClosedRange<Date> {
+        guard let firstDate = entries.min(by: { $0.date < $1.date })?.date,
+              let lastDate = entries.max(by: { $0.date < $1.date })?.date else {
+            return Date()...Date()
+        }
+        // Extend to include 14-day prediction
+        let predictionEnd = Calendar.current.date(byAdding: .day, value: 14, to: lastDate) ?? lastDate
+        return firstDate...predictionEnd
+    }
+
     private var filteredEntries: [WeightEntry] {
         guard let days = selectedRange.days else { return entries }
         
@@ -29,27 +43,66 @@ struct WeightTrendChartView: View {
     private func convertWeight(_ weight: Double) -> Double {
         WeightUnit.lb.convert(weight, to: weightUnit)
     }
-    
+
     private var yAxisPadding: Double {
         weightUnit == .kg ? 2.0 : 5.0
     }
-    
+
+    /// Entries currently visible in the scroll viewport
+    private var visibleEntries: [WeightEntry] {
+        let visibleEnd = scrollPosition.addingTimeInterval(visibleDomainSeconds)
+        return entries.filter { $0.date >= scrollPosition && $0.date <= visibleEnd }
+    }
+
+    /// Smoothed trend points currently visible in the scroll viewport
+    private var visibleTrendPoints: [TrendPoint] {
+        let visibleEnd = scrollPosition.addingTimeInterval(visibleDomainSeconds)
+        return smoothedTrend.filter { $0.date >= scrollPosition && $0.date <= visibleEnd }
+    }
+
+    /// Fallback weight range when no data is visible (e.g., scrolled into prediction area)
+    private var fallbackWeightRange: (min: Double, max: Double) {
+        // Use the most recent entry as fallback
+        if let lastEntry = entries.max(by: { $0.date < $1.date }) {
+            let weight = lastEntry.weightValue(in: weightUnit)
+            return (weight - yAxisPadding, weight + yAxisPadding)
+        }
+        return (0, 100) // Ultimate fallback
+    }
+
     private var minWeight: Double {
-        let dataMin = filteredEntries.map { $0.weightValue(in: weightUnit) }.min() ?? 0
-        let goalMin = goalWeight > 0 ? goalWeight : Double.infinity
-        return min(dataMin, goalMin) - yAxisPadding
+        // Use visible entries for dynamic Y-axis as user scrolls
+        // Goal line is drawn but doesn't affect viewport bounds
+        let entryWeights = visibleEntries.map { $0.weightValue(in: weightUnit) }
+        let trendWeights = visibleTrendPoints.map { $0.smoothedWeight(in: weightUnit) }
+        let allWeights = entryWeights + trendWeights
+
+        // Fall back to last known weight if scrolled past all data
+        guard let minVal = allWeights.min() else {
+            return fallbackWeightRange.min
+        }
+        return minVal - yAxisPadding
     }
 
     private var maxWeight: Double {
-        let dataMax = filteredEntries.map { $0.weightValue(in: weightUnit) }.max() ?? 0
-        let goalMax = goalWeight > 0 ? goalWeight : 0
-        return max(dataMax, goalMax) + yAxisPadding
+        // Use visible entries for dynamic Y-axis as user scrolls
+        // Goal line is drawn but doesn't affect viewport bounds
+        let entryWeights = visibleEntries.map { $0.weightValue(in: weightUnit) }
+        let trendWeights = visibleTrendPoints.map { $0.smoothedWeight(in: weightUnit) }
+        let allWeights = entryWeights + trendWeights
+
+        // Fall back to last known weight if scrolled past all data
+        guard let maxVal = allWeights.max() else {
+            return fallbackWeightRange.max
+        }
+        return maxVal + yAxisPadding
     }
     
     // Calculate smoothed trend using exponential moving average
+    // Uses ALL entries for consistent trendline across scroll positions
     private var smoothedTrend: [TrendPoint] {
         TrendCalculator.exponentialMovingAverage(
-            entries: filteredEntries,
+            entries: entries,
             span: 10
         )
     }
@@ -105,31 +158,36 @@ struct WeightTrendChartView: View {
     }
 
     // Holt's Double Exponential Smoothing prediction
-    // Generates prediction points from last data point to 14 days ahead
+    // Generates prediction points anchored to trendline endpoint
     private var predictionPoints: [ChartEntry] {
-        guard let holtResult = TrendCalculator.calculateHolt(entries: filteredEntries) else {
+        guard let holtResult = TrendCalculator.calculateHolt(entries: entries) else {
             return []
         }
 
+        // Use last smoothed point for visual continuity with trendline
+        let lastSmoothed = smoothedTrend.last
+        let startWeight = lastSmoothed?.smoothedWeight ?? holtResult.level
+        let startDate = lastSmoothed?.date ?? holtResult.lastDate
+
         var points: [ChartEntry] = []
 
-        // Add starting point at last actual data point
+        // Starting point anchored to trendline endpoint
         points.append(ChartEntry(
-            date: holtResult.lastDate,
-            weight: convertWeight(holtResult.level),
+            date: startDate,
+            weight: convertWeight(startWeight),
             isPrediction: true,
             showPoint: false,
             isIndividualEntry: false,
             isSmoothed: false
         ))
 
-        // Add intermediate and end points for smooth curve
+        // Future points using Holt's trend slope from smoothed endpoint
         for daysAhead in [7, 14] {
             guard let futureDate = Calendar.current.date(
-                byAdding: .day, value: daysAhead, to: holtResult.lastDate
+                byAdding: .day, value: daysAhead, to: startDate
             ) else { continue }
 
-            let futureWeight = convertWeight(holtResult.forecast(daysAhead: daysAhead))
+            let futureWeight = convertWeight(startWeight + Double(daysAhead) * holtResult.trend)
 
             points.append(ChartEntry(
                 date: futureDate,
@@ -206,8 +264,8 @@ struct WeightTrendChartView: View {
     }
 
     private var chartData: [ChartEntry] {
-        // Get all entries sorted by date
-        let sortedEntries = filteredEntries.sorted { $0.date < $1.date }
+        // Get ALL entries sorted by date for full historical scrolling
+        let sortedEntries = entries.sorted { $0.date < $1.date }
 
         var data: [ChartEntry] = []
 
@@ -272,6 +330,8 @@ struct WeightTrendChartView: View {
                             Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
                                 .font(.caption)
                                 .foregroundStyle(AppColors.chartGoal)
+                                .lineLimit(1)
+                                .fixedSize(horizontal: true, vertical: false)
                                 .background(Color(UIColor.systemBackground))
                         }
                 }
@@ -323,15 +383,18 @@ struct WeightTrendChartView: View {
             }
             .chartForegroundStyleScale([
                 "Entry": AppColors.chartEntry,
-                "Trend": AppColors.chartEntry,
+                "Trend": AppColors.chartTrend,
                 "Predicted": AppColors.chartPredicted
             ])
             .chartYScale(domain: minWeight...maxWeight)
+            .chartXScale(domain: chartDateDomain)
             .chartYAxis {
                 AxisMarks(preset: .extended, position: .leading) { value in
                     AxisValueLabel {
                         if let weight = value.as(Double.self) {
                             Text("\(weight, format: .number.precision(.fractionLength(1))) \(weightUnit.rawValue)")
+                                .lineLimit(1)
+                                .fixedSize(horizontal: true, vertical: false)
                         }
                     }
                     AxisGridLine()
@@ -350,10 +413,14 @@ struct WeightTrendChartView: View {
             .chartScrollPosition(x: $scrollPosition)
             .chartXSelection(value: $selectedDate)
             .animation(.snappy, value: selectedRange)
+            .animation(.easeInOut(duration: 0.15), value: scrollPosition)
             .padding(.bottom)
             .accessibilityChartDescriptor(self)
         }
         .padding(.horizontal)
+        .onAppear {
+            scrollPosition = initialScrollPosition
+        }
     }
 }
 
