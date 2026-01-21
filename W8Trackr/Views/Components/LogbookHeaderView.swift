@@ -11,30 +11,33 @@ import SwiftUI
 struct LogbookHeaderView: View {
     var body: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 12) {
+            HStack(spacing: LogbookLayout.columnSpacing) {
                 // Date column - matches dateColumn frame in LogbookRowView
                 Text("Date")
-                    .frame(width: 40, alignment: .leading)
+                    .frame(width: LogbookLayout.dateColumnWidth, alignment: .leading)
 
                 Spacer()
 
                 // Weight column
                 Text("Weight")
+                    .frame(width: LogbookLayout.weightColumnWidth, alignment: .trailing)
 
                 // Moving average column
                 Text("Avg")
+                    .frame(width: LogbookLayout.avgColumnWidth, alignment: .trailing)
 
                 // Weekly rate column
                 Text("Rate")
+                    .frame(width: LogbookLayout.rateColumnWidth, alignment: .trailing)
 
                 // Notes indicator column - matches approximate width of note icon
                 Text("Notes")
-                    .frame(width: 24)
+                    .frame(width: LogbookLayout.notesColumnWidth, alignment: .center)
             }
             .font(.caption)
             .foregroundStyle(.secondary)
             .padding(.horizontal)
-            .padding(.vertical, AppTheme.Spacing.xs)
+            .padding(.vertical, LogbookLayout.headerVerticalPadding)
             .background(AppColors.background)
 
             Divider()
@@ -56,6 +59,23 @@ struct LogbookHeaderView: View {
         movingAverage: 171.2,
         weeklyRate: -1.5,
         hasNote: true
+    )
+    return VStack(spacing: 0) {
+        LogbookHeaderView()
+        List {
+            LogbookRowView(rowData: rowData, weightUnit: .lb) {}
+        }
+        .listStyle(.plain)
+    }
+}
+
+#Preview("Header with Empty Row") {
+    let entry = WeightEntry(weight: 170.0, date: .now)
+    let rowData = LogbookRowData(
+        entry: entry,
+        movingAverage: nil,
+        weeklyRate: nil,
+        hasNote: false
     )
     return VStack(spacing: 0) {
         LogbookHeaderView()
