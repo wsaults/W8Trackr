@@ -13,7 +13,7 @@ enum AppColors {
     // MARK: - Primary Colors
 
     /// Warm coral - main interactive elements, FAB buttons
-    static let primary = Color("Primary")
+    static let primary = Color("AppPrimary")
 
     /// Darker coral for pressed/focused states
     static let primaryDark = Color("PrimaryDark")
@@ -21,7 +21,7 @@ enum AppColors {
     // MARK: - Secondary Colors
 
     /// Soft teal - secondary actions, chart averages
-    static let secondary = Color("Secondary")
+    static let secondary = Color("AppSecondary")
 
     /// Darker teal for pressed states
     static let secondaryDark = Color("SecondaryDark")
@@ -71,6 +71,9 @@ enum AppColors {
 
     /// Chart line for averaged/trend data
     static let chartAverage = Color("ChartAverage")
+
+    /// Chart line for smoothed trendline (blue)
+    static let chartTrend = Color("ChartTrend")
 
     /// Chart line for predicted values
     static let chartPredicted = Color("ChartPredicted")
@@ -146,6 +149,7 @@ extension AppColors {
         // Chart colors
         static let chartEntry = Color(hex: "#FF6B6B")
         static let chartAverage = Color(hex: "#FF6B6B").opacity(0.5)
+        static let chartTrend = Color(hex: "#4A90D9")
         static let chartPredicted = Color(hex: "#FFA07A")
         static let chartGoal = Color(hex: "#2ECC71")
     }
