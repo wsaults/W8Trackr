@@ -267,10 +267,10 @@ Plans:
   3. Tab bar minimizes on scroll with `.tabBarMinimizeBehavior(.onScrollDown)`
   4. Accessory slides inline when tab bar minimizes
   5. Existing FAB removed from dashboard
-**Plans**: 0 plans
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 14 to break down)
+- [ ] 14-01-PLAN.md - Add tab bar accessory and remove FAB from DashboardView/SummaryView
 
 **Details:**
 - Use `.tabViewBottomAccessory { }` modifier on TabView in ContentView
@@ -325,7 +325,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 11. Logbook Header & Cell Height | 1/1 | Complete | 2026-01-21 |
 | 12. Logbook Column Alignment | 1/1 | Complete | 2026-01-21 |
 | 13. App Store Automation | 1/1 | Complete | 2026-01-21 |
-| 14. Add Entry UI | 0/? | Not Started | - |
+| 14. Add Entry UI | 0/1 | Not Started | - |
 | 15. Weight Entry Screen | 0/? | Not Started | - |
 
 ---
@@ -359,4 +359,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 13 planned: 2026-01-21*
 *Phase 13 complete: 2026-01-21*
 *Phase 14 added: 2026-01-21*
+*Phase 14 planned: 2026-01-21*
 *Phase 15 added: 2026-01-21*
