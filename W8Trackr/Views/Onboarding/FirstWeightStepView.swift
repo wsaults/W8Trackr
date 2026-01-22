@@ -65,10 +65,16 @@ struct FirstWeightStepView: View {
                                     .keyboardType(.decimalPad)
                                     .fixedSize()
                                     .multilineTextAlignment(.trailing)
-                                    .foregroundStyle(localWeightText.isEmpty || isValidWeight ? AppColors.primaryDark : AppColors.primaryDark.opacity(0.5))
+                                    .foregroundStyle(
+                                        localWeightText.isEmpty || isValidWeight
+                                            ? AppColors.primaryDark
+                                            : AppColors.primaryDark.opacity(0.5)
+                                    )
                                     .focused($isWeightFieldFocused)
                                     .frame(minWidth: 80)
                                     .padding(.trailing, 4)
+                                    .accessibilityLabel("Current weight")
+                                    .accessibilityHint("Enter your starting weight")
                                     .toolbar {
                                         ToolbarItemGroup(placement: .keyboard) {
                                             Spacer()
@@ -142,6 +148,7 @@ struct FirstWeightStepView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .disabled(!isValidWeight)
+            .accessibilityHint("Proceed to next step")
             .padding(.horizontal, 30)
             .padding(.bottom, 20)
             .opacity(showContent ? 1.0 : 0.0)

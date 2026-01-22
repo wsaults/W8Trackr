@@ -62,6 +62,7 @@ struct CompletionStepView: View {
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
+            .accessibilityHint("Complete onboarding and go to dashboard")
             .padding(.horizontal, 30)
             .padding(.bottom, 20)
             .scaleEffect(showContent ? 1.0 : 0.95)

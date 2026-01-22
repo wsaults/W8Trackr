@@ -67,6 +67,7 @@ struct WelcomeStepView: View {
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
+            .accessibilityHint("Begin setting up your weight tracking")
             .padding(.horizontal, 30)
             .padding(.bottom, 20)
             .scaleEffect(showButton ? 1.0 : 0.95)

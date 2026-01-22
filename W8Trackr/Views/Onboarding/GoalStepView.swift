@@ -65,10 +65,16 @@ struct GoalStepView: View {
                                     .keyboardType(.decimalPad)
                                     .fixedSize()
                                     .multilineTextAlignment(.trailing)
-                                    .foregroundStyle(localGoalText.isEmpty || isValidGoal ? AppColors.primaryDark : AppColors.primaryDark.opacity(0.5))
+                                    .foregroundStyle(
+                                        localGoalText.isEmpty || isValidGoal
+                                            ? AppColors.primaryDark
+                                            : AppColors.primaryDark.opacity(0.5)
+                                    )
                                     .focused($isGoalFieldFocused)
                                     .frame(minWidth: 80)
                                     .padding(.trailing, 4)
+                                    .accessibilityLabel("Goal weight")
+                                    .accessibilityHint("Enter your target weight")
                                     .toolbar {
                                         ToolbarItemGroup(placement: .keyboard) {
                                             Spacer()
@@ -142,6 +148,7 @@ struct GoalStepView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .disabled(!isValidGoal)
+            .accessibilityHint("Proceed to next step")
             .padding(.horizontal, 30)
             .padding(.bottom, 20)
             .opacity(showContent ? 1.0 : 0.0)

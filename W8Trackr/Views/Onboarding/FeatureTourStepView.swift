@@ -88,6 +88,7 @@ struct FeatureTourStepView: View {
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
+            .accessibilityHint("Proceed to set up your goal")
             .padding(.horizontal, 30)
             .padding(.bottom, 20)
             .opacity(showContent ? 1.0 : 0.0)
@@ -153,6 +154,8 @@ private struct FeatureCard: View {
             .padding(.horizontal, 30)
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(feature.title). \(feature.description)")
     }
 }
 

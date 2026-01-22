@@ -71,6 +71,7 @@ struct UnitPreferenceStepView: View {
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
+            .accessibilityHint("Proceed to next step")
             .padding(.horizontal, 30)
             .padding(.bottom, 20)
             .opacity(showContent ? 1.0 : 0.0)
@@ -150,6 +151,9 @@ private struct UnitOptionCard: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("\(unitTitle) (\(unit.rawValue))")
+        .accessibilityHint("Select \(unit.rawValue) as your preferred weight unit")
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
     }
 }
 
