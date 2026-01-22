@@ -5,20 +5,21 @@
 See: .planning/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Users can reliably track weight and see progress with confidence-inspiring visualizations
-**Current focus:** v1.1 milestone - HealthKit import, widget, sharing, localization
+**Current focus:** v1.1 milestone - Phase 21: Infrastructure & Migration
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-01-22 — Milestone v1.1 started
+Phase: 21 of 26 (Infrastructure & Migration)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-22 — Roadmap created for v1.1 milestone
 
 Progress: [                    ] 0%
 
 ## Milestone History
 
 - **v1.0 Pre-Launch Audit** — 20 phases, 30 plans — shipped 2026-01-22
+- **v1.1 Feature Expansion** — 6 phases, TBD plans — in progress
 
 ## Performance Metrics
 
@@ -26,9 +27,14 @@ Progress: [                    ] 0%
 - Total plans completed: 30
 - Average duration: 4.3 minutes
 - Total execution time: 2.0 hours
-- Timeline: 3 days (2026-01-20 → 2026-01-22)
+- Timeline: 3 days (2026-01-20 to 2026-01-22)
 - Files modified: 185
 - Net LOC change: +20,330
+
+**v1.1 Milestone:**
+- Total plans completed: 0
+- Phases: 6 (21-26)
+- Requirements: 25
 
 ## Accumulated Context
 
@@ -38,10 +44,7 @@ Key decisions logged in PROJECT.md Key Decisions table.
 
 ### Pending Todos
 
-(All pending todos from v1.0 being addressed in v1.1:)
-1. ~~Add localization support~~ → v1.1 scope (Spanish)
-2. ~~Add full test coverage~~ → v1.1 scope
-3. ~~Fix HealthKit settings link destination~~ → v1.1 scope
+None for v1.1 milestone.
 
 ### Pending Human Actions
 
@@ -51,14 +54,20 @@ Key decisions logged in PROJECT.md Key Decisions table.
 
 ### Blockers/Concerns
 
-None — awaiting App Store review.
+**Phase 21 (Infrastructure):**
+- CloudKit migration risk: Test on device with CloudKit before release
+- App Group migration must be atomic with verification before deleting old container
+
+**Phase 23 (HealthKit Import):**
+- Conflict resolution rules need specification during planning
+- Background delivery scope decision needed (HKObserverQuery vs manual sync)
 
 ## Session Continuity
 
 Last session: 2026-01-22
-Stopped at: v1.0 milestone archived
+Stopped at: Roadmap created for v1.1
 Resume file: None
-Pending: App Store review
+Pending: Plan Phase 21
 
 ## Code Quality Status
 
@@ -71,17 +80,9 @@ Pending: App Store review
 
 ## Next Steps
 
-After requirements and roadmap are defined:
-
 ```
-/gsd:discuss-phase [N]
-```
-
-Or skip to planning:
-
-```
-/gsd:plan-phase [N]
+/gsd:plan-phase 21
 ```
 
 ---
-*Updated: 2026-01-22 after v1.1 milestone started*
+*Updated: 2026-01-22 after v1.1 roadmap created*

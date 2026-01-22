@@ -85,37 +85,37 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFRA-01 | TBD | Pending |
-| INFRA-02 | TBD | Pending |
-| INFRA-03 | TBD | Pending |
-| HKIT-01 | TBD | Pending |
-| HKIT-02 | TBD | Pending |
-| HKIT-03 | TBD | Pending |
-| HKIT-04 | TBD | Pending |
-| HKIT-05 | TBD | Pending |
-| WDGT-01 | TBD | Pending |
-| WDGT-02 | TBD | Pending |
-| WDGT-03 | TBD | Pending |
-| WDGT-04 | TBD | Pending |
-| WDGT-05 | TBD | Pending |
-| SHAR-01 | TBD | Pending |
-| SHAR-02 | TBD | Pending |
-| SHAR-03 | TBD | Pending |
-| LOCL-01 | TBD | Pending |
-| LOCL-02 | TBD | Pending |
-| LOCL-03 | TBD | Pending |
-| TEST-01 | TBD | Pending |
-| TEST-02 | TBD | Pending |
-| TEST-03 | TBD | Pending |
-| TEST-04 | TBD | Pending |
-| TEST-05 | TBD | Pending |
-| TEST-06 | TBD | Pending |
+| INFRA-01 | Phase 21 | Pending |
+| INFRA-02 | Phase 21 | Pending |
+| INFRA-03 | Phase 21 | Pending |
+| HKIT-01 | Phase 23 | Pending |
+| HKIT-02 | Phase 23 | Pending |
+| HKIT-03 | Phase 23 | Pending |
+| HKIT-04 | Phase 23 | Pending |
+| HKIT-05 | Phase 23 | Pending |
+| WDGT-01 | Phase 22 | Pending |
+| WDGT-02 | Phase 22 | Pending |
+| WDGT-03 | Phase 22 | Pending |
+| WDGT-04 | Phase 22 | Pending |
+| WDGT-05 | Phase 22 | Pending |
+| SHAR-01 | Phase 24 | Pending |
+| SHAR-02 | Phase 24 | Pending |
+| SHAR-03 | Phase 24 | Pending |
+| LOCL-01 | Phase 25 | Pending |
+| LOCL-02 | Phase 25 | Pending |
+| LOCL-03 | Phase 25 | Pending |
+| TEST-01 | Phase 26 | Pending |
+| TEST-02 | Phase 26 | Pending |
+| TEST-03 | Phase 26 | Pending |
+| TEST-04 | Phase 26 | Pending |
+| TEST-05 | Phase 26 | Pending |
+| TEST-06 | Phase 26 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 25 total
-- Mapped to phases: 0
-- Unmapped: 25 (pending roadmap)
+- Mapped to phases: 25
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-22*
-*Last updated: 2026-01-22 after initial definition*
+*Last updated: 2026-01-22 after roadmap creation*
