@@ -20,6 +20,7 @@ enum OnboardingStep: Int, CaseIterable {
 
 struct OnboardingView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @AppStorage("preferredWeightUnit") private var preferredWeightUnit: WeightUnit = Locale.current.measurementSystem == .metric ? .kg : .lb
     @AppStorage("goalWeight") private var goalWeight: Double = 170.0
@@ -78,7 +79,7 @@ struct OnboardingView: View {
                         .tag(OnboardingStep.complete)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
-                .animation(.spring(response: 0.5, dampingFraction: 0.8), value: currentStep)
+                .animation(reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.8), value: currentStep)
                 .onChange(of: currentStep) { oldStep, newStep in
                     // Revert invalid forward navigation
                     if newStep.rawValue > oldStep.rawValue {
@@ -102,7 +103,7 @@ struct OnboardingView: View {
                 stepIndicator
                     .padding(.bottom, 30)
             }
-            .confettiCannon(trigger: $confettiTrigger, num: 50, radius: 400)
+            .confettiCannon(trigger: reduceMotion ? .constant(0) : $confettiTrigger, num: reduceMotion ? 0 : 50, radius: 400)
         }
         .ignoresSafeArea(.keyboard)
     }
@@ -139,7 +140,7 @@ struct OnboardingView: View {
                     .fill(step == currentStep ? AppColors.primary : AppColors.surfaceSecondary)
                     .frame(width: 8, height: 8)
                     .scaleEffect(step == currentStep ? 1.2 : 1.0)
-                    .animation(.spring(response: 0.3), value: currentStep)
+                    .animation(reduceMotion ? nil : .spring(response: 0.3), value: currentStep)
             }
         }
     }

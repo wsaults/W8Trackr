@@ -14,6 +14,7 @@ struct MilestoneCelebrationView: View {
     let unit: WeightUnit
     let onDismiss: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
     @State private var showContent = false
     @State private var confettiTrigger: Int = 0
     @ScaledMetric(relativeTo: .largeTitle) private var trophySize: CGFloat = 60
@@ -35,6 +36,7 @@ struct MilestoneCelebrationView: View {
                     .foregroundStyle(.yellow)
                     .scaleEffect(showContent ? 1.0 : 0.5)
                     .opacity(showContent ? 1.0 : 0)
+                    .animation(reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.7), value: showContent)
 
                 VStack(spacing: 8) {
                     Text("Milestone Reached!")
@@ -56,6 +58,7 @@ struct MilestoneCelebrationView: View {
                 }
                 .opacity(showContent ? 1.0 : 0)
                 .offset(y: showContent ? 0 : 20)
+                .animation(reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.7), value: showContent)
 
                 Button {
                     dismiss()
@@ -79,23 +82,28 @@ struct MilestoneCelebrationView: View {
             .shadow(radius: 20)
             .padding(40)
             .scaleEffect(showContent ? 1.0 : 0.8)
+            .animation(reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.7), value: showContent)
             .accessibilityElement(children: .contain)
             .accessibilityLabel("Milestone reached! You've hit \(Int(milestoneWeight)) \(unit.rawValue). Keep up the great work!")
         }
-        .confettiCannon(trigger: $confettiTrigger, num: 50, radius: 400)
+        .confettiCannon(trigger: reduceMotion ? .constant(0) : $confettiTrigger, num: reduceMotion ? 0 : 50, radius: 400)
         .onAppear {
             // Announce milestone to VoiceOver
             UIAccessibility.post(
                 notification: .announcement,
                 argument: "Congratulations! You've reached \(Int(milestoneWeight)) \(unit.rawValue) milestone!"
             )
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+            if reduceMotion {
                 showContent = true
-            }
-            // Trigger confetti after animation starts
-            Task {
-                try? await Task.sleep(for: .milliseconds(300))
-                confettiTrigger += 1
+            } else {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                    showContent = true
+                }
+                // Trigger confetti after animation starts
+                Task {
+                    try? await Task.sleep(for: .milliseconds(300))
+                    confettiTrigger += 1
+                }
             }
         }
     }
