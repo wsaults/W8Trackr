@@ -447,13 +447,19 @@ struct SettingsView: View {
             }
             .alert("Health Access Required", isPresented: $showingHealthKitPermissionAlert) {
                 Button("OK", role: .cancel) { }
-                Button("Open Settings") {
-                    if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                Button("Open Health App") {
+                    // Open Health app directly - more reliable than prefs: URL schemes
+                    // which may not work consistently across iOS versions
+                    if let healthURL = URL(string: "x-apple-health://"),
+                       UIApplication.shared.canOpenURL(healthURL) {
+                        UIApplication.shared.open(healthURL)
+                    } else if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                        // Fallback to app settings if Health app URL doesn't work
                         UIApplication.shared.open(settingsUrl)
                     }
                 }
             } message: {
-                Text("Please enable Health access in Settings to sync your weight data.")
+                Text("To sync weight data, open the Health app, tap your profile, select Apps, and enable W8Trackr.")
             }
             .alert("Trend Smoothing", isPresented: $showingSmoothingInfo) {
                 Button("OK", role: .cancel) { }
