@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Users can reliably track weight and see progress with confidence-inspiring visualizations
-**Current focus:** v1.0 shipped, awaiting App Store review
+**Current focus:** v1.1 milestone - HealthKit import, widget, sharing, localization
 
 ## Current Position
 
-Phase: Milestone complete
-Plan: N/A
-Status: v1.0 shipped
-Last activity: 2026-01-22 — v1.0 milestone archived
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-01-22 — Milestone v1.1 started
 
-Progress: [####################] 100% (v1.0 Pre-Launch Audit complete)
+Progress: [                    ] 0%
 
 ## Milestone History
 
@@ -38,9 +38,10 @@ Key decisions logged in PROJECT.md Key Decisions table.
 
 ### Pending Todos
 
-1. **Add localization support** (ui) - 2026-01-20
-2. **Add full test coverage** (testing) - 2026-01-20
-3. **Fix HealthKit settings link destination** (ui) - 2026-01-22
+(All pending todos from v1.0 being addressed in v1.1:)
+1. ~~Add localization support~~ → v1.1 scope (Spanish)
+2. ~~Add full test coverage~~ → v1.1 scope
+3. ~~Fix HealthKit settings link destination~~ → v1.1 scope
 
 ### Pending Human Actions
 
@@ -70,17 +71,17 @@ Pending: App Store review
 
 ## Next Steps
 
-When App Store review completes or for v1.1 planning:
+After requirements and roadmap are defined:
 
 ```
-/gsd:new-milestone
+/gsd:discuss-phase [N]
 ```
 
-This will start the next milestone cycle with:
-- Context gathering
-- Requirements definition
-- Research
-- Roadmap creation
+Or skip to planning:
+
+```
+/gsd:plan-phase [N]
+```
 
 ---
-*Updated: 2026-01-22 after v1.0 milestone completion*
+*Updated: 2026-01-22 after v1.1 milestone started*

@@ -61,15 +61,19 @@ Users can reliably track their weight and see progress toward their goals with c
 
 ### Active
 
-(None for v1.0 — awaiting App Store approval)
+**v1.1 Scope:**
+- [ ] HealthKit import (read weight from Apple Health, Health wins on conflicts)
+- [ ] Spanish localization
+- [ ] Full test coverage (unit + UI tests)
+- [ ] Fix HealthKit settings link destination
+- [ ] Home screen widget (multiple sizes: weight+trend, progress, sparkline)
+- [ ] Social sharing (export chart/stats as shareable image)
 
 ### Out of Scope
 
-- HealthKit import (P2 feature) — deferred to post-launch
-- Social sharing feature — spec exists, deferred
-- iOS widget — spec exists, deferred
 - watchOS app — post-launch consideration
 - iPad optimization — post-launch consideration
+- Milestone achievement sharing — v1.1 focuses on progress screenshots only
 
 ## Context
 
@@ -106,4 +110,4 @@ Users can reliably track their weight and see progress toward their goals with c
 | Automated accessibility tests | Prevent regressions | ✓ Good |
 
 ---
-*Last updated: 2026-01-22 after v1.0 milestone*
+*Last updated: 2026-01-22 after v1.1 milestone started*
