@@ -60,10 +60,12 @@ Plans:
   3. Large widget displays sparkline chart of recent weight entries
   4. Widgets update when user adds, edits, or deletes weight entries in app
   5. Tapping any widget opens W8Trackr app
-**Plans:** TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 22-01: TBD
+- [ ] 22-01-PLAN.md — Widget extension target, entitlements, timeline entry and provider
+- [ ] 22-02-PLAN.md — Small, medium, large widget views with sparkline chart, widget refresh integration
+- [ ] 22-03-PLAN.md — Human verification of widget functionality
 
 ### Phase 23: HealthKit Import
 **Goal:** Users can import weight data from Apple Health with automatic sync
@@ -135,7 +137,7 @@ Phases execute in numeric order: 21 -> 21.1 -> 21.2 -> 22 -> etc.
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 21. Infrastructure & Migration | v1.1 | 2/2 | ✓ Complete | 2026-01-22 |
-| 22. Widgets | v1.1 | 0/TBD | Not started | - |
+| 22. Widgets | v1.1 | 0/3 | Planned | - |
 | 23. HealthKit Import | v1.1 | 0/TBD | Not started | - |
 | 24. Social Sharing | v1.1 | 0/TBD | Not started | - |
 | 25. Localization | v1.1 | 0/TBD | Not started | - |
@@ -143,4 +145,4 @@ Phases execute in numeric order: 21 -> 21.1 -> 21.2 -> 22 -> etc.
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22 (Phase 21 complete)*
+*Last updated: 2026-01-22 (Phase 22 planned)*
