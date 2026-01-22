@@ -98,6 +98,12 @@ Recent decisions affecting current work:
 - [10-01]: Plus/minus icons for weight adjustment (semantic clarity)
 - [10-01]: Filled icons for large increments, outline for small (visual hierarchy)
 - [10-01]: Spacing reduced from 40 to 24 (labels provide context)
+- [15-01]: Direct text entry over plus/minus buttons for faster weight logging
+- [15-01]: Date arrows for new entries, DatePicker retained for edit mode
+- [15-01]: 500-char note limit with visible countdown when <50 remaining
+- [15-01]: More... button for optional body fat field (cleaner primary UI)
+- [15-01]: Floating point comparison with 1-decimal rounding for hasUnsavedChanges
+- [15-01]: @FocusState with .task {} for reliable auto-focus (not .onAppear)
 - [11-01]: Header uses same HStack(spacing: 12) as LogbookRowView for alignment
 - [11-01]: Row padding reduced from 8pt to 4pt with minHeight: 44 for accessibility
 - [11-01]: List wrapped in VStack(spacing: 0) to place header above
@@ -133,8 +139,8 @@ None remaining. All 17 phases complete!
 
 ## Session Continuity
 
-Last session: 2026-01-21
-Stopped at: Completed 17-01-PLAN.md (All phases complete!)
+Last session: 2026-01-22
+Stopped at: Added missing 15-01-SUMMARY.md (All phases complete!)
 Resume file: None
 
 ## Project Completion Status
