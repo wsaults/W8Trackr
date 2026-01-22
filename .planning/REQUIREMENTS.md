@@ -1,0 +1,121 @@
+# Requirements: W8Trackr v1.1
+
+**Defined:** 2026-01-22
+**Core Value:** Users can reliably track weight and see progress with confidence-inspiring visualizations
+
+## v1.1 Requirements
+
+Requirements for v1.1 release. Each maps to roadmap phases.
+
+### Infrastructure
+
+- [ ] **INFRA-01**: App configures App Group entitlement for widget data sharing
+- [ ] **INFRA-02**: Existing users' SwiftData migrates to shared container without data loss
+- [ ] **INFRA-03**: HealthKit settings link navigates to correct destination
+
+### HealthKit Import
+
+- [ ] **HKIT-01**: User can grant HealthKit read permission for weight data
+- [ ] **HKIT-02**: App imports all weight samples from Apple Health
+- [ ] **HKIT-03**: Weight entries display source indicator (manual vs Health)
+- [ ] **HKIT-04**: Initial sync completes on first permission grant
+- [ ] **HKIT-05**: App syncs automatically when Health data changes (background)
+
+### Widgets
+
+- [ ] **WDGT-01**: Small widget displays current weight with trend arrow
+- [ ] **WDGT-02**: Medium widget displays progress toward goal weight
+- [ ] **WDGT-03**: Large widget displays sparkline chart of recent entries
+- [ ] **WDGT-04**: Widgets refresh when app data changes
+- [ ] **WDGT-05**: Tapping widget opens W8Trackr app
+
+### Social Sharing
+
+- [ ] **SHAR-01**: User can generate shareable progress image
+- [ ] **SHAR-02**: User can share via system share sheet
+- [ ] **SHAR-03**: User can hide exact weight values in shared image (privacy)
+
+### Localization
+
+- [ ] **LOCL-01**: All UI strings display correctly in Spanish
+- [ ] **LOCL-02**: Numbers and dates format according to locale
+- [ ] **LOCL-03**: App Store metadata available in Spanish
+
+### Testing
+
+- [ ] **TEST-01**: Unit tests cover weight data CRUD operations
+- [ ] **TEST-02**: Unit tests cover HealthKit sync logic
+- [ ] **TEST-03**: Unit tests cover trend/EWMA calculations
+- [ ] **TEST-04**: UI tests verify weight entry flow
+- [ ] **TEST-05**: UI tests verify settings flow
+- [ ] **TEST-06**: Mock HealthKit available for isolated testing
+
+## Future Requirements
+
+Deferred to later milestone. Tracked but not in v1.1 roadmap.
+
+### Widgets
+
+- **WDGT-06**: Lock screen widget (accessoryCircular)
+- **WDGT-07**: Interactive widget actions (quick log)
+
+### Social Sharing
+
+- **SHAR-04**: Multiple share image templates
+- **SHAR-05**: W8Trackr branded watermark on shared images
+
+### HealthKit
+
+- **HKIT-06**: Smart de-duplication (same weight + timestamp = one entry)
+
+## Out of Scope
+
+Explicitly excluded. Documented to prevent scope creep.
+
+| Feature | Reason |
+|---------|--------|
+| Milestone achievement sharing | v1.1 focuses on progress screenshots only |
+| watchOS app | Post-launch consideration |
+| iPad optimization | Post-launch consideration |
+| Conflict resolution (Health overwrites) | User chose "always import" — both sources coexist |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| INFRA-01 | TBD | Pending |
+| INFRA-02 | TBD | Pending |
+| INFRA-03 | TBD | Pending |
+| HKIT-01 | TBD | Pending |
+| HKIT-02 | TBD | Pending |
+| HKIT-03 | TBD | Pending |
+| HKIT-04 | TBD | Pending |
+| HKIT-05 | TBD | Pending |
+| WDGT-01 | TBD | Pending |
+| WDGT-02 | TBD | Pending |
+| WDGT-03 | TBD | Pending |
+| WDGT-04 | TBD | Pending |
+| WDGT-05 | TBD | Pending |
+| SHAR-01 | TBD | Pending |
+| SHAR-02 | TBD | Pending |
+| SHAR-03 | TBD | Pending |
+| LOCL-01 | TBD | Pending |
+| LOCL-02 | TBD | Pending |
+| LOCL-03 | TBD | Pending |
+| TEST-01 | TBD | Pending |
+| TEST-02 | TBD | Pending |
+| TEST-03 | TBD | Pending |
+| TEST-04 | TBD | Pending |
+| TEST-05 | TBD | Pending |
+| TEST-06 | TBD | Pending |
+
+**Coverage:**
+- v1.1 requirements: 25 total
+- Mapped to phases: 0
+- Unmapped: 25 (pending roadmap)
+
+---
+*Requirements defined: 2026-01-22*
+*Last updated: 2026-01-22 after initial definition*
