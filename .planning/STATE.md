@@ -136,6 +136,11 @@ Recent decisions affecting current work:
 - [19-01]: @MainActor on entire ScreenshotTests class for Swift 6 concurrency
 - [19-01]: API key authentication for fastlane to avoid SMS 2FA
 - [19-01]: include_in_app_purchases:false for precheck (not compatible with API key)
+- [20-01]: Use EmptyView for decorative views (SparkleView, ShimmerView) when Reduce Motion enabled
+- [20-01]: Disable repeating/infinite animations when Reduce Motion enabled
+- [20-01]: Make spring animations instant (nil) when Reduce Motion enabled
+- [20-01]: Use wrapper views to pass @Environment to ViewModifiers (BounceWrapper, EntranceWrapper)
+- [20-01]: VoiceOver announcements remain functional regardless of Reduce Motion setting
 - [20-02]: Computed properties for dynamic accessibility labels (GoalPredictionView pattern)
 - [20-02]: accessibilityHidden(true) for decorative column headers
 - [20-02]: accessibilityElement(children: .combine) for composite views
