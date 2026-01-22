@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can reliably track weight and see progress without UI bugs undermining the experience
-**Current focus:** Phase 17 - Next Milestone UI
+**Current focus:** Phase 18 - Hide Streak UI
 
 ## Current Position
 
-Phase: 17 of 17 (Next Milestone UI)
+Phase: 18 of 18 (Hide Streak UI)
 Plan: 1 of 1 in current phase
-Status: Complete
-Last activity: 2026-01-22 - Completed 15-02 (Onboarding text input migration - work was in 15-01)
+Status: Phase complete
+Last activity: 2026-01-22 - Completed 18-01-PLAN.md (hide streak UI)
 
-Progress: [#################] 100% (17 of 17 phases complete)
+Progress: [##################] 100% (18 of 18 phases complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 26
-- Average duration: 4.2 minutes
-- Total execution time: 1.75 hours
+- Total plans completed: 27
+- Average duration: 4.1 minutes
+- Total execution time: 1.8 hours
 
 **By Phase:**
 
@@ -44,9 +44,10 @@ Progress: [#################] 100% (17 of 17 phases complete)
 | 15-weight-entry-screen | 2 | 4 min | 2 min |
 | 16-trailing-fab-button | 1 | 4 min | 4 min |
 | 17-next-milestone-ui | 1 | 2 min | 2 min |
+| 18-hide-streak-ui | 1 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 14-01 (6 min), 15-01 (3 min), 15-02 (1 min), 16-01 (4 min), 17-01 (2 min)
+- Last 5 plans: 15-01 (3 min), 15-02 (1 min), 16-01 (4 min), 17-01 (2 min), 18-01 (3 min)
 - Trend: Consistently efficient execution, sub-5 minute average
 
 *Updated after each plan completion*
@@ -127,6 +128,8 @@ Recent decisions affecting current work:
 - [17-01]: Three-row layout: header (label + milestone), progress bar, labels (previous/to-go/next)
 - [17-01]: GeometryReader for animated width-based progress
 - [15-02]: Plan work completed during 15-01 execution (onboarding + component deletion bundled)
+- [18-01]: Two-card layout: "This Week" and "To Goal" only
+- [18-01]: Preserve streak calculation code for future re-enablement
 
 ### Pending Todos
 
@@ -136,17 +139,17 @@ Recent decisions affecting current work:
 
 ### Blockers/Concerns
 
-None remaining. All 17 phases complete!
+None remaining. All 18 phases complete!
 
 ## Session Continuity
 
 Last session: 2026-01-22
-Stopped at: Completed 15-02-SUMMARY.md (work verified already complete from 15-01)
+Stopped at: Completed 18-01-PLAN.md (hide streak UI)
 Resume file: None
 
 ## Project Completion Status
 
-ALL 17 PHASES COMPLETE! 🎉
+18 of 18 phases complete - MILESTONE V1 COMPLETE!
 
 - Phase 1: Critical Bugs (2 plans) DONE
 - Phase 2: Chart Animation (1 plan) DONE
@@ -165,8 +168,9 @@ ALL 17 PHASES COMPLETE! 🎉
 - Phase 15: Weight Entry Screen (2 plans) DONE
 - Phase 16: Trailing FAB Button (1 plan) DONE
 - Phase 17: Next Milestone UI (1 plan) DONE
+- Phase 18: Hide Streak UI (1 plan) DONE
 
-Total: 26 plans executed
+Total: 27 plans executed, 0 pending
 
 ### Roadmap Evolution
 
@@ -182,6 +186,7 @@ Total: 26 plans executed
 - Phase 14 added: Add entry UI (iOS 26 tab bar accessory replaces FAB)
 - Phase 16 added: Trailing FAB button (move add button to right of tab bar)
 - Phase 17 added: Next milestone UI (progress bar direction, improved design)
+- Phase 18 added: Hide streak UI (remove streak card, notifications, celebration for launch)
 
 ## Code Quality Status
 
