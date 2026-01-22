@@ -2,6 +2,7 @@
   "mode": "yolo",
   "depth": "standard",
   "parallelization": true,
+  "model_profile": "quality",
   "planning": {
     "commit_docs": true
   }
