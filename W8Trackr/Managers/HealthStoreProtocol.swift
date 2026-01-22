@@ -12,7 +12,10 @@ import HealthKit
 ///
 /// This protocol abstracts the key HKHealthStore operations used by HealthSyncManager,
 /// allowing unit tests to use a mock implementation without requiring device access.
-protocol HealthStoreProtocol {
+///
+/// Marked as `Sendable` because `HKHealthStore` is thread-safe by Apple's design
+/// and can be used from any isolation context.
+protocol HealthStoreProtocol: Sendable {
     /// Returns whether HealthKit is available on this device.
     /// - Returns: `false` on iPads without Health app, `true` on iPhones.
     static func isHealthDataAvailable() -> Bool

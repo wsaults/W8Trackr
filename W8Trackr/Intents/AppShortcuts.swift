@@ -50,10 +50,10 @@ struct W8TrackrShortcuts: AppShortcutsProvider {
 // MARK: - Log Weight Intent
 
 struct LogWeightIntent: AppIntent {
-    static var title: LocalizedStringResource = "Log Weight"
-    static var description = IntentDescription("Opens W8Trackr to log your current weight")
+    static let title: LocalizedStringResource = "Log Weight"
+    static let description = IntentDescription("Opens W8Trackr to log your current weight")
 
-    static var openAppWhenRun: Bool = true
+    static let openAppWhenRun: Bool = true
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
@@ -66,8 +66,8 @@ struct LogWeightIntent: AppIntent {
 // MARK: - Get Weight Trend Intent
 
 struct GetWeightTrendIntent: AppIntent {
-    static var title: LocalizedStringResource = "Get Weight Trend"
-    static var description = IntentDescription("Reports your recent weight trend")
+    static let title: LocalizedStringResource = "Get Weight Trend"
+    static let description = IntentDescription("Reports your recent weight trend")
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
@@ -121,8 +121,8 @@ struct GetWeightTrendIntent: AppIntent {
 // MARK: - Get Weight Loss Intent
 
 struct GetWeightLossIntent: AppIntent {
-    static var title: LocalizedStringResource = "Get Weight Change"
-    static var description = IntentDescription("Reports your total weight change since you started tracking")
+    static let title: LocalizedStringResource = "Get Weight Change"
+    static let description = IntentDescription("Reports your total weight change since you started tracking")
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {

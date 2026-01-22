@@ -14,7 +14,8 @@ import HealthKit
 // MARK: - Mock HealthStore
 
 /// Mock implementation of HealthStoreProtocol for testing without device.
-final class MockHealthStore: HealthStoreProtocol {
+/// Marked as `@unchecked Sendable` because tests run serially and don't have concurrent access.
+final class MockHealthStore: HealthStoreProtocol, @unchecked Sendable {
     // Configurable return values
     var isHealthDataAvailableResult = true
     var authorizationResult = true

@@ -13,7 +13,7 @@ import SwiftUI
 struct SpringNumberModifier: AnimatableModifier {
     var number: Double
 
-    var animatableData: Double {
+    nonisolated var animatableData: Double {
         get { number }
         set { number = newValue }
     }

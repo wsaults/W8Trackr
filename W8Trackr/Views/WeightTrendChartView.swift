@@ -433,7 +433,7 @@ struct WeightTrendChartView: View {
 // MARK: - AXChartDescriptorRepresentable
 
 extension WeightTrendChartView: AXChartDescriptorRepresentable {
-    func makeChartDescriptor() -> AXChartDescriptor {
+    nonisolated func makeChartDescriptor() -> AXChartDescriptor {
         let sorted = filteredEntries.sorted { $0.date < $1.date }
 
         // Create date axis
