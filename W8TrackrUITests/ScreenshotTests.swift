@@ -7,11 +7,11 @@
 
 import XCTest
 
+@MainActor
 final class ScreenshotTests: XCTestCase {
 
     var app: XCUIApplication!
 
-    @MainActor
     override func setUpWithError() throws {
         continueAfterFailure = false
 
@@ -29,7 +29,6 @@ final class ScreenshotTests: XCTestCase {
 
     // MARK: - Screenshot Tests
 
-    @MainActor
     func test01_Dashboard() throws {
         // Dashboard is the first tab, should already be visible
         // Wait for dashboard content to load
@@ -42,7 +41,6 @@ final class ScreenshotTests: XCTestCase {
         snapshot("01_dashboard")
     }
 
-    @MainActor
     func test02_Logbook() throws {
         // Navigate to Logbook tab
         let logbook = app.tabBars.buttons["Logbook"]
@@ -55,7 +53,6 @@ final class ScreenshotTests: XCTestCase {
         snapshot("02_logbook")
     }
 
-    @MainActor
     func test03_Settings() throws {
         // Navigate to Settings tab
         let settings = app.tabBars.buttons["Settings"]
@@ -68,7 +65,6 @@ final class ScreenshotTests: XCTestCase {
         snapshot("03_settings")
     }
 
-    @MainActor
     func test04_AddWeight() throws {
         // Navigate to Dashboard first (in case we're on another tab)
         let dashboard = app.tabBars.buttons["Dashboard"]
@@ -98,7 +94,6 @@ final class ScreenshotTests: XCTestCase {
         snapshot("04_add_weight")
     }
 
-    @MainActor
     func test05_Chart() throws {
         // Navigate to Dashboard for chart view
         let dashboard = app.tabBars.buttons["Dashboard"]
@@ -117,7 +112,6 @@ final class ScreenshotTests: XCTestCase {
         snapshot("05_chart")
     }
 
-    @MainActor
     func test06_WeeklySummary() throws {
         // Navigate to Dashboard
         let dashboard = app.tabBars.buttons["Dashboard"]
