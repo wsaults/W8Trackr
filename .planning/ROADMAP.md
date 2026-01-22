@@ -28,7 +28,8 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 16: Trailing FAB Button** - Move add button to right of tab bar using Tab(role: .search) pattern
 - [x] **Phase 17: Next Milestone UI** - Improve progress bar direction (left-to-right) and overall design/informativeness
 - [x] **Phase 18: Hide Streak UI** - Remove streak-related UI elements for launch
-- [ ] **Phase 19: App Store Submission Prep** - Prepare App Store info and screenshots for submission
+- [x] **Phase 19: App Store Submission Prep** - Prepare App Store info and screenshots for submission
+- [ ] **Phase 20: Full Accessibility Support** - Comprehensive VoiceOver, Dynamic Type, and WCAG compliance
 
 ## Phase Details
 
@@ -395,7 +396,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 19-01-PLAN.md - Update keywords, capture screenshots, validate metadata, complete age rating
+- [x] 19-01-PLAN.md - Update keywords, capture screenshots, validate metadata, complete age rating
 
 **Details:**
 - Update keywords.txt from keyword-stuffing to natural language phrases for 2026 AI search
@@ -404,10 +405,36 @@ Plans:
 - Complete age rating questionnaire in App Store Connect (DEADLINE: January 31, 2026)
 - Verify privacy policy URL is accessible
 
+### Phase 20: Full Accessibility Support
+**Goal**: Ensure comprehensive accessibility for users with disabilities
+**Depends on**: Phase 19
+**Requirements**: WCAG AA compliance, VoiceOver support, Dynamic Type
+**Success Criteria** (what must be TRUE):
+  1. All interactive elements have proper VoiceOver labels and hints
+  2. Dynamic Type works at all size classes without clipping
+  3. Color contrast meets WCAG AA standards (4.5:1 for text)
+  4. Touch targets meet 44pt minimum
+  5. Reduce Motion respected for all animations
+  6. Weight trend chart has accessible representation
+  7. Accessibility Inspector passes with no critical issues
+**Plans**: 3 plans
+
+Plans:
+- [ ] 20-01-PLAN.md - Add Reduce Motion support to all decorative animations
+- [ ] 20-02-PLAN.md - Add VoiceOver labels/hints to remaining views and verify touch targets
+- [ ] 20-03-PLAN.md - Create automated accessibility tests with performAccessibilityAudit()
+
+**Details:**
+- Add `@Environment(\.accessibilityReduceMotion)` checks to confetti, sparkles, spring animations
+- Add `.accessibilityLabel()` and `.accessibilityHint()` to GoalReachedBannerView, GoalPredictionView, WeightEntryView date nav, all onboarding steps
+- Verify touch targets meet 44pt minimum
+- Create AccessibilityTests.swift with performAccessibilityAudit() for all screens
+- Test with VoiceOver enabled through full user flows
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17 -> 18 -> 19
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17 -> 18 -> 19 -> 20
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -429,7 +456,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 16. Trailing FAB Button | 1/1 | Complete | 2026-01-21 |
 | 17. Next Milestone UI | 1/1 | Complete | 2026-01-21 |
 | 18. Hide Streak UI | 1/1 | Complete | 2026-01-21 |
-| 19. App Store Submission Prep | 0/1 | Not Started | - |
+| 19. App Store Submission Prep | 1/1 | Complete | 2026-01-22 |
+| 20. Full Accessibility Support | 0/3 | Planned | - |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -477,3 +505,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 18 planned: 2026-01-22*
 *Phase 18 complete: 2026-01-21*
 *Phase 19 planned: 2026-01-22*
+*Phase 19 complete: 2026-01-22*
+*Phase 20 added: 2026-01-22*
+*Phase 20 planned: 2026-01-22*
