@@ -43,10 +43,11 @@ See archived milestone documentation for v1.0 phase details.
   2. SwiftData container lives in App Group location accessible to extensions
   3. HealthKit settings link navigates to system Health settings (not app settings)
   4. CloudKit sync continues working after migration (no duplicates, no data loss)
-**Plans:** TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 21-01: TBD
+- [ ] 21-01-PLAN.md — App Group entitlement, SharedModelContainer, HealthKit settings fix
+- [ ] 21-02-PLAN.md — MigrationManager with CloudKit-safe migration, app integration
 
 ### Phase 22: Widgets
 **Goal:** Users can add home screen widgets showing weight, progress, and trends
@@ -133,7 +134,7 @@ Phases execute in numeric order: 21 -> 21.1 -> 21.2 -> 22 -> etc.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 21. Infrastructure & Migration | v1.1 | 0/TBD | Not started | - |
+| 21. Infrastructure & Migration | v1.1 | 0/2 | Planned | - |
 | 22. Widgets | v1.1 | 0/TBD | Not started | - |
 | 23. HealthKit Import | v1.1 | 0/TBD | Not started | - |
 | 24. Social Sharing | v1.1 | 0/TBD | Not started | - |
