@@ -233,3 +233,5 @@ Total: 30 plans executed across 20 phases - ALL COMPLETE!
 - Logbook layout centralized in LogbookLayout enum
 - Export compliance declared for App Store
 - iOS 26 Liquid Glass tab bar accessory for add entry
+- Full WCAG 2.1 AA accessibility compliance
+- Automated accessibility regression tests via performAccessibilityAudit()
