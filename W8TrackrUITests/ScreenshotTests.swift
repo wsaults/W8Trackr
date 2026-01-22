@@ -11,6 +11,7 @@ final class ScreenshotTests: XCTestCase {
 
     var app: XCUIApplication!
 
+    @MainActor
     override func setUpWithError() throws {
         continueAfterFailure = false
 

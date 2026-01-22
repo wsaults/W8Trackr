@@ -78,13 +78,13 @@ platform :ios do
   lane :screenshots do
     capture_screenshots(
       project: "W8Trackr.xcodeproj",
-      scheme: "W8TrackrUITests",
+      scheme: "W8Trackr",
       output_directory: "./fastlane/screenshots",
       clear_previous_screenshots: true,
       devices: [
-        "iPhone 16 Pro Max",
-        "iPhone 14 Plus",
-        "iPad Pro 13-inch (M4)"
+        "iPhone 17 Pro Max",
+        "iPhone Air",
+        "iPad Pro 13-inch (M5)"
       ],
       languages: ["en-US"]
     )
