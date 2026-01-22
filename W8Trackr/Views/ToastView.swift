@@ -87,6 +87,8 @@ struct ToastView: View {
 }
 
 struct ToastModifier: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+
     @Binding var isPresented: Bool
     let message: String
     let systemImage: String
@@ -101,7 +103,7 @@ struct ToastModifier: ViewModifier {
     }
 
     private func dismiss() {
-        withAnimation(.easeInOut(duration: 0.3)) {
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.3)) {
             isPresented = false
         }
     }
@@ -123,7 +125,7 @@ struct ToastModifier: ViewModifier {
             .padding(.horizontal)
             .opacity(isPresented ? 1 : 0)
             .offset(y: yOffset)
-            .animation(.easeInOut(duration: 0.3), value: isPresented)
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: isPresented)
         }
         .onChange(of: isPresented) { _, newValue in
             if newValue {
