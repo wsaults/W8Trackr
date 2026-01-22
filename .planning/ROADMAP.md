@@ -27,6 +27,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 15: Weight Entry Screen** - Simplify to focused text input with number keyboard and notes field
 - [x] **Phase 16: Trailing FAB Button** - Move add button to right of tab bar using Tab(role: .search) pattern
 - [x] **Phase 17: Next Milestone UI** - Improve progress bar direction (left-to-right) and overall design/informativeness
+- [x] **Phase 18: Hide Streak UI** - Remove streak-related UI elements for launch
 
 ## Phase Details
 
@@ -357,10 +358,33 @@ Plans:
 - Add VoiceOver accessibility labels for progress information
 - Use AppColors.surface background with cardShadow() styling
 
+### Phase 18: Hide Streak UI
+**Goal**: Remove streak-related UI elements to simplify launch experience
+**Depends on**: Phase 17
+**Requirements**: UX-15 (hide streak UI)
+**Success Criteria** (what must be TRUE):
+  1. Streak card removed from dashboard QuickStatsRow
+  2. Streak warning notifications disabled
+  3. StreakCelebrationView removed or unused
+  4. Settings help text updated to remove streak references
+  5. Streak calculation code can remain (data model intact for future)
+**Plans**: 1 plan
+
+Plans:
+- [x] 18-01-PLAN.md - Remove streak UI from dashboard, notifications, and settings
+
+**Details:**
+- Remove streak card from QuickStatsRow (keep "This Week" and "To Goal" cards)
+- Remove streak computed property from DashboardView
+- Remove streak warning notification scheduling from NotificationManager/Scheduler
+- Update SettingsView help text to remove "streak warnings" mention
+- Delete or comment out StreakCelebrationView (verify unused first)
+- Keep streak calculation functions for potential future use
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17 -> 18
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -381,6 +405,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 15. Weight Entry Screen | 2/2 | Complete | 2026-01-21 |
 | 16. Trailing FAB Button | 1/1 | Complete | 2026-01-21 |
 | 17. Next Milestone UI | 1/1 | Complete | 2026-01-21 |
+| 18. Hide Streak UI | 1/1 | Complete | 2026-01-21 |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -424,3 +449,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 17 planned: 2026-01-21*
 *Phase 17 complete: 2026-01-21*
 *Phase 15 complete: 2026-01-21*
+*Phase 18 added: 2026-01-22*
+*Phase 18 planned: 2026-01-22*
+*Phase 18 complete: 2026-01-21*

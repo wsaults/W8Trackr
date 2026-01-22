@@ -26,8 +26,11 @@ Requirements for pre-launch audit fixes. Each maps to roadmap phases.
 - [x] **UX-08**: Chart segmented control should show months (1M, 3M, 6M) not days (30D, 90D, 180D)
 - [x] **UX-09**: Move + FAB button to be right aligned
 - [x] **UX-10**: Redesign weight entry controls with plus/minus icons, increment labels, and accessibility support
-- [ ] **UX-11**: Replace FAB with iOS 26 Liquid Glass tab bar bottom accessory for adding entries
-- [ ] **UX-12**: Simplify weight entry screen to focused text input with number keyboard and labeled notes field
+- [x] **UX-11**: Replace FAB with iOS 26 Liquid Glass tab bar bottom accessory for adding entries
+- [x] **UX-12**: Simplify weight entry screen to focused text input with number keyboard and labeled notes field
+- [x] **UX-13**: Move add entry button to trailing side of tab bar (Reminders app pattern)
+- [x] **UX-14**: Improve next milestone progress UI with left-to-right progress bar
+- [x] **UX-15**: Hide streak-related UI elements for launch (streak card, notifications, celebration)
 
 ### Chart Improvements
 
@@ -109,12 +112,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LOG-04 | Phase 11 | Complete |
 | LOG-05 | Phase 12 | Complete |
 | CICD-01 | Phase 13 | Complete |
-| UX-11 | Phase 14 | Pending |
-| UX-12 | Phase 15 | Pending |
+| UX-11 | Phase 14 | Complete |
+| UX-12 | Phase 15 | Complete |
+| UX-13 | Phase 16 | Complete |
+| UX-14 | Phase 17 | Complete |
+| UX-15 | Phase 18 | Complete |
 
 **Coverage:**
-- v1 requirements: 28 total
-- Mapped to phases: 28
+- v1 requirements: 31 total
+- Mapped to phases: 31
 - Unmapped: 0
 
 ---
