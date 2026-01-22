@@ -322,7 +322,7 @@ struct SettingsView: View {
         } header: {
             Text("Smart Reminders")
         } footer: {
-            Text("Get personalized notifications including streak warnings, milestone alerts, and weekly summaries based on your logging habits.")
+            Text("Get personalized notifications including milestone alerts and weekly summaries based on your logging habits.")
         }
     }
 

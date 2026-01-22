@@ -144,7 +144,6 @@ final class NotificationManager {
     ///
     /// Call this after adding or editing weight entries to refresh:
     /// - Suggested optimal reminder time (based on logging patterns)
-    /// - Streak warning (if user hasn't logged recently)
     /// - Milestone notification (if close to a weight milestone)
     /// - Weekly summary (progress recap)
     ///
@@ -162,12 +161,6 @@ final class NotificationManager {
             if let date = calendar.date(from: optimalTime) {
                 suggestedReminderTime = date
             }
-        }
-
-        // Schedule streak warning if needed
-        let (shouldWarn, streak) = NotificationScheduler.shouldSendStreakWarning(entries: entries)
-        if shouldWarn {
-            NotificationScheduler.scheduleStreakWarning(streak: streak)
         }
 
         // Schedule milestone notification if close to a milestone
