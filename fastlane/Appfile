@@ -11,8 +11,13 @@ itc_team_id("77QB78PHPH")
 # See fastlane/api_key.json.example for setup instructions
 api_key_path = ENV["API_KEY_PATH"] || "fastlane/api_key.json"
 if File.exist?(api_key_path)
+  require 'json'
+  api_key_data = JSON.parse(File.read(api_key_path))
   app_store_connect_api_key(
-    key_filepath: api_key_path
+    key_id: api_key_data["key_id"],
+    issuer_id: api_key_data["issuer_id"],
+    key_content: api_key_data["key"],
+    in_house: api_key_data["in_house"] || false
   )
 end
 
