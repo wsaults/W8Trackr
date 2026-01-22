@@ -24,7 +24,7 @@ See archived milestone documentation for v1.0 phase details.
 - Integer phases (21, 22, 23): Planned milestone work
 - Decimal phases (21.1, 21.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 21: Infrastructure & Migration** - App Group setup and data migration
+- [x] **Phase 21: Infrastructure & Migration** - App Group setup and data migration (completed 2026-01-22)
 - [ ] **Phase 22: Widgets** - Home screen widgets (small, medium, large)
 - [ ] **Phase 23: HealthKit Import** - Read weight data from Apple Health
 - [ ] **Phase 24: Social Sharing** - Shareable progress images
@@ -46,8 +46,8 @@ See archived milestone documentation for v1.0 phase details.
 **Plans:** 2 plans
 
 Plans:
-- [ ] 21-01-PLAN.md — App Group entitlement, SharedModelContainer, HealthKit settings fix
-- [ ] 21-02-PLAN.md — MigrationManager with CloudKit-safe migration, app integration
+- [x] 21-01-PLAN.md — App Group entitlement, SharedModelContainer, HealthKit settings fix
+- [x] 21-02-PLAN.md — MigrationManager with CloudKit-safe migration, app integration
 
 ### Phase 22: Widgets
 **Goal:** Users can add home screen widgets showing weight, progress, and trends
@@ -134,7 +134,7 @@ Phases execute in numeric order: 21 -> 21.1 -> 21.2 -> 22 -> etc.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 21. Infrastructure & Migration | v1.1 | 0/2 | Planned | - |
+| 21. Infrastructure & Migration | v1.1 | 2/2 | ✓ Complete | 2026-01-22 |
 | 22. Widgets | v1.1 | 0/TBD | Not started | - |
 | 23. HealthKit Import | v1.1 | 0/TBD | Not started | - |
 | 24. Social Sharing | v1.1 | 0/TBD | Not started | - |
@@ -143,4 +143,4 @@ Phases execute in numeric order: 21 -> 21.1 -> 21.2 -> 22 -> etc.
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22*
+*Last updated: 2026-01-22 (Phase 21 complete)*

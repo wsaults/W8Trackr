@@ -9,9 +9,9 @@ Requirements for v1.1 release. Each maps to roadmap phases.
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: App configures App Group entitlement for widget data sharing
-- [ ] **INFRA-02**: Existing users' SwiftData migrates to shared container without data loss
-- [ ] **INFRA-03**: HealthKit settings link navigates to correct destination
+- [x] **INFRA-01**: App configures App Group entitlement for widget data sharing
+- [x] **INFRA-02**: Existing users' SwiftData migrates to shared container without data loss
+- [x] **INFRA-03**: HealthKit settings link navigates to correct destination
 
 ### HealthKit Import
 
@@ -85,9 +85,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFRA-01 | Phase 21 | Pending |
-| INFRA-02 | Phase 21 | Pending |
-| INFRA-03 | Phase 21 | Pending |
+| INFRA-01 | Phase 21 | Complete |
+| INFRA-02 | Phase 21 | Complete |
+| INFRA-03 | Phase 21 | Complete |
 | HKIT-01 | Phase 23 | Pending |
 | HKIT-02 | Phase 23 | Pending |
 | HKIT-03 | Phase 23 | Pending |
@@ -118,4 +118,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-22*
-*Last updated: 2026-01-22 after roadmap creation*
+*Last updated: 2026-01-22 (Phase 21 complete: INFRA-01, INFRA-02, INFRA-03)*

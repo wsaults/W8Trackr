@@ -5,21 +5,21 @@
 See: .planning/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Users can reliably track weight and see progress with confidence-inspiring visualizations
-**Current focus:** v1.1 milestone - Phase 21: Infrastructure & Migration
+**Current focus:** v1.1 milestone - Phase 22: Widgets
 
 ## Current Position
 
-Phase: 21 of 26 (Infrastructure & Migration)
+Phase: 22 of 26 (Widgets)
 Plan: Not started
 Status: Ready to plan
-Last activity: 2026-01-22 — Roadmap created for v1.1 milestone
+Last activity: 2026-01-22 — Phase 21 complete
 
-Progress: [                    ] 0%
+Progress: [████                ] 17%
 
 ## Milestone History
 
 - **v1.0 Pre-Launch Audit** — 20 phases, 30 plans — shipped 2026-01-22
-- **v1.1 Feature Expansion** — 6 phases, TBD plans — in progress
+- **v1.1 Feature Expansion** — 6 phases, 12+ plans — in progress
 
 ## Performance Metrics
 
@@ -32,8 +32,8 @@ Progress: [                    ] 0%
 - Net LOC change: +20,330
 
 **v1.1 Milestone:**
-- Total plans completed: 0
-- Phases: 6 (21-26)
+- Total plans completed: 2
+- Phases completed: 1/6 (Phase 21)
 - Requirements: 25
 
 ## Accumulated Context
@@ -41,6 +41,11 @@ Progress: [                    ] 0%
 ### Decisions
 
 Key decisions logged in PROJECT.md Key Decisions table.
+
+**Phase 21 decisions:**
+- Use `replacePersistentStore` (not `migratePersistentStore`) for CloudKit metadata preservation
+- Keep old store as backup for this release (can clean up in future version)
+- No auto-retry on migration failure (requires user action)
 
 ### Pending Todos
 
@@ -54,9 +59,9 @@ None for v1.1 milestone.
 
 ### Blockers/Concerns
 
-**Phase 21 (Infrastructure):**
-- CloudKit migration risk: Test on device with CloudKit before release
-- App Group migration must be atomic with verification before deleting old container
+**Phase 21 (Infrastructure) — RESOLVED:**
+- ✓ CloudKit migration risk mitigated with replacePersistentStore
+- ✓ App Group migration implemented with backup retention
 
 **Phase 23 (HealthKit Import):**
 - Conflict resolution rules need specification during planning
@@ -65,9 +70,9 @@ None for v1.1 milestone.
 ## Session Continuity
 
 Last session: 2026-01-22
-Stopped at: Roadmap created for v1.1
+Stopped at: Phase 21 complete
 Resume file: None
-Pending: Plan Phase 21
+Pending: Plan Phase 22
 
 ## Code Quality Status
 
@@ -81,8 +86,8 @@ Pending: Plan Phase 21
 ## Next Steps
 
 ```
-/gsd:plan-phase 21
+/gsd:discuss-phase 22
 ```
 
 ---
-*Updated: 2026-01-22 after v1.1 roadmap created*
+*Updated: 2026-01-22 after Phase 21 complete*
