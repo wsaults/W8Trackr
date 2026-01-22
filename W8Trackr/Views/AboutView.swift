@@ -22,7 +22,6 @@ struct AboutView: View {
         NavigationStack {
             List {
                 appHeaderSection
-                linksSection
                 legalSection
                 creditsSection
             }
@@ -36,10 +35,14 @@ struct AboutView: View {
     private var appHeaderSection: some View {
         Section {
             VStack(spacing: 12) {
-                Image(systemName: "scalemass.fill")
-                    .font(.system(size: 60))
-                    .foregroundStyle(AppColors.primary)
-                    .padding(.top, 8)
+                if let icon = UIImage(named: "AppIcon") {
+                    Image(uiImage: icon)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 80)
+                        .clipShape(.rect(cornerRadius: 18))
+                        .padding(.top, 8)
+                }
 
                 Text("W8Trackr")
                     .font(.title2)
@@ -82,12 +85,12 @@ struct AboutView: View {
 
     private var legalSection: some View {
         Section {
-            Link(destination: URL(string: "https://w8trackr.app/privacy")!) {
+            Link(destination: URL(string: "https://saults.io/w8trackr-privacy")!) {
                 Label("Privacy Policy", systemImage: "hand.raised")
             }
 
-            Link(destination: URL(string: "https://w8trackr.app/terms")!) {
-                Label("Terms of Service", systemImage: "doc.text")
+            Link(destination: URL(string: "https://saults.io/w8trackr-support")!) {
+                Label("Support", systemImage: "questionmark.circle")
             }
         } header: {
             Text("Legal")
@@ -97,9 +100,9 @@ struct AboutView: View {
     private var creditsSection: some View {
         Section {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Made with ❤️ by Will Saults")
+                Text("Made with 🤖 by Will Saults")
                     .font(.subheadline)
-                Text("© 2025-2026 Saults Software")
+                Text("© 2026")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

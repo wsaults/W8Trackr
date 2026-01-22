@@ -1,40 +1,6 @@
 fastlane documentation
 ----
 
-# App Store Connect API Key Setup
-
-To enable TestFlight uploads and App Store submissions without 2FA prompts:
-
-1. **Create API Key in App Store Connect**
-   - Go to [App Store Connect](https://appstoreconnect.apple.com) > Users and Access > Keys
-   - Click the "+" button to generate a new API key
-   - Name: `W8Trackr Fastlane` (or similar)
-   - Access: `App Manager` role
-   - Click "Generate"
-
-2. **Download and Note Credentials**
-   - Download the `.p8` file immediately (only downloadable once!)
-   - Copy the **Key ID** (shown in the keys list)
-   - Copy the **Issuer ID** (shown at the top of the keys page)
-
-3. **Create api_key.json**
-   ```bash
-   cp fastlane/api_key.json.example fastlane/api_key.json
-   ```
-   Edit `fastlane/api_key.json` and fill in:
-   - `key_id`: Your Key ID from step 2
-   - `issuer_id`: Your Issuer ID from step 2
-   - `key`: Contents of your `.p8` file (keep the BEGIN/END markers, use `\n` for newlines)
-
-4. **Verify Setup**
-   ```bash
-   bundle exec fastlane beta
-   ```
-
-> **Security Note**: `fastlane/api_key.json` is gitignored. Never commit API keys!
-
-----
-
 # Installation
 
 Make sure you have the latest version of the Xcode command line tools installed:
@@ -72,6 +38,48 @@ Build the app
 ```
 
 Build and upload to TestFlight
+
+### ios release
+
+```sh
+[bundle exec] fastlane ios release
+```
+
+Submit to App Store (metadata and screenshots only)
+
+Assumes binary already uploaded via beta lane
+
+### ios submit
+
+```sh
+[bundle exec] fastlane ios submit
+```
+
+Submit to App Store and request review
+
+### ios screenshots
+
+```sh
+[bundle exec] fastlane ios screenshots
+```
+
+Capture App Store screenshots using snapshot
+
+### ios frames
+
+```sh
+[bundle exec] fastlane ios frames
+```
+
+Add device frames to screenshots using frameit
+
+### ios screenshots_framed
+
+```sh
+[bundle exec] fastlane ios screenshots_framed
+```
+
+Capture screenshots and add device frames
 
 ----
 

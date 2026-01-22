@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3BF0D3992C96C62C00E13C51"
+               BlueprintIdentifier = "BE502EAD2DBFBF7700299FBF"
                BuildableName = "W8Trackr.app"
                BlueprintName = "W8Trackr"
                ReferencedContainer = "container:W8Trackr.xcodeproj">
@@ -35,7 +35,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3BF0D3A92C96C62D00E13C51"
+               BlueprintIdentifier = "BE502EBA2DBFBF7900299FBF"
                BuildableName = "W8TrackrTests.xctest"
                BlueprintName = "W8TrackrTests"
                ReferencedContainer = "container:W8Trackr.xcodeproj">
@@ -46,7 +46,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3BF0D3B32C96C62D00E13C51"
+               BlueprintIdentifier = "BEUI00082DBFBF7900299FBF"
                BuildableName = "W8TrackrUITests.xctest"
                BlueprintName = "W8TrackrUITests"
                ReferencedContainer = "container:W8Trackr.xcodeproj">
@@ -68,7 +68,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3BF0D3992C96C62C00E13C51"
+            BlueprintIdentifier = "BE502EAD2DBFBF7700299FBF"
             BuildableName = "W8Trackr.app"
             BlueprintName = "W8Trackr"
             ReferencedContainer = "container:W8Trackr.xcodeproj">
@@ -85,7 +85,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3BF0D3992C96C62C00E13C51"
+            BlueprintIdentifier = "BE502EAD2DBFBF7700299FBF"
             BuildableName = "W8Trackr.app"
             BlueprintName = "W8Trackr"
             ReferencedContainer = "container:W8Trackr.xcodeproj">

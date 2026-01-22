@@ -33,9 +33,11 @@ platform :ios do
       scheme: "W8Trackr",
       configuration: "Release",
       export_method: "app-store",
-      clean: true
+      clean: true,
+      export_xcargs: "-allowProvisioningUpdates"
     )
     upload_to_testflight(
+      api_key_path: "fastlane/api_key.json",
       skip_waiting_for_build_processing: true
     )
   end
