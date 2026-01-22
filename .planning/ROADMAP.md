@@ -300,7 +300,7 @@ Plans:
 
 Plans:
 - [x] 15-01-PLAN.md - Redesign WeightEntryView with text input, date arrows, notes, expandable body fat, unsaved changes protection
-- [ ] 15-02-PLAN.md - Update FirstWeightStepView to text-only input and delete WeightAdjustmentButton component
+- [x] 15-02-PLAN.md - Update FirstWeightStepView to text-only input and delete WeightAdjustmentButton component
 
 **Details:**
 - Replace WeightAdjustmentButton-based UI with simple TextField
@@ -378,7 +378,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 12. Logbook Column Alignment | 1/1 | Complete | 2026-01-21 |
 | 13. App Store Automation | 1/1 | Complete | 2026-01-21 |
 | 14. Add Entry UI | 1/1 | Complete | 2026-01-21 |
-| 15. Weight Entry Screen | 1/2 | In Progress | - |
+| 15. Weight Entry Screen | 2/2 | Complete | 2026-01-21 |
 | 16. Trailing FAB Button | 1/1 | Complete | 2026-01-21 |
 | 17. Next Milestone UI | 1/1 | Complete | 2026-01-21 |
 
@@ -423,3 +423,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 17 added: 2026-01-21*
 *Phase 17 planned: 2026-01-21*
 *Phase 17 complete: 2026-01-21*
+*Phase 15 complete: 2026-01-21*
