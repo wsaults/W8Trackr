@@ -30,6 +30,8 @@ struct SpringNumberModifier: AnimatableModifier {
 
 /// View that animates number changes with spring physics
 struct AnimatedNumber: View {
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+
     let value: Double
     let format: FloatingPointFormatStyle<Double>
     let font: Font
@@ -55,12 +57,12 @@ struct AnimatedNumber: View {
             .fontWeight(fontWeight)
             .contentTransition(.numericText(value: displayedValue))
             .onAppear {
-                withAnimation(.spring(response: 0.8, dampingFraction: 0.6)) {
+                withAnimation(reduceMotion ? nil : .spring(response: 0.8, dampingFraction: 0.6)) {
                     displayedValue = value
                 }
             }
             .onChange(of: value) { _, newValue in
-                withAnimation(.spring(response: 0.8, dampingFraction: 0.6)) {
+                withAnimation(reduceMotion ? nil : .spring(response: 0.8, dampingFraction: 0.6)) {
                     displayedValue = newValue
                 }
             }
@@ -71,6 +73,8 @@ struct AnimatedNumber: View {
 
 /// Animated badge reveal for achievements
 struct BadgeUnlockView: View {
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+
     let icon: String
     let title: String
     let subtitle: String
@@ -150,25 +154,34 @@ struct BadgeUnlockView: View {
             .padding(40)
         }
         .onAppear {
-            // Badge entrance
-            withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
+            if reduceMotion {
+                // Show everything immediately without animation
                 showBadge = true
                 scale = 1
-            }
-
-            // Rotation flourish
-            withAnimation(.spring(response: 0.8, dampingFraction: 0.5).delay(0.2)) {
                 rotation = 360
-            }
-
-            // Text entrance
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.7).delay(0.4)) {
                 showText = true
-            }
-
-            // Button entrance
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.7).delay(0.6)) {
                 showButton = true
+            } else {
+                // Badge entrance
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
+                    showBadge = true
+                    scale = 1
+                }
+
+                // Rotation flourish
+                withAnimation(.spring(response: 0.8, dampingFraction: 0.5).delay(0.2)) {
+                    rotation = 360
+                }
+
+                // Text entrance
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.7).delay(0.4)) {
+                    showText = true
+                }
+
+                // Button entrance
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.7).delay(0.6)) {
+                    showButton = true
+                }
             }
         }
     }
@@ -190,6 +203,8 @@ struct BadgeUnlockView: View {
 
 /// Animated celebration for logging streaks
 struct StreakCelebrationView: View {
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+
     let streakCount: Int
     let onDismiss: () -> Void
 
@@ -274,26 +289,35 @@ struct StreakCelebrationView: View {
             .padding(40)
         }
         .onAppear {
-            // Flame entrance
-            withAnimation(.spring(response: 0.6, dampingFraction: 0.5)) {
+            if reduceMotion {
+                // Show everything immediately without animation
                 showFlame = true
                 flameScale = 1
-            }
-
-            // Pulse flame
-            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true).delay(0.5)) {
-                flameScale = 1.1
-            }
-
-            // Number count up
-            withAnimation(.spring(response: 1.0, dampingFraction: 0.7).delay(0.3)) {
                 showNumber = true
                 numberValue = Double(streakCount)
-            }
-
-            // Text entrance
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.7).delay(0.6)) {
                 showText = true
+            } else {
+                // Flame entrance
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.5)) {
+                    showFlame = true
+                    flameScale = 1
+                }
+
+                // Pulse flame
+                withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true).delay(0.5)) {
+                    flameScale = 1.1
+                }
+
+                // Number count up
+                withAnimation(.spring(response: 1.0, dampingFraction: 0.7).delay(0.3)) {
+                    showNumber = true
+                    numberValue = Double(streakCount)
+                }
+
+                // Text entrance
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.7).delay(0.6)) {
+                    showText = true
+                }
             }
         }
     }
@@ -339,6 +363,7 @@ struct StreakCelebrationView: View {
 // MARK: - Bounce Animation Modifier
 
 struct BounceModifier: ViewModifier {
+    let reduceMotion: Bool
     @State private var bouncing = false
     let delay: Double
     let amount: CGFloat
@@ -347,12 +372,14 @@ struct BounceModifier: ViewModifier {
         content
             .offset(y: bouncing ? -amount : 0)
             .onAppear {
-                withAnimation(
-                    .spring(response: 0.3, dampingFraction: 0.3)
-                    .repeatForever(autoreverses: true)
-                    .delay(delay)
-                ) {
-                    bouncing = true
+                if !reduceMotion {
+                    withAnimation(
+                        .spring(response: 0.3, dampingFraction: 0.3)
+                        .repeatForever(autoreverses: true)
+                        .delay(delay)
+                    ) {
+                        bouncing = true
+                    }
                 }
             }
     }
@@ -376,7 +403,7 @@ struct PopModifier: ViewModifier {
 extension View {
     /// Adds a bouncing animation
     func bounce(delay: Double = 0, amount: CGFloat = 5) -> some View {
-        modifier(BounceModifier(delay: delay, amount: amount))
+        BounceWrapper(delay: delay, amount: amount) { self }
     }
 
     /// Adds a pop scale effect
@@ -386,11 +413,45 @@ extension View {
 
     /// Entrance animation with scale and opacity
     func entranceAnimation(delay: Double = 0) -> some View {
-        modifier(EntranceModifier(delay: delay))
+        EntranceWrapper(delay: delay) { self }
+    }
+}
+
+// Wrapper views to pass environment to modifiers
+struct BounceWrapper<Content: View>: View {
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+    let delay: Double
+    let amount: CGFloat
+    let content: Content
+
+    init(delay: Double, amount: CGFloat, @ViewBuilder content: () -> Content) {
+        self.delay = delay
+        self.amount = amount
+        self.content = content()
+    }
+
+    var body: some View {
+        content.modifier(BounceModifier(reduceMotion: reduceMotion, delay: delay, amount: amount))
+    }
+}
+
+struct EntranceWrapper<Content: View>: View {
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+    let delay: Double
+    let content: Content
+
+    init(delay: Double, @ViewBuilder content: () -> Content) {
+        self.delay = delay
+        self.content = content()
+    }
+
+    var body: some View {
+        content.modifier(EntranceModifier(reduceMotion: reduceMotion, delay: delay))
     }
 }
 
 struct EntranceModifier: ViewModifier {
+    let reduceMotion: Bool
     let delay: Double
     @State private var isVisible = false
 
@@ -400,8 +461,12 @@ struct EntranceModifier: ViewModifier {
             .scaleEffect(isVisible ? 1 : 0.8)
             .offset(y: isVisible ? 0 : 20)
             .onAppear {
-                withAnimation(.spring(response: 0.5, dampingFraction: 0.7).delay(delay)) {
+                if reduceMotion {
                     isVisible = true
+                } else {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.7).delay(delay)) {
+                        isVisible = true
+                    }
                 }
             }
     }

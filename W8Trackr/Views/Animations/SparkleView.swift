@@ -17,6 +17,8 @@ import SwiftUI
 /// }
 /// ```
 struct SparkleView: View {
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+
     /// Number of sparkle particles
     var sparkleCount: Int = 12
 
@@ -33,6 +35,14 @@ struct SparkleView: View {
     var repeating: Bool = false
 
     var body: some View {
+        if reduceMotion {
+            EmptyView()
+        } else {
+            sparkleContent
+        }
+    }
+
+    private var sparkleContent: some View {
         GeometryReader { geometry in
             ZStack {
                 ForEach(0..<sparkleCount, id: \.self) { index in
@@ -117,6 +127,8 @@ struct SparkleParticle: View {
 
 /// A shimmer effect that moves across a view
 struct ShimmerView: View {
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+
     var color: Color = .white
     var duration: Double = 1.5
     var angle: Double = 30
@@ -124,6 +136,14 @@ struct ShimmerView: View {
     @State private var offset: CGFloat = -1
 
     var body: some View {
+        if reduceMotion {
+            EmptyView()
+        } else {
+            shimmerContent
+        }
+    }
+
+    private var shimmerContent: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
             let gradient = LinearGradient(
@@ -156,6 +176,8 @@ struct ShimmerView: View {
 
 /// A pulsing glow effect behind a view
 struct GlowView: View {
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+
     var color: Color = AppColors.success
     var radius: CGFloat = 20
     var intensity: Double = 0.6
@@ -168,8 +190,10 @@ struct GlowView: View {
             .blur(radius: radius)
             .scaleEffect(glowing ? 1.2 : 0.8)
             .onAppear {
-                withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
-                    glowing = true
+                if !reduceMotion {
+                    withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+                        glowing = true
+                    }
                 }
             }
     }
