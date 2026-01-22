@@ -20,7 +20,13 @@ struct WeightTrendChartView: View {
     @State private var selectedDate: Date?
 
     private var initialScrollPosition: Date {
-        entries.max(by: { $0.date < $1.date })?.date ?? Date()
+        guard let mostRecentDate = entries.max(by: { $0.date < $1.date })?.date else {
+            return Date()
+        }
+        // Offset backward so recent entries appear on the right side of the viewport
+        // This positions the most recent entry ~80% across the visible domain
+        let offsetSeconds = visibleDomainSeconds * 0.8
+        return mostRecentDate.addingTimeInterval(-offsetSeconds)
     }
 
     private var chartDateDomain: ClosedRange<Date> {
@@ -382,7 +388,7 @@ struct WeightTrendChartView: View {
                 }
             }
             .chartForegroundStyleScale([
-                "Entry": AppColors.chartEntry,
+                "Entry": AppColors.accent,
                 "Trend": AppColors.chartTrend,
                 "Predicted": AppColors.chartPredicted
             ])
