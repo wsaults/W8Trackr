@@ -78,6 +78,30 @@ struct GoalPredictionView: View {
         return days / 7
     }
 
+    private var accessibilityDescription: String {
+        switch prediction.status {
+        case .onTrack:
+            let goalWeight = abs(prediction.weightToGoal)
+            let unitStr = prediction.unit.rawValue
+            if let date = formattedDate {
+                return "Goal prediction: You're on track to reach your goal of \(String(format: "%.1f", goalWeight)) \(unitStr) by \(date), losing \(String(format: "%.1f", abs(prediction.weeklyVelocity))) \(unitStr) per week"
+            }
+            return "Goal prediction: You're on track to reach your goal"
+        case .atGoal:
+            return "You've reached your goal weight! Congratulations on reaching your target weight. Keep up the great work maintaining it!"
+        case .wrongDirection:
+            let direction = prediction.weightToGoal > 0 ? "gaining" : "losing"
+            let goal = prediction.weightToGoal > 0 ? "lose" : "gain"
+            return "Trend alert: Currently \(direction) weight. Your goal requires you to \(goal) weight. Current rate: \(String(format: "%.1f", abs(prediction.weeklyVelocity))) \(prediction.unit.rawValue) per week \(direction)"
+        case .tooSlow:
+            return "Goal prediction: At current pace of \(String(format: "%.1f", abs(prediction.weeklyVelocity))) \(prediction.unit.rawValue) per week, reaching your goal would take over 2 years"
+        case .insufficientData:
+            return "Goal tracking: Keep logging! Log your weight for at least 7 days to see when you'll reach your goal"
+        case .noData:
+            return "Goal tracking: Start tracking. Add weight entries to see your goal prediction"
+        }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             // Header
@@ -110,6 +134,8 @@ struct GoalPredictionView: View {
         .padding()
         .background(backgroundColor)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityDescription)
     }
 
     private var headerText: String {

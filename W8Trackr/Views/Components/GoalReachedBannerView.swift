@@ -34,6 +34,8 @@ struct GoalReachedBannerView: View {
         .background(AppColors.success.opacity(0.1))
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .padding(.horizontal)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Goal reached! Congratulations on reaching your target weight!")
     }
 }
 
