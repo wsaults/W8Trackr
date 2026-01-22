@@ -219,11 +219,15 @@ struct WeightEntryView: View {
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.title2)
+                        .frame(minWidth: 44, minHeight: 44)
                 }
+                .accessibilityLabel("Previous day")
+                .accessibilityHint("Navigate to previous day for entry")
 
                 Text(date, format: .dateTime.weekday(.wide).month(.abbreviated).day())
                     .font(.headline)
                     .frame(maxWidth: .infinity)
+                    .accessibilityLabel("Selected date: \(date, format: .dateTime.weekday(.wide).month(.abbreviated).day())")
 
                 Button {
                     if canNavigateForward,
@@ -233,8 +237,11 @@ struct WeightEntryView: View {
                 } label: {
                     Image(systemName: "chevron.right")
                         .font(.title2)
+                        .frame(minWidth: 44, minHeight: 44)
                 }
                 .disabled(!canNavigateForward)
+                .accessibilityLabel("Next day")
+                .accessibilityHint("Navigate to next day for entry")
             }
             .padding(.horizontal)
         }
@@ -304,7 +311,10 @@ struct WeightEntryView: View {
                 Text(showMoreFields ? "Less..." : "More...")
                     .font(.subheadline)
                     .foregroundStyle(AppColors.primary)
+                    .frame(minWidth: 44, minHeight: 44)
             }
+            .accessibilityLabel(showMoreFields ? "Show less options" : "Show more options")
+            .accessibilityHint("Toggles body fat percentage field")
 
             if showMoreFields {
                 VStack(alignment: .leading, spacing: 8) {

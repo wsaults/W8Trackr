@@ -95,6 +95,8 @@ struct LogbookView: View {
                         } label: {
                             Image(systemName: hasActiveFilters ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
                         }
+                        .accessibilityLabel("Filter logbook entries")
+                        .accessibilityHint(hasActiveFilters ? "Filters are active. Tap to modify or clear filters." : "Show filter options")
 
                         // Add entry button
                         Button {

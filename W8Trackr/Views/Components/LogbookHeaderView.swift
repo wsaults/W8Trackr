@@ -37,6 +37,7 @@ struct LogbookHeaderView: View {
             .padding(.horizontal)
             .padding(.vertical, LogbookLayout.headerVerticalPadding)
             .background(AppColors.background)
+            .accessibilityHidden(true)
 
             Divider()
         }
