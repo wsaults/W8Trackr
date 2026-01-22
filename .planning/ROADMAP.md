@@ -28,6 +28,7 @@ This milestone addresses bugs and UX issues discovered during pre-launch testing
 - [x] **Phase 16: Trailing FAB Button** - Move add button to right of tab bar using Tab(role: .search) pattern
 - [x] **Phase 17: Next Milestone UI** - Improve progress bar direction (left-to-right) and overall design/informativeness
 - [x] **Phase 18: Hide Streak UI** - Remove streak-related UI elements for launch
+- [ ] **Phase 19: App Store Submission Prep** - Prepare App Store info and screenshots for submission
 
 ## Phase Details
 
@@ -381,10 +382,32 @@ Plans:
 - Delete or comment out StreakCelebrationView (verify unused first)
 - Keep streak calculation functions for potential future use
 
+### Phase 19: App Store Submission Prep
+**Goal**: Finalize all App Store metadata, screenshots, and submission materials
+**Depends on**: Phase 18
+**Requirements**: App Store submission readiness
+**Success Criteria** (what must be TRUE):
+  1. Keywords optimized for 2026 AI-based App Store search
+  2. Screenshots captured for all required device sizes (6.9" iPhone, 13" iPad)
+  3. fastlane precheck passes with no errors
+  4. Age rating questionnaire completed in App Store Connect
+  5. Privacy policy URL accessible
+**Plans**: 1 plan
+
+Plans:
+- [ ] 19-01-PLAN.md - Update keywords, capture screenshots, validate metadata, complete age rating
+
+**Details:**
+- Update keywords.txt from keyword-stuffing to natural language phrases for 2026 AI search
+- Run `fastlane snapshot` to capture screenshots on all device sizes
+- Run `fastlane precheck` to validate all metadata before submission
+- Complete age rating questionnaire in App Store Connect (DEADLINE: January 31, 2026)
+- Verify privacy policy URL is accessible
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17 -> 18
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17 -> 18 -> 19
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -406,6 +429,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 16. Trailing FAB Button | 1/1 | Complete | 2026-01-21 |
 | 17. Next Milestone UI | 1/1 | Complete | 2026-01-21 |
 | 18. Hide Streak UI | 1/1 | Complete | 2026-01-21 |
+| 19. App Store Submission Prep | 0/1 | Not Started | - |
 
 ---
 *Roadmap created: 2026-01-20*
@@ -452,3 +476,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 *Phase 18 added: 2026-01-22*
 *Phase 18 planned: 2026-01-22*
 *Phase 18 complete: 2026-01-21*
+*Phase 19 planned: 2026-01-22*
