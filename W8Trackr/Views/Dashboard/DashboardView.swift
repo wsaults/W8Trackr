@@ -18,7 +18,7 @@ import SwiftUI
 /// │  + Trend arrow + change badge   │
 /// ├─────────────────────────────────┤
 /// │  Quick Stats Row                │
-/// │  [Streak] [This Week] [To Goal] │
+/// │  [This Week] [To Goal]          │
 /// ├─────────────────────────────────┤
 /// │  Milestone Progress Ring        │
 /// ├─────────────────────────────────┤
@@ -56,10 +56,6 @@ struct DashboardView: View {
 
     private var toGoal: Double {
         currentWeight - goalWeight
-    }
-
-    private var streak: Int {
-        QuickStatsRow.calculateStreak(from: entries)
     }
 
     private var weeklyChange: Double? {
@@ -156,7 +152,6 @@ struct DashboardView: View {
 
                 // Quick Stats Row
                 QuickStatsRow(
-                    streak: streak,
                     weeklyChange: weeklyChange,
                     toGoal: toGoal,
                     weightUnit: preferredWeightUnit

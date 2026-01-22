@@ -11,29 +11,19 @@ import SwiftUI
 ///
 /// Layout:
 /// ```
-/// ┌─────────┐ ┌─────────┐ ┌─────────┐
-/// │ Streak  │ │This Week│ │ To Goal │
-/// │   7     │ │  -1.5   │ │  12.5   │
-/// │  days   │ │   lb    │ │   lb    │
-/// └─────────┘ └─────────┘ └─────────┘
+/// ┌─────────┐ ┌─────────┐
+/// │This Week│ │ To Goal │
+/// │  -1.5   │ │  12.5   │
+/// │   lb    │ │   lb    │
+/// └─────────┘ └─────────┘
 /// ```
 struct QuickStatsRow: View {
-    let streak: Int
     let weeklyChange: Double?
     let toGoal: Double
     let weightUnit: WeightUnit
 
     var body: some View {
         HStack(spacing: 12) {
-            // Streak card
-            QuickStatCard(
-                title: "Streak",
-                value: "\(streak)",
-                subtitle: streak == 1 ? "day" : "days",
-                icon: "flame.fill",
-                iconColor: streak >= 7 ? AppColors.warning : AppColors.secondary
-            )
-
             // This week card
             if let change = weeklyChange {
                 let sign = change > 0 ? "+" : ""
@@ -188,7 +178,6 @@ extension QuickStatsRow {
 #if DEBUG
 #Preview("Good Progress") {
     QuickStatsRow(
-        streak: 7,
         weeklyChange: -1.5,
         toGoal: 12.5,
         weightUnit: .lb
@@ -198,7 +187,6 @@ extension QuickStatsRow {
 
 #Preview("Just Started") {
     QuickStatsRow(
-        streak: 1,
         weeklyChange: nil,
         toGoal: 25.0,
         weightUnit: .lb
@@ -208,7 +196,6 @@ extension QuickStatsRow {
 
 #Preview("Close to Goal") {
     QuickStatsRow(
-        streak: 30,
         weeklyChange: -0.5,
         toGoal: 2.5,
         weightUnit: .kg
@@ -218,7 +205,6 @@ extension QuickStatsRow {
 
 #Preview("Weight Gain") {
     QuickStatsRow(
-        streak: 3,
         weeklyChange: 2.0,
         toGoal: -10.0,
         weightUnit: .lb
