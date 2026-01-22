@@ -1,1 +1,1 @@
-weight,tracker,health,fitness,scale,diet,body,fat,pounds,kilograms,trend,chart,log
+weight tracking,health journal,fitness progress,body measurements,diet log,scale tracker
