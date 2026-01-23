@@ -300,7 +300,6 @@ struct LogbookRowDataBuildRowDataTests {
 
     @Test func unitConversionInBuildRowData() {
         // Create entry in kg
-        let calendar = Calendar.current
         let date = Date()
         let entry = WeightEntry(weight: 81.6466, unit: .kg, date: date) // 180 lb
 

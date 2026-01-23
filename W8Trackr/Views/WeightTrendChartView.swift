@@ -432,41 +432,20 @@ struct WeightTrendChartView: View {
 
 // MARK: - AXChartDescriptorRepresentable
 
-extension WeightTrendChartView: AXChartDescriptorRepresentable {
-    /// Computes filtered entries for accessibility without main actor isolation.
-    /// Uses the immutable `entries` and `selectedRange` properties directly.
-    private nonisolated var accessibilityFilteredEntries: [WeightEntry] {
-        guard let days = selectedRange.days else { return entries }
-        let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
-        return entries.filter { $0.date >= cutoffDate }
-    }
-
-    /// Computes accessibility summary without main actor isolation.
-    private nonisolated var accessibilityChartSummary: String {
-        let sortedEntries = accessibilityFilteredEntries.sorted { $0.date < $1.date }
-        guard let firstEntry = sortedEntries.first,
-              let lastEntry = sortedEntries.last else {
-            return "No weight data available"
-        }
-
-        let firstWeight = firstEntry.weightValue(in: weightUnit)
-        let lastWeight = lastEntry.weightValue(in: weightUnit)
-        let change = lastWeight - firstWeight
-
-        let trend: String
-        if change > 0.1 {
-            trend = "increased"
-        } else if change < -0.1 {
-            trend = "decreased"
+// @preconcurrency suppresses Sendable warnings for Accessibility module
+// AXChartDescriptorRepresentable is always called on main thread
+extension WeightTrendChartView: @preconcurrency AXChartDescriptorRepresentable {
+    func makeChartDescriptor() -> AXChartDescriptor {
+        // Filter entries based on selected date range
+        let filteredEntries: [WeightEntry]
+        if let days = selectedRange.days {
+            let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
+            filteredEntries = entries.filter { $0.date >= cutoffDate }
         } else {
-            trend = "remained stable"
+            filteredEntries = entries
         }
 
-        return "Weight \(trend) from \(firstWeight.formatted(.number.precision(.fractionLength(1)))) to \(lastWeight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.displayName) over \(sortedEntries.count) entries"
-    }
-
-    nonisolated func makeChartDescriptor() -> AXChartDescriptor {
-        let sorted = accessibilityFilteredEntries.sorted { $0.date < $1.date }
+        let sorted = filteredEntries.sorted { $0.date < $1.date }
 
         // Create date axis
         let minDate = sorted.first?.date ?? Date()
@@ -512,9 +491,30 @@ extension WeightTrendChartView: AXChartDescriptorRepresentable {
             dataPoints: dataPoints
         )
 
+        // Compute accessibility summary inline
+        let summary: String
+        if let firstEntry = sorted.first, let lastEntry = sorted.last {
+            let firstWeight = firstEntry.weightValue(in: unit)
+            let lastWeight = lastEntry.weightValue(in: unit)
+            let change = lastWeight - firstWeight
+
+            let trend: String
+            if change > 0.1 {
+                trend = "increased"
+            } else if change < -0.1 {
+                trend = "decreased"
+            } else {
+                trend = "remained stable"
+            }
+
+            summary = "Weight \(trend) from \(firstWeight.formatted(.number.precision(.fractionLength(1)))) to \(lastWeight.formatted(.number.precision(.fractionLength(1)))) \(unit.displayName) over \(sorted.count) entries"
+        } else {
+            summary = "No weight data available"
+        }
+
         return AXChartDescriptor(
             title: "Weight Trend",
-            summary: accessibilityChartSummary,
+            summary: summary,
             xAxis: dateAxis,
             yAxis: weightAxis,
             additionalAxes: [],
