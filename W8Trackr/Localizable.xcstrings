@@ -1,0 +1,2006 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Dashboard" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panel"
+          }
+        }
+      }
+    },
+    "Logbook" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registro"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes"
+          }
+        }
+      }
+    },
+    "Add" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agregar"
+          }
+        }
+      }
+    },
+    "Current Weight" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso Actual"
+          }
+        }
+      }
+    },
+    "Goal Weight" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso Objetivo"
+          }
+        }
+      }
+    },
+    "Weight" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso"
+          }
+        }
+      }
+    },
+    "Notes" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notas"
+          }
+        }
+      }
+    },
+    "Date" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fecha"
+          }
+        }
+      }
+    },
+    "Save" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        }
+      }
+    },
+    "Delete" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar"
+          }
+        }
+      }
+    },
+    "Edit" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editar"
+          }
+        }
+      }
+    },
+    "Add Entry" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agregar Entrada"
+          }
+        }
+      }
+    },
+    "Edit Entry" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editar Entrada"
+          }
+        }
+      }
+    },
+    "Save Changes" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar Cambios"
+          }
+        }
+      }
+    },
+    "Weight Unit" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unidad de Peso"
+          }
+        }
+      }
+    },
+    "Weight Settings" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes de Peso"
+          }
+        }
+      }
+    },
+    "Your goal weight will be automatically converted when changing units." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Su peso objetivo se convertira automaticamente al cambiar de unidades."
+          }
+        }
+      }
+    },
+    "Reminders" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recordatorios"
+          }
+        }
+      }
+    },
+    "Daily Reminder" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recordatorio Diario"
+          }
+        }
+      }
+    },
+    "Reminder Time" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hora del Recordatorio"
+          }
+        }
+      }
+    },
+    "You'll receive a notification at the specified time every day to log your weight." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recibira una notificacion a la hora especificada todos los dias para registrar su peso."
+          }
+        }
+      }
+    },
+    "Smart Reminders" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recordatorios Inteligentes"
+          }
+        }
+      }
+    },
+    "Get personalized notifications including milestone alerts and weekly summaries based on your logging habits." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reciba notificaciones personalizadas incluyendo alertas de hitos y resumenes semanales basados en sus habitos de registro."
+          }
+        }
+      }
+    },
+    "iCloud Sync" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizacion iCloud"
+          }
+        }
+      }
+    },
+    "iCloud" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud"
+          }
+        }
+      }
+    },
+    "Your weight data syncs automatically across all your devices." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sus datos de peso se sincronizan automaticamente en todos sus dispositivos."
+          }
+        }
+      }
+    },
+    "Apple Health" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Salud"
+          }
+        }
+      }
+    },
+    "Sync with Apple Health" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizar con Apple Salud"
+          }
+        }
+      }
+    },
+    "See weight from your scale, Apple Watch, and other apps." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vea el peso de su bascula, Apple Watch y otras aplicaciones."
+          }
+        }
+      }
+    },
+    "Data Management" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestion de Datos"
+          }
+        }
+      }
+    },
+    "Export Data" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar Datos"
+          }
+        }
+      }
+    },
+    "Danger Zone" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zona de Peligro"
+          }
+        }
+      }
+    },
+    "Delete All Weight Entries" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar Todas las Entradas de Peso"
+          }
+        }
+      }
+    },
+    "Delete All Entries" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar Todas las Entradas"
+          }
+        }
+      }
+    },
+    "Are you sure you want to delete all weight entries? You'll have 5 seconds to undo." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta seguro de que desea eliminar todas las entradas de peso? Tendra 5 segundos para deshacer."
+          }
+        }
+      }
+    },
+    "Chart Settings" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes del Grafico"
+          }
+        }
+      }
+    },
+    "Trend Smoothing" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suavizado de Tendencia"
+          }
+        }
+      }
+    },
+    "Shows your true weight trend by smoothing out daily fluctuations from water weight and sodium." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra su verdadera tendencia de peso suavizando las fluctuaciones diarias por retencion de liquidos y sodio."
+          }
+        }
+      }
+    },
+    "Milestones" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hitos"
+          }
+        }
+      }
+    },
+    "Celebration Interval" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intervalo de Celebracion"
+          }
+        }
+      }
+    },
+    "About" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acerca de"
+          }
+        }
+      }
+    },
+    "About W8Trackr" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acerca de W8Trackr"
+          }
+        }
+      }
+    },
+    "Welcome to W8Trackr" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenido a W8Trackr"
+          }
+        }
+      }
+    },
+    "Let's start your journey to a healthier you!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comencemos su camino hacia una vida mas saludable!"
+          }
+        }
+      }
+    },
+    "Get Started" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comenzar"
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
+          }
+        }
+      }
+    },
+    "Skip" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omitir"
+          }
+        }
+      }
+    },
+    "Choose Your Unit" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elija Su Unidad"
+          }
+        }
+      }
+    },
+    "How do you prefer to track your weight?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Como prefiere registrar su peso?"
+          }
+        }
+      }
+    },
+    "Pounds" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libras"
+          }
+        }
+      }
+    },
+    "Kilograms" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kilogramos"
+          }
+        }
+      }
+    },
+    "Set Your Goal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Establezca Su Objetivo"
+          }
+        }
+      }
+    },
+    "What's your target weight?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cual es su peso objetivo?"
+          }
+        }
+      }
+    },
+    "Your Current Weight" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Su Peso Actual"
+          }
+        }
+      }
+    },
+    "Let's log your starting point" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registremos su punto de partida"
+          }
+        }
+      }
+    },
+    "You're All Set!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todo Listo!"
+          }
+        }
+      }
+    },
+    "Your journey to a healthier you starts now. Log your weight daily for the best insights." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Su camino hacia una vida mas saludable comienza ahora. Registre su peso diariamente para obtener los mejores resultados."
+          }
+        }
+      }
+    },
+    "Start Tracking" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comenzar a Registrar"
+          }
+        }
+      }
+    },
+    "Quick Tour" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tour Rapido"
+          }
+        }
+      }
+    },
+    "Track Your Progress" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siga Su Progreso"
+          }
+        }
+      }
+    },
+    "See your weight trend over time with beautiful charts that smooth out daily fluctuations." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vea su tendencia de peso a lo largo del tiempo con graficos atractivos que suavizan las fluctuaciones diarias."
+          }
+        }
+      }
+    },
+    "Celebrate Milestones" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Celebre Sus Hitos"
+          }
+        }
+      }
+    },
+    "See predictions for your next milestones and celebrate each achievement." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vea predicciones para sus proximos hitos y celebre cada logro."
+          }
+        }
+      }
+    },
+    "Stay Consistent" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenga la Constancia"
+          }
+        }
+      }
+    },
+    "Set daily reminders to log your weight and build a healthy habit." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configure recordatorios diarios para registrar su peso y crear un habito saludable."
+          }
+        }
+      }
+    },
+    "Sync with Health" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizar con Salud"
+          }
+        }
+      }
+    },
+    "Optionally sync your data with Apple Health for a complete picture." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opcionalmente sincronice sus datos con Apple Salud para una vision completa."
+          }
+        }
+      }
+    },
+    "Let's Start!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comencemos!"
+          }
+        }
+      }
+    },
+    "Goal Reached!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objetivo Alcanzado!"
+          }
+        }
+      }
+    },
+    "Goal Prediction" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prediccion de Objetivo"
+          }
+        }
+      }
+    },
+    "Goal Tracking" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguimiento de Objetivo"
+          }
+        }
+      }
+    },
+    "Trend Alert" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alerta de Tendencia"
+          }
+        }
+      }
+    },
+    "Reaching goal by" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alcanzando objetivo para"
+          }
+        }
+      }
+    },
+    "Congratulations!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Felicidades!"
+          }
+        }
+      }
+    },
+    "Congratulations on reaching your target weight!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Felicidades por alcanzar su peso objetivo!"
+          }
+        }
+      }
+    },
+    "You've reached your target weight. Keep up the great work maintaining it!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ha alcanzado su peso objetivo. Siga manteniendo el buen trabajo!"
+          }
+        }
+      }
+    },
+    "Goal is far away" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El objetivo esta lejos"
+          }
+        }
+      }
+    },
+    "At your current pace, reaching your goal would take over 2 years. Consider adjusting your approach." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A su ritmo actual, alcanzar su objetivo tomaria mas de 2 anos. Considere ajustar su enfoque."
+          }
+        }
+      }
+    },
+    "Keep logging!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siga registrando!"
+          }
+        }
+      }
+    },
+    "Log your weight for at least 7 days to see when you'll reach your goal." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registre su peso durante al menos 7 dias para ver cuando alcanzara su objetivo."
+          }
+        }
+      }
+    },
+    "Start tracking" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comenzar a registrar"
+          }
+        }
+      }
+    },
+    "Add weight entries to see your goal prediction." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agregue entradas de peso para ver su prediccion de objetivo."
+          }
+        }
+      }
+    },
+    "This Week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta Semana"
+          }
+        }
+      }
+    },
+    "To Goal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al Objetivo"
+          }
+        }
+      }
+    },
+    "Next Milestone" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proximo Hito"
+          }
+        }
+      }
+    },
+    "Milestone Reached!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hito Alcanzado!"
+          }
+        }
+      }
+    },
+    "Keep up the great work!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siga con el excelente trabajo!"
+          }
+        }
+      }
+    },
+    "Milestones Achieved" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hitos Alcanzados"
+          }
+        }
+      }
+    },
+    "No milestones completed yet. Keep going!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aun no hay hitos completados. Siga adelante!"
+          }
+        }
+      }
+    },
+    "Share" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir"
+          }
+        }
+      }
+    },
+    "Weight Chart" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grafico de Peso"
+          }
+        }
+      }
+    },
+    "Date Range" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rango de Fechas"
+          }
+        }
+      }
+    },
+    "1W" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1S"
+          }
+        }
+      }
+    },
+    "1M" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1M"
+          }
+        }
+      }
+    },
+    "3M" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3M"
+          }
+        }
+      }
+    },
+    "6M" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6M"
+          }
+        }
+      }
+    },
+    "1Y" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1A"
+          }
+        }
+      }
+    },
+    "All" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todo"
+          }
+        }
+      }
+    },
+    "Weekly Summary" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resumen Semanal"
+          }
+        }
+      }
+    },
+    "No Weekly Data" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin Datos Semanales"
+          }
+        }
+      }
+    },
+    "Log entries to see weekly summaries" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registre entradas para ver resumenes semanales"
+          }
+        }
+      }
+    },
+    "Swipe for more" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deslice para ver mas"
+          }
+        }
+      }
+    },
+    "Average" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Promedio"
+          }
+        }
+      }
+    },
+    "Change" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambio"
+          }
+        }
+      }
+    },
+    "Best Day" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mejor Dia"
+          }
+        }
+      }
+    },
+    "Great progress this week!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gran progreso esta semana!"
+          }
+        }
+      }
+    },
+    "You're crushing it!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo esta logrando!"
+          }
+        }
+      }
+    },
+    "Keep up the momentum!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenga el impulso!"
+          }
+        }
+      }
+    },
+    "Amazing work!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trabajo increible!"
+          }
+        }
+      }
+    },
+    "Staying consistent!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manteniendose constante!"
+          }
+        }
+      }
+    },
+    "Holding steady!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manteniendose estable!"
+          }
+        }
+      }
+    },
+    "Consistency is key!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La constancia es clave!"
+          }
+        }
+      }
+    },
+    "Right on track!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En el camino correcto!"
+          }
+        }
+      }
+    },
+    "Every week is a fresh start!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada semana es un nuevo comienzo!"
+          }
+        }
+      }
+    },
+    "Tomorrow's another day!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manana es otro dia!"
+          }
+        }
+      }
+    },
+    "Keep tracking, keep learning!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siga registrando, siga aprendiendo!"
+          }
+        }
+      }
+    },
+    "Progress isn't always linear!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El progreso no siempre es lineal!"
+          }
+        }
+      }
+    },
+    "Begin Your Journey" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comience Su Camino"
+          }
+        }
+      }
+    },
+    "Track your weight to see trends and progress toward your goals." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registre su peso para ver tendencias y progreso hacia sus objetivos."
+          }
+        }
+      }
+    },
+    "Log Your First Weight" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registre Su Primer Peso"
+          }
+        }
+      }
+    },
+    "Your Logbook Awaits" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Su Registro Le Espera"
+          }
+        }
+      }
+    },
+    "Every journey starts with a single step. Add your first entry to begin tracking." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todo camino comienza con un paso. Agregue su primera entrada para comenzar a registrar."
+          }
+        }
+      }
+    },
+    "Not Enough Data" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datos Insuficientes"
+          }
+        }
+      }
+    },
+    "Add a few more entries to see your weight trend chart come to life." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agregue algunas entradas mas para ver su grafico de tendencia de peso cobrar vida."
+          }
+        }
+      }
+    },
+    "Export Format" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formato de Exportacion"
+          }
+        }
+      }
+    },
+    "CSV" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CSV"
+          }
+        }
+      }
+    },
+    "JSON" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JSON"
+          }
+        }
+      }
+    },
+    "Filter by Date Range" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filtrar por Rango de Fechas"
+          }
+        }
+      }
+    },
+    "Start Date" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fecha de Inicio"
+          }
+        }
+      }
+    },
+    "End Date" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fecha de Fin"
+          }
+        }
+      }
+    },
+    "Export all entries" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar todas las entradas"
+          }
+        }
+      }
+    },
+    "CSV format works with spreadsheet apps like Excel and Numbers." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El formato CSV funciona con aplicaciones de hojas de calculo como Excel y Numbers."
+          }
+        }
+      }
+    },
+    "JSON format is ideal for backups and can be imported by other apps." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El formato JSON es ideal para copias de seguridad y puede ser importado por otras aplicaciones."
+          }
+        }
+      }
+    },
+    "Export Summary" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resumen de Exportacion"
+          }
+        }
+      }
+    },
+    "Entries to Export" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entradas a Exportar"
+          }
+        }
+      }
+    },
+    "Fields" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Campos"
+          }
+        }
+      }
+    },
+    "No entries to export" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay entradas para exportar"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
+          }
+        }
+      }
+    },
+    "Legal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legal"
+          }
+        }
+      }
+    },
+    "Privacy Policy" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Politica de Privacidad"
+          }
+        }
+      }
+    },
+    "Support" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soporte"
+          }
+        }
+      }
+    },
+    "Credits" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creditos"
+          }
+        }
+      }
+    },
+    "Thank you for using W8Trackr!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gracias por usar W8Trackr!"
+          }
+        }
+      }
+    },
+    "Simple weight tracking\nwith smart insights" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguimiento de peso simple\ncon informacion inteligente"
+          }
+        }
+      }
+    },
+    "Sync Status" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado de Sincronizacion"
+          }
+        }
+      }
+    },
+    "Open Settings" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir Ajustes"
+          }
+        }
+      }
+    },
+    "Retry" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reintentar"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aceptar"
+          }
+        }
+      }
+    },
+    "Checking sync status..." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verificando estado de sincronizacion..."
+          }
+        }
+      }
+    },
+    "Synced with iCloud" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizado con iCloud"
+          }
+        }
+      }
+    },
+    "Syncing..." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizando..."
+          }
+        }
+      }
+    },
+    "Offline - changes saved locally" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin conexion - cambios guardados localmente"
+          }
+        }
+      }
+    },
+    "Not signed in to iCloud" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No ha iniciado sesion en iCloud"
+          }
+        }
+      }
+    },
+    "Sync error" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error de sincronizacion"
+          }
+        }
+      }
+    },
+    "Sign in to iCloud to sync data across devices" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicie sesion en iCloud para sincronizar datos entre dispositivos"
+          }
+        }
+      }
+    },
+    "iCloud access is restricted" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El acceso a iCloud esta restringido"
+          }
+        }
+      }
+    },
+    "iCloud is temporarily unavailable" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud no esta disponible temporalmente"
+          }
+        }
+      }
+    },
+    "Sync failed. Will retry automatically." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizacion fallida. Se reintentara automaticamente."
+          }
+        }
+      }
+    },
+    "With Notes" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con Notas"
+          }
+        }
+      }
+    },
+    "Day of Week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dia de la Semana"
+          }
+        }
+      }
+    },
+    "Clear Days" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borrar Dias"
+          }
+        }
+      }
+    },
+    "Clear All Filters" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borrar Todos los Filtros"
+          }
+        }
+      }
+    },
+    "No Matching Entries" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Hay Entradas Coincidentes"
+          }
+        }
+      }
+    },
+    "Try adjusting your filters" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intente ajustar sus filtros"
+          }
+        }
+      }
+    },
+    "Entry deleted" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrada eliminada"
+          }
+        }
+      }
+    },
+    "Failed to delete entry" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error al eliminar entrada"
+          }
+        }
+      }
+    },
+    "Undo" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deshacer"
+          }
+        }
+      }
+    },
+    "All entries deleted" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todas las entradas eliminadas"
+          }
+        }
+      }
+    },
+    "Failed to delete entries" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error al eliminar entradas"
+          }
+        }
+      }
+    },
+    "Notifications Disabled" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notificaciones Deshabilitadas"
+          }
+        }
+      }
+    },
+    "Please enable notifications in Settings to use daily reminders." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor habilite las notificaciones en Ajustes para usar recordatorios diarios."
+          }
+        }
+      }
+    },
+    "Health Access Required" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se Requiere Acceso a Salud"
+          }
+        }
+      }
+    },
+    "Open Health App" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir Aplicacion Salud"
+          }
+        }
+      }
+    },
+    "To sync weight data, open the Health app, tap your profile, select Apps, and enable W8Trackr." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para sincronizar datos de peso, abra la aplicacion Salud, toque su perfil, seleccione Apps y habilite W8Trackr."
+          }
+        }
+      }
+    },
+    "Unable to Save" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Se Pudo Guardar"
+          }
+        }
+      }
+    },
+    "Your weight entry couldn't be saved. Please try again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Su entrada de peso no pudo ser guardada. Por favor intente de nuevo."
+          }
+        }
+      }
+    },
+    "Discard Changes?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descartar Cambios?"
+          }
+        }
+      }
+    },
+    "Discard" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descartar"
+          }
+        }
+      }
+    },
+    "Keep Editing" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguir Editando"
+          }
+        }
+      }
+    },
+    "You have unsaved changes that will be lost." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiene cambios sin guardar que se perderan."
+          }
+        }
+      }
+    },
+    "Add a note (optional)" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agregar una nota (opcional)"
+          }
+        }
+      }
+    },
+    "Body Fat %" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "% Grasa Corporal"
+          }
+        }
+      }
+    },
+    "Body Fat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grasa Corporal"
+          }
+        }
+      }
+    },
+    "More..." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mas..."
+          }
+        }
+      }
+    },
+    "Less..." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menos..."
+          }
+        }
+      }
+    },
+    "Created" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creado"
+          }
+        }
+      }
+    },
+    "Last Modified" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ultima Modificacion"
+          }
+        }
+      }
+    },
+    "Previous day" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dia anterior"
+          }
+        }
+      }
+    },
+    "Next day" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dia siguiente"
+          }
+        }
+      }
+    },
+    "% body fat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "% grasa corporal"
+          }
+        }
+      }
+    },
+    "this week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "esta semana"
+          }
+        }
+      }
+    },
+    "Sample data added. Feel free to delete and add your own entries!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datos de ejemplo agregados. Puede eliminarlos y agregar sus propias entradas!"
+          }
+        }
+      }
+    },
+    "Failed to save initial data" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error al guardar datos iniciales"
+          }
+        }
+      }
+    },
+    "Dismiss" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerrar"
+          }
+        }
+      }
+    },
+    "to go" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "restante"
+          }
+        }
+      }
+    },
+    "Format" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formato"
+          }
+        }
+      }
+    },
+    "entries" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "entradas"
+          }
+        }
+      }
+    },
+    "Developer Menu" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menu de Desarrollador"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
