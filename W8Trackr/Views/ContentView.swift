@@ -7,6 +7,7 @@
 
 import SwiftData
 import SwiftUI
+import WidgetKit
 
 /// Root view containing the main tab navigation.
 ///
@@ -125,6 +126,21 @@ struct ContentView: View {
             systemImage: "info.circle"
         )
         .toast(isPresented: $showingSaveError, message: "Failed to save initial data", systemImage: "exclamationmark.triangle.fill")
+        .onChange(of: goalWeight) { _, newValue in
+            // Sync to App Group UserDefaults for widget access
+            SharedModelContainer.sharedDefaults?.set(newValue, forKey: "goalWeight")
+        }
+        .onChange(of: preferredWeightUnit) { _, newValue in
+            // Sync to App Group UserDefaults for widget access
+            SharedModelContainer.sharedDefaults?.set(newValue.rawValue, forKey: "preferredWeightUnit")
+        }
+        .task {
+            // Sync current values to shared defaults on launch for existing users
+            SharedModelContainer.sharedDefaults?.set(goalWeight, forKey: "goalWeight")
+            SharedModelContainer.sharedDefaults?.set(preferredWeightUnit.rawValue, forKey: "preferredWeightUnit")
+            // Refresh widgets to pick up synced values
+            WidgetCenter.shared.reloadTimelines(ofKind: "WeightWidget")
+        }
     }
 }
 
