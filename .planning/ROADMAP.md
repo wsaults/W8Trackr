@@ -110,10 +110,12 @@ Plans:
   2. Numbers format with correct decimal/thousands separators for Spanish locale
   3. Dates format according to Spanish locale conventions
   4. App Store listing available in Spanish (name, description, keywords)
-**Plans:** TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 25-01: TBD
+- [ ] 25-01-PLAN.md — String Catalog setup, main app string translations (~150 strings)
+- [ ] 25-02-PLAN.md — Info.plist permissions, widget strings, Siri phrases localization
+- [ ] 25-03-PLAN.md — App Store metadata, human verification of all localization
 
 ### Phase 26: Testing
 **Goal:** Comprehensive test coverage prevents regressions and validates critical paths
@@ -142,10 +144,10 @@ Phases execute in numeric order: 21 -> 21.1 -> 21.2 -> 22 -> etc.
 | 21. Infrastructure & Migration | v1.1 | 2/2 | ✓ Complete | 2026-01-22 |
 | 22. Widgets | v1.1 | 3/3 | ✓ Complete | 2026-01-22 |
 | 23. HealthKit Import | v1.1 | 3/3 | ✓ Complete | 2026-01-23 |
-| 24. Social Sharing | v1.1 | 0/2 | Planned | - |
-| 25. Localization | v1.1 | 0/TBD | Not started | - |
+| 24. Social Sharing | v1.1 | 2/2 | ✓ Complete | 2026-01-23 |
+| 25. Localization | v1.1 | 0/3 | Planned | - |
 | 26. Testing | v1.1 | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 (Phase 24 planned)*
+*Last updated: 2026-01-23 (Phase 25 planned)*
