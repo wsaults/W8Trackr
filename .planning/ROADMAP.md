@@ -26,7 +26,7 @@ See archived milestone documentation for v1.0 phase details.
 
 - [x] **Phase 21: Infrastructure & Migration** - App Group setup and data migration (completed 2026-01-22)
 - [x] **Phase 22: Widgets** - Home screen widgets (small, medium, large) (completed 2026-01-22)
-- [ ] **Phase 23: HealthKit Import** - Read weight data from Apple Health
+- [x] **Phase 23: HealthKit Import** - Read weight data from Apple Health (completed 2026-01-23)
 - [ ] **Phase 24: Social Sharing** - Shareable progress images
 - [ ] **Phase 25: Localization** - Spanish language support
 - [ ] **Phase 26: Testing** - Comprehensive test coverage
@@ -94,10 +94,11 @@ Plans:
   1. User can generate a progress image from dashboard showing stats/chart
   2. Share sheet appears with standard iOS sharing options
   3. User can toggle privacy mode to hide exact weight values before sharing
-**Plans:** TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 24-01: TBD
+- [ ] 24-01-PLAN.md — Core infrastructure: ShareableProgressImage, ShareType, ShareableProgressView, ProgressImageGenerator
+- [ ] 24-02-PLAN.md — ShareProgressSheet UI, Dashboard integration, human verification
 
 ### Phase 25: Localization
 **Goal:** Spanish-speaking users can use the app in their native language
@@ -141,10 +142,10 @@ Phases execute in numeric order: 21 -> 21.1 -> 21.2 -> 22 -> etc.
 | 21. Infrastructure & Migration | v1.1 | 2/2 | ✓ Complete | 2026-01-22 |
 | 22. Widgets | v1.1 | 3/3 | ✓ Complete | 2026-01-22 |
 | 23. HealthKit Import | v1.1 | 3/3 | ✓ Complete | 2026-01-23 |
-| 24. Social Sharing | v1.1 | 0/TBD | Not started | - |
+| 24. Social Sharing | v1.1 | 0/2 | Planned | - |
 | 25. Localization | v1.1 | 0/TBD | Not started | - |
 | 26. Testing | v1.1 | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 (Phase 23 complete)*
+*Last updated: 2026-01-23 (Phase 24 planned)*
