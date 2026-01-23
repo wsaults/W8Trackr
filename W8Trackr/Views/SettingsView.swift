@@ -364,7 +364,38 @@ struct SettingsView: View {
                     }
                 ))
 
-                if healthSyncManager.isHealthSyncEnabled {
+                Toggle("Import from Apple Health", isOn: Binding(
+                    get: { healthSyncManager.isHealthImportEnabled },
+                    set: { newValue in
+                        if newValue {
+                            Task {
+                                do {
+                                    // Request authorization (shows permission dialog)
+                                    let success = try await healthSyncManager.requestAuthorization()
+                                    if success {
+                                        healthSyncManager.isHealthImportEnabled = true
+                                        // Perform initial import (HKIT-04)
+                                        try await healthSyncManager.importWeightFromHealth(
+                                            modelContext: modelContext
+                                        )
+                                        // Set up background delivery
+                                        healthSyncManager.setupBackgroundDelivery(modelContext: modelContext)
+                                    } else {
+                                        showingHealthKitPermissionAlert = true
+                                    }
+                                } catch {
+                                    showingHealthKitPermissionAlert = true
+                                }
+                            }
+                        } else {
+                            healthSyncManager.isHealthImportEnabled = false
+                            healthSyncManager.stopBackgroundDelivery()
+                        }
+                    }
+                ))
+
+                // Show sync status if either sync or import is enabled
+                if healthSyncManager.isHealthSyncEnabled || healthSyncManager.isHealthImportEnabled {
                     HStack {
                         Text("Sync Status")
                         Spacer()
@@ -374,7 +405,7 @@ struct SettingsView: View {
             } header: {
                 Text("Apple Health")
             } footer: {
-                Text("When enabled, your weight entries will be automatically saved to Apple Health.")
+                Text("Sync saves your entries to Apple Health. Import reads weight data from other apps and devices.")
             }
         }
     }
