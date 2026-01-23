@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 25 of 26 (Localization)
-Plan: 0 of TBD complete
-Status: Ready to plan
-Last activity: 2026-01-23 — Completed Phase 24 (Social Sharing)
+Plan: 1 of TBD complete (25-04)
+Status: In progress
+Last activity: 2026-01-23 — Completed 25-04-PLAN.md (Locale-Aware Number Formatting)
 
-Progress: [██████████░         ] 58%
+Progress: [██████████░         ] 60%
 
 ## Milestone History
 
@@ -32,7 +32,7 @@ Progress: [██████████░         ] 58%
 - Net LOC change: +20,330
 
 **v1.1 Milestone:**
-- Total plans completed: 12
+- Total plans completed: 13
 - Phases completed: 4/6 (Phase 21, Phase 22, Phase 23, Phase 24)
 - Requirements: 25
 
@@ -79,7 +79,11 @@ Key decisions logged in PROJECT.md Key Decisions table.
 - Share from milestone celebration, not Dashboard - more meaningful UX
 - Two buttons side-by-side: Share (secondary) + Continue (primary)
 - Dev Menu test option for milestone celebration without hitting real milestone
-- Enhanced shareable image with emoji accents (🎉 ✨) and glowing trophy
+- Enhanced shareable image with emoji accents and glowing trophy
+
+**Phase 25-04 decisions:**
+- Use .formatted(.number.precision(.fractionLength(N))) for all weight displays
+- Applied locale-aware formatting to CSV export for consistency with LOCL-02
 
 ### Pending Todos
 
@@ -109,12 +113,15 @@ None for v1.1 milestone.
 - Plan 01: Infrastructure (ShareType, ShareableProgressImage, ProgressImageGenerator)
 - Plan 02: Milestone celebration sharing with enhanced image design
 
+**Phase 25 (Localization) — IN PROGRESS:**
+- Plan 04: Locale-aware number formatting (LOCL-02) - COMPLETE
+
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Phase 24 complete
+Stopped at: Completed 25-04-PLAN.md
 Resume file: None
-Pending: Plan Phase 25 (Localization)
+Pending: Continue Phase 25 plans
 
 ## Code Quality Status
 
@@ -127,9 +134,7 @@ Pending: Plan Phase 25 (Localization)
 
 ## Next Steps
 
-```
-/gsd:plan-phase 25
-```
+Continue with remaining Phase 25 localization plans.
 
 ---
-*Updated: 2026-01-23 after Phase 24 complete*
+*Updated: 2026-01-23 after 25-04 complete*
