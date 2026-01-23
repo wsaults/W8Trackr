@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 23 of 26 (HealthKit Import)
-Plan: 0 of ? complete
-Status: Ready to plan
-Last activity: 2026-01-22 — Completed 22-02-PLAN.md (Phase 22 complete)
+Plan: 1 of 3 complete
+Status: In progress
+Last activity: 2026-01-23 — Completed 23-01-PLAN.md
 
-Progress: [██████              ] 30%
+Progress: [██████░             ] 32%
 
 ## Milestone History
 
@@ -32,7 +32,7 @@ Progress: [██████              ] 30%
 - Net LOC change: +20,330
 
 **v1.1 Milestone:**
-- Total plans completed: 5
+- Total plans completed: 6
 - Phases completed: 2/6 (Phase 21, Phase 22)
 - Requirements: 25
 
@@ -53,6 +53,12 @@ Key decisions logged in PROJECT.md Key Decisions table.
 - Use neutral colors for trend indicators (no red/green judgment)
 - Filled area chart with gradient for sparkline (like Apple Fitness)
 
+**Phase 23-01 decisions:**
+- Use HKAnchoredObjectQueryDescriptor (modern async API) instead of legacy callback-based HKAnchoredObjectQuery
+- Store imported entries in lb (app internal format) regardless of HealthKit sample unit
+- Skip samples where source bundleIdentifier matches W8Trackr to prevent duplicates
+- Cast healthStore to HKHealthStore for result(for:) method (protocol doesn't expose it)
+
 ### Pending Todos
 
 None for v1.1 milestone.
@@ -72,16 +78,17 @@ None for v1.1 milestone.
 - All widget views implemented
 - Widget refresh integrated into main app
 
-**Phase 23 (HealthKit Import):**
-- Conflict resolution rules need specification during planning
-- Background delivery scope decision needed (HKObserverQuery vs manual sync)
+**Phase 23 (HealthKit Import) — IN PROGRESS:**
+- Plan 01 complete: Import operations implemented
+- Background delivery entitlement added
+- Next: Settings UI integration (plan 02)
 
 ## Session Continuity
 
-Last session: 2026-01-22
-Stopped at: Completed Phase 22 (Widgets)
-Resume file: None - ready for Phase 23 planning
-Pending: Plan Phase 23
+Last session: 2026-01-23
+Stopped at: Completed 23-01-PLAN.md
+Resume file: None
+Pending: Execute 23-02-PLAN.md
 
 ## Code Quality Status
 
@@ -95,8 +102,8 @@ Pending: Plan Phase 23
 ## Next Steps
 
 ```
-/gsd:plan 23
+/gsd:execute-plan .planning/phases/23-healthkit-import/23-02-PLAN.md
 ```
 
 ---
-*Updated: 2026-01-22 after Phase 22 complete*
+*Updated: 2026-01-23 after 23-01 complete*
