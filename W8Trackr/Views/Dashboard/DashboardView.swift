@@ -33,6 +33,7 @@ struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var selectedTab: TabDestination
     @State private var celebrationMilestone: Double?
+    @State private var showingShareSheet = false
 
     var entries: [WeightEntry]
     var completedMilestones: [CompletedMilestone]
@@ -82,6 +83,37 @@ struct DashboardView: View {
         )
     }
 
+    private var trackingDuration: String {
+        guard let oldest = entries.min(by: { $0.date < $1.date }),
+              let newest = entries.first else {
+            return "Just started"
+        }
+        let days = Calendar.current.dateComponents([.day], from: oldest.date, to: newest.date).day ?? 0
+        if days < 7 {
+            return "\(days) days"
+        } else if days < 30 {
+            let weeks = days / 7
+            return weeks == 1 ? "1 week" : "\(weeks) weeks"
+        } else if days < 365 {
+            let months = days / 30
+            return months == 1 ? "1 month" : "\(months) months"
+        } else {
+            let years = days / 365
+            return years == 1 ? "1 year" : "\(years) years"
+        }
+    }
+
+    private var progressPercentage: Double {
+        guard startWeight != goalWeight else { return 100 }
+        let totalChange = abs(startWeight - goalWeight)
+        let currentChange = abs(startWeight - currentWeight)
+        return min(100, (currentChange / totalChange) * 100)
+    }
+
+    private var weightChangeFromStart: Double {
+        currentWeight - startWeight
+    }
+
     // MARK: - Body
 
     var body: some View {
@@ -110,6 +142,25 @@ struct DashboardView: View {
             .background(AppColors.background)
             .navigationTitle("Dashboard")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showingShareSheet = true
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    .disabled(entries.isEmpty)
+                    .accessibilityLabel("Share progress")
+                }
+            }
+            .sheet(isPresented: $showingShareSheet) {
+                ShareProgressSheet(
+                    progressPercentage: progressPercentage,
+                    weightChange: weightChangeFromStart,
+                    duration: trackingDuration,
+                    unit: preferredWeightUnit
+                )
+            }
             .onAppear {
                 checkForNewMilestone()
             }
