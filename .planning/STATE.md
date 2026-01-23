@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 23 of 26 (HealthKit Import)
-Plan: 1 of 3 complete
+Plan: 2 of 3 complete
 Status: In progress
-Last activity: 2026-01-23 — Completed 23-01-PLAN.md
+Last activity: 2026-01-23 — Completed 23-02-PLAN.md
 
-Progress: [██████░             ] 32%
+Progress: [██████░             ] 34%
 
 ## Milestone History
 
@@ -32,7 +32,7 @@ Progress: [██████░             ] 32%
 - Net LOC change: +20,330
 
 **v1.1 Milestone:**
-- Total plans completed: 6
+- Total plans completed: 7
 - Phases completed: 2/6 (Phase 21, Phase 22)
 - Requirements: 25
 
@@ -59,6 +59,12 @@ Key decisions logged in PROJECT.md Key Decisions table.
 - Skip samples where source bundleIdentifier matches W8Trackr to prevent duplicates
 - Cast healthStore to HKHealthStore for result(for:) method (protocol doesn't expose it)
 
+**Phase 23-02 decisions:**
+- Use defer { completionHandler() } at START of observer callback - missing this causes exponential backoff
+- Re-establish HKObserverQuery on every app launch (queries don't persist across launches)
+- Run initial import automatically when user first enables import (HKIT-04)
+- Store observerQuery property to allow stopping when user disables import
+
 ### Pending Todos
 
 None for v1.1 milestone.
@@ -80,15 +86,15 @@ None for v1.1 milestone.
 
 **Phase 23 (HealthKit Import) — IN PROGRESS:**
 - Plan 01 complete: Import operations implemented
-- Background delivery entitlement added
-- Next: Settings UI integration (plan 02)
+- Plan 02 complete: Background sync and Settings UI
+- Next: Conflict resolution (plan 03)
 
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed 23-01-PLAN.md
+Stopped at: Completed 23-02-PLAN.md
 Resume file: None
-Pending: Execute 23-02-PLAN.md
+Pending: Execute 23-03-PLAN.md
 
 ## Code Quality Status
 
@@ -102,8 +108,8 @@ Pending: Execute 23-02-PLAN.md
 ## Next Steps
 
 ```
-/gsd:execute-plan .planning/phases/23-healthkit-import/23-02-PLAN.md
+/gsd:execute-plan .planning/phases/23-healthkit-import/23-03-PLAN.md
 ```
 
 ---
-*Updated: 2026-01-23 after 23-01 complete*
+*Updated: 2026-01-23 after 23-02 complete*
