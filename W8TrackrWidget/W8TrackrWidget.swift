@@ -34,7 +34,15 @@ struct WeightWidgetEntryView: View {
     let entry: WeightWidgetEntry
 
     var body: some View {
-        // Placeholder - views implemented in Plan 22-02
-        Text(entry.currentWeight.map { "\($0)" } ?? "No data")
+        switch family {
+        case .systemSmall:
+            SmallWidgetView(entry: entry)
+        case .systemMedium:
+            MediumWidgetView(entry: entry)
+        case .systemLarge:
+            LargeWidgetView(entry: entry)
+        default:
+            SmallWidgetView(entry: entry)
+        }
     }
 }

@@ -5,8 +5,9 @@
 //  Created by Will Saults on 4/28/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
+import WidgetKit
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
@@ -59,6 +60,8 @@ struct SettingsView: View {
     private func updateGoalWeight(_ newValue: Double) {
         if weightUnit.isValidGoalWeight(newValue) {
             goalWeight = newValue
+            // Refresh widgets when goal changes
+            WidgetCenter.shared.reloadTimelines(ofKind: "WeightWidget")
         }
     }
 
@@ -78,6 +81,9 @@ struct SettingsView: View {
                 modelContext.delete(entry)
             }
             try modelContext.save()
+
+            // Refresh widgets after deletion
+            WidgetCenter.shared.reloadTimelines(ofKind: "WeightWidget")
 
             // Show undo toast
             showingUndoToast = true
@@ -113,6 +119,8 @@ struct SettingsView: View {
             try modelContext.save()
             pendingDeletionEntries = []
             showingUndoToast = false
+            // Refresh widgets after undo restores entries
+            WidgetCenter.shared.reloadTimelines(ofKind: "WeightWidget")
         } catch {
             // If undo fails, show error toast
             showingDeleteErrorToast = true
@@ -135,6 +143,8 @@ struct SettingsView: View {
                     // Invalid source value - use the new unit's default
                     localGoalWeight = newUnit.defaultWeight
                     goalWeight = newUnit.defaultWeight
+                    // Refresh widgets when unit changes
+                    WidgetCenter.shared.reloadTimelines(ofKind: "WeightWidget")
                     return
                 }
 
@@ -150,6 +160,8 @@ struct SettingsView: View {
                     localGoalWeight = clampedWeight
                     goalWeight = clampedWeight
                 }
+                // Refresh widgets when unit changes
+                WidgetCenter.shared.reloadTimelines(ofKind: "WeightWidget")
             }
 
             HStack {

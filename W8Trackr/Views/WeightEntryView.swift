@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 /// Unified view for adding new weight entries and editing existing ones.
 /// Pass `existingEntry` to edit, or leave nil to add a new entry.
@@ -429,6 +430,9 @@ struct WeightEntryView: View {
             showingSaveError = true
             return
         }
+
+        // Refresh widgets after successful save
+        WidgetCenter.shared.reloadTimelines(ofKind: "WeightWidget")
 
         // Sync to HealthKit (only after successful save)
         if let entry = existingEntry {
