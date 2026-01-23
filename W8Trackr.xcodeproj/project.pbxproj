@@ -101,11 +101,15 @@
 		};
 		BE502EBE2DBFBF7900299FBF /* W8TrackrTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = W8TrackrTests;
 			sourceTree = "<group>";
 		};
 		BEUI00022DBFBF7900299FBF /* W8TrackrUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = W8TrackrUITests;
 			sourceTree = "<group>";
 		};
@@ -129,13 +133,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		BE502EB82DBFBF7900299FBF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BEUI00062DBFBF7900299FBF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -268,27 +265,6 @@
 			productReference = BE502EBB2DBFBF7900299FBF /* W8TrackrTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		BEUI00082DBFBF7900299FBF /* W8TrackrUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BEUI000B2DBFBF7900299FBF /* Build configuration list for PBXNativeTarget "W8TrackrUITests" */;
-			buildPhases = (
-				BEUI00052DBFBF7900299FBF /* Sources */,
-				BEUI00062DBFBF7900299FBF /* Frameworks */,
-				BEUI00072DBFBF7900299FBF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				BEUI00042DBFBF7900299FBF /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				BEUI00022DBFBF7900299FBF /* W8TrackrUITests */,
-			);
-			name = W8TrackrUITests;
-			productName = W8TrackrUITests;
-			productReference = BEUI00012DBFBF7900299FBF /* W8TrackrUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		D264B3122EE6C7FC12156CCD /* W8TrackrWidget */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 044A5B6F87E9DBDD72BFF1E3 /* Build configuration list for PBXNativeTarget "W8TrackrWidget" */;
@@ -349,7 +325,6 @@
 			targets = (
 				BE502EAD2DBFBF7700299FBF /* W8Trackr */,
 				BE502EBA2DBFBF7900299FBF /* W8TrackrTests */,
-				BEUI00082DBFBF7900299FBF /* W8TrackrUITests */,
 				D264B3122EE6C7FC12156CCD /* W8TrackrWidget */,
 			);
 		};
@@ -372,13 +347,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		BE502EB92DBFBF7900299FBF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BEUI00072DBFBF7900299FBF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -425,13 +393,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BEUI00052DBFBF7900299FBF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E499C5C6DCEC80E463CEFD6D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -456,11 +417,6 @@
 			isa = PBXTargetDependency;
 			target = BE502EAD2DBFBF7700299FBF /* W8Trackr */;
 			targetProxy = BE502EBC2DBFBF7900299FBF /* PBXContainerItemProxy */;
-		};
-		BEUI00042DBFBF7900299FBF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BE502EAD2DBFBF7700299FBF /* W8Trackr */;
-			targetProxy = BEUI00032DBFBF7900299FBF /* PBXContainerItemProxy */;
 		};
 		E38FC4097FC0F5EA5BB298C1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -836,15 +792,6 @@
 			buildConfigurations = (
 				BE502ED32DBFBF7900299FBF /* Debug */,
 				BE502ED42DBFBF7900299FBF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BEUI000B2DBFBF7900299FBF /* Build configuration list for PBXNativeTarget "W8TrackrUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BEUI00092DBFBF7900299FBF /* Debug */,
-				BEUI000A2DBFBF7900299FBF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
