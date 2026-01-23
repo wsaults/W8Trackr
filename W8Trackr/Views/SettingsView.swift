@@ -338,6 +338,20 @@ struct SettingsView: View {
         }
     }
 
+    private var iCloudSection: some View {
+        Section {
+            HStack {
+                Text("iCloud Sync")
+                Spacer()
+                SyncStatusView()
+            }
+        } header: {
+            Text("iCloud")
+        } footer: {
+            Text("Your weight data syncs automatically across all your devices.")
+        }
+    }
+
     @ViewBuilder
     private var healthSection: some View {
         if HealthSyncManager.isHealthDataAvailable {
@@ -388,13 +402,13 @@ struct SettingsView: View {
                 milestoneSection
                 reminderSection
                 smartRemindersSection
+                iCloudSection
                 healthSection
                 dataManagementSection
                 aboutSection
                 dangerZoneSection
             }
             .navigationTitle("Settings")
-            .syncStatusToolbar()
             #if DEBUG
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
