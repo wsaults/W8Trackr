@@ -27,7 +27,7 @@ See archived milestone documentation for v1.0 phase details.
 - [x] **Phase 21: Infrastructure & Migration** - App Group setup and data migration (completed 2026-01-22)
 - [x] **Phase 22: Widgets** - Home screen widgets (small, medium, large) (completed 2026-01-22)
 - [x] **Phase 23: HealthKit Import** - Read weight data from Apple Health (completed 2026-01-23)
-- [ ] **Phase 24: Social Sharing** - Shareable progress images
+- [x] **Phase 24: Social Sharing** - Shareable progress images (completed 2026-01-23)
 - [ ] **Phase 25: Localization** - Spanish language support
 - [ ] **Phase 26: Testing** - Comprehensive test coverage
 
@@ -97,8 +97,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 24-01-PLAN.md — Core infrastructure: ShareableProgressImage, ShareType, ShareableProgressView, ProgressImageGenerator
-- [ ] 24-02-PLAN.md — ShareProgressSheet UI, Dashboard integration, human verification
+- [x] 24-01-PLAN.md — Core infrastructure: ShareableProgressImage, ShareType, ShareableProgressView, ProgressImageGenerator
+- [x] 24-02-PLAN.md — Milestone celebration sharing (pivoted from Dashboard), enhanced shareable image
 
 ### Phase 25: Localization
 **Goal:** Spanish-speaking users can use the app in their native language
