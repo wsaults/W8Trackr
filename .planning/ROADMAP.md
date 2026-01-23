@@ -28,7 +28,7 @@ See archived milestone documentation for v1.0 phase details.
 - [x] **Phase 22: Widgets** - Home screen widgets (small, medium, large) (completed 2026-01-22)
 - [x] **Phase 23: HealthKit Import** - Read weight data from Apple Health (completed 2026-01-23)
 - [x] **Phase 24: Social Sharing** - Shareable progress images (completed 2026-01-23)
-- [ ] **Phase 25: Localization** - Spanish language support
+- [x] **Phase 25: Localization** - Spanish language support (completed 2026-01-23)
 - [ ] **Phase 26: Testing** - Comprehensive test coverage
 
 ## Phase Details
@@ -110,12 +110,13 @@ Plans:
   2. Numbers format with correct decimal/thousands separators for Spanish locale
   3. Dates format according to Spanish locale conventions
   4. App Store listing available in Spanish (name, description, keywords)
-**Plans:** 3 plans
+**Plans:** 4 plans
 
 Plans:
-- [ ] 25-01-PLAN.md — String Catalog setup, main app string translations (~150 strings)
-- [ ] 25-02-PLAN.md — Info.plist permissions, widget strings, Siri phrases localization
-- [ ] 25-03-PLAN.md — App Store metadata, human verification of all localization
+- [x] 25-01-PLAN.md — String Catalog setup, main app string translations (~150 strings)
+- [x] 25-02-PLAN.md — Info.plist permissions, widget strings, Siri phrases localization
+- [x] 25-03-PLAN.md — Localization unit tests for number/date formatting
+- [x] 25-04-PLAN.md — Locale-aware number formatting throughout app
 
 ### Phase 26: Testing
 **Goal:** Comprehensive test coverage prevents regressions and validates critical paths
@@ -126,13 +127,13 @@ Plans:
   1. Unit tests verify weight entry CRUD operations (create, read, update, delete)
   2. Unit tests verify HealthKit sync logic with mock data
   3. Unit tests verify EWMA trend calculations produce correct values
-  4. UI tests verify complete weight entry flow (add, view, edit, delete)
-  5. UI tests verify settings flow (change goal, enable notifications, etc.)
+  4. UI tests verify complete weight entry flow (add, view, edit, delete) - REMOVED per Phase 25-03
+  5. UI tests verify settings flow (change goal, enable notifications, etc.) - REMOVED per Phase 25-03
   6. Mock HealthKit store available for isolated testing without real Health data
-**Plans:** TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] 26-01: TBD
+- [ ] 26-01-PLAN.md — WeightEntry CRUD tests, HealthKit sync flow tests
 
 ## Progress
 
@@ -145,9 +146,9 @@ Phases execute in numeric order: 21 -> 21.1 -> 21.2 -> 22 -> etc.
 | 22. Widgets | v1.1 | 3/3 | ✓ Complete | 2026-01-22 |
 | 23. HealthKit Import | v1.1 | 3/3 | ✓ Complete | 2026-01-23 |
 | 24. Social Sharing | v1.1 | 2/2 | ✓ Complete | 2026-01-23 |
-| 25. Localization | v1.1 | 0/3 | Planned | - |
-| 26. Testing | v1.1 | 0/TBD | Not started | - |
+| 25. Localization | v1.1 | 4/4 | ✓ Complete | 2026-01-23 |
+| 26. Testing | v1.1 | 0/1 | Planned | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 (Phase 25 planned)*
+*Last updated: 2026-01-23 (Phase 26 planned)*
