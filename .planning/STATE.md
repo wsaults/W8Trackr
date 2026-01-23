@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 25 of 26 (Localization)
-Plan: 2 of TBD complete (25-01, 25-04)
+Plan: 3 of 4 complete (25-01, 25-02, 25-04)
 Status: In progress
-Last activity: 2026-01-23 — Completed 25-01-PLAN.md (String Catalog Infrastructure)
+Last activity: 2026-01-23 — Completed 25-02-PLAN.md (System Strings Localization)
 
-Progress: [██████████░         ] 61%
+Progress: [███████████░        ] 64%
 
 ## Milestone History
 
@@ -32,7 +32,7 @@ Progress: [██████████░         ] 61%
 - Net LOC change: +20,330
 
 **v1.1 Milestone:**
-- Total plans completed: 13
+- Total plans completed: 14
 - Phases completed: 4/6 (Phase 21, Phase 22, Phase 23, Phase 24)
 - Requirements: 25
 
@@ -85,6 +85,11 @@ Key decisions logged in PROJECT.md Key Decisions table.
 - Use .formatted(.number.precision(.fractionLength(N))) for all weight displays
 - Applied locale-aware formatting to CSV export for consistency with LOCL-02
 
+**Phase 25-02 decisions:**
+- Use String(localized:) for computed string properties in widget views
+- Use Text() wrapper for widget configurationDisplayName and description
+- Add Spanish language to project knownRegions
+
 ### Pending Todos
 
 None for v1.1 milestone.
@@ -115,14 +120,15 @@ None for v1.1 milestone.
 
 **Phase 25 (Localization) — IN PROGRESS:**
 - Plan 01: String Catalog with Spanish translations (LOCL-01) - COMPLETE
+- Plan 02: System strings localization (permissions, widgets, Siri) - COMPLETE
 - Plan 04: Locale-aware number formatting (LOCL-02) - COMPLETE
 
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed 25-01-PLAN.md
+Stopped at: Completed 25-02-PLAN.md
 Resume file: None
-Pending: Continue Phase 25 plans (25-02, 25-03)
+Pending: Continue Phase 25 plans (25-03)
 
 ## Code Quality Status
 
@@ -138,4 +144,4 @@ Pending: Continue Phase 25 plans (25-02, 25-03)
 Continue with remaining Phase 25 localization plans.
 
 ---
-*Updated: 2026-01-23 after 25-01 complete*
+*Updated: 2026-01-23 after 25-02 complete*
