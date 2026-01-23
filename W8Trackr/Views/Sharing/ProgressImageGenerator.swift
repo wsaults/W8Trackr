@@ -39,7 +39,7 @@ enum ProgressImageGenerator {
         )
 
         let renderer = ImageRenderer(content: view)
-        renderer.scale = UIScreen.main.scale
+        renderer.scale = 3.0  // High-quality scale for shareable images
 
         return renderer.uiImage
     }
@@ -59,7 +59,7 @@ enum ProgressImageGenerator {
         )
 
         let renderer = ImageRenderer(content: view)
-        renderer.scale = UIScreen.main.scale
+        renderer.scale = 3.0  // High-quality scale for shareable images
 
         return renderer.uiImage
     }
