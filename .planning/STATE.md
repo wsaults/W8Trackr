@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 22 of 26 (Widgets)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-22 — Phase 21 complete
+Plan: 1 of 2 complete
+Status: In progress
+Last activity: 2026-01-22 — Completed 22-01-PLAN.md
 
-Progress: [████                ] 17%
+Progress: [█████               ] 20%
 
 ## Milestone History
 
@@ -32,7 +32,7 @@ Progress: [████                ] 17%
 - Net LOC change: +20,330
 
 **v1.1 Milestone:**
-- Total plans completed: 2
+- Total plans completed: 3
 - Phases completed: 1/6 (Phase 21)
 - Requirements: 25
 
@@ -47,6 +47,10 @@ Key decisions logged in PROJECT.md Key Decisions table.
 - Keep old store as backup for this release (can clean up in future version)
 - No auto-retry on migration failure (requires user action)
 
+**Phase 22 decisions:**
+- Create new ModelContext per widget fetch (not mainContext, which is @MainActor isolated)
+- Widget uses 4-hour refresh policy with on-demand updates from main app
+
 ### Pending Todos
 
 None for v1.1 milestone.
@@ -60,8 +64,11 @@ None for v1.1 milestone.
 ### Blockers/Concerns
 
 **Phase 21 (Infrastructure) — RESOLVED:**
-- ✓ CloudKit migration risk mitigated with replacePersistentStore
-- ✓ App Group migration implemented with backup retention
+- App Group migration implemented with backup retention
+
+**Phase 22 (Widgets) — IN PROGRESS:**
+- 22-01 complete: Widget infrastructure ready
+- 22-02 pending: Widget UI views
 
 **Phase 23 (HealthKit Import):**
 - Conflict resolution rules need specification during planning
@@ -70,9 +77,9 @@ None for v1.1 milestone.
 ## Session Continuity
 
 Last session: 2026-01-22
-Stopped at: Phase 21 complete
-Resume file: None
-Pending: Plan Phase 22
+Stopped at: Completed 22-01-PLAN.md
+Resume file: .planning/phases/22-widgets/22-02-PLAN.md
+Pending: Execute 22-02
 
 ## Code Quality Status
 
@@ -86,8 +93,8 @@ Pending: Plan Phase 22
 ## Next Steps
 
 ```
-/gsd:discuss-phase 22
+/gsd:execute-phase 22 (plan 02)
 ```
 
 ---
-*Updated: 2026-01-22 after Phase 21 complete*
+*Updated: 2026-01-22 after 22-01 complete*
