@@ -5,21 +5,21 @@
 See: .planning/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Users can reliably track weight and see progress with confidence-inspiring visualizations
-**Current focus:** v1.1 milestone - Phase 25: Localization
+**Current focus:** v1.1 milestone - Phase 26: Testing
 
 ## Current Position
 
-Phase: 25 of 26 (Localization)
-Plan: 3 of 4 complete (25-01, 25-02, 25-04)
-Status: In progress
-Last activity: 2026-01-23 — Completed 25-02-PLAN.md (System Strings Localization)
+Phase: 26 of 26 (Testing)
+Plan: 0 of ? (needs planning)
+Status: Ready to plan
+Last activity: 2026-01-23 — Completed Phase 25 (Localization)
 
-Progress: [███████████░        ] 64%
+Progress: [████████████████░   ] 83%
 
 ## Milestone History
 
 - **v1.0 Pre-Launch Audit** — 20 phases, 30 plans — shipped 2026-01-22
-- **v1.1 Feature Expansion** — 6 phases, 14+ plans — in progress
+- **v1.1 Feature Expansion** — 6 phases, 18+ plans — in progress
 
 ## Performance Metrics
 
@@ -32,8 +32,8 @@ Progress: [███████████░        ] 64%
 - Net LOC change: +20,330
 
 **v1.1 Milestone:**
-- Total plans completed: 14
-- Phases completed: 4/6 (Phase 21, Phase 22, Phase 23, Phase 24)
+- Total plans completed: 18
+- Phases completed: 5/6 (Phase 21, Phase 22, Phase 23, Phase 24, Phase 25)
 - Requirements: 25
 
 ## Accumulated Context
@@ -90,6 +90,10 @@ Key decisions logged in PROJECT.md Key Decisions table.
 - Use Text() wrapper for widget configurationDisplayName and description
 - Add Spanish language to project knownRegions
 
+**Phase 25-03 decisions:**
+- Removed UI tests (AccessibilityTests, ScreenshotTests) - keep unit tests only
+- Added localization unit tests for number/date formatting verification
+
 ### Pending Todos
 
 None for v1.1 milestone.
@@ -99,6 +103,7 @@ None for v1.1 milestone.
 - [ ] Publish privacy page at https://saults.io/w8trackr-privacy
 - [ ] Publish support page at https://saults.io/w8trackr-support
 - [ ] Complete age rating questionnaire in App Store Connect
+- [ ] Enter Spanish App Store metadata in App Store Connect (see APP_STORE_SPANISH.md)
 
 ### Blockers/Concerns
 
@@ -118,17 +123,21 @@ None for v1.1 milestone.
 - Plan 01: Infrastructure (ShareType, ShareableProgressImage, ProgressImageGenerator)
 - Plan 02: Milestone celebration sharing with enhanced image design
 
-**Phase 25 (Localization) — IN PROGRESS:**
-- Plan 01: String Catalog with Spanish translations (LOCL-01) - COMPLETE
-- Plan 02: System strings localization (permissions, widgets, Siri) - COMPLETE
-- Plan 04: Locale-aware number formatting (LOCL-02) - COMPLETE
+**Phase 25 (Localization) — COMPLETE:**
+- Plan 01: String Catalog with Spanish translations (LOCL-01)
+- Plan 02: System strings localization (permissions, widgets, Siri)
+- Plan 03: App Store metadata + human verification (LOCL-03)
+- Plan 04: Locale-aware number formatting (LOCL-02)
+
+**Phase 26 (Testing) — NOT STARTED:**
+- Needs planning and research
 
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed 25-02-PLAN.md
+Stopped at: Completed Phase 25
 Resume file: None
-Pending: Continue Phase 25 plans (25-03)
+Pending: Plan Phase 26 (Testing)
 
 ## Code Quality Status
 
@@ -137,11 +146,11 @@ Pending: Continue Phase 25 plans (25-03)
 - All managers using @MainActor + @Observable
 - All deprecated APIs replaced
 - Full WCAG 2.1 AA accessibility compliance
-- Automated accessibility regression tests
+- Localization unit tests for number/date formatting
 
 ## Next Steps
 
-Continue with remaining Phase 25 localization plans.
+Plan and execute Phase 26 (Testing) to complete v1.1 milestone.
 
 ---
-*Updated: 2026-01-23 after 25-02 complete*
+*Updated: 2026-01-23 after Phase 25 complete*
