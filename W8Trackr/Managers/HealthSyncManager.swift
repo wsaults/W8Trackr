@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import SwiftData
 import SwiftUI
 
 /// Manages synchronization of weight entries between W8Trackr and Apple HealthKit.
@@ -357,5 +358,153 @@ final class HealthSyncManager {
 
             healthStore.execute(query)
         }
+    }
+
+    // MARK: - Anchor Persistence
+
+    /// Saves the HKQueryAnchor for incremental sync across app launches.
+    private func saveAnchor(_ anchor: HKQueryAnchor?) {
+        guard let anchor = anchor else { return }
+        do {
+            let data = try NSKeyedArchiver.archivedData(
+                withRootObject: anchor,
+                requiringSecureCoding: true
+            )
+            healthSyncAnchor = data
+        } catch {
+            // Anchor archiving failure is non-fatal; next sync will fetch all data
+        }
+    }
+
+    /// Loads the persisted HKQueryAnchor for incremental sync.
+    private func loadAnchor() -> HKQueryAnchor? {
+        guard let data = healthSyncAnchor else { return nil }
+        do {
+            return try NSKeyedUnarchiver.unarchivedObject(
+                ofClass: HKQueryAnchor.self,
+                from: data
+            )
+        } catch {
+            // Unarchive failure is non-fatal; nil triggers full sync
+            return nil
+        }
+    }
+
+    // MARK: - Import Operations
+
+    /// Imports weight entries from HealthKit using an anchored query.
+    ///
+    /// Uses HKAnchoredObjectQueryDescriptor for incremental sync:
+    /// - First call (nil anchor): Fetches all historical weight data
+    /// - Subsequent calls: Fetches only changes since last sync
+    ///
+    /// Creates WeightEntry for each imported sample with source attribution.
+    /// Skips samples that were originally created by W8Trackr (by checking source bundle ID).
+    ///
+    /// - Parameter modelContext: The SwiftData context to insert entries into
+    /// - Returns: Number of new entries imported
+    /// - Throws: HealthKit query errors
+    @discardableResult
+    func importWeightFromHealth(modelContext: ModelContext) async throws -> Int {
+        guard Self.isHealthDataAvailable,
+              let weightType = weightType else {
+            return 0
+        }
+
+        syncStatus = .syncing
+
+        do {
+            let descriptor = HKAnchoredObjectQueryDescriptor(
+                predicates: [.quantitySample(type: weightType)],
+                anchor: loadAnchor()
+            )
+
+            // Cast required because protocol doesn't expose result(for:) method
+            guard let store = healthStore as? HKHealthStore else {
+                syncStatus = .idle
+                return 0
+            }
+
+            let result = try await descriptor.result(for: store)
+
+            // Save anchor for next incremental sync
+            saveAnchor(result.newAnchor)
+
+            var importedCount = 0
+
+            // Process added samples
+            for sample in result.addedSamples {
+                guard let quantitySample = sample as? HKQuantitySample else { continue }
+
+                // Skip samples created by W8Trackr (avoid duplicates)
+                if quantitySample.sourceRevision.source.bundleIdentifier == Bundle.main.bundleIdentifier {
+                    continue
+                }
+
+                // Skip if we already have this entry (by healthKitUUID)
+                let uuidString = quantitySample.uuid.uuidString
+                let existingDescriptor = FetchDescriptor<WeightEntry>(
+                    predicate: #Predicate { $0.healthKitUUID == uuidString }
+                )
+                let existingEntries = try modelContext.fetch(existingDescriptor)
+                guard existingEntries.isEmpty else { continue }
+
+                // Create WeightEntry from sample
+                let entry = createEntryFromSample(quantitySample)
+                modelContext.insert(entry)
+                importedCount += 1
+            }
+
+            // Handle deleted samples - remove imported entries if source sample was deleted
+            for deletedObject in result.deletedObjects {
+                let uuidString = deletedObject.uuid.uuidString
+                let deleteDescriptor = FetchDescriptor<WeightEntry>(
+                    predicate: #Predicate { $0.healthKitUUID == uuidString }
+                )
+                let entriesToDelete = try modelContext.fetch(deleteDescriptor)
+                for entry in entriesToDelete where entry.isImported {
+                    // Only delete imported entries (not W8Trackr-created ones)
+                    modelContext.delete(entry)
+                }
+            }
+
+            if importedCount > 0 || !result.deletedObjects.isEmpty {
+                try modelContext.save()
+            }
+
+            syncStatus = .success
+            lastHealthSyncDate = Date()
+
+            return importedCount
+        } catch {
+            syncStatus = .failed(error.localizedDescription)
+            throw error
+        }
+    }
+
+    /// Creates a WeightEntry from an HKQuantitySample.
+    ///
+    /// Converts the sample to the app's internal format:
+    /// - Extracts weight in kg from the sample quantity
+    /// - Converts to lb (app's storage unit)
+    /// - Sets source to the originating app/device name
+    /// - Stores healthKitUUID for duplicate detection
+    /// - Marks pendingHealthSync as false (already in Health)
+    private func createEntryFromSample(_ sample: HKQuantitySample) -> WeightEntry {
+        let weightInKg = sample.quantity.doubleValue(for: .gramUnit(with: .kilo))
+        let weightInLb = weightInKg * WeightUnit.kgToLb
+
+        let entry = WeightEntry(
+            weight: weightInLb,
+            unit: .lb,
+            date: sample.startDate
+        )
+
+        // Set source from HealthKit sample (e.g., "Withings Scale", "Fitness app")
+        entry.source = sample.sourceRevision.source.name
+        entry.healthKitUUID = sample.uuid.uuidString
+        entry.pendingHealthSync = false  // Already in Health, no need to sync back
+
+        return entry
     }
 }
