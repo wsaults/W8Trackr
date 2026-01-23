@@ -342,7 +342,7 @@ struct SettingsView: View {
     private var healthSection: some View {
         if HealthSyncManager.isHealthDataAvailable {
             Section {
-                Toggle("Sync to Apple Health", isOn: Binding(
+                Toggle("Export to Apple Health", isOn: Binding(
                     get: { healthSyncManager.isHealthSyncEnabled },
                     set: { newValue in
                         if newValue {
@@ -405,7 +405,7 @@ struct SettingsView: View {
             } header: {
                 Text("Apple Health")
             } footer: {
-                Text("Sync saves your entries to Apple Health. Import reads weight data from other apps and devices.")
+                Text("Export writes your W8Trackr entries to Health. Import reads weight from other apps and devices.")
             }
         }
     }
