@@ -342,21 +342,18 @@ struct SettingsView: View {
     private var healthSection: some View {
         if HealthSyncManager.isHealthDataAvailable {
             Section {
-                Toggle("Import from Apple Health", isOn: Binding(
+                Toggle("Sync with Apple Health", isOn: Binding(
                     get: { healthSyncManager.isHealthImportEnabled },
                     set: { newValue in
                         if newValue {
                             Task {
                                 do {
-                                    // Request authorization (shows permission dialog)
                                     let success = try await healthSyncManager.requestAuthorization()
                                     if success {
                                         healthSyncManager.isHealthImportEnabled = true
-                                        // Perform initial import (HKIT-04)
                                         try await healthSyncManager.importWeightFromHealth(
                                             modelContext: modelContext
                                         )
-                                        // Set up background delivery
                                         healthSyncManager.setupBackgroundDelivery(modelContext: modelContext)
                                     } else {
                                         showingHealthKitPermissionAlert = true
@@ -371,42 +368,11 @@ struct SettingsView: View {
                         }
                     }
                 ))
-
-                if healthSyncManager.isHealthImportEnabled {
-                    HStack {
-                        Text("Sync Status")
-                        Spacer()
-                        syncStatusView
-                    }
-                }
             } header: {
                 Text("Apple Health")
             } footer: {
-                Text("Import weight entries from other apps and devices connected to Apple Health.")
+                Text("See weight from your scale, Apple Watch, and other apps.")
             }
-        }
-    }
-
-    @ViewBuilder
-    private var syncStatusView: some View {
-        switch healthSyncManager.syncStatus {
-        case .idle:
-            Text("Ready")
-                .foregroundStyle(.secondary)
-        case .syncing:
-            HStack(spacing: 4) {
-                ProgressView()
-                    .scaleEffect(0.8)
-                Text("Syncing...")
-            }
-            .foregroundStyle(.secondary)
-        case .success:
-            Label("Synced", systemImage: "checkmark.circle.fill")
-                .foregroundStyle(AppColors.success)
-        case .failed(let error):
-            Label(error, systemImage: "exclamationmark.triangle.fill")
-                .foregroundStyle(.red)
-                .font(.caption)
         }
     }
 
