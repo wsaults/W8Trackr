@@ -65,7 +65,7 @@ struct GoalPredictionView: View {
     private var formattedVelocity: String {
         let absVelocity = abs(prediction.weeklyVelocity)
         let direction = prediction.weeklyVelocity < 0 ? "losing" : "gaining"
-        return String(format: "%.1f %@/week (%@)", absVelocity, prediction.unit.rawValue, direction)
+        return "\(absVelocity.formatted(.number.precision(.fractionLength(1)))) \(prediction.unit.rawValue)/week (\(direction))"
     }
 
     private var daysUntilGoal: Int? {
@@ -84,7 +84,7 @@ struct GoalPredictionView: View {
             let goalWeight = abs(prediction.weightToGoal)
             let unitStr = prediction.unit.rawValue
             if let date = formattedDate {
-                return "Goal prediction: You're on track to reach your goal of \(String(format: "%.1f", goalWeight)) \(unitStr) by \(date), losing \(String(format: "%.1f", abs(prediction.weeklyVelocity))) \(unitStr) per week"
+                return "Goal prediction: You're on track to reach your goal of \(goalWeight.formatted(.number.precision(.fractionLength(1)))) \(unitStr) by \(date), losing \(abs(prediction.weeklyVelocity).formatted(.number.precision(.fractionLength(1)))) \(unitStr) per week"
             }
             return "Goal prediction: You're on track to reach your goal"
         case .atGoal:
@@ -92,9 +92,9 @@ struct GoalPredictionView: View {
         case .wrongDirection:
             let direction = prediction.weightToGoal > 0 ? "gaining" : "losing"
             let goal = prediction.weightToGoal > 0 ? "lose" : "gain"
-            return "Trend alert: Currently \(direction) weight. Your goal requires you to \(goal) weight. Current rate: \(String(format: "%.1f", abs(prediction.weeklyVelocity))) \(prediction.unit.rawValue) per week \(direction)"
+            return "Trend alert: Currently \(direction) weight. Your goal requires you to \(goal) weight. Current rate: \(abs(prediction.weeklyVelocity).formatted(.number.precision(.fractionLength(1)))) \(prediction.unit.rawValue) per week \(direction)"
         case .tooSlow:
-            return "Goal prediction: At current pace of \(String(format: "%.1f", abs(prediction.weeklyVelocity))) \(prediction.unit.rawValue) per week, reaching your goal would take over 2 years"
+            return "Goal prediction: At current pace of \(abs(prediction.weeklyVelocity).formatted(.number.precision(.fractionLength(1)))) \(prediction.unit.rawValue) per week, reaching your goal would take over 2 years"
         case .insufficientData:
             return "Goal tracking: Keep logging! Log your weight for at least 7 days to see when you'll reach your goal"
         case .noData:

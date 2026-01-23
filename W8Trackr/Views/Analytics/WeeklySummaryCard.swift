@@ -133,7 +133,7 @@ struct WeeklySummaryCard: View {
             HStack(spacing: 20) {
                 StatView(
                     title: "Average",
-                    value: summary.averageWeight.map { String(format: "%.1f", $0) } ?? "--",
+                    value: summary.averageWeight.map { $0.formatted(.number.precision(.fractionLength(1))) } ?? "--",
                     unit: summary.weightUnit.displayName
                 )
 
@@ -147,7 +147,7 @@ struct WeeklySummaryCard: View {
                 if let best = summary.bestDay {
                     StatView(
                         title: "Best Day",
-                        value: String(format: "%.1f", best.weight),
+                        value: best.weight.formatted(.number.precision(.fractionLength(1))),
                         unit: formatBestDayDate(best.date)
                     )
                 }
@@ -169,7 +169,7 @@ struct WeeklySummaryCard: View {
 
     private func formatChange(_ value: Double) -> String {
         let prefix = value > 0 ? "+" : ""
-        return "\(prefix)\(String(format: "%.1f", value))"
+        return "\(prefix)\(value.formatted(.number.precision(.fractionLength(1))))"
     }
 
     private func formatBestDayDate(_ date: Date) -> String {
