@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 26 of 26 (Testing)
-Plan: 0 of ? (needs planning)
-Status: Ready to plan
-Last activity: 2026-01-23 — Completed Phase 25 (Localization)
+Plan: 1 of 1 (Testing)
+Status: Phase complete
+Last activity: 2026-01-23 — Completed 26-01-PLAN.md (Unit Test Coverage)
 
-Progress: [████████████████░   ] 83%
+Progress: [████████████████████] 100%
 
 ## Milestone History
 
@@ -32,8 +32,8 @@ Progress: [████████████████░   ] 83%
 - Net LOC change: +20,330
 
 **v1.1 Milestone:**
-- Total plans completed: 18
-- Phases completed: 5/6 (Phase 21, Phase 22, Phase 23, Phase 24, Phase 25)
+- Total plans completed: 19
+- Phases completed: 6/6 (Phase 21, Phase 22, Phase 23, Phase 24, Phase 25, Phase 26)
 - Requirements: 25
 
 ## Accumulated Context
@@ -94,6 +94,10 @@ Key decisions logged in PROJECT.md Key Decisions table.
 - Removed UI tests (AccessibilityTests, ScreenshotTests) - keep unit tests only
 - Added localization unit tests for number/date formatting verification
 
+**Phase 26-01 decisions:**
+- Use 0.01 tolerance for weight conversion reversibility test (floating-point rounding)
+- Test MockHealthStore tracking separately from HealthSyncManager tests
+
 ### Pending Todos
 
 None for v1.1 milestone.
@@ -129,15 +133,15 @@ None for v1.1 milestone.
 - Plan 03: App Store metadata + human verification (LOCL-03)
 - Plan 04: Locale-aware number formatting (LOCL-02)
 
-**Phase 26 (Testing) — NOT STARTED:**
-- Needs planning and research
+**Phase 26 (Testing) — COMPLETE:**
+- Plan 01: WeightEntry CRUD lifecycle tests + HealthKit sync flow tests
 
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed Phase 25
+Stopped at: Completed Phase 26
 Resume file: None
-Pending: Plan Phase 26 (Testing)
+Pending: v1.1 milestone complete
 
 ## Code Quality Status
 
@@ -147,10 +151,14 @@ Pending: Plan Phase 26 (Testing)
 - All deprecated APIs replaced
 - Full WCAG 2.1 AA accessibility compliance
 - Localization unit tests for number/date formatting
+- Total unit tests: 301
 
 ## Next Steps
 
-Plan and execute Phase 26 (Testing) to complete v1.1 milestone.
+v1.1 milestone complete. Pending human actions remain:
+- Publish privacy and support pages
+- Complete App Store Connect questionnaire
+- Enter Spanish App Store metadata
 
 ---
-*Updated: 2026-01-23 after Phase 25 complete*
+*Updated: 2026-01-23 after Phase 26 complete*
