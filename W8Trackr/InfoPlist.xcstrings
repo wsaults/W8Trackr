@@ -1,0 +1,70 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "NSHealthShareUsageDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr reads your weight data from Apple Health to help you track your progress."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr lee sus datos de peso de Apple Salud para ayudarle a seguir su progreso."
+          }
+        }
+      }
+    },
+    "NSHealthUpdateUsageDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr saves your weight and body fat entries to Apple Health so all your health data stays in one place."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr guarda sus entradas de peso y grasa corporal en Apple Salud para que todos sus datos de salud estén en un solo lugar."
+          }
+        }
+      }
+    },
+    "NSSiriUsageDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use Siri to log your weight and check your progress."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use Siri para registrar su peso y verificar su progreso."
+          }
+        }
+      }
+    },
+    "NSUserNotificationUsageDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We need to send you notifications for daily weight logging reminders."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Necesitamos enviarle notificaciones para recordatorios diarios de registro de peso."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
