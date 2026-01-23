@@ -81,9 +81,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 23-01-PLAN.md — Background-delivery entitlement, HKAnchoredObjectQueryDescriptor import operations
-- [ ] 23-02-PLAN.md — HKObserverQuery background delivery, app launch setup, Settings import toggle
-- [ ] 23-03-PLAN.md — Human verification of HealthKit import on device
+- [x] 23-01-PLAN.md — Background-delivery entitlement, HKAnchoredObjectQueryDescriptor import operations
+- [x] 23-02-PLAN.md — HKObserverQuery background delivery, app launch setup, Settings import toggle
+- [x] 23-03-PLAN.md — Human verification of HealthKit import on device
 
 ### Phase 24: Social Sharing
 **Goal:** Users can share their weight loss progress as an image
@@ -140,11 +140,11 @@ Phases execute in numeric order: 21 -> 21.1 -> 21.2 -> 22 -> etc.
 |-------|-----------|----------------|--------|-----------|
 | 21. Infrastructure & Migration | v1.1 | 2/2 | ✓ Complete | 2026-01-22 |
 | 22. Widgets | v1.1 | 3/3 | ✓ Complete | 2026-01-22 |
-| 23. HealthKit Import | v1.1 | 0/3 | Planned | - |
+| 23. HealthKit Import | v1.1 | 3/3 | ✓ Complete | 2026-01-23 |
 | 24. Social Sharing | v1.1 | 0/TBD | Not started | - |
 | 25. Localization | v1.1 | 0/TBD | Not started | - |
 | 26. Testing | v1.1 | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22 (Phase 23 planned)*
+*Last updated: 2026-01-23 (Phase 23 complete)*

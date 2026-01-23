@@ -15,19 +15,19 @@ Requirements for v1.1 release. Each maps to roadmap phases.
 
 ### HealthKit Import
 
-- [ ] **HKIT-01**: User can grant HealthKit read permission for weight data
-- [ ] **HKIT-02**: App imports all weight samples from Apple Health
-- [ ] **HKIT-03**: Weight entries display source indicator (manual vs Health)
-- [ ] **HKIT-04**: Initial sync completes on first permission grant
-- [ ] **HKIT-05**: App syncs automatically when Health data changes (background)
+- [x] **HKIT-01**: User can grant HealthKit read permission for weight data
+- [x] **HKIT-02**: App imports all weight samples from Apple Health
+- [x] **HKIT-03**: Weight entries display source indicator (manual vs Health)
+- [x] **HKIT-04**: Initial sync completes on first permission grant
+- [x] **HKIT-05**: App syncs automatically when Health data changes (background)
 
 ### Widgets
 
-- [ ] **WDGT-01**: Small widget displays current weight with trend arrow
-- [ ] **WDGT-02**: Medium widget displays progress toward goal weight
-- [ ] **WDGT-03**: Large widget displays sparkline chart of recent entries
-- [ ] **WDGT-04**: Widgets refresh when app data changes
-- [ ] **WDGT-05**: Tapping widget opens W8Trackr app
+- [x] **WDGT-01**: Small widget displays current weight with trend arrow
+- [x] **WDGT-02**: Medium widget displays progress toward goal weight
+- [x] **WDGT-03**: Large widget displays sparkline chart of recent entries
+- [x] **WDGT-04**: Widgets refresh when app data changes
+- [x] **WDGT-05**: Tapping widget opens W8Trackr app
 
 ### Social Sharing
 
@@ -88,16 +88,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-01 | Phase 21 | Complete |
 | INFRA-02 | Phase 21 | Complete |
 | INFRA-03 | Phase 21 | Complete |
-| HKIT-01 | Phase 23 | Pending |
-| HKIT-02 | Phase 23 | Pending |
-| HKIT-03 | Phase 23 | Pending |
-| HKIT-04 | Phase 23 | Pending |
-| HKIT-05 | Phase 23 | Pending |
-| WDGT-01 | Phase 22 | Pending |
-| WDGT-02 | Phase 22 | Pending |
-| WDGT-03 | Phase 22 | Pending |
-| WDGT-04 | Phase 22 | Pending |
-| WDGT-05 | Phase 22 | Pending |
+| HKIT-01 | Phase 23 | Complete |
+| HKIT-02 | Phase 23 | Complete |
+| HKIT-03 | Phase 23 | Complete |
+| HKIT-04 | Phase 23 | Complete |
+| HKIT-05 | Phase 23 | Complete |
+| WDGT-01 | Phase 22 | Complete |
+| WDGT-02 | Phase 22 | Complete |
+| WDGT-03 | Phase 22 | Complete |
+| WDGT-04 | Phase 22 | Complete |
+| WDGT-05 | Phase 22 | Complete |
 | SHAR-01 | Phase 24 | Pending |
 | SHAR-02 | Phase 24 | Pending |
 | SHAR-03 | Phase 24 | Pending |
@@ -115,7 +115,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 - v1.1 requirements: 25 total
 - Mapped to phases: 25
 - Unmapped: 0
+- Complete: 13 (INFRA: 3, WDGT: 5, HKIT: 5)
+- Pending: 12 (SHAR: 3, LOCL: 3, TEST: 6)
 
 ---
 *Requirements defined: 2026-01-22*
-*Last updated: 2026-01-22 (Phase 21 complete: INFRA-01, INFRA-02, INFRA-03)*
+*Last updated: 2026-01-23 (Phase 23 complete: HKIT-01 through HKIT-05)*

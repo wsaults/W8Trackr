@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Users can reliably track weight and see progress with confidence-inspiring visualizations
-**Current focus:** v1.1 milestone - Phase 23: HealthKit Import
+**Current focus:** v1.1 milestone - Phase 24: Social Sharing
 
 ## Current Position
 
-Phase: 23 of 26 (HealthKit Import)
-Plan: 2 of 3 complete
-Status: In progress
-Last activity: 2026-01-23 — Completed 23-02-PLAN.md
+Phase: 24 of 26 (Social Sharing)
+Plan: 0 of TBD complete
+Status: Ready to plan
+Last activity: 2026-01-23 — Completed Phase 23 (HealthKit Import)
 
-Progress: [██████░             ] 34%
+Progress: [████████░           ] 50%
 
 ## Milestone History
 
@@ -32,8 +32,8 @@ Progress: [██████░             ] 34%
 - Net LOC change: +20,330
 
 **v1.1 Milestone:**
-- Total plans completed: 7
-- Phases completed: 2/6 (Phase 21, Phase 22)
+- Total plans completed: 10
+- Phases completed: 3/6 (Phase 21, Phase 22, Phase 23)
 - Requirements: 25
 
 ## Accumulated Context
@@ -65,6 +65,10 @@ Key decisions logged in PROJECT.md Key Decisions table.
 - Run initial import automatically when user first enables import (HKIT-04)
 - Store observerQuery property to allow stopping when user disables import
 
+**Phase 23-03 decisions:**
+- Rename "Sync to Apple Health" to "Export to Apple Health" for clarity alongside "Import from Apple Health"
+- Footer text explicitly states: Export writes entries to Health, Import reads from other apps
+
 ### Pending Todos
 
 None for v1.1 milestone.
@@ -84,17 +88,17 @@ None for v1.1 milestone.
 - All widget views implemented
 - Widget refresh integrated into main app
 
-**Phase 23 (HealthKit Import) — IN PROGRESS:**
-- Plan 01 complete: Import operations implemented
-- Plan 02 complete: Background sync and Settings UI
-- Next: Conflict resolution (plan 03)
+**Phase 23 (HealthKit Import) — COMPLETE:**
+- Plan 01: Import operations with HKAnchoredObjectQueryDescriptor
+- Plan 02: Background delivery with HKObserverQuery, Settings toggle
+- Plan 03: Human verification + UX terminology fix
 
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed 23-02-PLAN.md
+Stopped at: Phase 23 complete
 Resume file: None
-Pending: Execute 23-03-PLAN.md
+Pending: Plan Phase 24 (Social Sharing)
 
 ## Code Quality Status
 
@@ -108,8 +112,8 @@ Pending: Execute 23-03-PLAN.md
 ## Next Steps
 
 ```
-/gsd:execute-plan .planning/phases/23-healthkit-import/23-03-PLAN.md
+/gsd:plan-phase 24
 ```
 
 ---
-*Updated: 2026-01-23 after 23-02 complete*
+*Updated: 2026-01-23 after Phase 23 complete*
