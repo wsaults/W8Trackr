@@ -61,11 +61,14 @@
 		4CDA67AA078FB82A3148820A /* WeightWidgetEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WeightWidgetEntry.swift; sourceTree = "<group>"; };
 		5FD0ED850EA78A7BA5A8C8D0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		732BADBDED7FAA39231ADF77 /* WeightWidgetProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WeightWidgetProvider.swift; sourceTree = "<group>"; };
+		738F015135A5F7840C8B83D5 /* SmallWidgetView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SmallWidgetView.swift; path = W8TrackrWidget/Views/SmallWidgetView.swift; sourceTree = "<group>"; };
 		746D543B9FDD0CDA915FE666 /* W8TrackrWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = W8TrackrWidget.swift; sourceTree = "<group>"; };
 		94CEA16BE178A03E3432761D /* SharedModelContainer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SharedModelContainer.swift; path = ../W8Trackr/Shared/SharedModelContainer.swift; sourceTree = "<group>"; };
 		BE502EAE2DBFBF7700299FBF /* W8Trackr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = W8Trackr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE502EBB2DBFBF7900299FBF /* W8TrackrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = W8TrackrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEUI00012DBFBF7900299FBF /* W8TrackrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = W8TrackrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7C51CED33163534D3CBC55D /* EmptyStateView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EmptyStateView.swift; path = W8TrackrWidget/Views/EmptyStateView.swift; sourceTree = "<group>"; };
+		D370E7D740B721D183792EB3 /* MediumWidgetView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MediumWidgetView.swift; path = W8TrackrWidget/Views/MediumWidgetView.swift; sourceTree = "<group>"; };
 		F53F74FCD752AA87D79A5054 /* WeightEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightEntry.swift; path = ../W8Trackr/Models/WeightEntry.swift; sourceTree = "<group>"; };
 		FA0D973D7F869313A00C4D2C /* Milestone.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Milestone.swift; path = ../W8Trackr/Models/Milestone.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -156,6 +159,7 @@
 				3FF51B1B6E139AE4E49DA92E /* SharedCode */,
 				4CDA67AA078FB82A3148820A /* WeightWidgetEntry.swift */,
 				732BADBDED7FAA39231ADF77 /* WeightWidgetProvider.swift */,
+				E948A072270D753C71952FB6 /* Views */,
 			);
 			name = W8TrackrWidget;
 			path = W8TrackrWidget;
@@ -190,6 +194,16 @@
 				022637AB165F31D5DAC182AB /* W8TrackrWidget.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E948A072270D753C71952FB6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C7C51CED33163534D3CBC55D /* EmptyStateView.swift */,
+				738F015135A5F7840C8B83D5 /* SmallWidgetView.swift */,
+				D370E7D740B721D183792EB3 /* MediumWidgetView.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		EA18AC707CE813DA97574D8E /* iOS */ = {
