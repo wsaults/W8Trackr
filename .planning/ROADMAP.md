@@ -25,7 +25,7 @@ See archived milestone documentation for v1.0 phase details.
 - Decimal phases (21.1, 21.2): Urgent insertions (marked with INSERTED)
 
 - [x] **Phase 21: Infrastructure & Migration** - App Group setup and data migration (completed 2026-01-22)
-- [ ] **Phase 22: Widgets** - Home screen widgets (small, medium, large)
+- [x] **Phase 22: Widgets** - Home screen widgets (small, medium, large) (completed 2026-01-22)
 - [ ] **Phase 23: HealthKit Import** - Read weight data from Apple Health
 - [ ] **Phase 24: Social Sharing** - Shareable progress images
 - [ ] **Phase 25: Localization** - Spanish language support
@@ -63,9 +63,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 22-01-PLAN.md — Widget extension target, entitlements, timeline entry and provider
-- [ ] 22-02-PLAN.md — Small, medium, large widget views with sparkline chart, widget refresh integration
-- [ ] 22-03-PLAN.md — Human verification of widget functionality
+- [x] 22-01-PLAN.md — Widget extension target, entitlements, timeline entry and provider
+- [x] 22-02-PLAN.md — Small, medium, large widget views with sparkline chart, widget refresh integration
+- [x] 22-03-PLAN.md — Human verification of widget functionality
 
 ### Phase 23: HealthKit Import
 **Goal:** Users can import weight data from Apple Health with automatic sync
@@ -78,10 +78,12 @@ Plans:
   3. Imported entries show Health icon to distinguish from manual entries
   4. Initial sync completes automatically when permission is first granted
   5. New Health data syncs automatically in background without user action
-**Plans:** TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 23-01: TBD
+- [ ] 23-01-PLAN.md — Background-delivery entitlement, HKAnchoredObjectQueryDescriptor import operations
+- [ ] 23-02-PLAN.md — HKObserverQuery background delivery, app launch setup, Settings import toggle
+- [ ] 23-03-PLAN.md — Human verification of HealthKit import on device
 
 ### Phase 24: Social Sharing
 **Goal:** Users can share their weight loss progress as an image
@@ -137,12 +139,12 @@ Phases execute in numeric order: 21 -> 21.1 -> 21.2 -> 22 -> etc.
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 21. Infrastructure & Migration | v1.1 | 2/2 | ✓ Complete | 2026-01-22 |
-| 22. Widgets | v1.1 | 0/3 | Planned | - |
-| 23. HealthKit Import | v1.1 | 0/TBD | Not started | - |
+| 22. Widgets | v1.1 | 3/3 | ✓ Complete | 2026-01-22 |
+| 23. HealthKit Import | v1.1 | 0/3 | Planned | - |
 | 24. Social Sharing | v1.1 | 0/TBD | Not started | - |
 | 25. Localization | v1.1 | 0/TBD | Not started | - |
 | 26. Testing | v1.1 | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22 (Phase 22 planned)*
+*Last updated: 2026-01-22 (Phase 23 planned)*
