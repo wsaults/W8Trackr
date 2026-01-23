@@ -43,4 +43,24 @@ enum ProgressImageGenerator {
 
         return renderer.uiImage
     }
+
+    /// Generates a milestone celebration image for sharing.
+    /// - Parameters:
+    ///   - milestoneWeight: The milestone weight that was achieved
+    ///   - unit: Weight unit for display
+    /// - Returns: UIImage suitable for sharing, or nil if rendering fails
+    static func generateMilestoneImage(
+        milestoneWeight: Double,
+        unit: WeightUnit
+    ) -> UIImage? {
+        let view = ShareableMilestoneView(
+            milestoneWeight: milestoneWeight,
+            unit: unit
+        )
+
+        let renderer = ImageRenderer(content: view)
+        renderer.scale = UIScreen.main.scale
+
+        return renderer.uiImage
+    }
 }

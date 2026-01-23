@@ -17,6 +17,7 @@ struct MilestoneCelebrationView: View {
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     @State private var showContent = false
     @State private var confettiTrigger: Int = 0
+    @State private var generatedImage: UIImage?
     @ScaledMetric(relativeTo: .largeTitle) private var trophySize: CGFloat = 60
 
     var body: some View {
@@ -60,19 +61,41 @@ struct MilestoneCelebrationView: View {
                 .offset(y: showContent ? 0 : 20)
                 .animation(reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.7), value: showContent)
 
-                Button {
-                    dismiss()
-                } label: {
-                    Text("Continue")
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(AppColors.primary)
-                        .foregroundStyle(.white)
-                        .clipShape(.rect(cornerRadius: 12))
+                // Action buttons
+                HStack(spacing: 12) {
+                    // Share button
+                    if let image = generatedImage {
+                        ShareLink(
+                            item: ShareableProgressImage(image: image, title: "W8Trackr Milestone"),
+                            preview: SharePreview("W8Trackr Milestone", image: Image(uiImage: image))
+                        ) {
+                            Label("Share", systemImage: "square.and.arrow.up")
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(AppColors.secondary)
+                                .foregroundStyle(.white)
+                                .clipShape(.rect(cornerRadius: 12))
+                        }
+                        .accessibilityLabel("Share milestone")
+                        .accessibilityHint("Share your milestone achievement")
+                    }
+
+                    // Continue button
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Continue")
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(AppColors.primary)
+                            .foregroundStyle(.white)
+                            .clipShape(.rect(cornerRadius: 12))
+                    }
+                    .accessibilityLabel("Continue")
+                    .accessibilityHint("Dismiss celebration and return to dashboard")
                 }
-                .accessibilityLabel("Continue")
-                .accessibilityHint("Dismiss celebration and return to dashboard")
                 .opacity(showContent ? 1.0 : 0)
                 .padding(.top, 8)
             }
@@ -88,6 +111,12 @@ struct MilestoneCelebrationView: View {
         }
         .confettiCannon(trigger: reduceMotion ? .constant(0) : $confettiTrigger, num: reduceMotion ? 0 : 50, radius: 400)
         .onAppear {
+            // Generate shareable image
+            generatedImage = ProgressImageGenerator.generateMilestoneImage(
+                milestoneWeight: milestoneWeight,
+                unit: unit
+            )
+
             // Announce milestone to VoiceOver
             UIAccessibility.post(
                 notification: .announcement,
