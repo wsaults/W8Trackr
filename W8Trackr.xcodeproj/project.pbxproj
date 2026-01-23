@@ -7,10 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00E65B396DD0D44A4608D76E /* W8TrackrWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D543B9FDD0CDA915FE666 /* W8TrackrWidget.swift */; };
+		0B190CBE6ED52664CACEC1AB /* WeightEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53F74FCD752AA87D79A5054 /* WeightEntry.swift */; };
+		0E40C56130742933B54CB636 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FD0ED850EA78A7BA5A8C8D0 /* Foundation.framework */; };
+		3D4FFF1F8BDF8A1E98EBA69A /* W8TrackrWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 022637AB165F31D5DAC182AB /* W8TrackrWidget.appex */; };
+		483AB4C8D97D19C29E4A5C21 /* Milestone.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0D973D7F869313A00C4D2C /* Milestone.swift */; };
+		48A488BD5D5D1AC0EC01F02D /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CEA16BE178A03E3432761D /* SharedModelContainer.swift */; };
+		A37255C62CEE567B88E69BD5 /* WeightWidgetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732BADBDED7FAA39231ADF77 /* WeightWidgetProvider.swift */; };
 		BE23C51E2F215F030013ED97 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = BE23C51D2F215F030013ED97 /* ConfettiSwiftUI */; };
+		E85564FAF0D9555E99068792 /* WeightWidgetEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA67AA078FB82A3148820A /* WeightWidgetEntry.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3B15BEE35B723BD166811328 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BE502EA62DBFBF7700299FBF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D264B3122EE6C7FC12156CCD;
+			remoteInfo = W8TrackrWidget;
+		};
 		BE502EBC2DBFBF7900299FBF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BE502EA62DBFBF7700299FBF /* Project object */;
@@ -27,10 +42,32 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		C1B8F6656C4101EC190A3ED9 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				3D4FFF1F8BDF8A1E98EBA69A /* W8TrackrWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		022637AB165F31D5DAC182AB /* W8TrackrWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = W8TrackrWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CDA67AA078FB82A3148820A /* WeightWidgetEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WeightWidgetEntry.swift; sourceTree = "<group>"; };
+		5FD0ED850EA78A7BA5A8C8D0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		732BADBDED7FAA39231ADF77 /* WeightWidgetProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WeightWidgetProvider.swift; sourceTree = "<group>"; };
+		746D543B9FDD0CDA915FE666 /* W8TrackrWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = W8TrackrWidget.swift; sourceTree = "<group>"; };
+		94CEA16BE178A03E3432761D /* SharedModelContainer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SharedModelContainer.swift; path = ../W8Trackr/Shared/SharedModelContainer.swift; sourceTree = "<group>"; };
 		BE502EAE2DBFBF7700299FBF /* W8Trackr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = W8Trackr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE502EBB2DBFBF7900299FBF /* W8TrackrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = W8TrackrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEUI00012DBFBF7900299FBF /* W8TrackrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = W8TrackrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F53F74FCD752AA87D79A5054 /* WeightEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightEntry.swift; path = ../W8Trackr/Models/WeightEntry.swift; sourceTree = "<group>"; };
+		FA0D973D7F869313A00C4D2C /* Milestone.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Milestone.swift; path = ../W8Trackr/Models/Milestone.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -54,17 +91,29 @@
 		};
 		BE502EBE2DBFBF7900299FBF /* W8TrackrTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = W8TrackrTests;
 			sourceTree = "<group>";
 		};
 		BEUI00022DBFBF7900299FBF /* W8TrackrUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = W8TrackrUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0B04931DF0EA6216E0C8BE66 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0E40C56130742933B54CB636 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BE502EAB2DBFBF7700299FBF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -90,6 +139,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3FF51B1B6E139AE4E49DA92E /* SharedCode */ = {
+			isa = PBXGroup;
+			children = (
+				F53F74FCD752AA87D79A5054 /* WeightEntry.swift */,
+				FA0D973D7F869313A00C4D2C /* Milestone.swift */,
+				94CEA16BE178A03E3432761D /* SharedModelContainer.swift */,
+			);
+			name = SharedCode;
+			sourceTree = "<group>";
+		};
+		440F2992FB9238FFE2C40ECD /* W8TrackrWidget */ = {
+			isa = PBXGroup;
+			children = (
+				746D543B9FDD0CDA915FE666 /* W8TrackrWidget.swift */,
+				3FF51B1B6E139AE4E49DA92E /* SharedCode */,
+				4CDA67AA078FB82A3148820A /* WeightWidgetEntry.swift */,
+				732BADBDED7FAA39231ADF77 /* WeightWidgetProvider.swift */,
+			);
+			name = W8TrackrWidget;
+			path = W8TrackrWidget;
+			sourceTree = "<group>";
+		};
+		78C1404ACB68286C4AD757F9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EA18AC707CE813DA97574D8E /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BE502EA52DBFBF7700299FBF = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +176,8 @@
 				BE502EBE2DBFBF7900299FBF /* W8TrackrTests */,
 				BEUI00022DBFBF7900299FBF /* W8TrackrUITests */,
 				BE502EAF2DBFBF7700299FBF /* Products */,
+				78C1404ACB68286C4AD757F9 /* Frameworks */,
+				440F2992FB9238FFE2C40ECD /* W8TrackrWidget */,
 			);
 			sourceTree = "<group>";
 		};
@@ -106,8 +187,17 @@
 				BE502EAE2DBFBF7700299FBF /* W8Trackr.app */,
 				BE502EBB2DBFBF7900299FBF /* W8TrackrTests.xctest */,
 				BEUI00012DBFBF7900299FBF /* W8TrackrUITests.xctest */,
+				022637AB165F31D5DAC182AB /* W8TrackrWidget.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		EA18AC707CE813DA97574D8E /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				5FD0ED850EA78A7BA5A8C8D0 /* Foundation.framework */,
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -121,10 +211,12 @@
 				BE502EAA2DBFBF7700299FBF /* Sources */,
 				BE502EAB2DBFBF7700299FBF /* Frameworks */,
 				BE502EAC2DBFBF7700299FBF /* Resources */,
+				C1B8F6656C4101EC190A3ED9 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E38FC4097FC0F5EA5BB298C1 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				BE502EB02DBFBF7700299FBF /* W8Trackr */,
@@ -154,8 +246,6 @@
 				BE502EBE2DBFBF7900299FBF /* W8TrackrTests */,
 			);
 			name = W8TrackrTests;
-			packageProductDependencies = (
-			);
 			productName = W8TrackrTests;
 			productReference = BE502EBB2DBFBF7900299FBF /* W8TrackrTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -177,11 +267,26 @@
 				BEUI00022DBFBF7900299FBF /* W8TrackrUITests */,
 			);
 			name = W8TrackrUITests;
-			packageProductDependencies = (
-			);
 			productName = W8TrackrUITests;
 			productReference = BEUI00012DBFBF7900299FBF /* W8TrackrUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		D264B3122EE6C7FC12156CCD /* W8TrackrWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 044A5B6F87E9DBDD72BFF1E3 /* Build configuration list for PBXNativeTarget "W8TrackrWidget" */;
+			buildPhases = (
+				E499C5C6DCEC80E463CEFD6D /* Sources */,
+				0B04931DF0EA6216E0C8BE66 /* Frameworks */,
+				3E998D582DD611DB73F04EBA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = W8TrackrWidget;
+			productName = W8TrackrWidget;
+			productReference = 022637AB165F31D5DAC182AB /* W8TrackrWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -226,11 +331,19 @@
 				BE502EAD2DBFBF7700299FBF /* W8Trackr */,
 				BE502EBA2DBFBF7900299FBF /* W8TrackrTests */,
 				BEUI00082DBFBF7900299FBF /* W8TrackrUITests */,
+				D264B3122EE6C7FC12156CCD /* W8TrackrWidget */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3E998D582DD611DB73F04EBA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BE502EAC2DBFBF7700299FBF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -299,6 +412,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E499C5C6DCEC80E463CEFD6D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00E65B396DD0D44A4608D76E /* W8TrackrWidget.swift in Sources */,
+				0B190CBE6ED52664CACEC1AB /* WeightEntry.swift in Sources */,
+				483AB4C8D97D19C29E4A5C21 /* Milestone.swift in Sources */,
+				48A488BD5D5D1AC0EC01F02D /* SharedModelContainer.swift in Sources */,
+				E85564FAF0D9555E99068792 /* WeightWidgetEntry.swift in Sources */,
+				A37255C62CEE567B88E69BD5 /* WeightWidgetProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -312,9 +438,80 @@
 			target = BE502EAD2DBFBF7700299FBF /* W8Trackr */;
 			targetProxy = BEUI00032DBFBF7900299FBF /* PBXContainerItemProxy */;
 		};
+		E38FC4097FC0F5EA5BB298C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = W8TrackrWidget;
+			target = D264B3122EE6C7FC12156CCD /* W8TrackrWidget */;
+			targetProxy = 3B15BEE35B723BD166811328 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		7F3F384BFD7ABFDAD857608F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = W8TrackrWidget/W8TrackrWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = 77QB78PHPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = W8TrackrWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "W8Trackr Widget";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.saults.W8Trackr.W8TrackrWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		B585316DAC88FB46D1F938D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = W8TrackrWidget/W8TrackrWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = 77QB78PHPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = W8TrackrWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "W8Trackr Widget";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.saults.W8Trackr.W8TrackrWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		BE502ECD2DBFBF7900299FBF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -583,6 +780,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		044A5B6F87E9DBDD72BFF1E3 /* Build configuration list for PBXNativeTarget "W8TrackrWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B585316DAC88FB46D1F938D1 /* Release */,
+				7F3F384BFD7ABFDAD857608F /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BE502EA92DBFBF7700299FBF /* Build configuration list for PBXProject "W8Trackr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
