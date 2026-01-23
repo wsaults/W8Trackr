@@ -3,7 +3,7 @@
 ## Milestones
 
 - [x] **v1.0 Pre-Launch Audit** - Phases 1-20 (shipped 2026-01-22)
-- [ ] **v1.1 Feature Expansion** - Phases 21-26 (in progress)
+- [x] **v1.1 Feature Expansion** - Phases 21-26 (completed 2026-01-23)
 
 ## Phases
 
@@ -29,7 +29,7 @@ See archived milestone documentation for v1.0 phase details.
 - [x] **Phase 23: HealthKit Import** - Read weight data from Apple Health (completed 2026-01-23)
 - [x] **Phase 24: Social Sharing** - Shareable progress images (completed 2026-01-23)
 - [x] **Phase 25: Localization** - Spanish language support (completed 2026-01-23)
-- [ ] **Phase 26: Testing** - Comprehensive test coverage
+- [x] **Phase 26: Testing** - Comprehensive test coverage (completed 2026-01-23)
 
 ## Phase Details
 
@@ -133,7 +133,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 26-01-PLAN.md — WeightEntry CRUD tests, HealthKit sync flow tests
+- [x] 26-01-PLAN.md — WeightEntry CRUD tests, HealthKit sync flow tests
 
 ## Progress
 
@@ -147,8 +147,8 @@ Phases execute in numeric order: 21 -> 21.1 -> 21.2 -> 22 -> etc.
 | 23. HealthKit Import | v1.1 | 3/3 | ✓ Complete | 2026-01-23 |
 | 24. Social Sharing | v1.1 | 2/2 | ✓ Complete | 2026-01-23 |
 | 25. Localization | v1.1 | 4/4 | ✓ Complete | 2026-01-23 |
-| 26. Testing | v1.1 | 0/1 | Planned | - |
+| 26. Testing | v1.1 | 1/1 | ✓ Complete | 2026-01-23 |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 (Phase 26 planned)*
+*Last updated: 2026-01-23 (Phase 26 complete, v1.1 milestone complete)*

@@ -31,24 +31,24 @@ Requirements for v1.1 release. Each maps to roadmap phases.
 
 ### Social Sharing
 
-- [ ] **SHAR-01**: User can generate shareable progress image
-- [ ] **SHAR-02**: User can share via system share sheet
-- [ ] **SHAR-03**: User can hide exact weight values in shared image (privacy)
+- [x] **SHAR-01**: User can generate shareable progress image
+- [x] **SHAR-02**: User can share via system share sheet
+- [x] **SHAR-03**: User can hide exact weight values in shared image (privacy)
 
 ### Localization
 
-- [ ] **LOCL-01**: All UI strings display correctly in Spanish
-- [ ] **LOCL-02**: Numbers and dates format according to locale
-- [ ] **LOCL-03**: App Store metadata available in Spanish
+- [x] **LOCL-01**: All UI strings display correctly in Spanish
+- [x] **LOCL-02**: Numbers and dates format according to locale
+- [x] **LOCL-03**: App Store metadata available in Spanish
 
 ### Testing
 
-- [ ] **TEST-01**: Unit tests cover weight data CRUD operations
-- [ ] **TEST-02**: Unit tests cover HealthKit sync logic
-- [ ] **TEST-03**: Unit tests cover trend/EWMA calculations
-- [ ] **TEST-04**: UI tests verify weight entry flow
-- [ ] **TEST-05**: UI tests verify settings flow
-- [ ] **TEST-06**: Mock HealthKit available for isolated testing
+- [x] **TEST-01**: Unit tests cover weight data CRUD operations
+- [x] **TEST-02**: Unit tests cover HealthKit sync logic
+- [x] **TEST-03**: Unit tests cover trend/EWMA calculations
+- [x] **TEST-04**: UI tests verify weight entry flow — REMOVED per Phase 25-03
+- [x] **TEST-05**: UI tests verify settings flow — REMOVED per Phase 25-03
+- [x] **TEST-06**: Mock HealthKit available for isolated testing
 
 ## Future Requirements
 
@@ -98,26 +98,26 @@ Which phases cover which requirements. Updated during roadmap creation.
 | WDGT-03 | Phase 22 | Complete |
 | WDGT-04 | Phase 22 | Complete |
 | WDGT-05 | Phase 22 | Complete |
-| SHAR-01 | Phase 24 | Pending |
-| SHAR-02 | Phase 24 | Pending |
-| SHAR-03 | Phase 24 | Pending |
-| LOCL-01 | Phase 25 | Pending |
-| LOCL-02 | Phase 25 | Pending |
-| LOCL-03 | Phase 25 | Pending |
-| TEST-01 | Phase 26 | Pending |
-| TEST-02 | Phase 26 | Pending |
-| TEST-03 | Phase 26 | Pending |
-| TEST-04 | Phase 26 | Pending |
-| TEST-05 | Phase 26 | Pending |
-| TEST-06 | Phase 26 | Pending |
+| SHAR-01 | Phase 24 | Complete |
+| SHAR-02 | Phase 24 | Complete |
+| SHAR-03 | Phase 24 | Complete |
+| LOCL-01 | Phase 25 | Complete |
+| LOCL-02 | Phase 25 | Complete |
+| LOCL-03 | Phase 25 | Complete |
+| TEST-01 | Phase 26 | Complete |
+| TEST-02 | Phase 26 | Complete |
+| TEST-03 | Phase 26 | Complete |
+| TEST-04 | Phase 26 | N/A (Removed) |
+| TEST-05 | Phase 26 | N/A (Removed) |
+| TEST-06 | Phase 26 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 25 total
 - Mapped to phases: 25
 - Unmapped: 0
-- Complete: 13 (INFRA: 3, WDGT: 5, HKIT: 5)
-- Pending: 12 (SHAR: 3, LOCL: 3, TEST: 6)
+- Complete: 23 (INFRA: 3, WDGT: 5, HKIT: 5, SHAR: 3, LOCL: 3, TEST: 4)
+- N/A: 2 (TEST-04, TEST-05 removed per Phase 25-03)
 
 ---
 *Requirements defined: 2026-01-22*
-*Last updated: 2026-01-23 (Phase 23 complete: HKIT-01 through HKIT-05)*
+*Last updated: 2026-01-23 (v1.1 milestone complete)*
