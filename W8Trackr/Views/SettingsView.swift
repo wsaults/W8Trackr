@@ -342,28 +342,6 @@ struct SettingsView: View {
     private var healthSection: some View {
         if HealthSyncManager.isHealthDataAvailable {
             Section {
-                Toggle("Export to Apple Health", isOn: Binding(
-                    get: { healthSyncManager.isHealthSyncEnabled },
-                    set: { newValue in
-                        if newValue {
-                            Task {
-                                do {
-                                    let success = try await healthSyncManager.requestAuthorization()
-                                    if success && healthSyncManager.isAuthorized {
-                                        healthSyncManager.isHealthSyncEnabled = true
-                                    } else {
-                                        showingHealthKitPermissionAlert = true
-                                    }
-                                } catch {
-                                    showingHealthKitPermissionAlert = true
-                                }
-                            }
-                        } else {
-                            healthSyncManager.isHealthSyncEnabled = false
-                        }
-                    }
-                ))
-
                 Toggle("Import from Apple Health", isOn: Binding(
                     get: { healthSyncManager.isHealthImportEnabled },
                     set: { newValue in
@@ -394,8 +372,7 @@ struct SettingsView: View {
                     }
                 ))
 
-                // Show sync status if either sync or import is enabled
-                if healthSyncManager.isHealthSyncEnabled || healthSyncManager.isHealthImportEnabled {
+                if healthSyncManager.isHealthImportEnabled {
                     HStack {
                         Text("Sync Status")
                         Spacer()
@@ -405,7 +382,7 @@ struct SettingsView: View {
             } header: {
                 Text("Apple Health")
             } footer: {
-                Text("Export writes your W8Trackr entries to Health. Import reads weight from other apps and devices.")
+                Text("Import weight entries from other apps and devices connected to Apple Health.")
             }
         }
     }

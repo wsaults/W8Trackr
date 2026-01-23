@@ -434,26 +434,6 @@ struct WeightEntryView: View {
         // Refresh widgets after successful save
         WidgetCenter.shared.reloadTimelines(ofKind: "WeightWidget")
 
-        // Sync to HealthKit (only after successful save)
-        if let entry = existingEntry {
-            // Update existing entry in Health
-            Task {
-                try? await HealthSyncManager.shared.updateWeightInHealth(entry: entry)
-            }
-        } else {
-            // For new entries, find the just-saved entry and sync it
-            // Note: The legacy HealthKitManager is still used for new entries until
-            // the full migration to HealthSyncManager is complete (T024)
-            Task {
-                _ = await HealthKitManager.shared.saveWeightEntry(
-                    weightInUnit: weight,
-                    unit: weightUnit,
-                    bodyFatPercentage: bodyFat,
-                    date: date
-                )
-            }
-        }
-
         dismiss()
     }
 }

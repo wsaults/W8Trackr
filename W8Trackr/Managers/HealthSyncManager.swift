@@ -2,7 +2,7 @@
 //  HealthSyncManager.swift
 //  W8Trackr
 //
-//  Manages bidirectional synchronization between W8Trackr and Apple HealthKit.
+//  Manages importing weight data from Apple HealthKit.
 //
 
 import Foundation
@@ -10,13 +10,12 @@ import HealthKit
 import SwiftData
 import SwiftUI
 
-/// Manages synchronization of weight entries between W8Trackr and Apple HealthKit.
+/// Manages importing weight entries from Apple HealthKit.
 ///
 /// This manager handles:
 /// - Authorization requests for Health data access
-/// - Exporting weight entries to HealthKit (P1)
-/// - Importing weight entries from HealthKit (P2 - future)
-/// - Ongoing bidirectional sync (P3 - future)
+/// - Importing weight entries from HealthKit
+/// - Background delivery for automatic sync when Health data changes
 ///
 /// Uses dependency injection via `HealthStoreProtocol` for testability.
 @Observable @MainActor
@@ -60,9 +59,6 @@ final class HealthSyncManager {
 
     // MARK: - Persisted State
 
-    /// User preference key for Health sync enabled/disabled.
-    private static let healthSyncEnabledKey = "healthSyncEnabled"
-
     /// User preference key for Health import enabled/disabled.
     private static let healthImportEnabledKey = "healthImportEnabled"
 
@@ -71,16 +67,6 @@ final class HealthSyncManager {
 
     /// Key for storing the last successful sync timestamp.
     private static let lastHealthSyncDateKey = "lastHealthSyncDate"
-
-    /// Whether Health sync is enabled by the user.
-    ///
-    /// Stored in UserDefaults and persists across app launches.
-    var isHealthSyncEnabled: Bool {
-        get { userDefaults.bool(forKey: Self.healthSyncEnabledKey) }
-        set {
-            userDefaults.set(newValue, forKey: Self.healthSyncEnabledKey)
-        }
-    }
 
     /// Whether Health import is enabled by the user.
     ///
@@ -155,7 +141,7 @@ final class HealthSyncManager {
         isAuthorized = status == .sharingAuthorized
     }
 
-    /// Requests authorization to read and write weight data to HealthKit.
+    /// Requests authorization to read weight data from HealthKit.
     ///
     /// - Returns: `true` if the authorization dialog was presented.
     /// - Throws: HealthKit errors if the request fails.
@@ -165,7 +151,8 @@ final class HealthSyncManager {
             return false
         }
 
-        let typesToShare: Set<HKSampleType> = [weightType]
+        // Only request read access (no write/share)
+        let typesToShare: Set<HKSampleType> = []
         let typesToRead: Set<HKObjectType> = [weightType]
 
         let success = try await healthStore.requestAuthorization(
@@ -177,205 +164,6 @@ final class HealthSyncManager {
         checkAuthorizationStatus()
 
         return success
-    }
-
-    // MARK: - Export Operations
-
-    /// Saves a weight entry to HealthKit.
-    ///
-    /// Creates a new HKQuantitySample for the weight and stores the resulting UUID
-    /// in the entry's `healthKitUUID` field for future updates/deletions.
-    ///
-    /// - Parameter entry: The weight entry to save
-    /// - Throws: HealthKit errors if save fails
-    func saveWeightToHealth(entry: WeightEntry) async throws {
-        guard isHealthSyncEnabled,
-              Self.isHealthDataAvailable,
-              let weightType = weightType else {
-            return
-        }
-
-        syncStatus = .syncing
-
-        do {
-            let sample = createWeightSample(from: entry, type: weightType)
-            try await healthStore.save(sample)
-
-            // Store the HealthKit UUID for future updates/deletions
-            entry.healthKitUUID = sample.uuid.uuidString
-            entry.pendingHealthSync = false
-            entry.syncVersion += 1
-
-            syncStatus = .success
-            lastHealthSyncDate = Date()
-        } catch {
-            // Graceful degradation: if auth denied, silently mark for later sync
-            if isAuthorizationDeniedError(error) {
-                entry.pendingHealthSync = true
-                syncStatus = .idle
-                return
-            }
-            syncStatus = .failed(error.localizedDescription)
-            throw error
-        }
-    }
-
-    /// Updates an existing weight entry in HealthKit.
-    ///
-    /// HealthKit doesn't support direct updates, so this:
-    /// 1. Deletes the existing sample (if healthKitUUID exists)
-    /// 2. Creates a new sample with updated values
-    /// 3. Updates the entry's healthKitUUID to the new sample
-    ///
-    /// - Parameter entry: The weight entry to update
-    /// - Throws: HealthKit errors if update fails
-    func updateWeightInHealth(entry: WeightEntry) async throws {
-        guard isHealthSyncEnabled,
-              Self.isHealthDataAvailable,
-              let weightType = weightType else {
-            return
-        }
-
-        syncStatus = .syncing
-
-        do {
-            // If we have an existing HealthKit sample, delete it first
-            if let existingUUID = entry.healthKitUUID,
-               let uuid = UUID(uuidString: existingUUID) {
-                // Create a predicate to find and delete the old sample
-                let predicate = HKQuery.predicateForObject(with: uuid)
-                try await deleteHealthSamples(matching: predicate, type: weightType)
-            }
-
-            // Create and save new sample
-            let sample = createWeightSample(from: entry, type: weightType)
-            try await healthStore.save(sample)
-
-            // Update entry with new UUID and sync metadata
-            entry.healthKitUUID = sample.uuid.uuidString
-            entry.pendingHealthSync = false
-            entry.syncVersion += 1
-
-            syncStatus = .success
-            lastHealthSyncDate = Date()
-        } catch {
-            // Graceful degradation: if auth denied, silently mark for later sync
-            if isAuthorizationDeniedError(error) {
-                entry.pendingHealthSync = true
-                syncStatus = .idle
-                return
-            }
-            syncStatus = .failed(error.localizedDescription)
-            throw error
-        }
-    }
-
-    /// Deletes a weight entry from HealthKit.
-    ///
-    /// Uses the stored `healthKitUUID` to locate and delete the corresponding sample.
-    /// No-op if the entry hasn't been synced to HealthKit.
-    ///
-    /// - Parameter entry: The weight entry to delete from Health
-    /// - Throws: HealthKit errors if delete fails
-    func deleteWeightFromHealth(entry: WeightEntry) async throws {
-        guard isHealthSyncEnabled,
-              Self.isHealthDataAvailable,
-              let weightType = weightType,
-              let existingUUID = entry.healthKitUUID,
-              let uuid = UUID(uuidString: existingUUID) else {
-            return
-        }
-
-        syncStatus = .syncing
-
-        do {
-            let predicate = HKQuery.predicateForObject(with: uuid)
-            try await deleteHealthSamples(matching: predicate, type: weightType)
-
-            entry.healthKitUUID = nil
-            entry.pendingHealthSync = false
-
-            syncStatus = .success
-            lastHealthSyncDate = Date()
-        } catch {
-            // Graceful degradation: if auth denied, silently clear UUID
-            // The HealthKit sample may remain orphaned, but app continues
-            if isAuthorizationDeniedError(error) {
-                entry.healthKitUUID = nil
-                syncStatus = .idle
-                return
-            }
-            syncStatus = .failed(error.localizedDescription)
-            throw error
-        }
-    }
-
-    // MARK: - Private Helpers
-
-    /// Checks if an error indicates HealthKit authorization was denied.
-    ///
-    /// Used for graceful degradation: when auth is denied, operations silently
-    /// succeed from the app's perspective while marking entries for later sync.
-    private func isAuthorizationDeniedError(_ error: Error) -> Bool {
-        let nsError = error as NSError
-        return nsError.domain == HKErrorDomain &&
-               nsError.code == HKError.errorAuthorizationDenied.rawValue
-    }
-
-    /// Creates an HKQuantitySample from a WeightEntry.
-    private func createWeightSample(from entry: WeightEntry, type: HKQuantityType) -> HKQuantitySample {
-        let unit = WeightUnit(rawValue: entry.weightUnit) ?? .lb
-        let weightInKg = unit == .kg ? entry.weightValue : entry.weightValue * WeightUnit.lbToKg
-
-        let quantity = HKQuantity(unit: .gramUnit(with: .kilo), doubleValue: weightInKg)
-
-        // Include sync metadata for conflict resolution
-        let metadata: [String: Any] = [
-            HKMetadataKeySyncVersion: entry.syncVersion,
-            HKMetadataKeySyncIdentifier: String(entry.id.hashValue)
-        ]
-
-        return HKQuantitySample(
-            type: type,
-            quantity: quantity,
-            start: entry.date,
-            end: entry.date,
-            metadata: metadata
-        )
-    }
-
-    /// Deletes HealthKit samples matching a predicate.
-    private func deleteHealthSamples(matching predicate: NSPredicate, type: HKSampleType) async throws {
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            let query = HKSampleQuery(
-                sampleType: type,
-                predicate: predicate,
-                limit: 1,
-                sortDescriptors: nil
-            ) { [weak self] _, samples, error in
-                if let error = error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-
-                guard let sample = samples?.first else {
-                    // No sample found - that's OK, just continue
-                    continuation.resume()
-                    return
-                }
-
-                Task { @MainActor [weak self] in
-                    do {
-                        try await self?.healthStore.delete(sample)
-                        continuation.resume()
-                    } catch {
-                        continuation.resume(throwing: error)
-                    }
-                }
-            }
-
-            healthStore.execute(query)
-        }
     }
 
     // MARK: - Anchor Persistence

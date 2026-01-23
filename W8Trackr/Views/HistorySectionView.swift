@@ -208,19 +208,6 @@ struct HistorySectionView: View {
         let count = pendingDeletes.count
         let entriesToDelete = pendingDeletes
 
-        // Delete from HealthKit first (async, non-blocking)
-        if healthSyncManager.isHealthSyncEnabled {
-            Task {
-                for entry in entriesToDelete {
-                    do {
-                        try await healthSyncManager.deleteWeightFromHealth(entry: entry)
-                    } catch {
-                        // HealthKit delete error is non-blocking - local delete proceeds
-                    }
-                }
-            }
-        }
-
         // Delete from local storage
         for entry in entriesToDelete {
             modelContext.delete(entry)

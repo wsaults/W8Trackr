@@ -99,15 +99,11 @@
 		};
 		BE502EBE2DBFBF7900299FBF /* W8TrackrTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = W8TrackrTests;
 			sourceTree = "<group>";
 		};
 		BEUI00022DBFBF7900299FBF /* W8TrackrUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = W8TrackrUITests;
 			sourceTree = "<group>";
 		};
@@ -166,7 +162,6 @@
 				732BADBDED7FAA39231ADF77 /* WeightWidgetProvider.swift */,
 				E948A072270D753C71952FB6 /* Views */,
 			);
-			name = W8TrackrWidget;
 			path = W8TrackrWidget;
 			sourceTree = "<group>";
 		};
@@ -209,7 +204,6 @@
 				C3E0495D5C01E860F6423599 /* MediumWidgetView.swift */,
 				4F8631D544990012D17D52D2 /* LargeWidgetView.swift */,
 			);
-			name = Views;
 			path = Views;
 			sourceTree = "<group>";
 		};
