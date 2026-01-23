@@ -15,9 +15,14 @@ struct W8TrackrShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: LogWeightIntent(),
             phrases: [
+                // English
                 "Log my weight in \(.applicationName)",
                 "Add weight to \(.applicationName)",
-                "Record my weight in \(.applicationName)"
+                "Record my weight in \(.applicationName)",
+                // Spanish
+                "Registrar mi peso en \(.applicationName)",
+                "Agregar peso en \(.applicationName)",
+                "Anotar mi peso en \(.applicationName)"
             ],
             shortTitle: "Log Weight",
             systemImageName: "scalemass"
@@ -26,9 +31,14 @@ struct W8TrackrShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: GetWeightTrendIntent(),
             phrases: [
+                // English
                 "What's my weight trend in \(.applicationName)",
                 "How is my weight trending in \(.applicationName)",
-                "Show weight trend from \(.applicationName)"
+                "Show weight trend from \(.applicationName)",
+                // Spanish
+                "Cual es mi tendencia de peso en \(.applicationName)",
+                "Como va mi peso en \(.applicationName)",
+                "Mostrar tendencia de peso de \(.applicationName)"
             ],
             shortTitle: "Weight Trend",
             systemImageName: "chart.line.uptrend.xyaxis"
@@ -37,9 +47,14 @@ struct W8TrackrShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: GetWeightLossIntent(),
             phrases: [
+                // English
                 "How much have I lost in \(.applicationName)",
                 "What's my weight change in \(.applicationName)",
-                "How much weight have I lost in \(.applicationName)"
+                "How much weight have I lost in \(.applicationName)",
+                // Spanish
+                "Cuanto peso he perdido en \(.applicationName)",
+                "Cual es mi cambio de peso en \(.applicationName)",
+                "Cuanto he bajado en \(.applicationName)"
             ],
             shortTitle: "Weight Change",
             systemImageName: "arrow.down.right"
