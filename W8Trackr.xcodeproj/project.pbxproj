@@ -38,13 +38,6 @@
 			remoteGlobalIDString = BE502EAD2DBFBF7700299FBF;
 			remoteInfo = W8Trackr;
 		};
-		BEUI00032DBFBF7900299FBF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BE502EA62DBFBF7700299FBF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BE502EAD2DBFBF7700299FBF;
-			remoteInfo = W8Trackr;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -73,6 +66,7 @@
 		94CEA16BE178A03E3432761D /* SharedModelContainer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SharedModelContainer.swift; path = ../W8Trackr/Shared/SharedModelContainer.swift; sourceTree = "<group>"; };
 		BE502EAE2DBFBF7700299FBF /* W8Trackr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = W8Trackr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE502EBB2DBFBF7900299FBF /* W8TrackrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = W8TrackrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEF799582F242CA90083D2C0 /* W8Trackr.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = file; path = W8Trackr.xctestplan; sourceTree = "<group>"; };
 		BEUI00012DBFBF7900299FBF /* W8TrackrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = W8TrackrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3E0495D5C01E860F6423599 /* MediumWidgetView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MediumWidgetView.swift; sourceTree = "<group>"; };
 		F53F74FCD752AA87D79A5054 /* WeightEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightEntry.swift; path = ../W8Trackr/Models/WeightEntry.swift; sourceTree = "<group>"; };
@@ -101,16 +95,7 @@
 		};
 		BE502EBE2DBFBF7900299FBF /* W8TrackrTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = W8TrackrTests;
-			sourceTree = "<group>";
-		};
-		BEUI00022DBFBF7900299FBF /* W8TrackrUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			path = W8TrackrUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -176,9 +161,9 @@
 		BE502EA52DBFBF7700299FBF = {
 			isa = PBXGroup;
 			children = (
+				BEF799582F242CA90083D2C0 /* W8Trackr.xctestplan */,
 				BE502EB02DBFBF7700299FBF /* W8Trackr */,
 				BE502EBE2DBFBF7900299FBF /* W8TrackrTests */,
-				BEUI00022DBFBF7900299FBF /* W8TrackrUITests */,
 				BE502EAF2DBFBF7700299FBF /* Products */,
 				78C1404ACB68286C4AD757F9 /* Frameworks */,
 				440F2992FB9238FFE2C40ECD /* W8TrackrWidget */,
@@ -296,10 +281,6 @@
 						CreatedOnToolsVersion = 16.3;
 					};
 					BE502EBA2DBFBF7900299FBF = {
-						CreatedOnToolsVersion = 16.3;
-						TestTargetID = BE502EAD2DBFBF7700299FBF;
-					};
-					BEUI00082DBFBF7900299FBF = {
 						CreatedOnToolsVersion = 16.3;
 						TestTargetID = BE502EAD2DBFBF7700299FBF;
 					};
@@ -718,42 +699,6 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/W8Trackr.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/W8Trackr";
-			};
-			name = Release;
-		};
-		BEUI00092DBFBF7900299FBF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
-				DEVELOPMENT_TEAM = 77QB78PHPH;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.saults.W8TrackrUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = W8Trackr;
-			};
-			name = Debug;
-		};
-		BEUI000A2DBFBF7900299FBF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
-				DEVELOPMENT_TEAM = 77QB78PHPH;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.saults.W8TrackrUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = W8Trackr;
 			};
 			name = Release;
 		};

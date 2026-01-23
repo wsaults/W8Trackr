@@ -1,0 +1,30 @@
+{
+  "configurations" : [
+    {
+      "id" : "03BFB586-013E-4044-8A04-5A48A7AB9472",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:W8Trackr.xcodeproj",
+      "identifier" : "BE502EAD2DBFBF7700299FBF",
+      "name" : "W8Trackr"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:W8Trackr.xcodeproj",
+        "identifier" : "BE502EBA2DBFBF7900299FBF",
+        "name" : "W8TrackrTests"
+      }
+    }
+  ],
+  "version" : 1
+}

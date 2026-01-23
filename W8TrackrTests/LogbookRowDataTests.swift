@@ -439,9 +439,10 @@ struct MilestoneDetectionTests {
     }
 
     @Test func weightsJustBelowMilestoneAreRecognized() {
-        // Threshold is 0.5 lbs
-        #expect(Self.isNearMilestone(174.6) == true, "174.6 is within 0.5 of 175")
-        #expect(Self.isNearMilestone(199.5) == true, "199.5 is within 0.5 of 200")
+        // Threshold is strictly < 0.5 lbs (not <=)
+        #expect(Self.isNearMilestone(174.6) == true, "174.6 is 0.4 from 175")
+        #expect(Self.isNearMilestone(199.6) == true, "199.6 is 0.4 from 200")
+        #expect(Self.isNearMilestone(199.5) == false, "199.5 is exactly 0.5 from 200 (threshold is <, not <=)")
     }
 
     @Test func weightsJustAboveMilestoneAreRecognized() {
