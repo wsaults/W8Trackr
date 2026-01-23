@@ -18,6 +18,8 @@ struct DevMenuView: View {
     @State private var customDate: Date = .now
     @State private var showingSuccessToast = false
     @State private var toastMessage = ""
+    @State private var showingMilestoneCelebration = false
+    @State private var testMilestoneWeight: Double = 175.0
 
     enum DatasetOption: String, CaseIterable, Identifiable {
         case empty = "New User (No Data)"
@@ -46,19 +48,31 @@ struct DevMenuView: View {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
     var body: some View {
-        NavigationStack {
-            Form {
-                onboardingSection
-                datasetSection
-                addEntrySection
-            }
-            .navigationTitle("Developer Menu")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
+        ZStack {
+            NavigationStack {
+                Form {
+                    onboardingSection
+                    datasetSection
+                    addEntrySection
+                    milestoneSection
                 }
+                .navigationTitle("Developer Menu")
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") { dismiss() }
+                    }
+                }
+                .toast(isPresented: $showingSuccessToast, message: toastMessage, systemImage: "checkmark.circle.fill")
             }
-            .toast(isPresented: $showingSuccessToast, message: toastMessage, systemImage: "checkmark.circle.fill")
+
+            // Milestone celebration overlay
+            if showingMilestoneCelebration {
+                MilestoneCelebrationView(
+                    milestoneWeight: testMilestoneWeight,
+                    unit: .lb,
+                    onDismiss: { showingMilestoneCelebration = false }
+                )
+            }
         }
     }
 
@@ -120,6 +134,29 @@ struct DevMenuView: View {
             Text("Add Custom Entry")
         } footer: {
             Text("Quickly add a weight entry for any date.")
+        }
+    }
+
+    private var milestoneSection: some View {
+        Section {
+            HStack {
+                Text("Milestone Weight")
+                Spacer()
+                TextField("Weight", value: $testMilestoneWeight, format: .number.precision(.fractionLength(0)))
+                    .keyboardType(.decimalPad)
+                    .multilineTextAlignment(.trailing)
+                    .frame(width: 80)
+                Text("lb")
+                    .foregroundStyle(.secondary)
+            }
+
+            Button("Show Milestone Celebration") {
+                showingMilestoneCelebration = true
+            }
+        } header: {
+            Text("Test Milestone")
+        } footer: {
+            Text("Test the milestone celebration UI and share feature.")
         }
     }
 
