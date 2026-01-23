@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 /// Generates shareable progress images using ImageRenderer.
 /// Must be called on the main thread - ImageRenderer requires main actor.
