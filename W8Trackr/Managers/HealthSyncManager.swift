@@ -46,6 +46,10 @@ final class HealthSyncManager {
     /// The UserDefaults instance for persisting settings (injectable for testing).
     private let userDefaults: UserDefaults
 
+    /// The currently running observer query for background updates.
+    /// Stored to allow stopping the query when import is disabled.
+    private var observerQuery: HKObserverQuery?
+
     // MARK: - Observable State
 
     /// The current sync status for UI feedback.
@@ -58,6 +62,9 @@ final class HealthSyncManager {
 
     /// User preference key for Health sync enabled/disabled.
     private static let healthSyncEnabledKey = "healthSyncEnabled"
+
+    /// User preference key for Health import enabled/disabled.
+    private static let healthImportEnabledKey = "healthImportEnabled"
 
     /// Key for storing the HealthKit query anchor for incremental sync.
     private static let healthSyncAnchorKey = "healthSyncAnchor"
@@ -72,6 +79,17 @@ final class HealthSyncManager {
         get { userDefaults.bool(forKey: Self.healthSyncEnabledKey) }
         set {
             userDefaults.set(newValue, forKey: Self.healthSyncEnabledKey)
+        }
+    }
+
+    /// Whether Health import is enabled by the user.
+    ///
+    /// When enabled, the app imports weight data from Apple Health
+    /// and sets up background delivery for automatic sync.
+    var isHealthImportEnabled: Bool {
+        get { userDefaults.bool(forKey: Self.healthImportEnabledKey) }
+        set {
+            userDefaults.set(newValue, forKey: Self.healthImportEnabledKey)
         }
     }
 
@@ -506,5 +524,84 @@ final class HealthSyncManager {
         entry.pendingHealthSync = false  // Already in Health, no need to sync back
 
         return entry
+    }
+
+    // MARK: - Background Delivery
+
+    /// Sets up background delivery for weight data import.
+    ///
+    /// Creates an HKObserverQuery to receive notifications when Health data changes,
+    /// then runs an incremental import using the anchored query.
+    ///
+    /// CRITICAL: The completion handler MUST always be called in the observer callback.
+    /// Failure to call it causes HealthKit to use exponential backoff, eventually
+    /// stopping background delivery entirely.
+    ///
+    /// - Parameter modelContext: The SwiftData context for importing entries
+    func setupBackgroundDelivery(modelContext: ModelContext) {
+        guard Self.isHealthDataAvailable,
+              isHealthImportEnabled,
+              let weightType = weightType else {
+            return
+        }
+
+        // Stop existing query if any
+        if let existingQuery = observerQuery {
+            healthStore.stop(existingQuery)
+            observerQuery = nil
+        }
+
+        let query = HKObserverQuery(
+            sampleType: weightType,
+            predicate: nil
+        ) { [weak self] _, completionHandler, error in
+            // CRITICAL: Always call completion handler using defer
+            // Missing this call causes exponential backoff and eventual delivery halt
+            defer { completionHandler() }
+
+            guard error == nil else {
+                print("Observer query error: \(error!.localizedDescription)")
+                return
+            }
+
+            // Run incremental import on main actor
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                do {
+                    try await self.importWeightFromHealth(modelContext: modelContext)
+                } catch {
+                    print("Background import failed: \(error)")
+                }
+            }
+        }
+
+        healthStore.execute(query)
+        observerQuery = query
+
+        // Enable background delivery with immediate frequency
+        healthStore.enableBackgroundDelivery(
+            for: weightType,
+            frequency: .immediate
+        ) { success, error in
+            if !success, let error {
+                print("enableBackgroundDelivery failed: \(error)")
+            }
+        }
+    }
+
+    /// Stops background delivery and clears the observer query.
+    ///
+    /// Called when user disables Health import.
+    func stopBackgroundDelivery() {
+        guard let weightType = weightType else { return }
+
+        if let query = observerQuery {
+            healthStore.stop(query)
+            observerQuery = nil
+        }
+
+        // Optionally disable background delivery
+        // Note: Not strictly required since query is stopped
+        healthStore.disableBackgroundDelivery(for: weightType) { _, _ in }
     }
 }

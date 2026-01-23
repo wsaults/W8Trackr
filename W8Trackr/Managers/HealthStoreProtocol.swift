@@ -64,6 +64,15 @@ protocol HealthStoreProtocol: Sendable {
         frequency: HKUpdateFrequency,
         withCompletion completion: @escaping @Sendable (Bool, Error?) -> Void
     )
+
+    /// Disables background delivery for a data type.
+    /// - Parameters:
+    ///   - type: The object type to stop monitoring
+    ///   - completion: Called with success/failure
+    func disableBackgroundDelivery(
+        for type: HKObjectType,
+        withCompletion completion: @escaping @Sendable (Bool, Error?) -> Void
+    )
 }
 
 // MARK: - HKHealthStore Conformance
