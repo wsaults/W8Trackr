@@ -23,8 +23,8 @@ struct WeightWidget: Widget {
             WeightWidgetEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("Weight Tracker")
-        .description("See your current weight and progress at a glance.")
+        .configurationDisplayName(Text("Weight Tracker"))
+        .description(Text("See your current weight and progress at a glance."))
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }

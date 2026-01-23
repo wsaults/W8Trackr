@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E65B396DD0D44A4608D76E /* W8TrackrWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D543B9FDD0CDA915FE666 /* W8TrackrWidget.swift */; };
+		LOCL25021000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = LOCL25021000000000000001 /* Localizable.xcstrings */; };
 		0B190CBE6ED52664CACEC1AB /* WeightEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F53F74FCD752AA87D79A5054 /* WeightEntry.swift */; };
 		0E40C56130742933B54CB636 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FD0ED850EA78A7BA5A8C8D0 /* Foundation.framework */; };
 		3D4FFF1F8BDF8A1E98EBA69A /* W8TrackrWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 022637AB165F31D5DAC182AB /* W8TrackrWidget.appex */; };
@@ -76,6 +77,7 @@
 		C3E0495D5C01E860F6423599 /* MediumWidgetView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MediumWidgetView.swift; sourceTree = "<group>"; };
 		F53F74FCD752AA87D79A5054 /* WeightEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightEntry.swift; path = ../W8Trackr/Models/WeightEntry.swift; sourceTree = "<group>"; };
 		FA0D973D7F869313A00C4D2C /* Milestone.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Milestone.swift; path = ../W8Trackr/Models/Milestone.swift; sourceTree = "<group>"; };
+		LOCL25021000000000000001 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -157,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				746D543B9FDD0CDA915FE666 /* W8TrackrWidget.swift */,
+				LOCL25021000000000000001 /* Localizable.xcstrings */,
 				3FF51B1B6E139AE4E49DA92E /* SharedCode */,
 				4CDA67AA078FB82A3148820A /* WeightWidgetEntry.swift */,
 				732BADBDED7FAA39231ADF77 /* WeightWidgetProvider.swift */,
@@ -357,6 +360,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				LOCL25021000000000000002 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

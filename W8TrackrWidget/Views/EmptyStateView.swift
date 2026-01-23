@@ -18,7 +18,7 @@ struct EmptyStateView: View {
                 .font(family == .systemSmall ? .title2 : .largeTitle)
                 .foregroundStyle(.secondary)
 
-            Text("Add your first weigh-in")
+            Text("Add your first weigh-in", comment: "Widget empty state prompt")
                 .font(family == .systemSmall ? .caption2 : .caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -35,7 +35,7 @@ struct NoGoalView: View {
                 .font(.title)
                 .foregroundStyle(.secondary)
 
-            Text("Set a goal to track progress")
+            Text("Set a goal to track progress", comment: "Widget no goal state prompt")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

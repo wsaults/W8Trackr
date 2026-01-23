@@ -93,9 +93,9 @@ struct MediumWidgetView: View {
 
     private var trendText: String {
         switch entry.trend {
-        case .up: return "Up"
-        case .down: return "Down"
-        case .neutral: return "Steady"
+        case .up: return String(localized: "Up")
+        case .down: return String(localized: "Down")
+        case .neutral: return String(localized: "Steady")
         case .unknown: return "-"
         }
     }
@@ -112,7 +112,8 @@ struct MediumWidgetView: View {
         }
 
         let diff = abs(current - goal)
-        return "\(diff) \(entry.weightUnit) to go"
+        let toGo = String(localized: "to go")
+        return "\(diff) \(entry.weightUnit) \(toGo)"
     }
 }
 

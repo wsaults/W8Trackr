@@ -62,10 +62,10 @@ struct SmallWidgetView: View {
 
     private var trendText: String {
         switch entry.trend {
-        case .up: return "Trending up"
-        case .down: return "Trending down"
-        case .neutral: return "Holding steady"
-        case .unknown: return "Not enough data"
+        case .up: return String(localized: "Trending up")
+        case .down: return String(localized: "Trending down")
+        case .neutral: return String(localized: "Holding steady")
+        case .unknown: return String(localized: "Not enough data")
         }
     }
 

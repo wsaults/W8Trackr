@@ -65,7 +65,7 @@ struct LargeWidgetView: View {
                     Image(systemName: "chart.line.uptrend.xyaxis")
                         .font(.largeTitle)
                         .foregroundStyle(.secondary)
-                    Text("Add more weigh-ins to see your trend")
+                    Text("Add more weigh-ins to see your trend", comment: "Large widget empty chart prompt")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -77,7 +77,7 @@ struct LargeWidgetView: View {
             // Footer: 7-day summary
             if entry.chartData.count >= 2 {
                 HStack {
-                    Text("Last 7 days")
+                    Text("Last 7 days", comment: "Large widget footer")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
 
