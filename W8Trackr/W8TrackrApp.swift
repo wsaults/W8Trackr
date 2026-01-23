@@ -47,9 +47,7 @@ struct W8TrackrApp: App {
                 // Set up HealthKit background delivery if import is enabled
                 // This runs on every app launch to ensure observer query is active
                 if healthSyncManager.isHealthImportEnabled {
-                    // Use the shared container's mainContext for import
-                    let context = SharedModelContainer.sharedModelContainer.mainContext
-                    healthSyncManager.setupBackgroundDelivery(modelContext: context)
+                    healthSyncManager.setupBackgroundDelivery(modelContainer: SharedModelContainer.sharedModelContainer)
                 }
             }
             .overlay {

@@ -240,15 +240,13 @@ final class HealthSyncManager {
 
             // Process added samples
             for sample in result.addedSamples {
-                guard let quantitySample = sample as? HKQuantitySample else { continue }
-
                 // Skip samples created by W8Trackr (avoid duplicates)
-                if quantitySample.sourceRevision.source.bundleIdentifier == Bundle.main.bundleIdentifier {
+                if sample.sourceRevision.source.bundleIdentifier == Bundle.main.bundleIdentifier {
                     continue
                 }
 
                 // Skip if we already have this entry (by healthKitUUID)
-                let uuidString = quantitySample.uuid.uuidString
+                let uuidString = sample.uuid.uuidString
                 let existingDescriptor = FetchDescriptor<WeightEntry>(
                     predicate: #Predicate { $0.healthKitUUID == uuidString }
                 )
@@ -256,7 +254,7 @@ final class HealthSyncManager {
                 guard existingEntries.isEmpty else { continue }
 
                 // Create WeightEntry from sample
-                let entry = createEntryFromSample(quantitySample)
+                let entry = createEntryFromSample(sample)
                 modelContext.insert(entry)
                 importedCount += 1
             }
@@ -325,8 +323,8 @@ final class HealthSyncManager {
     /// Failure to call it causes HealthKit to use exponential backoff, eventually
     /// stopping background delivery entirely.
     ///
-    /// - Parameter modelContext: The SwiftData context for importing entries
-    func setupBackgroundDelivery(modelContext: ModelContext) {
+    /// - Parameter modelContainer: The SwiftData container for creating contexts
+    func setupBackgroundDelivery(modelContainer: ModelContainer) {
         guard Self.isHealthDataAvailable,
               isHealthImportEnabled,
               let weightType = weightType else {
@@ -353,10 +351,12 @@ final class HealthSyncManager {
             }
 
             // Run incremental import on main actor
+            // Create fresh ModelContext inside Task to avoid Sendable capture issues
             Task { @MainActor [weak self] in
                 guard let self else { return }
+                let context = modelContainer.mainContext
                 do {
-                    try await self.importWeightFromHealth(modelContext: modelContext)
+                    try await self.importWeightFromHealth(modelContext: context)
                 } catch {
                     print("Background import failed: \(error)")
                 }

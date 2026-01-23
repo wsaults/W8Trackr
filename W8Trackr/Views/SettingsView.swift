@@ -368,7 +368,7 @@ struct SettingsView: View {
                                         try await healthSyncManager.importWeightFromHealth(
                                             modelContext: modelContext
                                         )
-                                        healthSyncManager.setupBackgroundDelivery(modelContext: modelContext)
+                                        healthSyncManager.setupBackgroundDelivery(modelContainer: SharedModelContainer.sharedModelContainer)
                                     } else {
                                         showingHealthKitPermissionAlert = true
                                     }
