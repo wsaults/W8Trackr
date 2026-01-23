@@ -103,7 +103,7 @@ struct LargeWidgetView: View {
 
         let diff = last.weight - first.weight
         let sign = diff >= 0 ? "+" : ""
-        return "\(sign)\(String(format: "%.1f", diff)) \(entry.weightUnit)"
+        return "\(sign)\(diff.formatted(.number.precision(.fractionLength(1)))) \(entry.weightUnit)"
     }
 }
 

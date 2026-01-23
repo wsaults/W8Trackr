@@ -194,7 +194,7 @@ struct NotificationScheduler {
         }
 
         var message: String {
-            let changeStr = String(format: "%.1f", abs(weightChange))
+            let changeStr = abs(weightChange).formatted(.number.precision(.fractionLength(1)))
             let direction = trend == .down ? "lost" : (trend == .up ? "gained" : "maintained")
 
             if trend == .stable {
@@ -232,7 +232,9 @@ struct NotificationScheduler {
     static func scheduleMilestoneNotification(remaining: Double, milestone: Double, unit: WeightUnit) {
         let content = UNMutableNotificationContent()
         content.title = "Almost there!"
-        content.body = String(format: "Just %.1f %@ to your next milestone of %.0f %@!", remaining, unit.rawValue, milestone, unit.rawValue)
+        let remainingStr = remaining.formatted(.number.precision(.fractionLength(1)))
+        let milestoneStr = milestone.formatted(.number.precision(.fractionLength(0)))
+        content.body = "Just \(remainingStr) \(unit.rawValue) to your next milestone of \(milestoneStr) \(unit.rawValue)!"
         content.sound = .default
 
         // Schedule for 9 AM tomorrow

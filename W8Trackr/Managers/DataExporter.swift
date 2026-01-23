@@ -52,7 +52,7 @@ struct DataExporter {
 
         for entry in sortedEntries {
             let date = dateFormatter.string(from: entry.date)
-            let weight = String(format: "%.1f", entry.weightValue)
+            let weight = entry.weightValue.formatted(.number.precision(.fractionLength(1)))
             let unit = entry.weightUnit
             let note = escapeCSVField(entry.note ?? "")
             let bodyFat = entry.bodyFatPercentage.map { String(describing: $0) } ?? ""

@@ -104,14 +104,14 @@ struct GetWeightTrendIntent: AppIntent {
         let change = newestWeight - oldestWeight
 
         let trendDescription: String
-        let changeAmount = String(format: "%.1f", abs(change))
+        let changeAmount = abs(change).formatted(.number.precision(.fractionLength(1)))
 
         if abs(change) < 0.5 {
-            trendDescription = "Your weight has been stable at \(String(format: "%.1f", newestWeight)) \(unit.rawValue)"
+            trendDescription = "Your weight has been stable at \(newestWeight.formatted(.number.precision(.fractionLength(1)))) \(unit.rawValue)"
         } else if change < 0 {
-            trendDescription = "You're down \(changeAmount) \(unit.rawValue)! Your current weight is \(String(format: "%.1f", newestWeight)) \(unit.rawValue)"
+            trendDescription = "You're down \(changeAmount) \(unit.rawValue)! Your current weight is \(newestWeight.formatted(.number.precision(.fractionLength(1)))) \(unit.rawValue)"
         } else {
-            trendDescription = "You're up \(changeAmount) \(unit.rawValue). Your current weight is \(String(format: "%.1f", newestWeight)) \(unit.rawValue)"
+            trendDescription = "You're up \(changeAmount) \(unit.rawValue). Your current weight is \(newestWeight.formatted(.number.precision(.fractionLength(1)))) \(unit.rawValue)"
         }
 
         return .result(dialog: "\(trendDescription)")
@@ -148,9 +148,9 @@ struct GetWeightLossIntent: AppIntent {
         let currentWeight = lastEntry.weightValue(in: unit)
         let totalChange = currentWeight - startWeight
 
-        let changeAmount = String(format: "%.1f", abs(totalChange))
-        let startFormatted = String(format: "%.1f", startWeight)
-        let currentFormatted = String(format: "%.1f", currentWeight)
+        let changeAmount = abs(totalChange).formatted(.number.precision(.fractionLength(1)))
+        let startFormatted = startWeight.formatted(.number.precision(.fractionLength(1)))
+        let currentFormatted = currentWeight.formatted(.number.precision(.fractionLength(1)))
 
         let timeSpan = Calendar.current.dateComponents([.day], from: firstEntry.date, to: lastEntry.date)
         let days = timeSpan.day ?? 0
