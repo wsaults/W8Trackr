@@ -433,8 +433,40 @@ struct WeightTrendChartView: View {
 // MARK: - AXChartDescriptorRepresentable
 
 extension WeightTrendChartView: AXChartDescriptorRepresentable {
+    /// Computes filtered entries for accessibility without main actor isolation.
+    /// Uses the immutable `entries` and `selectedRange` properties directly.
+    private nonisolated var accessibilityFilteredEntries: [WeightEntry] {
+        guard let days = selectedRange.days else { return entries }
+        let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
+        return entries.filter { $0.date >= cutoffDate }
+    }
+
+    /// Computes accessibility summary without main actor isolation.
+    private nonisolated var accessibilityChartSummary: String {
+        let sortedEntries = accessibilityFilteredEntries.sorted { $0.date < $1.date }
+        guard let firstEntry = sortedEntries.first,
+              let lastEntry = sortedEntries.last else {
+            return "No weight data available"
+        }
+
+        let firstWeight = firstEntry.weightValue(in: weightUnit)
+        let lastWeight = lastEntry.weightValue(in: weightUnit)
+        let change = lastWeight - firstWeight
+
+        let trend: String
+        if change > 0.1 {
+            trend = "increased"
+        } else if change < -0.1 {
+            trend = "decreased"
+        } else {
+            trend = "remained stable"
+        }
+
+        return "Weight \(trend) from \(firstWeight.formatted(.number.precision(.fractionLength(1)))) to \(lastWeight.formatted(.number.precision(.fractionLength(1)))) \(weightUnit.displayName) over \(sortedEntries.count) entries"
+    }
+
     nonisolated func makeChartDescriptor() -> AXChartDescriptor {
-        let sorted = filteredEntries.sorted { $0.date < $1.date }
+        let sorted = accessibilityFilteredEntries.sorted { $0.date < $1.date }
 
         // Create date axis
         let minDate = sorted.first?.date ?? Date()
@@ -449,21 +481,28 @@ extension WeightTrendChartView: AXChartDescriptorRepresentable {
             return date.formatted(date: .abbreviated, time: .omitted)
         }
 
+        // Compute weight range from sorted entries
+        let weights = sorted.map { $0.weightValue(in: weightUnit) }
+        let yAxisPadding = weightUnit == .kg ? 2.0 : 5.0
+        let minWeightValue = (weights.min() ?? 0) - yAxisPadding
+        let maxWeightValue = (weights.max() ?? 100) + yAxisPadding
+
         // Create weight axis
+        let unit = weightUnit
         let weightAxis = AXNumericDataAxisDescriptor(
-            title: "Weight (\(weightUnit.displayName))",
-            range: minWeight...maxWeight,
+            title: "Weight (\(unit.displayName))",
+            range: minWeightValue...maxWeightValue,
             gridlinePositions: []
         ) { value in
-            "\(value.formatted(.number.precision(.fractionLength(1)))) \(self.weightUnit.displayName)"
+            "\(value.formatted(.number.precision(.fractionLength(1)))) \(unit.displayName)"
         }
 
         // Create data points
         let dataPoints = sorted.map { entry in
             AXDataPoint(
                 x: entry.date.timeIntervalSince1970,
-                y: entry.weightValue(in: weightUnit),
-                label: "\(entry.date.formatted(date: .abbreviated, time: .omitted)): \(entry.weightValue(in: weightUnit).formatted(.number.precision(.fractionLength(1)))) \(weightUnit.displayName)"
+                y: entry.weightValue(in: unit),
+                label: "\(entry.date.formatted(date: .abbreviated, time: .omitted)): \(entry.weightValue(in: unit).formatted(.number.precision(.fractionLength(1)))) \(unit.displayName)"
             )
         }
 
@@ -475,7 +514,7 @@ extension WeightTrendChartView: AXChartDescriptorRepresentable {
 
         return AXChartDescriptor(
             title: "Weight Trend",
-            summary: chartAccessibilitySummary,
+            summary: accessibilityChartSummary,
             xAxis: dateAxis,
             yAxis: weightAxis,
             additionalAxes: [],

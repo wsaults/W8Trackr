@@ -84,6 +84,13 @@ final class MockHealthStore: HealthStoreProtocol, @unchecked Sendable {
     ) {
         completion(true, nil)
     }
+
+    func disableBackgroundDelivery(
+        for type: HKObjectType,
+        withCompletion completion: @escaping @Sendable (Bool, Error?) -> Void
+    ) {
+        completion(true, nil)
+    }
 }
 
 // MARK: - Test Helpers
@@ -103,7 +110,8 @@ struct HealthSyncManagerInitializationTests {
     @Test func managerInitializesWithMockStore() {
         let mockStore = MockHealthStore()
         let manager = HealthSyncManager(healthStore: mockStore)
-        #expect(manager != nil)
+        // Verify manager is functional by checking default state
+        #expect(manager.isHealthSyncEnabled == false)
     }
 
     @Test func managerDefaultsToHealthSyncDisabled() {
