@@ -415,4 +415,35 @@ struct MilestoneCalculatorIntegrationTests {
         #expect(progress.nextMilestone == 175,
                 "calculateProgress should use effective start, next milestone should be 175, not \(progress.nextMilestone)")
     }
+
+    // BUG: Progress bar is empty when current weight equals effective start weight
+    // because previousMilestone = currentWeight, making traveled distance = 0
+    @Test("Progress bar shows partial progress when current equals effective start")
+    func progressNotEmptyWhenCurrentEqualsEffectiveStart() {
+        // User at 178.6, start was 165 (user gained weight), goal is 160
+        // effectiveStartWeight = max(165, 178.6) = 178.6
+        // This caused previousMilestone = 178.6, progress = 0
+        let progress = MilestoneCalculator.calculateProgress(
+            currentWeight: 178.6,
+            startWeight: 165,
+            goalWeight: 160,
+            unit: .lb,
+            completedMilestones: [],
+            intervalPreference: .five
+        )
+
+        // previousMilestone should be 180 (ceiling to interval), not 178.6
+        #expect(progress.previousMilestone == 180,
+                "Previous milestone should be 180, not \(progress.previousMilestone)")
+
+        // nextMilestone should be 175
+        #expect(progress.nextMilestone == 175,
+                "Next milestone should be 175, not \(progress.nextMilestone)")
+
+        // Progress should be (180 - 178.6) / (180 - 175) = 1.4 / 5 = 0.28
+        #expect(progress.progressToNextMilestone > 0.2,
+                "Progress should be ~0.28, not \(progress.progressToNextMilestone)")
+        #expect(progress.progressToNextMilestone < 0.35,
+                "Progress should be ~0.28, not \(progress.progressToNextMilestone)")
+    }
 }

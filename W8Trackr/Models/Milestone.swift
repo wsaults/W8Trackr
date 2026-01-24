@@ -208,16 +208,30 @@ enum MilestoneCalculator {
         let nextMilestone: Double
         let previousMilestone: Double
 
+        let intervalValue = interval(for: unit, preference: intervalPreference)
+
         if isLosingWeight {
             // Next milestone is the first one at or below current weight (includes milestones we've just reached)
             nextMilestone = allMilestones.first { $0 <= currentWeight } ?? goalWeight
             // Previous milestone is the last one above current weight (the one we came from)
-            previousMilestone = allMilestones.last { $0 > currentWeight } ?? effectiveStartWeight
+            // If none exists (current >= all milestones), use ceiling to next interval boundary
+            if let lastAbove = allMilestones.last(where: { $0 > currentWeight }) {
+                previousMilestone = lastAbove
+            } else {
+                // Round up to next interval boundary as virtual previous milestone
+                previousMilestone = ceil(currentWeight / intervalValue) * intervalValue
+            }
         } else {
             // Next milestone is the first one at or above current weight
             nextMilestone = allMilestones.first { $0 >= currentWeight } ?? goalWeight
             // Previous milestone is the last one below current weight
-            previousMilestone = allMilestones.last { $0 < currentWeight } ?? effectiveStartWeight
+            // If none exists (current <= all milestones), use floor to previous interval boundary
+            if let lastBelow = allMilestones.last(where: { $0 < currentWeight }) {
+                previousMilestone = lastBelow
+            } else {
+                // Round down to previous interval boundary as virtual previous milestone
+                previousMilestone = floor(currentWeight / intervalValue) * intervalValue
+            }
         }
 
         return MilestoneProgress(

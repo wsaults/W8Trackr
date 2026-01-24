@@ -48,7 +48,7 @@ struct MilestoneProgressView: View {
                 HStack(spacing: 4) {
                     Text(progress.weightToNextMilestone, format: .number.precision(.fractionLength(1)))
                         .fontWeight(.semibold)
-                    Text("\(progress.unit.rawValue) to go")
+                    Text("\(progress.unit.displayName) to go")
                 }
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -65,7 +65,7 @@ struct MilestoneProgressView: View {
         .cardShadow()
         .padding(.horizontal)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Next milestone \(Int(progress.nextMilestone)) \(progress.unit.rawValue). \(Int(animatedProgress * 100)) percent complete. \(progress.weightToNextMilestone.formatted(.number.precision(.fractionLength(1)))) \(progress.unit.rawValue) remaining.")
+        .accessibilityLabel("Next milestone \(Int(progress.nextMilestone)) \(progress.unit.displayName). \(Int(animatedProgress * 100)) percent complete. \(progress.weightToNextMilestone.formatted(.number.precision(.fractionLength(1)))) \(progress.unit.displayName) remaining.")
         .onAppear {
             withAnimation(.easeOut(duration: 0.8)) {
                 animatedProgress = progress.progressToNextMilestone
