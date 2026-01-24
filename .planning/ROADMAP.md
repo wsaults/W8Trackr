@@ -39,7 +39,7 @@ See archived milestone documentation for v1.0 phase details.
 - Integer phases (27, 28): Planned milestone work
 - Decimal phases (27.1, 27.2): Urgent insertions if needed
 
-- [ ] **Phase 27: In-App Localization** - UI strings, widget strings, and formatting for all 8 languages
+- [x] **Phase 27: In-App Localization** - UI strings, widget strings, and formatting for all 8 languages
 - [ ] **Phase 28: App Store Localization** - Metadata translations for all 8 languages
 
 ## Phase Details
@@ -56,9 +56,9 @@ See archived milestone documentation for v1.0 phase details.
   4. Existing localization unit tests pass for all new locales
 **Plans:** 3 plans
 Plans:
-- [ ] 27-01-PLAN.md - Main app UI string translations (8 languages)
-- [ ] 27-02-PLAN.md - Widget string translations (8 languages)
-- [ ] 27-03-PLAN.md - InfoPlist and Siri phrase translations (8 languages)
+- [x] 27-01-PLAN.md - Main app UI string translations (8 languages)
+- [x] 27-02-PLAN.md - Widget string translations (8 languages)
+- [x] 27-03-PLAN.md - InfoPlist and Siri phrase translations (8 languages)
 
 ### Phase 28: App Store Localization
 **Goal:** Users in all 8 target markets discover W8Trackr through localized App Store listings
@@ -79,9 +79,9 @@ Phases execute in numeric order: 27 -> 27.1 -> 27.2 -> 28 -> etc.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 27. In-App Localization | v1.2 | 0/3 | Planned | - |
+| 27. In-App Localization | v1.2 | 3/3 | Complete | 2026-01-24 |
 | 28. App Store Localization | v1.2 | 0/? | Not Started | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-24 (Phase 27 plans created)*
+*Last updated: 2026-01-24 (Phase 27 complete)*
