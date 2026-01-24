@@ -22,7 +22,39 @@ struct W8TrackrShortcuts: AppShortcutsProvider {
                 // Spanish
                 "Registrar mi peso en \(.applicationName)",
                 "Agregar peso en \(.applicationName)",
-                "Anotar mi peso en \(.applicationName)"
+                "Anotar mi peso en \(.applicationName)",
+                // Chinese (Simplified)
+                "在\(.applicationName)记录我的体重",
+                "添加体重到\(.applicationName)",
+                "用\(.applicationName)记录体重",
+                // French
+                "Enregistrer mon poids dans \(.applicationName)",
+                "Ajouter mon poids dans \(.applicationName)",
+                "Noter mon poids dans \(.applicationName)",
+                // German
+                "Mein Gewicht in \(.applicationName) protokollieren",
+                "Gewicht zu \(.applicationName) hinzufügen",
+                "Mein Gewicht in \(.applicationName) aufzeichnen",
+                // Japanese
+                "体重を\(.applicationName)に記録",
+                "\(.applicationName)で体重を記録",
+                "\(.applicationName)に体重を追加",
+                // Portuguese (Brazil)
+                "Registrar meu peso no \(.applicationName)",
+                "Adicionar peso no \(.applicationName)",
+                "Anotar meu peso no \(.applicationName)",
+                // Italian
+                "Registra il mio peso in \(.applicationName)",
+                "Aggiungi peso a \(.applicationName)",
+                "Annota il mio peso in \(.applicationName)",
+                // Korean
+                "내 체중을 \(.applicationName)에 기록",
+                "\(.applicationName)에 체중 추가",
+                "\(.applicationName)에서 체중 기록",
+                // Russian
+                "Записать мой вес в \(.applicationName)",
+                "Добавить вес в \(.applicationName)",
+                "Записать вес в \(.applicationName)"
             ],
             shortTitle: "Log Weight",
             systemImageName: "scalemass"
@@ -38,7 +70,39 @@ struct W8TrackrShortcuts: AppShortcutsProvider {
                 // Spanish
                 "Cual es mi tendencia de peso en \(.applicationName)",
                 "Como va mi peso en \(.applicationName)",
-                "Mostrar tendencia de peso de \(.applicationName)"
+                "Mostrar tendencia de peso de \(.applicationName)",
+                // Chinese (Simplified)
+                "我在\(.applicationName)的体重趋势是什么",
+                "\(.applicationName)里我的体重趋势",
+                "查看\(.applicationName)的体重趋势",
+                // French
+                "Quelle est ma tendance de poids dans \(.applicationName)",
+                "Comment évolue mon poids dans \(.applicationName)",
+                "Afficher ma tendance de poids de \(.applicationName)",
+                // German
+                "Wie ist mein Gewichtstrend in \(.applicationName)",
+                "Wie entwickelt sich mein Gewicht in \(.applicationName)",
+                "Zeige Gewichtstrend von \(.applicationName)",
+                // Japanese
+                "\(.applicationName)での体重の傾向は",
+                "\(.applicationName)の体重トレンドを見せて",
+                "体重の傾向を\(.applicationName)で確認",
+                // Portuguese (Brazil)
+                "Qual é minha tendência de peso no \(.applicationName)",
+                "Como está meu peso no \(.applicationName)",
+                "Mostrar tendência de peso do \(.applicationName)",
+                // Italian
+                "Qual è la mia tendenza di peso in \(.applicationName)",
+                "Come sta andando il mio peso in \(.applicationName)",
+                "Mostra tendenza peso da \(.applicationName)",
+                // Korean
+                "내 체중 추세가 \(.applicationName)에서 어때",
+                "\(.applicationName)에서 체중 추세 보여줘",
+                "\(.applicationName)의 체중 추세 확인",
+                // Russian
+                "Какова моя тенденция веса в \(.applicationName)",
+                "Как идёт мой вес в \(.applicationName)",
+                "Показать тенденцию веса из \(.applicationName)"
             ],
             shortTitle: "Weight Trend",
             systemImageName: "chart.line.uptrend.xyaxis"
@@ -54,7 +118,39 @@ struct W8TrackrShortcuts: AppShortcutsProvider {
                 // Spanish
                 "Cuanto peso he perdido en \(.applicationName)",
                 "Cual es mi cambio de peso en \(.applicationName)",
-                "Cuanto he bajado en \(.applicationName)"
+                "Cuanto he bajado en \(.applicationName)",
+                // Chinese (Simplified)
+                "我在\(.applicationName)减了多少",
+                "\(.applicationName)里我的体重变化是多少",
+                "用\(.applicationName)查看我减了多少",
+                // French
+                "Combien ai-je perdu dans \(.applicationName)",
+                "Quel est mon changement de poids dans \(.applicationName)",
+                "Combien de poids ai-je perdu dans \(.applicationName)",
+                // German
+                "Wie viel habe ich in \(.applicationName) abgenommen",
+                "Was ist meine Gewichtsveränderung in \(.applicationName)",
+                "Wie viel Gewicht habe ich in \(.applicationName) verloren",
+                // Japanese
+                "\(.applicationName)でどのくらい痩せた",
+                "\(.applicationName)での体重変化は",
+                "どのくらい体重が減ったか\(.applicationName)で確認",
+                // Portuguese (Brazil)
+                "Quanto eu perdi no \(.applicationName)",
+                "Qual é minha mudança de peso no \(.applicationName)",
+                "Quanto peso eu perdi no \(.applicationName)",
+                // Italian
+                "Quanto ho perso in \(.applicationName)",
+                "Qual è il mio cambiamento di peso in \(.applicationName)",
+                "Quanto peso ho perso in \(.applicationName)",
+                // Korean
+                "\(.applicationName)에서 얼마나 뺐어",
+                "\(.applicationName)에서 체중 변화가 얼마야",
+                "\(.applicationName)에서 얼마나 살이 빠졌어",
+                // Russian
+                "Сколько я сбросил в \(.applicationName)",
+                "Каково изменение моего веса в \(.applicationName)",
+                "Сколько веса я потерял в \(.applicationName)"
             ],
             shortTitle: "Weight Change",
             systemImageName: "arrow.down.right"
