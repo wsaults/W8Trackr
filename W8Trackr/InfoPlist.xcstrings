@@ -16,6 +16,12 @@
     "NSHealthShareUsageDescription" : {
       "comment" : "Privacy - Health Share Usage Description",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr liest Ihre Gewichtsdaten aus Apple Health, um Ihnen bei der Verfolgung Ihres Fortschritts zu helfen."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -27,12 +33,60 @@
             "state" : "translated",
             "value" : "W8Trackr lee sus datos de peso de Apple Salud para ayudarle a seguir su progreso."
           }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr lit vos données de poids depuis Apple Santé pour vous aider à suivre vos progrès."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr legge i tuoi dati di peso da Apple Salute per aiutarti a monitorare i tuoi progressi."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8TrackrはAppleヘルスケアから体重データを読み取り、進捗の追跡をサポートします。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr는 Apple 건강에서 체중 데이터를 읽어 진행 상황을 추적하는 데 도움을 줍니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O W8Trackr lê seus dados de peso do Apple Saúde para ajudá-lo a acompanhar seu progresso."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr читает ваши данные о весе из Apple Здоровье, чтобы помочь вам отслеживать прогресс."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr从Apple健康读取您的体重数据，帮助您追踪进度。"
+          }
         }
       }
     },
     "NSHealthUpdateUsageDescription" : {
       "comment" : "Privacy - Health Update Usage Description",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr speichert Ihre Gewichts- und Körperfetteinträge in Apple Health, damit alle Ihre Gesundheitsdaten an einem Ort bleiben."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -44,12 +98,60 @@
             "state" : "translated",
             "value" : "W8Trackr guarda sus entradas de peso y grasa corporal en Apple Salud para que todos sus datos de salud estén en un solo lugar."
           }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr enregistre vos entrées de poids et de masse grasse dans Apple Santé afin que toutes vos données de santé restent au même endroit."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr salva le tue voci di peso e massa grassa in Apple Salute in modo che tutti i tuoi dati sanitari rimangano in un unico posto."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackrは体重と体脂肪のデータをAppleヘルスケアに保存し、すべての健康データを一か所にまとめます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr는 체중 및 체지방 기록을 Apple 건강에 저장하여 모든 건강 데이터를 한 곳에 보관합니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O W8Trackr salva suas entradas de peso e gordura corporal no Apple Saúde para que todos os seus dados de saúde fiquem em um só lugar."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr сохраняет ваши записи о весе и жировой массе в Apple Здоровье, чтобы все данные о здоровье были в одном месте."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W8Trackr将您的体重和体脂数据保存到Apple健康，让您的所有健康数据集中在一处。"
+          }
         }
       }
     },
     "NSSiriUsageDescription" : {
       "comment" : "Privacy - Siri Usage Description",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwenden Sie Siri, um Ihr Gewicht zu protokollieren und Ihren Fortschritt zu überprüfen."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -61,12 +163,60 @@
             "state" : "translated",
             "value" : "Use Siri para registrar su peso y verificar su progreso."
           }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez Siri pour enregistrer votre poids et vérifier vos progrès."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa Siri per registrare il tuo peso e controllare i tuoi progressi."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siriを使って体重を記録し、進捗を確認できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siri를 사용하여 체중을 기록하고 진행 상황을 확인하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use a Siri para registrar seu peso e verificar seu progresso."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Используйте Siri для записи веса и проверки прогресса."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用Siri记录您的体重并查看进度。"
+          }
         }
       }
     },
     "NSUserNotificationUsageDescription" : {
       "extractionState" : "stale",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wir müssen Ihnen Benachrichtigungen für tägliche Erinnerungen zur Gewichtseingabe senden."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -77,6 +227,48 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Necesitamos enviarle notificaciones para recordatorios diarios de registro de peso."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nous devons vous envoyer des notifications pour les rappels quotidiens d'enregistrement de poids."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dobbiamo inviarti notifiche per i promemoria giornalieri di registrazione del peso."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "毎日の体重記録リマインダーの通知を送信する必要があります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일일 체중 기록 알림을 보내드리기 위해 알림 권한이 필요합니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Precisamos enviar notificações para lembretes diários de registro de peso."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нам нужно отправлять вам уведомления для ежедневных напоминаний о записи веса."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我们需要向您发送每日体重记录提醒的通知。"
           }
         }
       }

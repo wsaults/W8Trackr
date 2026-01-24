@@ -78,7 +78,9 @@
 		BE7C2EED2DBFD62000C4C8E9 /* Exceptions for "W8Trackr" folder in "W8Trackr" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				CLAUDE.md,
 				Info.plist,
+				Intents/CLAUDE.md,
 			);
 			target = BE502EAD2DBFBF7700299FBF /* W8Trackr */;
 		};
