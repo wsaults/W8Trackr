@@ -1,7 +1,8 @@
-What's New in W8Trackr:
+What's New in v1.1:
 
-• Initial release
-• Simple weight logging with optional body fat tracking
-• Beautiful trend charts with EWMA smoothing
-• Support for pounds and kilograms
-• Private, on-device storage
+• Home Screen Widgets - Track your progress at a glance with small, medium, and large widgets
+• HealthKit Import - Sync your existing weight data from Apple Health with automatic background updates
+• Share Your Milestones - Celebrate your progress by sharing milestone achievements
+• Spanish Localization - Full support for Spanish speakers
+• Improved Milestone Tracking - More accurate progress calculations
+• Bug Fixes - Various stability and performance improvements
