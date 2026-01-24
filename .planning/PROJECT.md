@@ -8,19 +8,41 @@ W8Trackr is an iOS weight tracking app with HealthKit sync, trend analysis, mile
 
 Users can reliably track their weight and see progress toward their goals with confidence-inspiring visualizations.
 
-## Current State (v1.0 shipped)
+## Current Milestone: v1.2 Global Localization
 
-**Version:** 1.0 (Build 6)
-**Status:** Submitted for App Store review
-**Codebase:** 15,861 lines Swift, iOS 26.0+, Swift 6.2+
+**Goal:** Expand W8Trackr to top 10 App Store languages with AI-generated translations
+
+**Target languages (8 new):**
+- Chinese (Simplified)
+- French
+- German
+- Japanese
+- Portuguese (Brazilian)
+- Italian
+- Korean
+- Russian
+
+**Deliverables:**
+- UI strings translated for all 8 languages (~200 strings each)
+- Widget strings localized
+- App Store metadata (descriptions, keywords) for each language
+- Number/date formatting verified per locale
+
+## Current State (v1.1 shipped)
+
+**Version:** 1.1 (Build 13)
+**Status:** TestFlight beta, preparing App Store submission
+**Codebase:** 17,745 lines Swift, iOS 26.0+, Swift 6.2+
 **Architecture:** Pure SwiftUI with SwiftData, no ViewModels, @Observable managers
 
 **Tech Stack:**
 - SwiftUI with SwiftData persistence
-- HealthKit export (write weight to Apple Health)
+- HealthKit import/export (read and write weight to Apple Health)
 - iCloud sync via CloudKit
 - EWMA trend analysis
 - iOS 26 Liquid Glass tab bar
+- Home screen widgets (WidgetKit)
+- Spanish localization (String Catalogs)
 
 ## Requirements
 
@@ -58,35 +80,52 @@ Users can reliably track their weight and see progress toward their goals with c
 - ✓ iOS 26 Liquid Glass tab bar accessory — v1.0
 - ✓ Full WCAG 2.1 AA accessibility — v1.0
 - ✓ App Store automation (fastlane, CI) — v1.0
+- ✓ HealthKit import (read weight from Apple Health) — v1.1
+- ✓ Spanish localization — v1.1
+- ✓ Unit test coverage (301 tests) — v1.1
+- ✓ Home screen widgets (small, medium, large) — v1.1
+- ✓ Social sharing from milestone celebrations — v1.1
+- ✓ App Group data migration for widgets — v1.1
+- ✓ Background HealthKit sync — v1.1
 
 ### Active
 
-**v1.1 Scope:**
-- [ ] HealthKit import (read weight from Apple Health, Health wins on conflicts)
-- [ ] Spanish localization
-- [ ] Full test coverage (unit + UI tests)
-- [ ] Fix HealthKit settings link destination
-- [ ] Home screen widget (multiple sizes: weight+trend, progress, sparkline)
-- [ ] Social sharing (export chart/stats as shareable image)
+**v1.2 Scope:**
+- [ ] Chinese (Simplified) localization — UI strings, widgets, App Store
+- [ ] French localization — UI strings, widgets, App Store
+- [ ] German localization — UI strings, widgets, App Store
+- [ ] Japanese localization — UI strings, widgets, App Store
+- [ ] Portuguese (Brazilian) localization — UI strings, widgets, App Store
+- [ ] Italian localization — UI strings, widgets, App Store
+- [ ] Korean localization — UI strings, widgets, App Store
+- [ ] Russian localization — UI strings, widgets, App Store
 
 ### Out of Scope
 
 - watchOS app — post-launch consideration
 - iPad optimization — post-launch consideration
-- Milestone achievement sharing — v1.1 focuses on progress screenshots only
+- RTL language support (Arabic, Hebrew) — requires layout mirroring work, defer to v1.3+
+- Professional translation review — ship AI translations, iterate on feedback
+- Regional variants (es-MX vs es-ES, pt-PT vs pt-BR) — use generic locale codes
 
 ## Context
 
-**Shipped v1.0** with 15,861 LOC Swift on 2026-01-22.
+**Shipped v1.1** with 17,745 LOC Swift on 2026-01-24.
 
-**App Store Status:** Build 6 submitted for review.
+**App Store Status:** v1.1 Build 13 on TestFlight, preparing submission.
 
-**Known Issues:** None critical. Minor tech debt documented in v1-MILESTONE-AUDIT.md.
+**Localization status:**
+- English: base language (200+ strings)
+- Spanish: complete (v1.1)
+- 8 languages pending: zh-Hans, fr, de, ja, pt-BR, it, ko, ru
+
+**Known Issues:** None critical.
 
 **Pending Human Actions:**
 - Publish privacy page at https://saults.io/w8trackr-privacy
 - Publish support page at https://saults.io/w8trackr-support
 - Complete age rating questionnaire in App Store Connect
+- Enter Spanish App Store metadata in App Store Connect
 
 ## Constraints
 
@@ -109,5 +148,7 @@ Users can reliably track their weight and see progress toward their goals with c
 | WCAG 2.1 AA as launch requirement | Inclusive design from day one | ✓ Good |
 | Automated accessibility tests | Prevent regressions | ✓ Good |
 
+| AI translations for v1.2 | Ship fast, iterate on feedback | — Pending |
+
 ---
-*Last updated: 2026-01-22 after v1.1 milestone started*
+*Last updated: 2026-01-24 after v1.2 milestone started*

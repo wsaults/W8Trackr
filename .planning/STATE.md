@@ -2,24 +2,25 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-01-22)
+See: .planning/PROJECT.md (updated 2026-01-24)
 
 **Core value:** Users can reliably track weight and see progress with confidence-inspiring visualizations
-**Current focus:** v1.1 milestone - Phase 26: Testing
+**Current focus:** v1.2 milestone - Global Localization
 
 ## Current Position
 
-Phase: 26 of 26 (Testing)
-Plan: 1 of 1 (Testing)
-Status: Phase complete
-Last activity: 2026-01-23 — Completed 26-01-PLAN.md (Unit Test Coverage)
+Phase: Not started (defining roadmap)
+Plan: —
+Status: Defining roadmap
+Last activity: 2026-01-24 — Milestone v1.2 started
 
-Progress: [████████████████████] 100%
+Progress: [░░░░░░░░░░░░░░░░░░░░] 0%
 
 ## Milestone History
 
 - **v1.0 Pre-Launch Audit** — 20 phases, 30 plans — shipped 2026-01-22
-- **v1.1 Feature Expansion** — 6 phases, 18+ plans — in progress
+- **v1.1 Feature Expansion** — 6 phases, 15 plans — shipped 2026-01-24
+- **v1.2 Global Localization** — in progress
 
 ## Performance Metrics
 
@@ -32,9 +33,13 @@ Progress: [████████████████████] 100%
 - Net LOC change: +20,330
 
 **v1.1 Milestone:**
-- Total plans completed: 19
-- Phases completed: 6/6 (Phase 21, Phase 22, Phase 23, Phase 24, Phase 25, Phase 26)
-- Requirements: 25
+- Total plans completed: 15
+- Phases completed: 6/6 (Phase 21-26)
+- Requirements: 23 satisfied
+- Timeline: 3 days (2026-01-22 to 2026-01-24)
+- Files modified: 111
+- Net LOC change: +18,795
+- Tests: 301 total (52 new)
 
 ## Accumulated Context
 
@@ -42,106 +47,33 @@ Progress: [████████████████████] 100%
 
 Key decisions logged in PROJECT.md Key Decisions table.
 
-**Phase 21 decisions:**
-- Use `replacePersistentStore` (not `migratePersistentStore`) for CloudKit metadata preservation
-- Keep old store as backup for this release (can clean up in future version)
-- No auto-retry on migration failure (requires user action)
-
-**Phase 22 decisions:**
-- Create new ModelContext per widget fetch (not mainContext, which is @MainActor isolated)
-- Widget uses 4-hour refresh policy with on-demand updates from main app
-- Use neutral colors for trend indicators (no red/green judgment)
-- Filled area chart with gradient for sparkline (like Apple Fitness)
-
-**Phase 23-01 decisions:**
-- Use HKAnchoredObjectQueryDescriptor (modern async API) instead of legacy callback-based HKAnchoredObjectQuery
-- Store imported entries in lb (app internal format) regardless of HealthKit sample unit
-- Skip samples where source bundleIdentifier matches W8Trackr to prevent duplicates
-- Cast healthStore to HKHealthStore for result(for:) method (protocol doesn't expose it)
-
-**Phase 23-02 decisions:**
-- Use defer { completionHandler() } at START of observer callback - missing this causes exponential backoff
-- Re-establish HKObserverQuery on every app launch (queries don't persist across launches)
-- Run initial import automatically when user first enables import (HKIT-04)
-- Store observerQuery property to allow stopping when user disables import
-
-**Phase 23-03 decisions:**
-- Rename "Sync to Apple Health" to "Export to Apple Health" for clarity alongside "Import from Apple Health"
-- Footer text explicitly states: Export writes entries to Health, Import reads from other apps
-
-**Phase 24-01 decisions:**
-- Use enum (not struct) for ProgressImageGenerator - static functions only
-- Privacy mode via nil weightChange parameter - simple and explicit
-- Fixed font sizes in ShareableProgressView - required for consistent image rendering
-- 600x315 (1.91:1) ratio optimized for Twitter/Facebook/LinkedIn
-
-**Phase 24-02 decisions:**
-- Share from milestone celebration, not Dashboard - more meaningful UX
-- Two buttons side-by-side: Share (secondary) + Continue (primary)
-- Dev Menu test option for milestone celebration without hitting real milestone
-- Enhanced shareable image with emoji accents and glowing trophy
-
-**Phase 25-04 decisions:**
-- Use .formatted(.number.precision(.fractionLength(N))) for all weight displays
-- Applied locale-aware formatting to CSV export for consistency with LOCL-02
-
-**Phase 25-02 decisions:**
-- Use String(localized:) for computed string properties in widget views
-- Use Text() wrapper for widget configurationDisplayName and description
-- Add Spanish language to project knownRegions
-
-**Phase 25-03 decisions:**
-- Removed UI tests (AccessibilityTests, ScreenshotTests) - keep unit tests only
-- Added localization unit tests for number/date formatting verification
-
-**Phase 26-01 decisions:**
-- Use 0.01 tolerance for weight conversion reversibility test (floating-point rounding)
-- Test MockHealthStore tracking separately from HealthSyncManager tests
+**v1.2 decisions:**
+- AI translations for initial release (ship fast, iterate on feedback)
+- 8 languages based on top App Store downloads
+- Skip RTL support (defer Arabic/Hebrew to v1.3+)
+- Use generic locale codes (not regional variants)
 
 ### Pending Todos
 
-None for v1.1 milestone.
+None for v1.2 milestone.
 
 ### Pending Human Actions
 
 - [ ] Publish privacy page at https://saults.io/w8trackr-privacy
 - [ ] Publish support page at https://saults.io/w8trackr-support
 - [ ] Complete age rating questionnaire in App Store Connect
-- [ ] Enter Spanish App Store metadata in App Store Connect (see APP_STORE_SPANISH.md)
+- [ ] Enter Spanish App Store metadata in App Store Connect
 
 ### Blockers/Concerns
 
-**Phase 21 (Infrastructure) — COMPLETE:**
-- App Group migration implemented with backup retention
-
-**Phase 22 (Widgets) — COMPLETE:**
-- All widget views implemented
-- Widget refresh integrated into main app
-
-**Phase 23 (HealthKit Import) — COMPLETE:**
-- Plan 01: Import operations with HKAnchoredObjectQueryDescriptor
-- Plan 02: Background delivery with HKObserverQuery, Settings toggle
-- Plan 03: Human verification + UX terminology fix
-
-**Phase 24 (Social Sharing) — COMPLETE:**
-- Plan 01: Infrastructure (ShareType, ShareableProgressImage, ProgressImageGenerator)
-- Plan 02: Milestone celebration sharing with enhanced image design
-
-**Phase 25 (Localization) — COMPLETE:**
-- Plan 01: String Catalog with Spanish translations (LOCL-01)
-- Plan 02: System strings localization (permissions, widgets, Siri)
-- Plan 03: App Store metadata + human verification (LOCL-03)
-- Plan 04: Locale-aware number formatting (LOCL-02)
-
-**Phase 26 (Testing) — COMPLETE:**
-- Plan 01: WeightEntry CRUD lifecycle tests + HealthKit sync flow tests
+None identified.
 
 ## Session Continuity
 
-Last session: 2026-01-23
-Stopped at: Completed Phase 26
+Last session: 2026-01-24
+Stopped at: Defining v1.2 requirements
 Resume file: None
-Pending: v1.1 milestone complete
+Pending: Create roadmap
 
 ## Code Quality Status
 
@@ -155,10 +87,7 @@ Pending: v1.1 milestone complete
 
 ## Next Steps
 
-v1.1 milestone complete. Pending human actions remain:
-- Publish privacy and support pages
-- Complete App Store Connect questionnaire
-- Enter Spanish App Store metadata
+Create roadmap for v1.2 Global Localization milestone.
 
 ---
-*Updated: 2026-01-23 after Phase 26 complete*
+*Updated: 2026-01-24 after v1.2 milestone started*
