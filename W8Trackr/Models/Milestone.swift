@@ -140,8 +140,12 @@ enum MilestoneCalculator {
         var current = startWeight
 
         if isLosingWeight {
-            // Round down to next milestone (e.g., 198 -> 195)
+            // Round down to next milestone (e.g., 198 -> 195, 178.6 -> 175)
             current = floor(startWeight / interval) * interval
+            // Include rounded start as first milestone if it's below the start weight
+            if current < startWeight && current > goalWeight {
+                milestones.append(current)
+            }
             while current > goalWeight {
                 current -= interval
                 if current > goalWeight {
@@ -151,6 +155,10 @@ enum MilestoneCalculator {
         } else {
             // Round up to next milestone (e.g., 152 -> 155)
             current = ceil(startWeight / interval) * interval
+            // Include rounded start as first milestone if it's above the start weight
+            if current > startWeight && current < goalWeight {
+                milestones.append(current)
+            }
             while current < goalWeight {
                 current += interval
                 if current < goalWeight {
@@ -174,14 +182,27 @@ enum MilestoneCalculator {
         completedMilestones: [CompletedMilestone],
         intervalPreference: MilestoneInterval = .five
     ) -> MilestoneProgress {
+        // Determine direction based on goal relative to current position
+        let isLosingWeight = goalWeight < currentWeight
+
+        // Use effective start weight to ensure milestones exist between current weight and goal
+        // This handles cases where user moved opposite to goal direction
+        let effectiveStartWeight: Double
+        if isLosingWeight {
+            // For weight loss: use the higher of start or current to generate milestones
+            effectiveStartWeight = max(startWeight, currentWeight)
+        } else {
+            // For weight gain: use the lower of start or current
+            effectiveStartWeight = min(startWeight, currentWeight)
+        }
+
         let allMilestones = generateMilestones(
-            startWeight: startWeight,
+            startWeight: effectiveStartWeight,
             goalWeight: goalWeight,
             unit: unit,
             intervalPreference: intervalPreference
         )
         let completedWeights = Set(completedMilestones.map { $0.targetWeight(in: unit) })
-        let isLosingWeight = goalWeight < startWeight
 
         // Find next uncompleted milestone
         let nextMilestone: Double
@@ -191,12 +212,12 @@ enum MilestoneCalculator {
             // Next milestone is the first one at or below current weight (includes milestones we've just reached)
             nextMilestone = allMilestones.first { $0 <= currentWeight } ?? goalWeight
             // Previous milestone is the last one above current weight (the one we came from)
-            previousMilestone = allMilestones.last { $0 > currentWeight } ?? startWeight
+            previousMilestone = allMilestones.last { $0 > currentWeight } ?? effectiveStartWeight
         } else {
             // Next milestone is the first one at or above current weight
             nextMilestone = allMilestones.first { $0 >= currentWeight } ?? goalWeight
             // Previous milestone is the last one below current weight
-            previousMilestone = allMilestones.last { $0 < currentWeight } ?? startWeight
+            previousMilestone = allMilestones.last { $0 < currentWeight } ?? effectiveStartWeight
         }
 
         return MilestoneProgress(

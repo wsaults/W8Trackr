@@ -341,4 +341,78 @@ struct MilestoneCalculatorIntegrationTests {
         // Current = 181, next = 180, remaining = 1
         #expect(progress.weightToNextMilestone == 1.0)
     }
+
+    // BUG: Card shows "18.6 lbs to go to 160" instead of "3.6 lbs to go to 175"
+    @Test("Next milestone is intermediate milestone, not goal")
+    func nextMilestoneIsIntermediateNotGoal() {
+        let progress = MilestoneCalculator.calculateProgress(
+            currentWeight: 178.6,
+            startWeight: 200,
+            goalWeight: 160,
+            unit: .lb,
+            completedMilestones: [],
+            intervalPreference: .five
+        )
+
+        // With 5 lb intervals: milestones are 195, 190, 185, 180, 175, 170, 165, 160
+        // Current = 178.6, so next milestone should be 175 (not 160)
+        #expect(progress.nextMilestone == 175,
+                "Next milestone should be 175, not \(progress.nextMilestone)")
+
+        // Weight to next should be 3.6, not 18.6
+        #expect(abs(progress.weightToNextMilestone - 3.6) < 0.01,
+                "Weight to next milestone should be 3.6, not \(progress.weightToNextMilestone)")
+    }
+
+    // BUG: When startWeight < currentWeight (user gained weight or deleted old entries),
+    // no intermediate milestones are generated between current and goal
+    @Test("Milestones generated correctly when current weight exceeds start weight")
+    func milestonesWhenCurrentExceedsStart() {
+        // Scenario: User's oldest entry was 165, but they gained to 178.6, goal is 160
+        let progress = MilestoneCalculator.calculateProgress(
+            currentWeight: 178.6,
+            startWeight: 165,  // Start weight below current (user gained weight)
+            goalWeight: 160,
+            unit: .lb,
+            completedMilestones: [],
+            intervalPreference: .five
+        )
+
+        // Even though start was 165, we need milestones between 178.6 and 160
+        // Next milestone from 178.6 should be 175, not 160
+        #expect(progress.nextMilestone == 175,
+                "Next milestone should be 175 (between current 178.6 and goal 160), not \(progress.nextMilestone)")
+
+        // Weight to next should be 3.6, not 18.6
+        #expect(abs(progress.weightToNextMilestone - 3.6) < 0.01,
+                "Weight to next milestone should be ~3.6, not \(progress.weightToNextMilestone)")
+    }
+
+    @Test("calculateProgress uses effective start when current exceeds start")
+    func calculateProgressUsesEffectiveStart() {
+        // generateMilestones with start=165, goal=160 returns only [160]
+        let rawMilestones = MilestoneCalculator.generateMilestones(
+            startWeight: 165,
+            goalWeight: 160,
+            unit: .lb,
+            intervalPreference: .five
+        )
+        #expect(rawMilestones == [160],
+                "Raw milestones with start=165 should be [160], got \(rawMilestones)")
+
+        // But calculateProgress should use effective start (max of start and current)
+        // to generate milestones that include values between current and goal
+        let progress = MilestoneCalculator.calculateProgress(
+            currentWeight: 178.6,
+            startWeight: 165,
+            goalWeight: 160,
+            unit: .lb,
+            completedMilestones: [],
+            intervalPreference: .five
+        )
+
+        // With effective start = 178.6, milestones should include 175
+        #expect(progress.nextMilestone == 175,
+                "calculateProgress should use effective start, next milestone should be 175, not \(progress.nextMilestone)")
+    }
 }
