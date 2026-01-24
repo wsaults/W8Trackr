@@ -1,0 +1,16 @@
+Novidades na versao 1.2:
+
+SUPORTE GLOBAL DE IDIOMAS
+W8Trackr agora fala o seu idioma! Esta versao adiciona suporte para 8 novos idiomas:
+- Chines (Simplificado)
+- Frances
+- Alemao
+- Japones
+- Portugues (Brasil)
+- Italiano
+- Coreano
+- Russo
+
+Todo o aplicativo - incluindo widgets, atalhos da Siri e listagem na App Store - esta agora disponivel no seu idioma preferido.
+
+Obrigado por usar W8Trackr!
