@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-24)
 ## Current Position
 
 Phase: 28 (App Store Localization)
-Plan: Not started
-Status: Ready for phase planning
-Last activity: 2026-01-24 — Phase 27 verified complete
+Plan: 1 of 2 complete
+Status: In progress
+Last activity: 2026-01-24 — Completed 28-01-PLAN.md
 
-Progress: [██████████░░░░░░░░░░] 50% (v1.2 milestone)
+Progress: [███████████████░░░░░] 75% (v1.2 milestone)
 
 ## Milestone History
 
@@ -43,8 +43,9 @@ Progress: [██████████░░░░░░░░░░] 50% (v1
 
 **v1.2 Progress:**
 - Phase 27: 3/3 plans complete
-- Phase 28: 0/2 plans pending
+- Phase 28: 1/2 plans complete
 - Total translations added: 1,616+ (main app) + 168 (widget) + 72 (system) = 1,856+
+- App Store metadata: 4/8 locales complete (zh-Hans, fr-FR, de-DE, ja)
 
 ## Accumulated Context
 
@@ -62,6 +63,7 @@ Key decisions logged in PROJECT.md Key Decisions table.
 - Used locale-appropriate Apple Health brand names per locale
 - Formal form in all languages for professional tone
 - Preserve W8Trackr brand name across all languages
+- Locale-specific keywords for App Store search optimization
 
 ### Pending Todos
 
@@ -81,9 +83,9 @@ None identified.
 ## Session Continuity
 
 Last session: 2026-01-24
-Stopped at: Phase 27 verified complete
+Stopped at: Completed 28-01-PLAN.md
 Resume file: None
-Pending: Plan Phase 28 (App Store metadata localization)
+Pending: Execute 28-02-PLAN.md (remaining locales: ko, pt-BR, ru, es-ES)
 
 ## Code Quality Status
 
@@ -97,7 +99,7 @@ Pending: Plan Phase 28 (App Store metadata localization)
 
 ## Next Steps
 
-Phase 27 (In-App Localization) complete. Ready for Phase 28 (App Store Metadata Localization).
+Plan 28-01 complete. Ready for 28-02 (Korean, Portuguese, Russian, Spanish metadata).
 
 ---
-*Updated: 2026-01-24 after Phase 27 verified complete*
+*Updated: 2026-01-24 after 28-01-PLAN.md complete*
