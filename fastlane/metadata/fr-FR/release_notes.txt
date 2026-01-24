@@ -1,0 +1,7 @@
+Nouveautes de W8Trackr v1.2 :
+
+• Support multilingue - Nouveau support pour le chinois, le francais, l'allemand, le japonais, le coreen, le portugais et le russe
+• Localisation complete - L'application, les widgets et les fonctions systeme sont entierement traduits
+• Experience amelioree - Profitez de W8Trackr dans votre langue maternelle
+
+Merci d'utiliser W8Trackr !
