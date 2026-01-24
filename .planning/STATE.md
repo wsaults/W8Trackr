@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-01-24)
 
 **Core value:** Users can reliably track weight and see progress with confidence-inspiring visualizations
-**Current focus:** v1.2 milestone - Global Localization
+**Current focus:** v1.2 milestone complete — ready for milestone audit
 
 ## Current Position
 
@@ -20,7 +20,7 @@ Progress: [████████████████████] 100% (v
 
 - **v1.0 Pre-Launch Audit** — 20 phases, 30 plans — shipped 2026-01-22
 - **v1.1 Feature Expansion** — 6 phases, 15 plans — shipped 2026-01-24
-- **v1.2 Global Localization** — 2 phases — in progress
+- **v1.2 Global Localization** — 2 phases, 5 plans — shipped 2026-01-24
 
 ## Performance Metrics
 
@@ -41,7 +41,7 @@ Progress: [████████████████████] 100% (v
 - Net LOC change: +18,795
 - Tests: 301 total (52 new)
 
-**v1.2 Progress:**
+**v1.2 Milestone:**
 - Phase 27: 3/3 plans complete
 - Phase 28: 2/2 plans complete
 - Total translations added: 1,616+ (main app) + 168 (widget) + 72 (system) = 1,856+
@@ -85,7 +85,7 @@ None identified.
 Last session: 2026-01-24
 Stopped at: Completed 28-02-PLAN.md
 Resume file: None
-Pending: v1.2 milestone complete - ready for App Store submission
+Pending: Milestone audit (/gsd:audit-milestone)
 
 ## Code Quality Status
 
@@ -99,7 +99,9 @@ Pending: v1.2 milestone complete - ready for App Store submission
 
 ## Next Steps
 
-v1.2 Global Localization milestone complete. All 8 App Store locale folders ready for fastlane deliver.
+v1.2 Global Localization milestone complete. All 32 requirements satisfied.
+
+**Recommended:** Run `/gsd:audit-milestone` to verify cross-phase integration and E2E flows before archiving.
 
 ---
-*Updated: 2026-01-24 after 28-02-PLAN.md complete*
+*Updated: 2026-01-24 after v1.2 milestone complete*

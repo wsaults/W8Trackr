@@ -4,7 +4,7 @@
 
 - [x] **v1.0 Pre-Launch Audit** - Phases 1-20 (shipped 2026-01-22)
 - [x] **v1.1 Feature Expansion** - Phases 21-26 (shipped 2026-01-24)
-- [ ] **v1.2 Global Localization** - Phases 27-28 (in progress)
+- [x] **v1.2 Global Localization** - Phases 27-28 (shipped 2026-01-24)
 
 ## Phases
 
@@ -31,7 +31,7 @@ See archived milestone documentation for v1.0 phase details.
 
 </details>
 
-### v1.2 Global Localization (In Progress)
+### v1.2 Global Localization (SHIPPED 2026-01-24)
 
 **Milestone Goal:** Expand W8Trackr to 8 additional languages (Chinese, French, German, Japanese, Portuguese, Italian, Korean, Russian) for global App Store reach.
 
@@ -40,7 +40,7 @@ See archived milestone documentation for v1.0 phase details.
 - Decimal phases (27.1, 27.2): Urgent insertions if needed
 
 - [x] **Phase 27: In-App Localization** - UI strings, widget strings, and formatting for all 8 languages
-- [ ] **Phase 28: App Store Localization** - Metadata translations for all 8 languages
+- [x] **Phase 28: App Store Localization** - Metadata translations for all 8 languages
 
 ## Phase Details
 
@@ -72,8 +72,8 @@ Plans:
   4. What's New text available in all 8 languages for v1.2 release
 **Plans:** 2 plans
 Plans:
-- [ ] 28-01-PLAN.md - App Store metadata for Chinese, French, German, Japanese
-- [ ] 28-02-PLAN.md - App Store metadata for Portuguese, Italian, Korean, Russian + v1.2 release notes
+- [x] 28-01-PLAN.md - App Store metadata for Chinese, French, German, Japanese
+- [x] 28-02-PLAN.md - App Store metadata for Portuguese, Italian, Korean, Russian + v1.2 release notes
 
 ## Progress
 
@@ -83,8 +83,8 @@ Phases execute in numeric order: 27 -> 27.1 -> 27.2 -> 28 -> etc.
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 27. In-App Localization | v1.2 | 3/3 | Complete | 2026-01-24 |
-| 28. App Store Localization | v1.2 | 0/2 | Not Started | - |
+| 28. App Store Localization | v1.2 | 2/2 | Complete | 2026-01-24 |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-24 (Phase 27 complete)*
+*Last updated: 2026-01-24 (v1.2 milestone complete)*
