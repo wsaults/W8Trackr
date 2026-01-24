@@ -66,7 +66,7 @@
 		94CEA16BE178A03E3432761D /* SharedModelContainer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SharedModelContainer.swift; path = ../W8Trackr/Shared/SharedModelContainer.swift; sourceTree = "<group>"; };
 		BE502EAE2DBFBF7700299FBF /* W8Trackr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = W8Trackr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE502EBB2DBFBF7900299FBF /* W8TrackrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = W8TrackrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BEF799582F242CA90083D2C0 /* W8Trackr.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = file; path = W8Trackr.xctestplan; sourceTree = "<group>"; };
+		BEF799582F242CA90083D2C0 /* W8Trackr.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = W8Trackr.xctestplan; sourceTree = "<group>"; };
 		BEUI00012DBFBF7900299FBF /* W8TrackrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = W8TrackrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3E0495D5C01E860F6423599 /* MediumWidgetView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MediumWidgetView.swift; sourceTree = "<group>"; };
 		F53F74FCD752AA87D79A5054 /* WeightEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WeightEntry.swift; path = ../W8Trackr/Models/WeightEntry.swift; sourceTree = "<group>"; };
@@ -416,7 +416,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = W8TrackrWidget/W8TrackrWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 77QB78PHPH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = W8TrackrWidget/Info.plist;
@@ -448,7 +448,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = W8TrackrWidget/W8TrackrWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 77QB78PHPH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = W8TrackrWidget/Info.plist;
@@ -603,7 +603,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = W8Trackr/W8Trackr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 77QB78PHPH;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -637,7 +637,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = W8Trackr/W8Trackr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 77QB78PHPH;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -669,7 +669,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 77QB78PHPH;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
@@ -688,7 +688,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 77QB78PHPH;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;

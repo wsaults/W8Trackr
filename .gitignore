@@ -103,3 +103,10 @@ iOSInjectionProject/
 
 # MacOS
 .DS_Store
+
+# Claude Code auto-generated context files in source directories
+# (Keep root CLAUDE.md and .planning/**/CLAUDE.md)
+W8Trackr/**/CLAUDE.md
+W8TrackrWidget/**/CLAUDE.md
+W8TrackrTests/**/CLAUDE.md
+*.xcodeproj/CLAUDE.md
