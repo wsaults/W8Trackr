@@ -3,7 +3,8 @@
 ## Milestones
 
 - [x] **v1.0 Pre-Launch Audit** - Phases 1-20 (shipped 2026-01-22)
-- [x] **v1.1 Feature Expansion** - Phases 21-26 (completed 2026-01-23)
+- [x] **v1.1 Feature Expansion** - Phases 21-26 (shipped 2026-01-24)
+- [ ] **v1.2 Global Localization** - Phases 27-28 (in progress)
 
 ## Phases
 
@@ -16,139 +17,67 @@ See archived milestone documentation for v1.0 phase details.
 
 </details>
 
-### v1.1 Feature Expansion (In Progress)
+<details>
+<summary>v1.1 Feature Expansion (Phases 21-26) - SHIPPED 2026-01-24</summary>
 
-**Milestone Goal:** Add HealthKit import, home screen widgets, social sharing, Spanish localization, and comprehensive test coverage.
+**Summary:** 6 phases, 15 plans, 18,795 LOC added.
+
+- Phase 21: Infrastructure & Migration - App Group setup and data migration
+- Phase 22: Widgets - Home screen widgets (small, medium, large)
+- Phase 23: HealthKit Import - Read weight data from Apple Health
+- Phase 24: Social Sharing - Shareable progress images
+- Phase 25: Localization - Spanish language support
+- Phase 26: Testing - Comprehensive test coverage (301 tests)
+
+</details>
+
+### v1.2 Global Localization (In Progress)
+
+**Milestone Goal:** Expand W8Trackr to 8 additional languages (Chinese, French, German, Japanese, Portuguese, Italian, Korean, Russian) for global App Store reach.
 
 **Phase Numbering:**
-- Integer phases (21, 22, 23): Planned milestone work
-- Decimal phases (21.1, 21.2): Urgent insertions (marked with INSERTED)
+- Integer phases (27, 28): Planned milestone work
+- Decimal phases (27.1, 27.2): Urgent insertions if needed
 
-- [x] **Phase 21: Infrastructure & Migration** - App Group setup and data migration (completed 2026-01-22)
-- [x] **Phase 22: Widgets** - Home screen widgets (small, medium, large) (completed 2026-01-22)
-- [x] **Phase 23: HealthKit Import** - Read weight data from Apple Health (completed 2026-01-23)
-- [x] **Phase 24: Social Sharing** - Shareable progress images (completed 2026-01-23)
-- [x] **Phase 25: Localization** - Spanish language support (completed 2026-01-23)
-- [x] **Phase 26: Testing** - Comprehensive test coverage (completed 2026-01-23)
+- [ ] **Phase 27: In-App Localization** - UI strings, widget strings, and formatting for all 8 languages
+- [ ] **Phase 28: App Store Localization** - Metadata translations for all 8 languages
 
 ## Phase Details
 
-### Phase 21: Infrastructure & Migration
-**Goal:** Existing users' data migrates safely to App Group container, enabling widget data sharing
-**Depends on:** v1.0 complete
-**Requirements:** INFRA-01, INFRA-02, INFRA-03
-**Risk:** HIGH - Affects all existing users, CloudKit sync implications
+### Phase 27: In-App Localization
+**Goal:** Users in all 8 target locales see the app in their native language with correct formatting
+**Depends on:** v1.1 complete (Spanish localization patterns established)
+**Requirements:** ZH-01, ZH-02, ZH-03, FR-01, FR-02, FR-03, DE-01, DE-02, DE-03, JA-01, JA-02, JA-03, PT-01, PT-02, PT-03, IT-01, IT-02, IT-03, KO-01, KO-02, KO-03, RU-01, RU-02, RU-03
+**Risk:** LOW - Pattern established in Phase 25, mechanical translation work
 **Success Criteria** (what must be TRUE):
-  1. App launches without data loss for existing users (migration verified)
-  2. SwiftData container lives in App Group location accessible to extensions
-  3. HealthKit settings link navigates to system Health settings (not app settings)
-  4. CloudKit sync continues working after migration (no duplicates, no data loss)
-**Plans:** 2 plans
+  1. All UI strings display correctly in Chinese, French, German, Japanese, Portuguese, Italian, Korean, and Russian when device language is set accordingly
+  2. Widget strings display correctly in all 8 languages
+  3. Numbers and dates format according to each locale's conventions (decimal separators, date order)
+  4. Existing localization unit tests pass for all new locales
+**Plans:** TBD during phase planning
 
-Plans:
-- [x] 21-01-PLAN.md — App Group entitlement, SharedModelContainer, HealthKit settings fix
-- [x] 21-02-PLAN.md — MigrationManager with CloudKit-safe migration, app integration
-
-### Phase 22: Widgets
-**Goal:** Users can add home screen widgets showing weight, progress, and trends
-**Depends on:** Phase 21 (App Group infrastructure)
-**Requirements:** WDGT-01, WDGT-02, WDGT-03, WDGT-04, WDGT-05
-**Risk:** MEDIUM - New extension target, entitlements
+### Phase 28: App Store Localization
+**Goal:** Users in all 8 target markets discover W8Trackr through localized App Store listings
+**Depends on:** Phase 27 (in-app localization verified first)
+**Requirements:** ZH-04, FR-04, DE-04, JA-04, PT-04, IT-04, KO-04, RU-04
+**Risk:** LOW - Existing fastlane metadata structure, copy translation work
 **Success Criteria** (what must be TRUE):
-  1. Small widget displays current weight with trend arrow (up/down/neutral)
-  2. Medium widget displays progress percentage toward goal weight
-  3. Large widget displays sparkline chart of recent weight entries
-  4. Widgets update when user adds, edits, or deletes weight entries in app
-  5. Tapping any widget opens W8Trackr app
-**Plans:** 3 plans
-
-Plans:
-- [x] 22-01-PLAN.md — Widget extension target, entitlements, timeline entry and provider
-- [x] 22-02-PLAN.md — Small, medium, large widget views with sparkline chart, widget refresh integration
-- [x] 22-03-PLAN.md — Human verification of widget functionality
-
-### Phase 23: HealthKit Import
-**Goal:** Users can import weight data from Apple Health with automatic sync
-**Depends on:** Phase 21 (for testing infrastructure patterns)
-**Requirements:** HKIT-01, HKIT-02, HKIT-03, HKIT-04, HKIT-05
-**Risk:** HIGH - Complex conflict resolution, sync state management
-**Success Criteria** (what must be TRUE):
-  1. User can grant HealthKit read permission from Settings
-  2. All weight samples from Apple Health appear in W8Trackr
-  3. Imported entries show Health icon to distinguish from manual entries
-  4. Initial sync completes automatically when permission is first granted
-  5. New Health data syncs automatically in background without user action
-**Plans:** 3 plans
-
-Plans:
-- [x] 23-01-PLAN.md — Background-delivery entitlement, HKAnchoredObjectQueryDescriptor import operations
-- [x] 23-02-PLAN.md — HKObserverQuery background delivery, app launch setup, Settings import toggle
-- [x] 23-03-PLAN.md — Human verification of HealthKit import on device
-
-### Phase 24: Social Sharing
-**Goal:** Users can share their weight loss progress as an image
-**Depends on:** Phase 21 (stable infrastructure)
-**Requirements:** SHAR-01, SHAR-02, SHAR-03
-**Risk:** LOW - Self-contained feature, contracts exist
-**Success Criteria** (what must be TRUE):
-  1. User can generate a progress image from dashboard showing stats/chart
-  2. Share sheet appears with standard iOS sharing options
-  3. User can toggle privacy mode to hide exact weight values before sharing
-**Plans:** 2 plans
-
-Plans:
-- [x] 24-01-PLAN.md — Core infrastructure: ShareableProgressImage, ShareType, ShareableProgressView, ProgressImageGenerator
-- [x] 24-02-PLAN.md — Milestone celebration sharing (pivoted from Dashboard), enhanced shareable image
-
-### Phase 25: Localization
-**Goal:** Spanish-speaking users can use the app in their native language
-**Depends on:** Phases 22-24 (UI stable before translation)
-**Requirements:** LOCL-01, LOCL-02, LOCL-03
-**Risk:** LOW - Standard localization workflow
-**Success Criteria** (what must be TRUE):
-  1. All UI text displays correctly in Spanish when device language is Spanish
-  2. Numbers format with correct decimal/thousands separators for Spanish locale
-  3. Dates format according to Spanish locale conventions
-  4. App Store listing available in Spanish (name, description, keywords)
-**Plans:** 4 plans
-
-Plans:
-- [x] 25-01-PLAN.md — String Catalog setup, main app string translations (~150 strings)
-- [x] 25-02-PLAN.md — Info.plist permissions, widget strings, Siri phrases localization
-- [x] 25-03-PLAN.md — Localization unit tests for number/date formatting
-- [x] 25-04-PLAN.md — Locale-aware number formatting throughout app
-
-### Phase 26: Testing
-**Goal:** Comprehensive test coverage prevents regressions and validates critical paths
-**Depends on:** Phases 21-25 (test final implementations)
-**Requirements:** TEST-01, TEST-02, TEST-03, TEST-04, TEST-05, TEST-06
-**Risk:** LOW - Testing infrastructure patterns established
-**Success Criteria** (what must be TRUE):
-  1. Unit tests verify weight entry CRUD operations (create, read, update, delete)
-  2. Unit tests verify HealthKit sync logic with mock data
-  3. Unit tests verify EWMA trend calculations produce correct values
-  4. UI tests verify complete weight entry flow (add, view, edit, delete) - REMOVED per Phase 25-03
-  5. UI tests verify settings flow (change goal, enable notifications, etc.) - REMOVED per Phase 25-03
-  6. Mock HealthKit store available for isolated testing without real Health data
-**Plans:** 1 plan
-
-Plans:
-- [x] 26-01-PLAN.md — WeightEntry CRUD tests, HealthKit sync flow tests
+  1. App Store name displays correctly in all 8 languages
+  2. App Store description available in all 8 languages
+  3. Keywords optimized for each language's App Store search
+  4. What's New text available in all 8 languages for v1.2 release
+**Plans:** TBD during phase planning
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 21 -> 21.1 -> 21.2 -> 22 -> etc.
+Phases execute in numeric order: 27 -> 27.1 -> 27.2 -> 28 -> etc.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 21. Infrastructure & Migration | v1.1 | 2/2 | ✓ Complete | 2026-01-22 |
-| 22. Widgets | v1.1 | 3/3 | ✓ Complete | 2026-01-22 |
-| 23. HealthKit Import | v1.1 | 3/3 | ✓ Complete | 2026-01-23 |
-| 24. Social Sharing | v1.1 | 2/2 | ✓ Complete | 2026-01-23 |
-| 25. Localization | v1.1 | 4/4 | ✓ Complete | 2026-01-23 |
-| 26. Testing | v1.1 | 1/1 | ✓ Complete | 2026-01-23 |
+| 27. In-App Localization | v1.2 | 0/? | Not Started | - |
+| 28. App Store Localization | v1.2 | 0/? | Not Started | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 (Phase 26 complete, v1.1 milestone complete)*
+*Last updated: 2026-01-24 (v1.2 milestone roadmap added)*
