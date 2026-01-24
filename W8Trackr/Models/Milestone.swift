@@ -79,11 +79,27 @@ struct MilestoneProgress {
     let completedMilestones: [Double]
 
     /// Progress from previous milestone to next milestone (0.0 to 1.0)
+    /// Returns 0.0 if user is moving in the wrong direction (gaining when trying to lose, or vice versa)
     var progressToNextMilestone: Double {
         let totalDistance = abs(previousMilestone - nextMilestone)
         guard totalDistance > 0 else { return 1.0 }
-        let traveled = abs(previousMilestone - currentWeight)
-        return min(1.0, max(0.0, traveled / totalDistance))
+
+        let isLosingWeight = goalWeight < previousMilestone
+
+        // Check if user is moving in the correct direction
+        if isLosingWeight {
+            // For weight loss: current should be <= previous (moving down)
+            // If current > previous, user gained weight - return 0
+            guard currentWeight <= previousMilestone else { return 0.0 }
+            let traveled = previousMilestone - currentWeight
+            return min(1.0, max(0.0, traveled / totalDistance))
+        } else {
+            // For weight gain: current should be >= previous (moving up)
+            // If current < previous, user lost weight - return 0
+            guard currentWeight >= previousMilestone else { return 0.0 }
+            let traveled = currentWeight - previousMilestone
+            return min(1.0, max(0.0, traveled / totalDistance))
+        }
     }
 
     /// Weight remaining to reach next milestone
@@ -172,13 +188,15 @@ enum MilestoneCalculator {
         let previousMilestone: Double
 
         if isLosingWeight {
-            // Next milestone is the first one we haven't passed yet
-            nextMilestone = allMilestones.first { $0 < currentWeight } ?? goalWeight
-            // Previous milestone is the last one we passed
-            previousMilestone = allMilestones.last { $0 >= currentWeight } ?? startWeight
+            // Next milestone is the first one at or below current weight (includes milestones we've just reached)
+            nextMilestone = allMilestones.first { $0 <= currentWeight } ?? goalWeight
+            // Previous milestone is the last one above current weight (the one we came from)
+            previousMilestone = allMilestones.last { $0 > currentWeight } ?? startWeight
         } else {
-            nextMilestone = allMilestones.first { $0 > currentWeight } ?? goalWeight
-            previousMilestone = allMilestones.last { $0 <= currentWeight } ?? startWeight
+            // Next milestone is the first one at or above current weight
+            nextMilestone = allMilestones.first { $0 >= currentWeight } ?? goalWeight
+            // Previous milestone is the last one below current weight
+            previousMilestone = allMilestones.last { $0 < currentWeight } ?? startWeight
         }
 
         return MilestoneProgress(
