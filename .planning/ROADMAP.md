@@ -54,7 +54,11 @@ See archived milestone documentation for v1.0 phase details.
   2. Widget strings display correctly in all 8 languages
   3. Numbers and dates format according to each locale's conventions (decimal separators, date order)
   4. Existing localization unit tests pass for all new locales
-**Plans:** TBD during phase planning
+**Plans:** 3 plans
+Plans:
+- [ ] 27-01-PLAN.md - Main app UI string translations (8 languages)
+- [ ] 27-02-PLAN.md - Widget string translations (8 languages)
+- [ ] 27-03-PLAN.md - InfoPlist and Siri phrase translations (8 languages)
 
 ### Phase 28: App Store Localization
 **Goal:** Users in all 8 target markets discover W8Trackr through localized App Store listings
@@ -75,9 +79,9 @@ Phases execute in numeric order: 27 -> 27.1 -> 27.2 -> 28 -> etc.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 27. In-App Localization | v1.2 | 0/? | Not Started | - |
+| 27. In-App Localization | v1.2 | 0/3 | Planned | - |
 | 28. App Store Localization | v1.2 | 0/? | Not Started | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-24 (v1.2 milestone roadmap added)*
+*Last updated: 2026-01-24 (Phase 27 plans created)*
