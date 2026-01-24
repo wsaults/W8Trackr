@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-24)
 ## Current Position
 
 Phase: 27 (In-App Localization)
-Plan: Not started
-Status: Ready for phase planning
-Last activity: 2026-01-24 — Roadmap created
+Plan: 02 of 2
+Status: Plan 02 complete
+Last activity: 2026-01-24 - Completed 27-02-PLAN.md (widget localization)
 
-Progress: [░░░░░░░░░░░░░░░░░░░░] 0%
+Progress: [██████████░░░░░░░░░░] 50%
 
 ## Milestone History
 
@@ -41,6 +41,11 @@ Progress: [░░░░░░░░░░░░░░░░░░░░] 0%
 - Net LOC change: +18,795
 - Tests: 301 total (52 new)
 
+**v1.2 Progress:**
+- Plans completed: 1/4 (Phase 27 plan 02)
+- Phase 27: 1/2 plans complete
+- Phase 28: 0/2 plans complete
+
 ## Accumulated Context
 
 ### Decisions
@@ -53,6 +58,7 @@ Key decisions logged in PROJECT.md Key Decisions table.
 - Skip RTL support (defer Arabic/Hebrew to v1.3+)
 - Use generic locale codes (not regional variants)
 - 2-phase structure (in-app vs App Store metadata) for efficiency
+- Widget translations kept concise for space constraints
 
 ### Pending Todos
 
@@ -71,10 +77,10 @@ None identified.
 
 ## Session Continuity
 
-Last session: 2026-01-24
-Stopped at: Roadmap created for v1.2
+Last session: 2026-01-24 16:43:35
+Stopped at: Completed 27-02-PLAN.md
 Resume file: None
-Pending: Plan Phase 27
+Pending: Execute 27-01-PLAN.md (main app translations)
 
 ## Code Quality Status
 
@@ -88,7 +94,7 @@ Pending: Plan Phase 27
 
 ## Next Steps
 
-Run `/gsd:plan-phase 27` to create execution plans for in-app localization.
+Execute 27-01-PLAN.md to add main app translations.
 
 ---
-*Updated: 2026-01-24 after v1.2 roadmap created*
+*Updated: 2026-01-24 after 27-02-PLAN.md completed*
