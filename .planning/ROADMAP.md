@@ -70,7 +70,10 @@ Plans:
   2. App Store description available in all 8 languages
   3. Keywords optimized for each language's App Store search
   4. What's New text available in all 8 languages for v1.2 release
-**Plans:** TBD during phase planning
+**Plans:** 2 plans
+Plans:
+- [ ] 28-01-PLAN.md - App Store metadata for Chinese, French, German, Japanese
+- [ ] 28-02-PLAN.md - App Store metadata for Portuguese, Italian, Korean, Russian + v1.2 release notes
 
 ## Progress
 
@@ -80,7 +83,7 @@ Phases execute in numeric order: 27 -> 27.1 -> 27.2 -> 28 -> etc.
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 27. In-App Localization | v1.2 | 3/3 | Complete | 2026-01-24 |
-| 28. App Store Localization | v1.2 | 0/? | Not Started | - |
+| 28. App Store Localization | v1.2 | 0/2 | Not Started | - |
 
 ---
 *Roadmap created: 2026-01-22*
