@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-24)
 ## Current Position
 
 Phase: 27 (In-App Localization)
-Plan: 02 of 2
-Status: Plan 02 complete
-Last activity: 2026-01-24 - Completed 27-02-PLAN.md (widget localization)
+Plan: 03 of 3
+Status: Plan 03 complete (2/3 plans done)
+Last activity: 2026-01-24 - Completed 27-03-PLAN.md (system strings localization)
 
-Progress: [██████████░░░░░░░░░░] 50%
+Progress: [████████████░░░░░░░░] 67%
 
 ## Milestone History
 
@@ -42,9 +42,9 @@ Progress: [██████████░░░░░░░░░░] 50%
 - Tests: 301 total (52 new)
 
 **v1.2 Progress:**
-- Plans completed: 1/4 (Phase 27 plan 02)
-- Phase 27: 1/2 plans complete
-- Phase 28: 0/2 plans complete
+- Plans completed: 2/4 (Phase 27 plans 02, 03)
+- Phase 27: 2/3 plans complete
+- Phase 28: 0/2 plans pending
 
 ## Accumulated Context
 
@@ -59,6 +59,7 @@ Key decisions logged in PROJECT.md Key Decisions table.
 - Use generic locale codes (not regional variants)
 - 2-phase structure (in-app vs App Store metadata) for efficiency
 - Widget translations kept concise for space constraints
+- Used locale-appropriate Apple Health brand names per locale
 
 ### Pending Todos
 
@@ -77,8 +78,8 @@ None identified.
 
 ## Session Continuity
 
-Last session: 2026-01-24 16:43:35
-Stopped at: Completed 27-02-PLAN.md
+Last session: 2026-01-24 16:45:23
+Stopped at: Completed 27-03-PLAN.md
 Resume file: None
 Pending: Execute 27-01-PLAN.md (main app translations)
 
@@ -94,7 +95,7 @@ Pending: Execute 27-01-PLAN.md (main app translations)
 
 ## Next Steps
 
-Execute 27-01-PLAN.md to add main app translations.
+Execute 27-01-PLAN.md to add main app translations (Localizable.xcstrings).
 
 ---
-*Updated: 2026-01-24 after 27-02-PLAN.md completed*
+*Updated: 2026-01-24 after 27-03-PLAN.md completed*
