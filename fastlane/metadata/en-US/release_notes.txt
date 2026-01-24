@@ -1,8 +1,16 @@
-What's New in v1.1:
+What's New in v1.2:
 
-• Home Screen Widgets - Track your progress at a glance with small, medium, and large widgets
-• HealthKit Import - Sync your existing weight data from Apple Health with automatic background updates
-• Share Your Milestones - Celebrate your progress by sharing milestone achievements
-• Spanish Localization - Full support for Spanish speakers
-• Improved Milestone Tracking - More accurate progress calculations
-• Bug Fixes - Various stability and performance improvements
+GLOBAL LANGUAGE SUPPORT
+W8Trackr now speaks your language! This release adds support for 8 new languages:
+- Chinese (Simplified)
+- French
+- German
+- Japanese
+- Portuguese (Brazil)
+- Italian
+- Korean
+- Russian
+
+The entire app - including widgets, Siri shortcuts, and App Store listing - is now available in your preferred language.
+
+Thank you for using W8Trackr!
