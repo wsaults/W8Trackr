@@ -81,6 +81,9 @@
 				CLAUDE.md,
 				Info.plist,
 				Intents/CLAUDE.md,
+				Models/CLAUDE.md,
+				Views/CLAUDE.md,
+				Views/Dashboard/CLAUDE.md,
 			);
 			target = BE502EAD2DBFBF7700299FBF /* W8Trackr */;
 		};
