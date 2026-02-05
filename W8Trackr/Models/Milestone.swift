@@ -119,11 +119,122 @@ struct MilestoneProgress {
     }
 }
 
+/// Result of checking for milestone celebrations
+struct MilestoneCelebrationCheck {
+    /// Milestone weight to celebrate (nil if none)
+    let milestoneToShow: Double?
+    /// Reason for the result
+    let reason: Reason
+
+    enum Reason: Equatable {
+        case noEntries
+        case uncelebratedExisting(weight: Double)
+        case newlyCrossed(weight: Double)
+        case noCrossedMilestones
+        case allMilestonesAlreadyCelebrated
+    }
+}
+
 /// Utility for computing milestones
 enum MilestoneCalculator {
     /// Milestone interval by unit, using user preference
     static func interval(for unit: WeightUnit, preference: MilestoneInterval = .five) -> Double {
         preference.value(for: unit)
+    }
+
+    /// Detect milestones that have been crossed but not yet completed
+    /// - Parameters:
+    ///   - currentWeight: User's current weight
+    ///   - startWeight: User's starting weight (oldest entry)
+    ///   - goalWeight: User's goal weight
+    ///   - unit: Weight unit for calculations
+    ///   - completedMilestoneWeights: Set of already-completed milestone weights
+    ///   - intervalPreference: Milestone interval (5, 10, or 15 lbs)
+    /// - Returns: Array of milestone weights that were crossed but not yet recorded
+    static func detectCrossedMilestones(
+        currentWeight: Double,
+        startWeight: Double,
+        goalWeight: Double,
+        unit: WeightUnit,
+        completedMilestoneWeights: Set<Double>,
+        intervalPreference: MilestoneInterval = .five
+    ) -> [Double] {
+        let allMilestones = generateMilestones(
+            startWeight: startWeight,
+            goalWeight: goalWeight,
+            unit: unit,
+            intervalPreference: intervalPreference
+        )
+
+        let isLosingWeight = goalWeight < startWeight
+
+        return allMilestones.filter { milestone in
+            let isCrossed = isLosingWeight
+                ? currentWeight <= milestone
+                : currentWeight >= milestone
+            return isCrossed && !completedMilestoneWeights.contains(milestone)
+        }
+    }
+
+    /// Determine if a milestone celebration should be shown
+    /// - Parameters:
+    ///   - hasEntries: Whether user has any weight entries
+    ///   - currentWeight: User's current weight
+    ///   - startWeight: User's starting weight
+    ///   - goalWeight: User's goal weight
+    ///   - unit: Weight unit
+    ///   - completedMilestones: All completed milestones from database
+    ///   - intervalPreference: Milestone interval preference
+    /// - Returns: Check result with milestone to show (if any) and reason
+    static func checkForCelebration(
+        hasEntries: Bool,
+        currentWeight: Double,
+        startWeight: Double,
+        goalWeight: Double,
+        unit: WeightUnit,
+        completedMilestones: [CompletedMilestone],
+        intervalPreference: MilestoneInterval = .five
+    ) -> MilestoneCelebrationCheck {
+        guard hasEntries else {
+            return MilestoneCelebrationCheck(milestoneToShow: nil, reason: .noEntries)
+        }
+
+        // Priority 1: Show any uncelebrated existing milestones first
+        if let uncelebrated = completedMilestones.first(where: { !$0.celebrationShown }) {
+            let weight = uncelebrated.targetWeight(in: unit)
+            return MilestoneCelebrationCheck(
+                milestoneToShow: weight,
+                reason: .uncelebratedExisting(weight: weight)
+            )
+        }
+
+        // Priority 2: Check for newly crossed milestones
+        let completedWeights = Set(completedMilestones.map { $0.targetWeight(in: unit) })
+        let crossedMilestones = detectCrossedMilestones(
+            currentWeight: currentWeight,
+            startWeight: startWeight,
+            goalWeight: goalWeight,
+            unit: unit,
+            completedMilestoneWeights: completedWeights,
+            intervalPreference: intervalPreference
+        )
+
+        if let firstCrossed = crossedMilestones.first {
+            return MilestoneCelebrationCheck(
+                milestoneToShow: firstCrossed,
+                reason: .newlyCrossed(weight: firstCrossed)
+            )
+        }
+
+        // Determine reason for no celebration
+        if completedMilestones.isEmpty {
+            return MilestoneCelebrationCheck(milestoneToShow: nil, reason: .noCrossedMilestones)
+        } else {
+            return MilestoneCelebrationCheck(
+                milestoneToShow: nil,
+                reason: .allMilestonesAlreadyCelebrated
+            )
+        }
     }
 
     /// Generate all milestone targets between start and goal weights

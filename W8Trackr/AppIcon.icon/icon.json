@@ -1,7 +1,7 @@
 {
   "fill" : {
     "linear-gradient" : [
-      "display-p3:0.72661,0.53934,1.00000,1.00000",
+      "display-p3:0.72549,0.54118,1.00000,1.00000",
       "extended-srgb:0.00000,0.53333,1.00000,1.00000"
     ],
     "orientation" : {
@@ -21,7 +21,7 @@
         {
           "blend-mode" : "normal",
           "fill" : {
-            "solid" : "display-p3:0.69971,0.53955,0.99561,1.00000"
+            "solid" : "display-p3:0.69804,0.54118,0.99608,1.00000"
           },
           "glass" : false,
           "image-name" : "w8.png",
