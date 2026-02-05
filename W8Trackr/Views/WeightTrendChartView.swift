@@ -16,20 +16,17 @@ struct WeightTrendChartView: View {
     let selectedRange: DateRange
     let showSmoothing: Bool
 
-    @State private var scrollPosition: Date = Date()
     @State private var selectedDate: Date?
 
     // MARK: - Cached Chart Data
-    // Recomputed only when entries/settings change — NOT on every scroll frame.
-    // Previously, computed properties recalculated EMA trends and Y-axis bounds
-    // on every frame during scrolling, causing jank.
+    // Recomputed only when entries/settings/range change.
+    // No scroll binding means body only re-evaluates on actual data changes.
 
     @State private var cachedData = PreparedChartData.empty
     @State private var cachedYMin: Double = 0
     @State private var cachedYMax: Double = 200
 
     /// Lightweight fingerprint of entry data for change detection.
-    /// O(n) hash combining is far cheaper than rerunning EMA every scroll frame.
     private var dataFingerprint: Int {
         var hasher = Hasher()
         for entry in entries {
@@ -51,16 +48,30 @@ struct WeightTrendChartView: View {
         )
     }
 
-    /// Recomputes all chart data and caches it in @State.
-    /// Called on appear and when inputs change — never during scroll.
+    /// Recomputes all chart data filtered to selectedRange and caches it in @State.
     private func recomputeChartData() {
-        let sortedEntries = entries.sorted { $0.date < $1.date }
+        // Filter entries to selected date range
+        let rangeEntries: [WeightEntry]
+        if let days = selectedRange.days {
+            let cutoff = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
+            rangeEntries = entries.filter { $0.date >= cutoff }
+        } else {
+            rangeEntries = entries
+        }
+        let sortedRangeEntries = rangeEntries.sorted { $0.date < $1.date }
 
-        let trend = TrendCalculator.exponentialMovingAverage(entries: entries, span: 10)
+        // Compute EMA from ALL entries for trend accuracy, then filter to range
+        let allTrend = TrendCalculator.exponentialMovingAverage(entries: entries, span: 10)
 
         var smoothed: [ChartEntry] = []
         if showSmoothing {
-            smoothed = trend.map { point in
+            let cutoffDate: Date? = selectedRange.days.flatMap {
+                Calendar.current.date(byAdding: .day, value: -$0, to: Date())
+            }
+            let rangeTrend = cutoffDate != nil
+                ? allTrend.filter { $0.date >= cutoffDate! }
+                : allTrend
+            smoothed = rangeTrend.map { point in
                 ChartEntry(
                     date: point.date,
                     weight: point.smoothedWeight(in: weightUnit),
@@ -72,7 +83,7 @@ struct WeightTrendChartView: View {
             }
         }
 
-        let points = sortedEntries.map { entry in
+        let points = sortedRangeEntries.map { entry in
             ChartEntry(
                 date: entry.date,
                 weight: entry.weightValue(in: weightUnit),
@@ -83,12 +94,13 @@ struct WeightTrendChartView: View {
             )
         }
 
-        let predictions = makePredictionPoints(trend: trend)
+        let predictions = makePredictionPoints(trend: allTrend)
 
+        // Date domain: from first entry in range to prediction end
         let dateDomain: ClosedRange<Date>
-        if let firstDate = sortedEntries.first?.date,
-           let lastDate = sortedEntries.last?.date {
-            let predictionEnd = Calendar.current.date(byAdding: .day, value: 14, to: lastDate) ?? lastDate
+        if let firstDate = sortedRangeEntries.first?.date {
+            let lastEntryDate = entries.max(by: { $0.date < $1.date })?.date ?? firstDate
+            let predictionEnd = Calendar.current.date(byAdding: .day, value: 14, to: lastEntryDate) ?? lastEntryDate
             dateDomain = firstDate...predictionEnd
         } else {
             dateDomain = Date()...Date()
@@ -101,22 +113,12 @@ struct WeightTrendChartView: View {
             dateDomain: dateDomain
         )
 
-        // Stable Y-axis from ALL data, not just visible entries.
-        // This eliminates per-frame Y-axis domain changes that forced full chart re-layouts.
+        // Y-axis from filtered data (points + trend + predictions)
         let allWeights = points.map(\.weight) + smoothed.map(\.weight) + predictions.map(\.weight)
         if let minVal = allWeights.min(), let maxVal = allWeights.max() {
             cachedYMin = minVal - yAxisPadding
             cachedYMax = maxVal + yAxisPadding
         }
-    }
-
-    private var initialScrollPosition: Date {
-        guard let mostRecentDate = entries.max(by: { $0.date < $1.date })?.date else {
-            return Date()
-        }
-        // Offset backward so recent entries appear on the right side of the viewport
-        let offsetSeconds = visibleDomainSeconds * 0.8
-        return mostRecentDate.addingTimeInterval(-offsetSeconds)
     }
 
     private func convertWeight(_ weight: Double) -> Double {
@@ -149,25 +151,6 @@ struct WeightTrendChartView: View {
         case .oneYear, .allTime:
             return .month
         }
-    }
-
-    private var visibleDomainSeconds: TimeInterval {
-        let days: Double
-        switch selectedRange {
-        case .oneWeek:
-            days = 10
-        case .oneMonth:
-            days = 35
-        case .threeMonth:
-            days = 45
-        case .sixMonth:
-            days = 60
-        case .oneYear:
-            days = 90
-        case .allTime:
-            days = 120
-        }
-        return days * 86400
     }
 
     private var selectedEntry: ChartEntry? {
@@ -349,9 +332,6 @@ struct WeightTrendChartView: View {
                     AxisValueLabel(format: dateFormatForRange)
                 }
             }
-            .chartScrollableAxes(.horizontal)
-            .chartXVisibleDomain(length: visibleDomainSeconds)
-            .chartScrollPosition(x: $scrollPosition)
             .chartXSelection(value: $selectedDate)
             .animation(.snappy, value: selectedRange)
             .padding(.bottom)
@@ -360,11 +340,11 @@ struct WeightTrendChartView: View {
         .padding(.horizontal)
         .onAppear {
             recomputeChartData()
-            scrollPosition = initialScrollPosition
         }
         .onChange(of: dataFingerprint) { _, _ in recomputeChartData() }
         .onChange(of: weightUnit) { _, _ in recomputeChartData() }
         .onChange(of: showSmoothing) { _, _ in recomputeChartData() }
+        .onChange(of: selectedRange) { _, _ in recomputeChartData() }
     }
 }
 
