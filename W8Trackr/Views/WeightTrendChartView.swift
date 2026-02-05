@@ -19,6 +19,61 @@ struct WeightTrendChartView: View {
     @State private var scrollPosition: Date = Date()
     @State private var selectedDate: Date?
 
+    // MARK: - Cached Chart Data
+
+    private var cachedSmoothedTrend: [TrendPoint] {
+        TrendCalculator.exponentialMovingAverage(
+            entries: entries,
+            span: 10
+        )
+    }
+
+    private struct PreparedChartData {
+        let smoothed: [ChartEntry]
+        let predictions: [ChartEntry]
+        let points: [ChartEntry]
+        let all: [ChartEntry]
+    }
+
+    private var preparedData: PreparedChartData {
+        let sortedEntries = entries.sorted { $0.date < $1.date }
+        let trend = cachedSmoothedTrend
+
+        var smoothed: [ChartEntry] = []
+        if showSmoothing {
+            smoothed = trend.map { point in
+                ChartEntry(
+                    date: point.date,
+                    weight: point.smoothedWeight(in: weightUnit),
+                    isPrediction: false,
+                    showPoint: false,
+                    isIndividualEntry: false,
+                    isSmoothed: true
+                )
+            }
+        }
+
+        let points = sortedEntries.map { entry in
+            ChartEntry(
+                date: entry.date,
+                weight: entry.weightValue(in: weightUnit),
+                isPrediction: false,
+                showPoint: true,
+                isIndividualEntry: true,
+                isSmoothed: false
+            )
+        }
+
+        let predictions = makePredictionPoints(trend: trend)
+
+        return PreparedChartData(
+            smoothed: smoothed,
+            predictions: predictions,
+            points: points,
+            all: smoothed + points + predictions
+        )
+    }
+
     private var initialScrollPosition: Date {
         guard let mostRecentDate = entries.max(by: { $0.date < $1.date })?.date else {
             return Date()
@@ -63,7 +118,7 @@ struct WeightTrendChartView: View {
     /// Smoothed trend points currently visible in the scroll viewport
     private var visibleTrendPoints: [TrendPoint] {
         let visibleEnd = scrollPosition.addingTimeInterval(visibleDomainSeconds)
-        return smoothedTrend.filter { $0.date >= scrollPosition && $0.date <= visibleEnd }
+        return cachedSmoothedTrend.filter { $0.date >= scrollPosition && $0.date <= visibleEnd }
     }
 
     /// Fallback weight range when no data is visible (e.g., scrolled into prediction area)
@@ -102,15 +157,6 @@ struct WeightTrendChartView: View {
             return fallbackWeightRange.max
         }
         return maxVal + yAxisPadding
-    }
-    
-    // Calculate smoothed trend using exponential moving average
-    // Uses ALL entries for consistent trendline across scroll positions
-    private var smoothedTrend: [TrendPoint] {
-        TrendCalculator.exponentialMovingAverage(
-            entries: entries,
-            span: 10
-        )
     }
     
     private var dateFormatForRange: Date.FormatStyle {
@@ -158,20 +204,19 @@ struct WeightTrendChartView: View {
 
     private var selectedEntry: ChartEntry? {
         guard let selected = selectedDate else { return nil }
-        return chartData
-            .filter { !$0.isPrediction && $0.showPoint }
+        return preparedData.points
             .min(by: { abs($0.date.timeIntervalSince(selected)) < abs($1.date.timeIntervalSince(selected)) })
     }
 
     // Holt's Double Exponential Smoothing prediction
     // Generates prediction points anchored to trendline endpoint
-    private var predictionPoints: [ChartEntry] {
+    private func makePredictionPoints(trend: [TrendPoint]) -> [ChartEntry] {
         guard let holtResult = TrendCalculator.calculateHolt(entries: entries) else {
             return []
         }
 
         // Use last smoothed point for visual continuity with trendline
-        let lastSmoothed = smoothedTrend.last
+        let lastSmoothed = trend.last
         let startWeight = lastSmoothed?.smoothedWeight ?? holtResult.level
         let startDate = lastSmoothed?.date ?? holtResult.lastDate
 
@@ -269,45 +314,6 @@ struct WeightTrendChartView: View {
         return summary
     }
 
-    private var chartData: [ChartEntry] {
-        // Get ALL entries sorted by date for full historical scrolling
-        let sortedEntries = entries.sorted { $0.date < $1.date }
-
-        var data: [ChartEntry] = []
-
-        // Add smoothed trend line (when smoothing is on)
-        // Uses EWMA-smoothed TrendPoints instead of simple daily averages
-        if showSmoothing {
-            data.append(contentsOf: smoothedTrend.map { point in
-                ChartEntry(
-                    date: point.date,
-                    weight: point.smoothedWeight(in: weightUnit),
-                    isPrediction: false,
-                    showPoint: false,
-                    isIndividualEntry: false,
-                    isSmoothed: true
-                )
-            })
-        }
-
-        // Add all individual points
-        data.append(contentsOf: sortedEntries.map { entry in
-            ChartEntry(
-                date: entry.date,
-                weight: entry.weightValue(in: weightUnit),
-                isPrediction: false,
-                showPoint: true,
-                isIndividualEntry: true,
-                isSmoothed: false
-            )
-        })
-
-        // Add prediction points (14-day forecast)
-        data.append(contentsOf: predictionPoints)
-
-        return data
-    }
-
     @ViewBuilder
     private var selectionDisplay: some View {
         if let entry = selectedEntry {
@@ -324,6 +330,7 @@ struct WeightTrendChartView: View {
     }
 
     var body: some View {
+        let data = preparedData
         VStack {
             selectionDisplay
             Chart {
@@ -343,7 +350,7 @@ struct WeightTrendChartView: View {
                 }
 
                 // Draw smoothed trend line (when smoothing is on)
-                ForEach(chartData.filter { $0.isSmoothed }) { entry in
+                ForEach(data.smoothed) { entry in
                     LineMark(
                         x: .value("Date", entry.date),
                         y: .value("Weight", entry.weight)
@@ -354,7 +361,7 @@ struct WeightTrendChartView: View {
                 }
 
                 // Draw prediction line
-                ForEach(chartData.filter { $0.isPrediction }) { entry in
+                ForEach(data.predictions) { entry in
                     LineMark(
                         x: .value("Date", entry.date),
                         y: .value("Weight", entry.weight)
@@ -362,14 +369,14 @@ struct WeightTrendChartView: View {
                     .foregroundStyle(by: .value("Type", "Predicted"))
                     .interpolationMethod(.monotone)
                 }
-                
+
                 // Draw all points last
-                ForEach(chartData.filter { $0.showPoint }) { entry in
+                ForEach(data.points) { entry in
                     PointMark(
                         x: .value("Date", entry.date),
                         y: .value("Weight", entry.weight)
                     )
-                    .foregroundStyle(by: .value("Type", entry.isPrediction ? "Predicted" : (entry.isIndividualEntry ? "Entry" : "Average")))
+                    .foregroundStyle(by: .value("Type", entry.isIndividualEntry ? "Entry" : "Average"))
                 }
 
                 // Selection indicator
@@ -419,7 +426,6 @@ struct WeightTrendChartView: View {
             .chartScrollPosition(x: $scrollPosition)
             .chartXSelection(value: $selectedDate)
             .animation(.snappy, value: selectedRange)
-            .animation(.easeInOut(duration: 0.15), value: scrollPosition)
             .padding(.bottom)
             .accessibilityChartDescriptor(self)
         }
