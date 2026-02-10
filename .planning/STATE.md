@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-01-24)
 
 Phase: 29 (Chart Scroll Performance)
 Plan: 0 of 1 (planned, not started)
-Status: Planned
-Last activity: 2026-02-05 — Phase 29 added, PLAN.md created
+Status: Planned (revised based on research)
+Last activity: 2026-02-10 — Phase 29 plan revised with research findings
 
 Progress: [░░░░░░░░░░░░░░░░░░░░] 0% (v1.3 milestone)
 
