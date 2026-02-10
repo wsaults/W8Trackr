@@ -80,7 +80,7 @@ Plans:
 
 **Milestone Goal:** Fix chart scroll performance and ship quality-of-life improvements.
 
-- [ ] **Phase 29: Chart Scroll Performance** - Smooth horizontal scrolling with non-reactive binding
+- [x] **Phase 29: Chart Scroll Performance** - Smooth horizontal scrolling with non-reactive binding
 
 ## Phase Details (v1.3)
 
@@ -97,7 +97,7 @@ Plans:
   6. Vertical page scroll is not blocked by chart horizontal scroll
 **Plans:** 1 plan
 Plans:
-- [ ] 29-01-PLAN.md — Decouple data layer from scroll layer, add horizontal scrolling
+- [x] 29-01-PLAN.md — Decouple data layer from scroll layer, add horizontal scrolling
 
 ## Progress
 
@@ -108,8 +108,8 @@ Phases execute in numeric order: 29 -> 29.1 -> 29.2 -> 30 -> etc.
 |-------|-----------|----------------|--------|-----------|
 | 27. In-App Localization | v1.2 | 3/3 | Complete | 2026-01-24 |
 | 28. App Store Localization | v1.2 | 2/2 | Complete | 2026-01-24 |
-| 29. Chart Scroll Performance | v1.3 | 0/1 | Planned | — |
+| 29. Chart Scroll Performance | v1.3 | 1/1 | Complete | 2026-02-10 |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-02-05 (v1.3 milestone started — Phase 29 added)*
+*Last updated: 2026-02-10 (Phase 29 complete — chart scroll performance shipped)*

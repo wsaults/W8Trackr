@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-24)
 ## Current Position
 
 Phase: 29 (Chart Scroll Performance)
-Plan: 0 of 1 (planned, not started)
-Status: Planned (revised based on research)
-Last activity: 2026-02-10 — Phase 29 plan revised with research findings
+Plan: 1 of 1 (complete)
+Status: Phase complete
+Last activity: 2026-02-10 — Completed 29-01-PLAN.md
 
-Progress: [░░░░░░░░░░░░░░░░░░░░] 0% (v1.3 milestone)
+Progress: [████████████████████] 100% (v1.3 milestone)
 
 ## Milestone History
 
@@ -67,7 +67,7 @@ Key decisions logged in PROJECT.md Key Decisions table.
 
 ### Pending Todos
 
-None for v1.2 milestone.
+None.
 
 ### Pending Human Actions
 
@@ -86,10 +86,10 @@ None identified.
 
 ## Session Continuity
 
-Last session: 2026-01-24
-Stopped at: Completed 28-02-PLAN.md
+Last session: 2026-02-10
+Stopped at: Completed 29-01-PLAN.md (Phase 29 complete)
 Resume file: None
-Pending: Milestone audit (/gsd:audit-milestone)
+Pending: None
 
 ## Code Quality Status
 
@@ -103,9 +103,9 @@ Pending: Milestone audit (/gsd:audit-milestone)
 
 ## Next Steps
 
-v1.3 Performance & Polish milestone in progress.
+v1.3 Performance & Polish — Phase 29 complete. Milestone may be complete if no more phases needed.
 
-**Next:** Plan and execute Phase 29 (Chart Scroll Performance).
+**Next:** Verify on device / TestFlight, then `/gsd:complete-milestone` or add more phases.
 
 ---
-*Updated: 2026-02-05 — v1.3 milestone started*
+*Updated: 2026-02-10 — Phase 29 complete (chart scroll performance shipped)*
