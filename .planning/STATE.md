@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-24)
 
 **Core value:** Users can reliably track weight and see progress with confidence-inspiring visualizations
-**Current focus:** v1.2 milestone complete — ready for milestone audit
+**Current focus:** v1.3 Performance & Polish — Chart scroll performance
 
 ## Current Position
 
-Phase: 28 (App Store Localization)
-Plan: 2 of 2 complete
-Status: Phase complete
-Last activity: 2026-01-24 — Completed 28-02-PLAN.md
+Phase: 29 (Chart Scroll Performance)
+Plan: 0 of 1 (planned, not started)
+Status: Planned
+Last activity: 2026-02-05 — Phase 29 added, PLAN.md created
 
-Progress: [████████████████████] 100% (v1.2 milestone)
+Progress: [░░░░░░░░░░░░░░░░░░░░] 0% (v1.3 milestone)
 
 ## Milestone History
 
@@ -76,6 +76,10 @@ None for v1.2 milestone.
 - [ ] Complete age rating questionnaire in App Store Connect
 - [ ] Enter Spanish App Store metadata in App Store Connect
 
+### Roadmap Evolution
+
+- Phase 29 added: Chart Scroll Performance (v1.3 milestone)
+
 ### Blockers/Concerns
 
 None identified.
@@ -99,9 +103,9 @@ Pending: Milestone audit (/gsd:audit-milestone)
 
 ## Next Steps
 
-v1.2 Global Localization milestone complete. All 32 requirements satisfied.
+v1.3 Performance & Polish milestone in progress.
 
-**Recommended:** Run `/gsd:audit-milestone` to verify cross-phase integration and E2E flows before archiving.
+**Next:** Plan and execute Phase 29 (Chart Scroll Performance).
 
 ---
-*Updated: 2026-01-24 after v1.2 milestone complete*
+*Updated: 2026-02-05 — v1.3 milestone started*
