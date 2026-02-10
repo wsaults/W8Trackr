@@ -19,7 +19,7 @@ struct WeightTrendChartView: View {
     @State private var selectedDate: Date?
 
     // MARK: - Cached Chart Data
-    // Recomputed only when entries/settings/range change.
+    // Recomputed only when entries/settings change (not on scroll or range change).
     // No scroll binding means body only re-evaluates on actual data changes.
 
     @State private var cachedData = PreparedChartData.empty
@@ -36,7 +36,7 @@ struct WeightTrendChartView: View {
         return hasher.finalize()
     }
 
-    private struct PreparedChartData {
+    private struct PreparedChartData: Equatable {
         let smoothed: [ChartEntry]
         let predictions: [ChartEntry]
         let points: [ChartEntry]
@@ -48,30 +48,18 @@ struct WeightTrendChartView: View {
         )
     }
 
-    /// Recomputes all chart data filtered to selectedRange and caches it in @State.
+    /// Recomputes all chart data from ALL entries and caches it in @State.
+    /// No range filtering — scrolling controls what's visible.
     private func recomputeChartData() {
-        // Filter entries to selected date range
-        let rangeEntries: [WeightEntry]
-        if let days = selectedRange.days {
-            let cutoff = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
-            rangeEntries = entries.filter { $0.date >= cutoff }
-        } else {
-            rangeEntries = entries
-        }
-        let sortedRangeEntries = rangeEntries.sorted { $0.date < $1.date }
+        let sortedEntries = entries.sorted { $0.date < $1.date }
 
-        // Compute EMA from ALL entries for trend accuracy, then filter to range
+        // Compute EMA from ALL entries
         let allTrend = TrendCalculator.exponentialMovingAverage(entries: entries, span: 10)
 
         var smoothed: [ChartEntry] = []
         if showSmoothing {
-            let cutoffDate: Date? = selectedRange.days.flatMap {
-                Calendar.current.date(byAdding: .day, value: -$0, to: Date())
-            }
-            let rangeTrend = cutoffDate != nil
-                ? allTrend.filter { $0.date >= cutoffDate! }
-                : allTrend
-            smoothed = rangeTrend.map { point in
+            // ALL trend points — no range filtering
+            smoothed = allTrend.map { point in
                 ChartEntry(
                     date: point.date,
                     weight: point.smoothedWeight(in: weightUnit),
@@ -83,7 +71,8 @@ struct WeightTrendChartView: View {
             }
         }
 
-        let points = sortedRangeEntries.map { entry in
+        // ALL data points — no range filtering
+        let points = sortedEntries.map { entry in
             ChartEntry(
                 date: entry.date,
                 weight: entry.weightValue(in: weightUnit),
@@ -96,11 +85,11 @@ struct WeightTrendChartView: View {
 
         let predictions = makePredictionPoints(trend: allTrend)
 
-        // Date domain: from first entry in range to prediction end
+        // Date domain spans ALL data + predictions
         let dateDomain: ClosedRange<Date>
-        if let firstDate = sortedRangeEntries.first?.date {
-            let lastEntryDate = entries.max(by: { $0.date < $1.date })?.date ?? firstDate
-            let predictionEnd = Calendar.current.date(byAdding: .day, value: 14, to: lastEntryDate) ?? lastEntryDate
+        if let firstDate = sortedEntries.first?.date {
+            let lastDate = sortedEntries.last?.date ?? firstDate
+            let predictionEnd = Calendar.current.date(byAdding: .day, value: 14, to: lastDate) ?? lastDate
             dateDomain = firstDate...predictionEnd
         } else {
             dateDomain = Date()...Date()
@@ -113,7 +102,7 @@ struct WeightTrendChartView: View {
             dateDomain: dateDomain
         )
 
-        // Y-axis from filtered data (points + trend + predictions)
+        // Y-axis from ALL data (stable during scroll)
         let allWeights = points.map(\.weight) + smoothed.map(\.weight) + predictions.map(\.weight)
         if let minVal = allWeights.min(), let maxVal = allWeights.max() {
             cachedYMin = minVal - yAxisPadding
@@ -127,6 +116,31 @@ struct WeightTrendChartView: View {
 
     private var yAxisPadding: Double {
         weightUnit == .kg ? 2.0 : 5.0
+    }
+
+    private var visibleDomainSeconds: TimeInterval {
+        guard let days = selectedRange.days else {
+            // "All" mode — show entire data span + predictions
+            let sorted = entries.sorted { $0.date < $1.date }
+            guard let first = sorted.first?.date, let last = sorted.last?.date else {
+                return 604_800 // fallback: 7 days in seconds
+            }
+            let predictionEnd = Calendar.current.date(byAdding: .day, value: 14, to: last) ?? last
+            return predictionEnd.timeIntervalSince(first)
+        }
+        // Range days + 14 days for prediction visibility at scroll end
+        return TimeInterval((days + 14) * 86_400)
+    }
+
+    private var initialScrollDate: Date {
+        let sorted = entries.sorted { $0.date < $1.date }
+        guard let lastDate = sorted.last?.date else { return Date() }
+        guard let days = selectedRange.days else {
+            // "All" mode — start from beginning
+            return sorted.first?.date ?? Date()
+        }
+        // Position chart so latest data is visible on the right side
+        return Calendar.current.date(byAdding: .day, value: -(days + 14), to: lastDate) ?? lastDate
     }
 
     private var dateFormatForRange: Date.FormatStyle {
@@ -204,7 +218,7 @@ struct WeightTrendChartView: View {
         return points
     }
 
-    private struct ChartEntry: Identifiable {
+    private struct ChartEntry: Identifiable, Equatable {
         var id: String {
             let timestamp = Int(date.timeIntervalSince1970)
             if isSmoothed {
@@ -241,101 +255,108 @@ struct WeightTrendChartView: View {
         }
     }
 
+    private var chartContent: some View {
+        Chart {
+            // Goal weight line
+            if goalWeight > 0 {
+                RuleMark(y: .value("Goal Weight", goalWeight))
+                    .foregroundStyle(AppColors.chartGoal.opacity(0.5))
+                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [10, 5]))
+                    .annotation(position: .overlay) {
+                        Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) \(weightUnit.displayName)")
+                            .font(.caption)
+                            .foregroundStyle(AppColors.chartGoal)
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
+                            .background(Color(UIColor.systemBackground))
+                    }
+            }
+
+            // Smoothed trend line
+            ForEach(cachedData.smoothed) { entry in
+                LineMark(
+                    x: .value("Date", entry.date),
+                    y: .value("Weight", entry.weight)
+                )
+                .foregroundStyle(by: .value("Type", "Trend"))
+                .interpolationMethod(.monotone)
+                .lineStyle(StrokeStyle(lineWidth: 3))
+            }
+
+            // Prediction line
+            ForEach(cachedData.predictions) { entry in
+                LineMark(
+                    x: .value("Date", entry.date),
+                    y: .value("Weight", entry.weight)
+                )
+                .foregroundStyle(by: .value("Type", "Predicted"))
+                .interpolationMethod(.monotone)
+            }
+
+            // Data points
+            ForEach(cachedData.points) { entry in
+                PointMark(
+                    x: .value("Date", entry.date),
+                    y: .value("Weight", entry.weight)
+                )
+                .foregroundStyle(by: .value("Type", entry.isIndividualEntry ? "Entry" : "Average"))
+            }
+
+            // Selection indicator
+            if let entry = selectedEntry {
+                RuleMark(x: .value("Selected", entry.date))
+                    .foregroundStyle(AppColors.textSecondary.opacity(0.3))
+                    .lineStyle(StrokeStyle(lineWidth: 1))
+
+                PointMark(
+                    x: .value("Date", entry.date),
+                    y: .value("Weight", entry.weight)
+                )
+                .symbol(.circle)
+                .symbolSize(100)
+                .foregroundStyle(AppColors.accent)
+            }
+        }
+        .chartForegroundStyleScale([
+            "Entry": AppColors.accent,
+            "Trend": AppColors.chartTrend,
+            "Predicted": AppColors.chartPredicted
+        ])
+        .chartYScale(domain: cachedYMin...cachedYMax)
+        .chartXScale(domain: cachedData.dateDomain)
+        .chartYAxis {
+            AxisMarks(preset: .extended, position: .leading) { value in
+                AxisValueLabel {
+                    if let weight = value.as(Double.self) {
+                        Text("\(weight, format: .number.precision(.fractionLength(1))) \(weightUnit.displayName)")
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
+                    }
+                }
+                AxisGridLine()
+                AxisTick()
+            }
+        }
+        .chartXAxis {
+            AxisMarks(values: .stride(by: xAxisStride)) { _ in
+                AxisGridLine()
+                AxisTick()
+                AxisValueLabel(format: dateFormatForRange)
+            }
+        }
+        .chartXSelection(value: $selectedDate)
+        .chartScrollableAxes(.horizontal)
+        .chartXVisibleDomain(length: visibleDomainSeconds)
+        .chartScrollPosition(initialX: initialScrollDate)
+        .id(selectedRange)
+        .padding(.bottom)
+        .accessibilityChartDescriptor(self)
+    }
+
     var body: some View {
         VStack {
             selectionDisplay
-            Chart {
-                // Goal weight line
-                if goalWeight > 0 {
-                    RuleMark(y: .value("Goal Weight", goalWeight))
-                        .foregroundStyle(AppColors.chartGoal.opacity(0.5))
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [10, 5]))
-                        .annotation(position: .overlay) {
-                            Text("Goal: \(goalWeight, format: .number.precision(.fractionLength(1))) \(weightUnit.displayName)")
-                                .font(.caption)
-                                .foregroundStyle(AppColors.chartGoal)
-                                .lineLimit(1)
-                                .fixedSize(horizontal: true, vertical: false)
-                                .background(Color(UIColor.systemBackground))
-                        }
-                }
-
-                // Smoothed trend line
-                ForEach(cachedData.smoothed) { entry in
-                    LineMark(
-                        x: .value("Date", entry.date),
-                        y: .value("Weight", entry.weight)
-                    )
-                    .foregroundStyle(by: .value("Type", "Trend"))
-                    .interpolationMethod(.monotone)
-                    .lineStyle(StrokeStyle(lineWidth: 3))
-                }
-
-                // Prediction line
-                ForEach(cachedData.predictions) { entry in
-                    LineMark(
-                        x: .value("Date", entry.date),
-                        y: .value("Weight", entry.weight)
-                    )
-                    .foregroundStyle(by: .value("Type", "Predicted"))
-                    .interpolationMethod(.monotone)
-                }
-
-                // Data points
-                ForEach(cachedData.points) { entry in
-                    PointMark(
-                        x: .value("Date", entry.date),
-                        y: .value("Weight", entry.weight)
-                    )
-                    .foregroundStyle(by: .value("Type", entry.isIndividualEntry ? "Entry" : "Average"))
-                }
-
-                // Selection indicator
-                if let entry = selectedEntry {
-                    RuleMark(x: .value("Selected", entry.date))
-                        .foregroundStyle(AppColors.textSecondary.opacity(0.3))
-                        .lineStyle(StrokeStyle(lineWidth: 1))
-
-                    PointMark(
-                        x: .value("Date", entry.date),
-                        y: .value("Weight", entry.weight)
-                    )
-                    .symbol(.circle)
-                    .symbolSize(100)
-                    .foregroundStyle(AppColors.accent)
-                }
-            }
-            .chartForegroundStyleScale([
-                "Entry": AppColors.accent,
-                "Trend": AppColors.chartTrend,
-                "Predicted": AppColors.chartPredicted
-            ])
-            .chartYScale(domain: cachedYMin...cachedYMax)
-            .chartXScale(domain: cachedData.dateDomain)
-            .chartYAxis {
-                AxisMarks(preset: .extended, position: .leading) { value in
-                    AxisValueLabel {
-                        if let weight = value.as(Double.self) {
-                            Text("\(weight, format: .number.precision(.fractionLength(1))) \(weightUnit.displayName)")
-                                .lineLimit(1)
-                                .fixedSize(horizontal: true, vertical: false)
-                        }
-                    }
-                    AxisGridLine()
-                    AxisTick()
-                }
-            }
-            .chartXAxis {
-                AxisMarks(values: .stride(by: xAxisStride)) { _ in
-                    AxisGridLine()
-                    AxisTick()
-                    AxisValueLabel(format: dateFormatForRange)
-                }
-            }
-            .chartXSelection(value: $selectedDate)
-            .animation(.snappy, value: selectedRange)
-            .padding(.bottom)
-            .accessibilityChartDescriptor(self)
+            chartContent
         }
         .padding(.horizontal)
         .onAppear {
@@ -344,7 +365,6 @@ struct WeightTrendChartView: View {
         .onChange(of: dataFingerprint) { _, _ in recomputeChartData() }
         .onChange(of: weightUnit) { _, _ in recomputeChartData() }
         .onChange(of: showSmoothing) { _, _ in recomputeChartData() }
-        .onChange(of: selectedRange) { _, _ in recomputeChartData() }
     }
 }
 
