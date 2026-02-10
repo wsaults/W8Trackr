@@ -5,6 +5,7 @@
 - [x] **v1.0 Pre-Launch Audit** - Phases 1-20 (shipped 2026-01-22)
 - [x] **v1.1 Feature Expansion** - Phases 21-26 (shipped 2026-01-24)
 - [x] **v1.2 Global Localization** - Phases 27-28 (shipped 2026-01-24)
+- [ ] **v1.3 Performance & Polish** - Phases 29+
 
 ## Phases
 
@@ -75,16 +76,40 @@ Plans:
 - [x] 28-01-PLAN.md - App Store metadata for Chinese, French, German, Japanese
 - [x] 28-02-PLAN.md - App Store metadata for Portuguese, Italian, Korean, Russian + v1.2 release notes
 
+### v1.3 Performance & Polish
+
+**Milestone Goal:** Fix chart scroll performance and ship quality-of-life improvements.
+
+- [ ] **Phase 29: Chart Scroll Performance** - Smooth horizontal scrolling with non-reactive binding
+
+## Phase Details (v1.3)
+
+### Phase 29: Chart Scroll Performance
+**Goal:** Chart scrolls horizontally through all weight data without jank, regardless of data volume
+**Depends on:** None (standalone fix)
+**Risk:** MEDIUM - Three prior attempts failed; requires correct separation of data layer from scroll layer
+**Success Criteria** (what must be TRUE):
+  1. Chart scrolls smoothly at 60fps on all supported devices
+  2. ALL weight entries are in the chart (not filtered to selected range)
+  3. DateRange picker controls the visible window width, not which data is loaded
+  4. Y-axis remains stable during scroll (no jumping)
+  5. Tap-to-select still works during/after scroll
+  6. Vertical page scroll is not blocked by chart horizontal scroll
+**Plans:** 1 plan
+Plans:
+- [ ] 29-01-PLAN.md — Decouple data layer from scroll layer, add horizontal scrolling
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 27 -> 27.1 -> 27.2 -> 28 -> etc.
+Phases execute in numeric order: 29 -> 29.1 -> 29.2 -> 30 -> etc.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 27. In-App Localization | v1.2 | 3/3 | Complete | 2026-01-24 |
 | 28. App Store Localization | v1.2 | 2/2 | Complete | 2026-01-24 |
+| 29. Chart Scroll Performance | v1.3 | 0/1 | Planned | — |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-24 (v1.2 milestone complete)*
+*Last updated: 2026-02-05 (v1.3 milestone started — Phase 29 added)*
